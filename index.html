@@ -1,668 +1,222 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#1a1a2e">
-  <link rel="manifest" href="manifest.webmanifest">
-  <title>Flamewalker Runtime v0.1</title>
-  <style>
-    *{box-sizing:border-box}
-    body{margin:0;background:#070710;color:#e2e8f0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
-    .app{max-width:920px;margin:0 auto;padding:14px}
-    header{padding:18px 0 12px;text-align:center}
-    h1{margin:0;color:#B8860B;font-size:24px;letter-spacing:.08em}
-    .sub{margin-top:6px;color:#94a3b8;font-size:13px;line-height:1.45}
-    .panel{background:#10101c;border:1px solid #272744;border-radius:14px;padding:14px;margin:12px 0;box-shadow:0 8px 28px rgba(0,0,0,.22)}
-    .panel-title{color:#B8860B;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
-    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    button,.file-label,select,input,textarea{font:inherit}
-    button,.file-label{border:1px solid #3a3a60;background:#151526;color:#e2e8f0;border-radius:10px;padding:10px 12px;cursor:pointer}
-    button.primary,.file-label.primary{border-color:#B8860B;color:#fde68a}
-    button.danger{border-color:#7f1d1d;color:#fca5a5}
-    button:active,.file-label:active{transform:translateY(1px)}
-    select,input,textarea{width:100%;background:#090914;color:#e2e8f0;border:1px solid #30304f;border-radius:10px;padding:10px}
-    textarea{min-height:110px;resize:vertical;line-height:1.45}
-    input[type="checkbox"]{width:20px;height:20px}
-    .hidden{display:none!important}
-    .muted{color:#94a3b8;font-size:12px;line-height:1.45}
-    .tiny{color:#64748b;font-size:11px;line-height:1.4}
-    .workspace-card{border:1px solid #272744;background:#0c0c16;border-radius:12px;padding:12px;margin:8px 0;display:flex;justify-content:space-between;gap:10px;align-items:center}
-    .workspace-title{font-weight:700;color:#f8fafc}
-    .workspace-meta{font-size:12px;color:#94a3b8;margin-top:3px}
-    .tabs{display:flex;gap:8px;overflow:auto;margin:10px 0}
-    .tab{white-space:nowrap}
-    .tab.active{border-color:#B8860B;background:#1a1824;color:#fde68a}
-    .screen-title{font-size:20px;font-weight:800;color:#f8fafc;margin:6px 0 2px}
-    .section{border:1px solid #272744;background:#0d0d18;border-radius:14px;padding:12px;margin:10px 0}
-    .section h3{margin:0 0 8px;color:#B8860B;font-size:14px}
-    .section-desc{font-size:13px;color:#cbd5e1;line-height:1.5;margin:0 0 10px}
-    .item{border-top:1px solid rgba(255,255,255,.06);padding:10px 0}
-    .item:first-of-type{border-top:0}
-    .item-line{display:flex;gap:10px;align-items:flex-start}
-    .item-label{font-weight:650;color:#e5e7eb;line-height:1.35}
-    .item-note{font-size:12px;color:#94a3b8;margin-top:4px;line-height:1.4}
-    .rating-row,.status-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-    .rating-btn,.status-btn{padding:8px 10px;font-size:13px}
-    .rating-btn.active,.status-btn.active{border-color:#B8860B;background:#1a1824;color:#fde68a}
-    .log-box{display:flex;gap:8px;flex-direction:column}
-    .log-list{border:1px solid #24243b;border-radius:10px;padding:8px;background:#080812;max-height:180px;overflow:auto}
-    .log-entry{font-size:12px;color:#cbd5e1;border-bottom:1px solid rgba(255,255,255,.06);padding:6px 0}
-    .log-entry:last-child{border-bottom:0}
-    .toast{position:fixed;left:12px;right:12px;bottom:18px;background:#111827;border:1px solid #B8860B;color:#fde68a;border-radius:12px;padding:12px;text-align:center;z-index:50;box-shadow:0 12px 40px rgba(0,0,0,.45)}
-    .footer{text-align:center;color:#475569;font-size:11px;line-height:1.5;padding:18px 0 28px}
-    @media(min-width:720px){.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.app{padding:20px}.actions-sticky{position:sticky;top:0;z-index:20;background:rgba(7,7,16,.92);backdrop-filter:blur(8px);padding-top:8px}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Flamewalker Runtime v0.1</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#070710;color:#e2e8f0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+.app{max-width:920px;margin:0 auto;padding:14px}
+header{padding:18px 0 12px;text-align:center}
+h1{margin:0;color:#B8860B;font-size:24px;letter-spacing:.08em}
+.sub{margin-top:6px;color:#94a3b8;font-size:13px;line-height:1.45}
+.panel{background:#10101c;border:1px solid #272744;border-radius:14px;padding:14px;margin:12px 0;box-shadow:0 8px 28px rgba(0,0,0,.22)}
+.panel-title{color:#B8860B;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button,.file-label,select,input,textarea{font:inherit}
+button,.file-label{border:1px solid #3a3a60;background:#151526;color:#e2e8f0;border-radius:10px;padding:10px 12px;cursor:pointer}
+button.primary,.file-label.primary{border-color:#B8860B;color:#fde68a}
+button.danger{border-color:#7f1d1d;color:#fca5a5}
+button:active,.file-label:active{transform:translateY(1px)}
+select,input,textarea{width:100%;background:#090914;color:#e2e8f0;border:1px solid #30304f;border-radius:10px;padding:10px}
+textarea{min-height:110px;resize:vertical;line-height:1.45}
+input[type="checkbox"]{width:20px;height:20px}
+.hidden{display:none!important}
+.muted{color:#94a3b8;font-size:12px;line-height:1.45}
+.tiny{color:#64748b;font-size:11px;line-height:1.4}
+.workspace-card{border:1px solid #272744;background:#0c0c16;border-radius:12px;padding:12px;margin:8px 0;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.workspace-title{font-weight:700;color:#f8fafc}
+.workspace-meta{font-size:12px;color:#94a3b8;margin-top:3px}
+.tabs{display:flex;gap:8px;overflow:auto;margin:10px 0}
+.tab{white-space:nowrap}
+.tab.active{border-color:#B8860B;background:#1a1824;color:#fde68a}
+.screen-title{font-size:20px;font-weight:800;color:#f8fafc;margin:6px 0 2px}
+.section{border:1px solid #272744;background:#0d0d18;border-radius:14px;padding:12px;margin:10px 0}
+.section h3{margin:0 0 8px;color:#B8860B;font-size:14px}
+.section-desc{font-size:13px;color:#cbd5e1;line-height:1.5;margin:0 0 10px}
+.item{border-top:1px solid rgba(255,255,255,.06);padding:10px 0}
+.item:first-of-type{border-top:0}
+.item-line{display:flex;gap:10px;align-items:flex-start}
+.item-label{font-weight:650;color:#e5e7eb;line-height:1.35}
+.item-note{font-size:12px;color:#94a3b8;margin-top:4px;line-height:1.4}
+.rating-row,.status-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.rating-btn,.status-btn{padding:8px 10px;font-size:13px}
+.rating-btn.active,.status-btn.active{border-color:#B8860B;background:#1a1824;color:#fde68a}
+.log-box{display:flex;gap:8px;flex-direction:column}
+.log-list{border:1px solid #24243b;border-radius:10px;padding:8px;background:#080812;max-height:180px;overflow:auto}
+.log-entry{font-size:12px;color:#cbd5e1;border-bottom:1px solid rgba(255,255,255,.06);padding:6px 0}
+.log-entry:last-child{border-bottom:0}
+.toast{position:fixed;left:12px;right:12px;bottom:18px;background:#111827;border:1px solid #B8860B;color:#fde68a;border-radius:12px;padding:12px;text-align:center;z-index:50;box-shadow:0 12px 40px rgba(0,0,0,.45)}
+.footer{text-align:center;color:#475569;font-size:11px;line-height:1.5;padding:18px 0 28px}
+@media(min-width:720px){.app{padding:20px}.actions-sticky{position:sticky;top:0;z-index:20;background:rgba(7,7,16,.92);backdrop-filter:blur(8px);padding-top:8px}}
+</style>
 </head>
 <body>
-  <div class="app">
-    <header>
-      <h1>FLAMEWALKER RUNTIME</h1>
-      <div class="sub">v0.1 phone-first seed · local IndexedDB state · AI pack vessel</div>
-    </header>
+<div class="app">
+<header>
+<h1>FLAMEWALKER RUNTIME</h1>
+<div class="sub">v0.1 phone seed · local IndexedDB state · AI pack vessel</div>
+</header>
 
-    <section class="panel">
-      <div class="panel-title">Runtime Doctrine</div>
-      <div class="muted">
-        The AI chat is the architect. The PWA is the runtime vessel. The user interaction is lived data. The export is the feedback loop.
-      </div>
-    </section>
+<section class="panel">
+<div class="panel-title">Runtime Doctrine</div>
+<div class="muted">The AI chat is the architect. The PWA is the runtime vessel. The user interaction is lived data. The export is the feedback loop.</div>
+</section>
 
-    <section class="panel actions-sticky">
-      <div class="panel-title">Actions</div>
-      <div class="row">
-        <label class="file-label primary" for="packFile">Import Pack JSON</label>
-        <input id="packFile" class="hidden" type="file" accept=".json,application/json">
-        <button id="exportHandoffBtn" class="primary">Export AI Handoff</button>
-        <button id="exportStateBtn">Export State</button>
-        <label class="file-label" for="stateFile">Import State</label>
-        <input id="stateFile" class="hidden" type="file" accept=".json,application/json">
-        <button id="resetStateBtn" class="danger">Reset State</button>
-        <button id="deletePackBtn" class="danger">Delete Pack</button>
-      </div>
-      <div id="activePackInfo" class="tiny" style="margin-top:8px">No active pack yet.</div>
-    </section>
+<section class="panel actions-sticky">
+<div class="panel-title">Actions</div>
+<div class="row">
+<label class="file-label primary" for="packFile">Import Pack JSON</label>
+<input id="packFile" class="hidden" type="file" accept=".json,application/json">
+<button id="exportHandoffBtn" class="primary">Export AI Handoff</button>
+<button id="exportStateBtn">Export State</button>
+<label class="file-label" for="stateFile">Import State</label>
+<input id="stateFile" class="hidden" type="file" accept=".json,application/json">
+<button id="resetStateBtn" class="danger">Reset State</button>
+<button id="deletePackBtn" class="danger">Delete Pack</button>
+</div>
+<div id="activePackInfo" class="tiny" style="margin-top:8px">No active pack yet.</div>
+</section>
 
-    <section class="panel">
-      <div class="panel-title">Workspaces</div>
-      <div id="workspaceList"></div>
-    </section>
+<section class="panel">
+<div class="panel-title">Workspaces</div>
+<div id="workspaceList"></div>
+</section>
 
-    <main id="runtimeView" class="panel hidden">
-      <div class="panel-title">Pack Viewer</div>
-      <div id="packHeader"></div>
-      <div id="screenTabs" class="tabs"></div>
-      <div id="screenContent"></div>
-    </main>
+<main id="runtimeView" class="panel hidden">
+<div class="panel-title">Pack Viewer</div>
+<div id="packHeader"></div>
+<div id="screenTabs" class="tabs"></div>
+<div id="screenContent"></div>
+</main>
 
-    <div class="footer">
-      Flamewalker Runtime v0.1 · zero-cost private PWA seed · no AI calls · no paid APIs · no embedded astrology engine
-    </div>
-  </div>
+<div class="footer">Flamewalker Runtime v0.1 · zero-cost private PWA seed · no AI calls · no paid APIs · no embedded calculation engine</div>
+</div>
 
-  <div id="toast" class="toast hidden"></div>
+<div id="toast" class="toast hidden"></div>
 
 <script>
-const RUNTIME_VERSION = "0.1.0-phone-seed";
-const DB_NAME = "flamewalker_runtime_db";
-const DB_VERSION = 1;
-const SUPPORTED_TYPES = ["checkbox","text-note","journal-entry","select","rating","status-button","log-entry","number","text"];
+const RUNTIME_VERSION="0.1.1-phone-patched";
+const DB_NAME="flamewalker_runtime_db";
+const DB_VERSION=1;
+const SUPPORTED_TYPES=["checkbox","text-note","journal-entry","select","rating","status-button","log-entry","number","text"];
+let db=null,activePackId=null,activePack=null,activeState=null,activeScreenId=null;
 
-let db = null;
-let activePackId = null;
-let activePack = null;
-let activeState = null;
-let activeScreenId = null;
-
-const samplePacks = [
-  {
-    packId:"sample-theon-may8",
-    packType:"planner",
-    title:"Sample THEON Planner · May 8",
-    version:"v0.1-sample",
-    dateRange:{start:"2026-05-08",end:"2026-05-08"},
-    metadata:{author:"Flamewalker Runtime",created:"2026-05-08"},
-    screens:[
-      {screenId:"day-2026-05-08",title:"Friday May 8 · THEON Sample",sections:[
-        {sectionId:"supplements",title:"Supplements",description:"Small sample stack. Real planner packs will contain the full fortnight.",items:["supp-multivitamin","supp-d3k2","supp-seamoss","supp-quercetin","supp-resveratrol","supp-magnesium"]},
-        {sectionId:"practices",title:"Practices",description:"Practice completion ticks.",items:["prac-heart-breath","prac-cat-cow","prac-cv17","prac-mantra"]},
-        {sectionId:"vq",title:"V(Q) Body State",description:"Rate the lived state after the day. 1 = weak, 5 = strong.",items:["vq-liver","vq-heart","vq-skin","vq-sleep"]},
-        {sectionId:"journal",title:"Journal",description:"Write body reactions, symbolic resonance, and planner corrections.",items:["journal-may8"]}
-      ]}
-    ],
-    interactiveItems:[
-      {itemId:"supp-multivitamin",type:"checkbox",label:"Multivitamin",screenId:"day-2026-05-08",metadata:{group:"supplements",note:"Weekly mineral baseline"}},
-      {itemId:"supp-d3k2",type:"checkbox",label:"D3/K2",screenId:"day-2026-05-08",metadata:{group:"supplements",note:"Foundation support"}},
-      {itemId:"supp-seamoss",type:"checkbox",label:"Sea Moss",screenId:"day-2026-05-08",metadata:{group:"supplements",note:"Mineral layer"}},
-      {itemId:"supp-quercetin",type:"checkbox",label:"Quercetin",screenId:"day-2026-05-08",metadata:{group:"supplements",note:"Mast cell and polyphenol layer"}},
-      {itemId:"supp-resveratrol",type:"checkbox",label:"Resveratrol",screenId:"day-2026-05-08",metadata:{group:"supplements",note:"Polyphenol modulation"}},
-      {itemId:"supp-magnesium",type:"checkbox",label:"Magnesium Bisglycinate",screenId:"day-2026-05-08",metadata:{group:"supplements",note:"Sleep and nervous system"}},
-      {itemId:"prac-heart-breath",type:"checkbox",label:"Heart coherence breathing",screenId:"day-2026-05-08",metadata:{group:"practices",note:"5 seconds in, 5 seconds out"}},
-      {itemId:"prac-cat-cow",type:"checkbox",label:"Cat-Cow flow",screenId:"day-2026-05-08",metadata:{group:"practices",note:"10 slow rounds"}},
-      {itemId:"prac-cv17",type:"checkbox",label:"CV17 heart center acupressure",screenId:"day-2026-05-08",metadata:{group:"practices",note:"Gentle pressure, 60 to 90 seconds"}},
-      {itemId:"prac-mantra",type:"checkbox",label:"Mantra used",screenId:"day-2026-05-08",metadata:{group:"practices",note:"I am already enough to attract what resonates."}},
-      {itemId:"vq-liver",type:"rating",label:"Liver state",screenId:"day-2026-05-08",metadata:{group:"vq",max:5}},
-      {itemId:"vq-heart",type:"rating",label:"Heart state",screenId:"day-2026-05-08",metadata:{group:"vq",max:5}},
-      {itemId:"vq-skin",type:"rating",label:"Skin state",screenId:"day-2026-05-08",metadata:{group:"vq",max:5}},
-      {itemId:"vq-sleep",type:"rating",label:"Sleep state",screenId:"day-2026-05-08",metadata:{group:"vq",max:5}},
-      {itemId:"journal-may8",type:"journal-entry",label:"Daily journal",screenId:"day-2026-05-08",metadata:{group:"journal",placeholder:"Body reactions, signals, corrections, next planner notes..."}}
-    ],
-    exportTemplate:{handoffType:"theon-planner",sections:["supplements","practices","vq","journal"]}
-  },
-  {
-    packId:"sample-inbound-4428",
-    packType:"operations-dashboard",
-    title:"Sample Inbound Gate 4428",
-    version:"v0.1-sample",
-    dateRange:{start:"2026-05-08",end:"2026-05-08"},
-    metadata:{author:"Flamewalker Runtime",created:"2026-05-08"},
-    screens:[
-      {screenId:"gate-4428",title:"Gate 4428 · Minimal Ops Sample",sections:[
-        {sectionId:"gate",title:"Gate Control",description:"Prototype only. Full tables come after v0.1.",items:["gate-status","tri-field","pallet-count","slot-time"]},
-        {sectionId:"log",title:"Shift Log",description:"Manual operational notes for AI handoff.",items:["gate-log"]}
-      ]}
-    ],
-    interactiveItems:[
-      {itemId:"gate-status",type:"select",label:"Gate status",screenId:"gate-4428",options:["free","incoming","on gate","unloaded","to receive","to putaway","blocked"],metadata:{group:"gate"}},
-      {itemId:"tri-field",type:"text",label:"TRI number",screenId:"gate-4428",metadata:{group:"gate",placeholder:"Example: TRI-021269"}},
-      {itemId:"pallet-count",type:"number",label:"Pallet count",screenId:"gate-4428",metadata:{group:"gate",placeholder:"Example: 33"}},
-      {itemId:"slot-time",type:"text",label:"Slot time",screenId:"gate-4428",metadata:{group:"gate",placeholder:"Example: 09:00"}},
-      {itemId:"gate-log",type:"log-entry",label:"Operational log",screenId:"gate-4428",metadata:{group:"log",placeholder:"Example: 4428 unloaded, putaway ongoing."}}
-    ],
-    exportTemplate:{handoffType:"inbound-operations",sections:["gate","log"]}
-  },
-  {
-    packId:"sample-learning-day3",
-    packType:"learning-plan",
-    title:"Sample AI/Excel Learning · Day 3",
-    version:"v0.1-sample",
-    dateRange:{start:"2026-05-06",end:"2026-05-06"},
-    metadata:{author:"Flamewalker Runtime",created:"2026-05-08"},
-    screens:[
-      {screenId:"lesson-day3",title:"Day 3 · Prompt Engineering Skeleton",sections:[
-        {sectionId:"lesson",title:"Lesson",description:"Prompt engineering means structured communication with AI: role, goal, context, input, task, output format, constraints, and quality check.",items:["task-read","task-write-prompt","task-test-prompt","skill-confidence","progress-note"]}
-      ]}
-    ],
-    interactiveItems:[
-      {itemId:"task-read",type:"checkbox",label:"Read the lesson",screenId:"lesson-day3",metadata:{group:"tasks"}},
-      {itemId:"task-write-prompt",type:"checkbox",label:"Write one warehouse prompt",screenId:"lesson-day3",metadata:{group:"tasks"}},
-      {itemId:"task-test-prompt",type:"checkbox",label:"Test the prompt with AI",screenId:"lesson-day3",metadata:{group:"tasks"}},
-      {itemId:"skill-confidence",type:"rating",label:"Prompt engineering confidence",screenId:"lesson-day3",metadata:{group:"skill",max:5}},
-      {itemId:"progress-note",type:"text-note",label:"Progress notes",screenId:"lesson-day3",metadata:{group:"notes",placeholder:"What was clear? What needs review?"}}
-    ],
-    exportTemplate:{handoffType:"learning-plan",sections:["tasks","skill","notes"]}
-  }
+const samplePacks=[
+{
+packId:"sample-theon-may8",
+packType:"planner",
+title:"Sample THEON Planner · May 8",
+version:"v0.1-sample",
+dateRange:{start:"2026-05-08",end:"2026-05-08"},
+metadata:{author:"Flamewalker Runtime",created:"2026-05-08"},
+screens:[{screenId:"day-2026-05-08",title:"Friday May 8 · THEON Sample",sections:[
+{sectionId:"supplements",title:"Supplements",description:"Small sample stack. Real planner packs will contain the full fortnight.",items:["supp-multivitamin","supp-d3k2","supp-seamoss","supp-quercetin","supp-resveratrol","supp-magnesium"]},
+{sectionId:"practices",title:"Practices",description:"Practice completion ticks.",items:["prac-heart-breath","prac-cat-cow","prac-cv17","prac-mantra"]},
+{sectionId:"vq",title:"V(Q) Body State",description:"Rate the lived state after the day. 1 = weak, 5 = strong.",items:["vq-liver","vq-heart","vq-skin","vq-sleep"]},
+{sectionId:"journal",title:"Journal",description:"Write body reactions, symbolic resonance, and planner corrections.",items:["journal-may8"]}
+]}],
+interactiveItems:[
+{itemId:"supp-multivitamin",type:"checkbox",label:"Multivitamin",screenId:"day-2026-05-08",metadata:{group:"supplements",note:"Weekly mineral baseline"}},
+{itemId:"supp-d3k2",type:"checkbox",label:"D3/K2",screenId:"day-2026-05-08",metadata:{group:"supplements",note:"Foundation support"}},
+{itemId:"supp-seamoss",type:"checkbox",label:"Sea Moss",screenId:"day-2026-05-08",metadata:{group:"supplements",note:"Mineral layer"}},
+{itemId:"supp-quercetin",type:"checkbox",label:"Quercetin",screenId:"day-2026-05-08",metadata:{group:"supplements",note:"Mast cell and polyphenol layer"}},
+{itemId:"supp-resveratrol",type:"checkbox",label:"Resveratrol",screenId:"day-2026-05-08",metadata:{group:"supplements",note:"Polyphenol modulation"}},
+{itemId:"supp-magnesium",type:"checkbox",label:"Magnesium Bisglycinate",screenId:"day-2026-05-08",metadata:{group:"supplements",note:"Sleep and nervous system"}},
+{itemId:"prac-heart-breath",type:"checkbox",label:"Heart coherence breathing",screenId:"day-2026-05-08",metadata:{group:"practices",note:"5 seconds in, 5 seconds out"}},
+{itemId:"prac-cat-cow",type:"checkbox",label:"Cat-Cow flow",screenId:"day-2026-05-08",metadata:{group:"practices",note:"10 slow rounds"}},
+{itemId:"prac-cv17",type:"checkbox",label:"CV17 heart center acupressure",screenId:"day-2026-05-08",metadata:{group:"practices",note:"Gentle pressure, 60 to 90 seconds"}},
+{itemId:"prac-mantra",type:"checkbox",label:"Mantra used",screenId:"day-2026-05-08",metadata:{group:"practices",note:"I am already enough to attract what resonates."}},
+{itemId:"vq-liver",type:"rating",label:"Liver state",screenId:"day-2026-05-08",metadata:{group:"vq",max:5}},
+{itemId:"vq-heart",type:"rating",label:"Heart state",screenId:"day-2026-05-08",metadata:{group:"vq",max:5}},
+{itemId:"vq-skin",type:"rating",label:"Skin state",screenId:"day-2026-05-08",metadata:{group:"vq",max:5}},
+{itemId:"vq-sleep",type:"rating",label:"Sleep state",screenId:"day-2026-05-08",metadata:{group:"vq",max:5}},
+{itemId:"journal-may8",type:"journal-entry",label:"Daily journal",screenId:"day-2026-05-08",metadata:{group:"journal",placeholder:"Body reactions, signals, corrections, next planner notes..."}}
+],
+exportTemplate:{handoffType:"theon-planner",sections:["supplements","practices","vq","journal"]}
+},
+{
+packId:"sample-inbound-4428",
+packType:"operations-dashboard",
+title:"Sample Inbound Gate 4428",
+version:"v0.1-sample",
+dateRange:{start:"2026-05-08",end:"2026-05-08"},
+metadata:{author:"Flamewalker Runtime",created:"2026-05-08"},
+screens:[{screenId:"gate-4428",title:"Gate 4428 · Minimal Ops Sample",sections:[
+{sectionId:"gate",title:"Gate Control",description:"Prototype only. Full tables come after v0.1.",items:["gate-status","tri-field","pallet-count","slot-time"]},
+{sectionId:"log",title:"Shift Log",description:"Manual operational notes for AI handoff.",items:["gate-log"]}
+]}],
+interactiveItems:[
+{itemId:"gate-status",type:"select",label:"Gate status",screenId:"gate-4428",options:["free","incoming","on gate","unloaded","to receive","to putaway","blocked"],metadata:{group:"gate"}},
+{itemId:"tri-field",type:"text",label:"TRI number",screenId:"gate-4428",metadata:{group:"gate",placeholder:"Example: TRI-021269"}},
+{itemId:"pallet-count",type:"number",label:"Pallet count",screenId:"gate-4428",metadata:{group:"gate",placeholder:"Example: 33"}},
+{itemId:"slot-time",type:"text",label:"Slot time",screenId:"gate-4428",metadata:{group:"gate",placeholder:"Example: 09:00"}},
+{itemId:"gate-log",type:"log-entry",label:"Operational log",screenId:"gate-4428",metadata:{group:"log",placeholder:"Example: 4428 unloaded, putaway ongoing."}}
+],
+exportTemplate:{handoffType:"inbound-operations",sections:["gate","log"]}
+},
+{
+packId:"sample-learning-day3",
+packType:"learning-plan",
+title:"Sample AI/Excel Learning · Day 3",
+version:"v0.1-sample",
+dateRange:{start:"2026-05-06",end:"2026-05-06"},
+metadata:{author:"Flamewalker Runtime",created:"2026-05-08"},
+screens:[{screenId:"lesson-day3",title:"Day 3 · Prompt Engineering Skeleton",sections:[
+{sectionId:"lesson",title:"Lesson",description:"Prompt engineering means structured communication with AI: role, goal, context, input, task, output format, constraints, and quality check.",items:["task-read","task-write-prompt","task-test-prompt","skill-confidence","progress-note"]}
+]}],
+interactiveItems:[
+{itemId:"task-read",type:"checkbox",label:"Read the lesson",screenId:"lesson-day3",metadata:{group:"tasks"}},
+{itemId:"task-write-prompt",type:"checkbox",label:"Write one warehouse prompt",screenId:"lesson-day3",metadata:{group:"tasks"}},
+{itemId:"task-test-prompt",type:"checkbox",label:"Test the prompt with AI",screenId:"lesson-day3",metadata:{group:"tasks"}},
+{itemId:"skill-confidence",type:"rating",label:"Prompt engineering confidence",screenId:"lesson-day3",metadata:{group:"skill",max:5}},
+{itemId:"progress-note",type:"text-note",label:"Progress notes",screenId:"lesson-day3",metadata:{group:"notes",placeholder:"What was clear? What needs review?"}}
+],
+exportTemplate:{handoffType:"learning-plan",sections:["tasks","skill","notes"]}
+}
 ];
 
-function $(id){return document.getElementById(id);}
-function nowISO(){return new Date().toISOString();}
-function escapeHTML(value){
-  return String(value ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function downloadFile(content, filename, mimeType){
-  const blob = new Blob([content], {type:mimeType});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},500);
-}
-function toast(message){
-  const el = $("toast");
-  el.textContent = message;
-  el.classList.remove("hidden");
-  setTimeout(()=>el.classList.add("hidden"),2400);
-}
-function tx(store, mode="readonly"){
-  return db.transaction(store, mode).objectStore(store);
-}
-function reqToPromise(req){
-  return new Promise((resolve,reject)=>{
-    req.onsuccess=()=>resolve(req.result);
-    req.onerror=()=>reject(req.error);
-  });
-}
-function openDB(){
-  return new Promise((resolve,reject)=>{
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
-    request.onupgradeneeded = e => {
-      const d = e.target.result;
-      if(!d.objectStoreNames.contains("packs")) d.createObjectStore("packs",{keyPath:"packId"});
-      if(!d.objectStoreNames.contains("states")) d.createObjectStore("states",{keyPath:"packId"});
-      if(!d.objectStoreNames.contains("archives")) d.createObjectStore("archives",{keyPath:"archiveId"});
-      if(!d.objectStoreNames.contains("appSettings")) d.createObjectStore("appSettings",{keyPath:"key"});
-    };
-    request.onsuccess=()=>resolve(request.result);
-    request.onerror=()=>reject(request.error);
-  });
-}
-async function savePack(pack){return reqToPromise(tx("packs","readwrite").put(pack));}
-async function loadPack(packId){return reqToPromise(tx("packs").get(packId));}
-async function getAllPacks(){return reqToPromise(tx("packs").getAll());}
-async function deletePackFromDB(packId){
-  await reqToPromise(tx("packs","readwrite").delete(packId));
-  await reqToPromise(tx("states","readwrite").delete(packId));
-}
-function blankState(packId){
-  return {packId,runtimeVersion:RUNTIME_VERSION,updatedAt:nowISO(),items:{},logs:[]};
-}
-async function loadState(packId){
-  const state = await reqToPromise(tx("states").get(packId));
-  return state || blankState(packId);
-}
-async function saveState(packId,state){
-  state.packId = packId;
-  state.runtimeVersion = RUNTIME_VERSION;
-  state.updatedAt = nowISO();
-  return reqToPromise(tx("states","readwrite").put(state));
-}
-function validatePack(pack){
-  const errors = [];
-  const warnings = [];
-  ["packId","packType","title","screens","interactiveItems"].forEach(k=>{
-    if(pack[k] === undefined || pack[k] === null) errors.push("Missing required field: "+k);
-  });
-  if(!Array.isArray(pack.screens)) errors.push("screens must be an array");
-  if(!Array.isArray(pack.interactiveItems)) errors.push("interactiveItems must be an array");
-  (pack.screens || []).forEach((s,i)=>{
-    if(!s.screenId) errors.push("screens["+i+"] missing screenId");
-    if(!s.title) errors.push("screens["+i+"] missing title");
-    if(!Array.isArray(s.sections)) errors.push("screens["+i+"] sections must be an array");
-  });
-  (pack.interactiveItems || []).forEach((item,i)=>{
-    if(!item.itemId) errors.push("interactiveItems["+i+"] missing itemId");
-    if(!item.type) errors.push("interactiveItems["+i+"] missing type");
-    if(!item.label) errors.push("interactiveItems["+i+"] missing label");
-    if(item.type && !SUPPORTED_TYPES.includes(item.type)) warnings.push("Unknown item type: "+item.type);
-  });
-  return {ok:errors.length===0,errors,warnings};
-}
-async function seedSamples(){
-  const existing = await getAllPacks();
-  const existingIds = new Set(existing.map(p=>p.packId));
-  for(const pack of samplePacks){
-    if(!existingIds.has(pack.packId)) await savePack(pack);
-  }
-}
-function itemMap(pack){
-  const m = new Map();
-  pack.interactiveItems.forEach(i=>m.set(i.itemId,i));
-  return m;
-}
-function getItemValue(itemId, fallback=""){
-  return activeState?.items?.[itemId]?.value ?? fallback;
-}
-async function updateItem(itemId,value){
-  activeState.items[itemId] = {value,updatedAt:nowISO()};
-  await saveState(activePackId,activeState);
-  updateActiveInfo();
-}
-function setActivePackInfo(text){$("activePackInfo").textContent = text;}
-function updateActiveInfo(){
-  if(!activePack){setActivePackInfo("No active pack yet.");return;}
-  const count = Object.keys(activeState.items || {}).length;
-  setActivePackInfo("Active: "+activePack.title+" · saved fields: "+count+" · last update: "+new Date(activeState.updatedAt).toLocaleString());
-}
-async function renderWorkspaceList(){
-  const packs = await getAllPacks();
-  const root = $("workspaceList");
-  if(!packs.length){root.innerHTML = '<div class="muted">No packs available.</div>';return;}
-  root.innerHTML = packs.map(pack => `
-    <div class="workspace-card">
-      <div>
-        <div class="workspace-title">${escapeHTML(pack.title)}</div>
-        <div class="workspace-meta">${escapeHTML(pack.packType)} · ${escapeHTML(pack.version || "v?")} · ${escapeHTML(pack.dateRange?.start || "")} to ${escapeHTML(pack.dateRange?.end || "")}</div>
-      </div>
-      <button class="primary" data-open-pack="${escapeHTML(pack.packId)}">Open</button>
-    </div>
-  `).join("");
-  root.querySelectorAll("[data-open-pack]").forEach(btn=>{
-    btn.addEventListener("click",()=>openPack(btn.dataset.openPack));
-  });
-}
-async function openPack(packId){
-  activePackId = packId;
-  activePack = await loadPack(packId);
-  activeState = await loadState(packId);
-  activeScreenId = activePack.screens[0]?.screenId;
-  $("runtimeView").classList.remove("hidden");
-  renderPack();
-  updateActiveInfo();
-  toast("Opened "+activePack.title);
-}
-function renderPack(){
-  if(!activePack) return;
-  $("packHeader").innerHTML = `
-    <div class="screen-title">${escapeHTML(activePack.title)}</div>
-    <div class="muted">${escapeHTML(activePack.packType)} · ${escapeHTML(activePack.version || "")} · ${escapeHTML(activePack.dateRange?.start || "")} to ${escapeHTML(activePack.dateRange?.end || "")}</div>
-  `;
-  $("screenTabs").innerHTML = activePack.screens.map(s=>`
-    <button class="tab ${s.screenId===activeScreenId?"active":""}" data-screen="${escapeHTML(s.screenId)}">${escapeHTML(s.title)}</button>
-  `).join("");
-  $("screenTabs").querySelectorAll("[data-screen]").forEach(btn=>{
-    btn.addEventListener("click",()=>{activeScreenId = btn.dataset.screen; renderPack();});
-  });
-  const screen = activePack.screens.find(s=>s.screenId===activeScreenId) || activePack.screens[0];
-  const items = itemMap(activePack);
-  $("screenContent").innerHTML = screen.sections.map(section=>{
-    const htmlItems = (section.items || []).map(itemId=>{
-      const item = items.get(itemId);
-      if(!item) return `<div class="item muted">Missing item: ${escapeHTML(itemId)}</div>`;
-      return renderItem(item);
-    }).join("");
-    return `
-      <section class="section">
-        <h3>${escapeHTML(section.title)}</h3>
-        ${section.description ? `<p class="section-desc">${escapeHTML(section.description)}</p>` : ""}
-        ${htmlItems}
-      </section>
-    `;
-  }).join("");
-  bindRenderedItems();
-}
-function renderItem(item){
-  const value = getItemValue(item.itemId, item.type==="checkbox" ? false : "");
-  const note = item.metadata?.note || "";
-  const placeholder = item.metadata?.placeholder || "";
-  if(item.type === "checkbox"){
-    return `
-      <div class="item">
-        <label class="item-line">
-          <input type="checkbox" data-item="${escapeHTML(item.itemId)}" ${value ? "checked" : ""}>
-          <span><span class="item-label">${escapeHTML(item.label)}</span>${note ? `<div class="item-note">${escapeHTML(note)}</div>` : ""}</span>
-        </label>
-      </div>
-    `;
-  }
-  if(item.type === "text-note" || item.type === "journal-entry"){
-    return `
-      <div class="item">
-        <div class="item-label">${escapeHTML(item.label)}</div>
-        ${note ? `<div class="item-note">${escapeHTML(note)}</div>` : ""}
-        <textarea data-item="${escapeHTML(item.itemId)}" placeholder="${escapeHTML(placeholder)}">${escapeHTML(value)}</textarea>
-      </div>
-    `;
-  }
-  if(item.type === "text" || item.type === "number"){
-    return `
-      <div class="item">
-        <label>
-          <div class="item-label">${escapeHTML(item.label)}</div>
-          ${note ? `<div class="item-note">${escapeHTML(note)}</div>` : ""}
-          <input data-item="${escapeHTML(item.itemId)}" type="${item.type === "number" ? "number" : "text"}" value="${escapeHTML(value)}" placeholder="${escapeHTML(placeholder)}">
-        </label>
-      </div>
-    `;
-  }
-  if(item.type === "select"){
-    const opts = item.options || [];
-    return `
-      <div class="item">
-        <label>
-          <div class="item-label">${escapeHTML(item.label)}</div>
-          <select data-item="${escapeHTML(item.itemId)}">
-            <option value="">Select...</option>
-            ${opts.map(o=>`<option value="${escapeHTML(o)}" ${String(value)===String(o) ? "selected" : ""}>${escapeHTML(o)}</option>`).join("")}
-          </select>
-        </label>
-      </div>
-    `;
-  }
-  if(item.type === "rating"){
-    const max = Number(item.metadata?.max || 5);
-    let buttons = "";
-    for(let n=1;n<=max;n++){
-      buttons += `<button class="rating-btn ${Number(value)===n ? "active" : ""}" data-rating-item="${escapeHTML(item.itemId)}" data-rating-value="${n}">${n}</button>`;
-    }
-    return `
-      <div class="item">
-        <div class="item-label">${escapeHTML(item.label)}</div>
-        <div class="rating-row">${buttons}</div>
-      </div>
-    `;
-  }
-  if(item.type === "status-button"){
-    const statuses = item.options || ["yes","no","partly"];
-    return `
-      <div class="item">
-        <div class="item-label">${escapeHTML(item.label)}</div>
-        <div class="status-row">
-          ${statuses.map(s=>`<button class="status-btn ${String(value)===String(s) ? "active" : ""}" data-status-item="${escapeHTML(item.itemId)}" data-status-value="${escapeHTML(s)}">${escapeHTML(s)}</button>`).join("")}
-        </div>
-      </div>
-    `;
-  }
-  if(item.type === "log-entry"){
-    const logs = Array.isArray(value) ? value : [];
-    return `
-      <div class="item">
-        <div class="item-label">${escapeHTML(item.label)}</div>
-        <div class="log-box">
-          <input data-log-input="${escapeHTML(item.itemId)}" placeholder="${escapeHTML(placeholder || "Add log entry...")}">
-          <button class="primary" data-log-add="${escapeHTML(item.itemId)}">Add Log</button>
-          <div class="log-list">
-            ${logs.length ? logs.map(l=>`<div class="log-entry">${escapeHTML(l.time)} · ${escapeHTML(l.text)}</div>`).join("") : `<div class="muted">No logs yet.</div>`}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-  return `<div class="item muted">Unsupported item type: ${escapeHTML(item.type)}</div>`;
-}
-function bindRenderedItems(){
-  document.querySelectorAll("[data-item]").forEach(el=>{
-    const itemId = el.dataset.item;
-    if(el.type === "checkbox"){
-      el.addEventListener("change",()=>updateItem(itemId,el.checked));
-    } else {
-      el.addEventListener("input",()=>updateItem(itemId,el.value));
-      el.addEventListener("change",()=>updateItem(itemId,el.value));
-    }
-  });
-  document.querySelectorAll("[data-rating-item]").forEach(btn=>{
-    btn.addEventListener("click",async ()=>{
-      await updateItem(btn.dataset.ratingItem, Number(btn.dataset.ratingValue));
-      renderPack();
-    });
-  });
-  document.querySelectorAll("[data-status-item]").forEach(btn=>{
-    btn.addEventListener("click",async ()=>{
-      await updateItem(btn.dataset.statusItem, btn.dataset.statusValue);
-      renderPack();
-    });
-  });
-  document.querySelectorAll("[data-log-add]").forEach(btn=>{
-    btn.addEventListener("click",async ()=>{
-      const id = btn.dataset.logAdd;
-      const input = document.querySelector(`[data-log-input="${CSS.escape(id)}"]`);
-      const text = (input.value || "").trim();
-      if(!text){toast("Write a log entry first.");return;}
-      const current = getItemValue(id, []);
-      const logs = Array.isArray(current) ? current : [];
-      logs.push({time:new Date().toLocaleString(),text});
-      await updateItem(id, logs);
-      renderPack();
-    });
-  });
-}
-function buildHandoff(pack,state){
-  const items = pack.interactiveItems || [];
-  const completed = [];
-  const skipped = [];
-  const journals = [];
-  const logs = [];
-  const ratings = [];
-  const other = [];
-  for(const item of items){
-    const record = state.items?.[item.itemId];
-    const value = record?.value;
-    const group = item.metadata?.group || "ungrouped";
-    const entry = {itemId:item.itemId,label:item.label,type:item.type,group,value,updatedAt:record?.updatedAt || null};
-    if(item.type === "checkbox"){
-      value ? completed.push(entry) : skipped.push(entry);
-    } else if(item.type === "journal-entry" || item.type === "text-note"){
-      if(value) journals.push(entry);
-    } else if(item.type === "log-entry"){
-      if(Array.isArray(value)) value.forEach(v=>logs.push({itemId:item.itemId,label:item.label,...v}));
-    } else if(item.type === "rating"){
-      if(value) ratings.push(entry);
-    } else {
-      if(value !== undefined && value !== "") other.push(entry);
-    }
-  }
-  const structured = {
-    appVersion:RUNTIME_VERSION,
-    exportedAt:nowISO(),
-    pack:{packId:pack.packId,packType:pack.packType,title:pack.title,version:pack.version,dateRange:pack.dateRange,exportTemplate:pack.exportTemplate || {}},
-    summary:{completedCount:completed.length,checkboxTotal:completed.length+skipped.length,journalCount:journals.length,logCount:logs.length,ratingCount:ratings.length},
-    completed,skipped,journals,logs,ratings,other,
-    nextAnalysisQuestions:[
-      "Which completed items correlate with positive lived state?",
-      "Which skipped items should be removed, downgraded, or moved?",
-      "What patterns in journals/logs should shape the next pack?",
-      "What should be tested in the next runtime version?"
-    ]
-  };
-  const text = [
-    "FLAMEWALKER RUNTIME AI HANDOFF",
-    "================================",
-    "App version: "+RUNTIME_VERSION,
-    "Exported: "+new Date().toLocaleString(),
-    "",
-    "Pack: "+pack.title,
-    "Pack ID: "+pack.packId,
-    "Type: "+pack.packType,
-    "Version: "+(pack.version || ""),
-    "Date range: "+(pack.dateRange?.start || "")+" to "+(pack.dateRange?.end || ""),
-    "",
-    "SUMMARY",
-    "Completed checkboxes: "+completed.length+" / "+(completed.length+skipped.length),
-    "Journals/notes with content: "+journals.length,
-    "Log entries: "+logs.length,
-    "Ratings captured: "+ratings.length,
-    "",
-    "COMPLETED",
-    completed.length ? completed.map(x=>"- ["+x.group+"] "+x.label).join("\n") : "- None",
-    "",
-    "SKIPPED",
-    skipped.length ? skipped.map(x=>"- ["+x.group+"] "+x.label).join("\n") : "- None",
-    "",
-    "JOURNALS AND NOTES",
-    journals.length ? journals.map(x=>"- "+x.label+": "+x.value).join("\n\n") : "- None",
-    "",
-    "LOGS",
-    logs.length ? logs.map(x=>"- "+x.time+" · "+x.text).join("\n") : "- None",
-    "",
-    "RATINGS",
-    ratings.length ? ratings.map(x=>"- ["+x.group+"] "+x.label+": "+x.value).join("\n") : "- None",
-    "",
-    "OTHER FIELDS",
-    other.length ? other.map(x=>"- ["+x.group+"] "+x.label+": "+x.value).join("\n") : "- None",
-    "",
-    "NEXT ANALYSIS QUESTIONS",
-    structured.nextAnalysisQuestions.map(q=>"- "+q).join("\n")
-  ].join("\n");
-  return {text,structured};
-}
-async function exportHandoff(){
-  if(!activePack){toast("Open a pack first.");return;}
-  const {text,structured} = buildHandoff(activePack,activeState);
-  const base = activePack.packId+"-handoff";
-  downloadFile(text, base+".txt", "text/plain");
-  downloadFile(JSON.stringify(structured,null,2), base+".json", "application/json");
-  toast("Handoff exported.");
-}
-async function exportState(){
-  if(!activePack){toast("Open a pack first.");return;}
-  downloadFile(JSON.stringify(activeState,null,2), activePack.packId+"-state-backup.json", "application/json");
-  toast("State backup exported.");
-}
-async function importPackFromFile(file){
-  const text = await file.text();
-  let pack;
-  try{pack = JSON.parse(text);}catch(e){toast("Invalid JSON.");return;}
-  const result = validatePack(pack);
-  if(!result.ok){alert("Pack rejected:\n"+result.errors.join("\n"));return;}
-  await savePack(pack);
-  await renderWorkspaceList();
-  toast("Pack imported: "+pack.title);
-  if(result.warnings.length) alert("Warnings:\n"+result.warnings.join("\n"));
-}
-async function importStateFromFile(file){
-  if(!activePack){toast("Open a pack first.");return;}
-  const text = await file.text();
-  let incoming;
-  try{incoming = JSON.parse(text);}catch(e){toast("Invalid state JSON.");return;}
-  if(incoming.packId && incoming.packId !== activePackId){
-    if(!confirm("This backup belongs to "+incoming.packId+". Import into current pack anyway?")) return;
-  }
-  incoming.packId = activePackId;
-  incoming.updatedAt = nowISO();
-  await saveState(activePackId,incoming);
-  activeState = await loadState(activePackId);
-  renderPack();
-  updateActiveInfo();
-  toast("State imported.");
-}
-async function resetState(){
-  if(!activePack){toast("Open a pack first.");return;}
-  if(!confirm("Reset all saved ticks, notes, ratings, and logs for this pack?")) return;
-  activeState = blankState(activePackId);
-  await saveState(activePackId,activeState);
-  renderPack();
-  updateActiveInfo();
-  toast("State reset.");
-}
-async function deleteActivePack(){
-  if(!activePack){toast("Open a pack first.");return;}
-  if(!confirm("Delete this pack and its state from this browser?")) return;
-  await deletePackFromDB(activePackId);
-  activePackId = null; activePack = null; activeState = null; activeScreenId = null;
-  $("runtimeView").classList.add("hidden");
-  await renderWorkspaceList();
-  updateActiveInfo();
-  toast("Pack deleted.");
-}
-function bindGlobalActions(){
-  $("packFile").addEventListener("change",e=>{
-    const file = e.target.files?.[0];
-    if(file) importPackFromFile(file);
-    e.target.value = "";
-  });
-  $("stateFile").addEventListener("change",e=>{
-    const file = e.target.files?.[0];
-    if(file) importStateFromFile(file);
-    e.target.value = "";
-  });
-  $("exportHandoffBtn").addEventListener("click",exportHandoff);
-  $("exportStateBtn").addEventListener("click",exportState);
-  $("resetStateBtn").addEventListener("click",resetState);
-  $("deletePackBtn").addEventListener("click",deleteActivePack);
-}
-async function registerSW(){
-  if("serviceWorker" in navigator){
-    try{await navigator.serviceWorker.register("service-worker.js");}
-    catch(e){console.warn("Service worker not registered yet.",e);}
-  }
-}
-async function boot(){
-  if(!("indexedDB" in window)){
-    alert("IndexedDB is not available in this browser.");
-    return;
-  }
-  db = await openDB();
-  await seedSamples();
-  bindGlobalActions();
-  await renderWorkspaceList();
-  await registerSW();
-  toast("Runtime ready.");
-}
-boot().catch(err=>{
-  console.error(err);
-  alert("Runtime failed to start: "+err.message);
-});
+function $(id){return document.getElementById(id)}
+function nowISO(){return new Date().toISOString()}
+function escapeHTML(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toast(msg){const el=$("toast");el.textContent=msg;el.classList.remove("hidden");setTimeout(()=>el.classList.add("hidden"),2400)}
+function downloadFile(content,filename,mimeType){const blob=new Blob([content],{type:mimeType});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},500)}
+function reqToPromise(req){return new Promise((res,rej)=>{req.onsuccess=()=>res(req.result);req.onerror=()=>rej(req.error)})}
+function store(name,mode="readonly"){return db.transaction(name,mode).objectStore(name)}
+function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB_NAME,DB_VERSION);r.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains("packs"))d.createObjectStore("packs",{keyPath:"packId"});if(!d.objectStoreNames.contains("states"))d.createObjectStore("states",{keyPath:"packId"});if(!d.objectStoreNames.contains("archives"))d.createObjectStore("archives",{keyPath:"archiveId"});if(!d.objectStoreNames.contains("appSettings"))d.createObjectStore("appSettings",{keyPath:"key"})};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function savePack(pack){return reqToPromise(store("packs","readwrite").put(pack))}
+async function loadPack(packId){return reqToPromise(store("packs").get(packId))}
+async function getAllPacks(){return reqToPromise(store("packs").getAll())}
+async function deletePackFromDB(packId){await reqToPromise(store("packs","readwrite").delete(packId));await reqToPromise(store("states","readwrite").delete(packId))}
+function blankState(packId){return{packId,runtimeVersion:RUNTIME_VERSION,updatedAt:nowISO(),items:{},logs:[]}}
+async function loadState(packId){return await reqToPromise(store("states").get(packId))||blankState(packId)}
+async function saveState(packId,state){state.packId=packId;state.runtimeVersion=state.runtimeVersion||RUNTIME_VERSION;state.updatedAt=nowISO();return reqToPromise(store("states","readwrite").put(state))}
+function validatePack(pack){const errors=[],warnings=[];["packId","packType","title","screens","interactiveItems"].forEach(k=>{if(pack[k]===undefined||pack[k]===null)errors.push("Missing required field: "+k)});if(!Array.isArray(pack.screens))errors.push("screens must be an array");if(!Array.isArray(pack.interactiveItems))errors.push("interactiveItems must be an array");(pack.screens||[]).forEach((s,i)=>{if(!s.screenId)errors.push("screens["+i+"] missing screenId");if(!s.title)errors.push("screens["+i+"] missing title");if(!Array.isArray(s.sections))errors.push("screens["+i+"] sections must be an array")});(pack.interactiveItems||[]).forEach((it,i)=>{if(!it.itemId)errors.push("interactiveItems["+i+"] missing itemId");if(!it.type)errors.push("interactiveItems["+i+"] missing type");if(!it.label)errors.push("interactiveItems["+i+"] missing label");if(it.type&&!SUPPORTED_TYPES.includes(it.type))warnings.push("Unknown item type: "+it.type)});return{ok:errors.length===0,errors,warnings}}
+async function seedSamples(){const existing=await getAllPacks();const ids=new Set(existing.map(p=>p.packId));for(const p of samplePacks){if(!ids.has(p.packId))await savePack(p)}}
+function itemMap(pack){const m=new Map();pack.interactiveItems.forEach(i=>m.set(i.itemId,i));return m}
+function getItemValue(itemId,fallback=""){return activeState?.items?.[itemId]?.value??fallback}
+async function updateItem(itemId,value){if(!activeState.items)activeState.items={};activeState.items[itemId]={value,updatedAt:nowISO()};await saveState(activePackId,activeState);updateActiveInfo()}
+function updateActiveInfo(){if(!activePack){$("activePackInfo").textContent="No active pack yet.";return}const count=Object.keys(activeState.items||{}).length;$("activePackInfo").textContent="Active: "+activePack.title+" · saved fields: "+count+" · last update: "+new Date(activeState.updatedAt).toLocaleString()}
+async function renderWorkspaceList(){const packs=await getAllPacks();const root=$("workspaceList");if(!packs.length){root.innerHTML='<div class="muted">No packs available.</div>';return}root.innerHTML=packs.map(p=>`<div class="workspace-card"><div><div class="workspace-title">${escapeHTML(p.title)}</div><div class="workspace-meta">${escapeHTML(p.packType)} · ${escapeHTML(p.version||"v?")} · ${escapeHTML(p.dateRange?.start||"")} to ${escapeHTML(p.dateRange?.end||"")}</div></div><button class="primary" data-open-pack="${escapeHTML(p.packId)}">Open</button></div>`).join("");root.querySelectorAll("[data-open-pack]").forEach(b=>b.addEventListener("click",()=>openPack(b.dataset.openPack)))}
+async function openPack(packId){activePackId=packId;activePack=await loadPack(packId);activeState=await loadState(packId);if(!activeState.items||typeof activeState.items!=="object")activeState=blankState(packId);activeScreenId=activePack.screens[0]?.screenId;$("runtimeView").classList.remove("hidden");renderPack();updateActiveInfo();toast("Opened "+activePack.title)}
+function renderPack(){if(!activePack)return;$("packHeader").innerHTML=`<div class="screen-title">${escapeHTML(activePack.title)}</div><div class="muted">${escapeHTML(activePack.packType)} · ${escapeHTML(activePack.version||"")} · ${escapeHTML(activePack.dateRange?.start||"")} to ${escapeHTML(activePack.dateRange?.end||"")}</div>`;$("screenTabs").innerHTML=activePack.screens.map(s=>`<button class="tab ${s.screenId===activeScreenId?"active":""}" data-screen="${escapeHTML(s.screenId)}">${escapeHTML(s.title)}</button>`).join("");$("screenTabs").querySelectorAll("[data-screen]").forEach(b=>b.addEventListener("click",()=>{activeScreenId=b.dataset.screen;renderPack()}));const screen=activePack.screens.find(s=>s.screenId===activeScreenId)||activePack.screens[0];const items=itemMap(activePack);$("screenContent").innerHTML=screen.sections.map(sec=>`<section class="section"><h3>${escapeHTML(sec.title)}</h3>${sec.description?`<p class="section-desc">${escapeHTML(sec.description)}</p>`:""}${(sec.items||[]).map(id=>{const it=items.get(id);return it?renderItem(it):`<div class="item muted">Missing item: ${escapeHTML(id)}</div>`}).join("")}</section>`).join("");bindRenderedItems()}
+function renderItem(item){const value=getItemValue(item.itemId,item.type==="checkbox"?false:"");const note=item.metadata?.note||"";const placeholder=item.metadata?.placeholder||"";if(item.type==="checkbox")return`<div class="item"><label class="item-line"><input type="checkbox" data-item="${escapeHTML(item.itemId)}" ${value?"checked":""}><span><span class="item-label">${escapeHTML(item.label)}</span>${note?`<div class="item-note">${escapeHTML(note)}</div>`:""}</span></label></div>`;if(item.type==="text-note"||item.type==="journal-entry")return`<div class="item"><div class="item-label">${escapeHTML(item.label)}</div>${note?`<div class="item-note">${escapeHTML(note)}</div>`:""}<textarea data-item="${escapeHTML(item.itemId)}" placeholder="${escapeHTML(placeholder)}">${escapeHTML(value)}</textarea></div>`;if(item.type==="text"||item.type==="number")return`<div class="item"><label><div class="item-label">${escapeHTML(item.label)}</div>${note?`<div class="item-note">${escapeHTML(note)}</div>`:""}<input data-item="${escapeHTML(item.itemId)}" type="${item.type==="number"?"number":"text"}" value="${escapeHTML(value)}" placeholder="${escapeHTML(placeholder)}"></label></div>`;if(item.type==="select")return`<div class="item"><label><div class="item-label">${escapeHTML(item.label)}</div><select data-item="${escapeHTML(item.itemId)}"><option value="">Select...</option>${(item.options||[]).map(o=>`<option value="${escapeHTML(o)}" ${String(value)===String(o)?"selected":""}>${escapeHTML(o)}</option>`).join("")}</select></label></div>`;if(item.type==="rating"){const max=Number(item.metadata?.max||5);let btns="";for(let n=1;n<=max;n++)btns+=`<button class="rating-btn ${Number(value)===n?"active":""}" data-rating-item="${escapeHTML(item.itemId)}" data-rating-value="${n}">${n}</button>`;return`<div class="item"><div class="item-label">${escapeHTML(item.label)}</div><div class="rating-row">${btns}</div></div>`}if(item.type==="status-button"){const statuses=item.options||["yes","no","partly"];return`<div class="item"><div class="item-label">${escapeHTML(item.label)}</div><div class="status-row">${statuses.map(s=>`<button class="status-btn ${String(value)===String(s)?"active":""}" data-status-item="${escapeHTML(item.itemId)}" data-status-value="${escapeHTML(s)}">${escapeHTML(s)}</button>`).join("")}</div></div>`}if(item.type==="log-entry"){const logs=Array.isArray(value)?value:[];return`<div class="item"><div class="item-label">${escapeHTML(item.label)}</div><div class="log-box"><input id="log-input-${escapeHTML(item.itemId)}" placeholder="${escapeHTML(placeholder||"Add log entry...")}"><button class="primary" data-log-add="${escapeHTML(item.itemId)}">Add Log</button><div class="log-list">${logs.length?logs.map(l=>`<div class="log-entry">${escapeHTML(l.time)} · ${escapeHTML(l.text)}</div>`).join(""):`<div class="muted">No logs yet.</div>`}</div></div></div>`}return`<div class="item muted">Unsupported item type: ${escapeHTML(item.type)}</div>`}
+function bindRenderedItems(){document.querySelectorAll("[data-item]").forEach(el=>{const id=el.dataset.item;if(el.type==="checkbox")el.addEventListener("change",()=>updateItem(id,el.checked));else{el.addEventListener("input",()=>updateItem(id,el.value));el.addEventListener("change",()=>updateItem(id,el.value))}});document.querySelectorAll("[data-rating-item]").forEach(b=>b.addEventListener("click",async()=>{await updateItem(b.dataset.ratingItem,Number(b.dataset.ratingValue));renderPack()}));document.querySelectorAll("[data-status-item]").forEach(b=>b.addEventListener("click",async()=>{await updateItem(b.dataset.statusItem,b.dataset.statusValue);renderPack()}));document.querySelectorAll("[data-log-add]").forEach(b=>b.addEventListener("click",async()=>{const id=b.dataset.logAdd;const input=$("log-input-"+id);const text=(input.value||"").trim();if(!text){toast("Write a log entry first.");return}const current=getItemValue(id,[]);const logs=Array.isArray(current)?current:[];logs.push({time:new Date().toLocaleString(),text});await updateItem(id,logs);renderPack()}))}
+function buildHandoff(pack,state){const completed=[],skipped=[],journals=[],logs=[],ratings=[],other=[];for(const item of pack.interactiveItems||[]){const rec=state.items?.[item.itemId];const value=rec?.value;const group=item.metadata?.group||"ungrouped";const entry={itemId:item.itemId,label:item.label,type:item.type,group,value,updatedAt:rec?.updatedAt||null};if(item.type==="checkbox")value?completed.push(entry):skipped.push(entry);else if(item.type==="journal-entry"||item.type==="text-note"){if(value)journals.push(entry)}else if(item.type==="log-entry"){if(Array.isArray(value))value.forEach(v=>logs.push({itemId:item.itemId,label:item.label,...v}))}else if(item.type==="rating"){if(value)ratings.push(entry)}else{if(value!==undefined&&value!=="")other.push(entry)}}const structured={appVersion:RUNTIME_VERSION,exportedAt:nowISO(),pack:{packId:pack.packId,packType:pack.packType,title:pack.title,version:pack.version,dateRange:pack.dateRange,exportTemplate:pack.exportTemplate||{}},summary:{completedCount:completed.length,checkboxTotal:completed.length+skipped.length,journalCount:journals.length,logCount:logs.length,ratingCount:ratings.length},completed,skipped,journals,logs,ratings,other,nextAnalysisQuestions:["Which completed items correlate with positive lived state?","Which skipped items should be removed, downgraded, or moved?","What patterns in journals/logs should shape the next pack?","What should be tested in the next runtime version?"]};const text=["FLAMEWALKER RUNTIME AI HANDOFF","================================","App version: "+RUNTIME_VERSION,"Exported: "+new Date().toLocaleString(),"","Pack: "+pack.title,"Pack ID: "+pack.packId,"Type: "+pack.packType,"Version: "+(pack.version||""),"Date range: "+(pack.dateRange?.start||"")+" to "+(pack.dateRange?.end||""),"","SUMMARY","Completed checkboxes: "+completed.length+" / "+(completed.length+skipped.length),"Journals/notes with content: "+journals.length,"Log entries: "+logs.length,"Ratings captured: "+ratings.length,"","COMPLETED",completed.length?completed.map(x=>"- ["+x.group+"] "+x.label).join("\n"):"- None","","SKIPPED",skipped.length?skipped.map(x=>"- ["+x.group+"] "+x.label).join("\n"):"- None","","JOURNALS AND NOTES",journals.length?journals.map(x=>"- "+x.label+": "+x.value).join("\n\n"):"- None","","LOGS",logs.length?logs.map(x=>"- "+x.time+" · "+x.text).join("\n"):"- None","","RATINGS",ratings.length?ratings.map(x=>"- ["+x.group+"] "+x.label+": "+x.value).join("\n"):"- None","","OTHER FIELDS",other.length?other.map(x=>"- ["+x.group+"] "+x.label+": "+x.value).join("\n"):"- None","","NEXT ANALYSIS QUESTIONS",structured.nextAnalysisQuestions.map(q=>"- "+q).join("\n")].join("\n");return{text,structured}}
+async function exportHandoff(){if(!activePack){toast("Open a pack first.");return}const out=buildHandoff(activePack,activeState);downloadFile(out.text,activePack.packId+"-handoff.txt","text/plain");downloadFile(JSON.stringify(out.structured,null,2),activePack.packId+"-handoff.json","application/json");toast("Handoff exported.")}
+async function exportState(){if(!activePack){toast("Open a pack first.");return}const clean={packId:activePackId,runtimeVersion:activeState.runtimeVersion||RUNTIME_VERSION,updatedAt:nowISO(),items:activeState.items||{},logs:Array.isArray(activeState.logs)?activeState.logs:[]};downloadFile(JSON.stringify(clean,null,2),activePack.packId+"-state-backup.json","application/json");toast("State backup exported.")}
+function isValidStateBackup(obj){if(!obj||typeof obj!=="object"||Array.isArray(obj))return false;if(typeof obj.packId!=="string")return false;if(!obj.items||typeof obj.items!=="object"||Array.isArray(obj.items))return false;if(obj.logs!==undefined&&!Array.isArray(obj.logs))return false;return true}
+async function importStateFromFile(file){if(!activePack){toast("Open a pack first.");return}const text=await file.text();let incoming;try{incoming=JSON.parse(text)}catch(e){toast("Invalid JSON.");return}if(!isValidStateBackup(incoming)){alert("Import rejected.\n\nThis is not a Runtime state backup.\n\nUse a file ending like:\n"+activePackId+"-state-backup.json\n\nDo not import AI handoff JSON here.");return}if(incoming.packId!==activePackId){const ok=confirm("This backup belongs to:\n\n"+incoming.packId+"\n\nCurrent pack is:\n\n"+activePackId+"\n\nImport into the current pack anyway?");if(!ok)return}const cleanState={packId:activePackId,runtimeVersion:incoming.runtimeVersion||RUNTIME_VERSION,updatedAt:nowISO(),items:incoming.items||{},logs:Array.isArray(incoming.logs)?incoming.logs:[]};await saveState(activePackId,cleanState);activeState=await loadState(activePackId);renderPack();updateActiveInfo();toast("State backup imported.")}
+async function importPackFromFile(file){const text=await file.text();let pack;try{pack=JSON.parse(text)}catch(e){toast("Invalid JSON.");return}const result=validatePack(pack);if(!result.ok){alert("Pack rejected:\n"+result.errors.join("\n"));return}await savePack(pack);await renderWorkspaceList();toast("Pack imported: "+pack.title);if(result.warnings.length)alert("Warnings:\n"+result.warnings.join("\n"))}
+async function resetState(){if(!activePack){toast("Open a pack first.");return}if(!confirm("Reset all saved ticks, notes, ratings, and logs for this pack?"))return;activeState=blankState(activePackId);await saveState(activePackId,activeState);renderPack();updateActiveInfo();toast("State reset.")}
+async function deleteActivePack(){if(!activePack){toast("Open a pack first.");return}if(!confirm("Delete this pack and its state from this browser?"))return;await deletePackFromDB(activePackId);activePackId=null;activePack=null;activeState=null;activeScreenId=null;$("runtimeView").classList.add("hidden");await renderWorkspaceList();updateActiveInfo();toast("Pack deleted.")}
+function bindGlobalActions(){$("packFile").addEventListener("change",e=>{const f=e.target.files?.[0];if(f)importPackFromFile(f);e.target.value=""});$("stateFile").addEventListener("change",e=>{const f=e.target.files?.[0];if(f)importStateFromFile(f);e.target.value=""});$("exportHandoffBtn").addEventListener("click",exportHandoff);$("exportStateBtn").addEventListener("click",exportState);$("resetStateBtn").addEventListener("click",resetState);$("deletePackBtn").addEventListener("click",deleteActivePack)}
+async function registerSW(){if("serviceWorker" in navigator){try{await navigator.serviceWorker.register("service-worker.js")}catch(e){console.warn("Service worker not registered.",e)}}}
+async function boot(){if(!("indexedDB" in window)){alert("IndexedDB is not available in this browser.");return}db=await openDB();await seedSamples();bindGlobalActions();await renderWorkspaceList();await registerSW();toast("Runtime ready.")}
+boot().catch(err=>{console.error(err);alert("Runtime failed to start: "+err.message)});
 </script>
 </body>
 </html>
