@@ -1,0 +1,13 @@
+{
+  "name": "Flamewalker Runtime",
+  "short_name": "Runtime",
+  "description": "Local-first PWA runtime for AI-generated project packs.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070710",
+  "theme_color": "#1a1a2e",
+  "categories": ["productivity", "utilities"],
+  "lang": "en"
+}
