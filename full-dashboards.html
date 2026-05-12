@@ -2,22 +2,140 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes,maximum-scale=5">
 <title>Flamewalker Full Dashboards</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#070710;color:#e2e8f0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;padding:18px}.wrap{max-width:760px;margin:0 auto}h1{text-align:center;color:#B8860B;letter-spacing:.08em;font-size:24px}.sub{text-align:center;color:#94a3b8;line-height:1.5;margin-bottom:18px}.card{display:block;text-decoration:none;color:#e2e8f0;background:#10101c;border:1px solid #272744;border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 8px 28px rgba(0,0,0,.25)}.card b{display:block;color:#fde68a;font-size:18px;margin-bottom:6px}.card span{color:#94a3b8;line-height:1.45}.footer{text-align:center;color:#64748b;font-size:12px;margin-top:24px;line-height:1.5}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#070710;
+  color:#e2e8f0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;
+  padding:18px;
+}
+.wrap{max-width:820px;margin:0 auto}
+h1{
+  text-align:center;
+  color:#B8860B;
+  letter-spacing:.08em;
+  font-size:24px;
+  margin-bottom:8px;
+}
+.sub{
+  text-align:center;
+  color:#94a3b8;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+.group-title{
+  margin:22px 0 8px;
+  color:#fde68a;
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  border-bottom:1px solid #272744;
+  padding-bottom:6px;
+}
+.card{
+  display:block;
+  text-decoration:none;
+  color:#e2e8f0;
+  background:#10101c;
+  border:1px solid #272744;
+  border-radius:16px;
+  padding:16px;
+  margin:12px 0;
+  box-shadow:0 8px 28px rgba(0,0,0,.25);
+}
+.card:hover{
+  border-color:#B8860B;
+  background:#141426;
+}
+.card b{
+  display:block;
+  color:#fde68a;
+  font-size:18px;
+  margin-bottom:6px;
+}
+.card span{
+  color:#94a3b8;
+  line-height:1.45;
+}
+.footer{
+  text-align:center;
+  color:#64748b;
+  font-size:12px;
+  margin-top:24px;
+  line-height:1.5;
+}
+code{
+  color:#fde68a;
+}
 </style>
 </head>
+
 <body>
 <div class="wrap">
+
 <h1>FLAMEWALKER FULL DASHBOARDS</h1>
-<div class="sub">Standalone original interfaces. These are the full HTML dashboards, separate from the generic Runtime pack vessel.</div>
-<a class="card" href="theon-v10.html"><b>THEON v10 Planner</b><span>Original full THEON May 4 to May 17 planner interface.</span></a>
-<a class="card" href="inbound-dashboard-full.html"><b>Inbound Floor Control Dashboard</b><span>Original full inbound dashboard with gates, TRI logic, logs, routing, and handover tools.</span></a>
-<a class="card" href="ai-logistics-learning-dashboard.html"><b>AI Logistics Learning Dashboard</b><span>Original full 14-day AI/Excel learning dashboard.</span></a>
-<a class="card" href="investment-dashboard.html"><b>Investment Cockpit</b><span>Portfolio, ratios, rotation, cycles, signals, snapshots, and Fortnight Market OS.</span></a>
-<a class="card" href="index.html"><b>Universal Runtime</b><span>Back to the generic pack runtime.</span></a>
-<div class="footer">Keep these pages as standalone full apps. Use Runtime for future modular packs and lived-data export.</div>
+
+<div class="sub">
+Standalone original interfaces. These are the full HTML dashboards, separate from the generic Runtime pack vessel.
+</div>
+
+<div class="group-title">Daily Command / Planner</div>
+
+<a class="card" href="WeeklyPlanner-v11.html">
+  <b>Weekly Planner v11</b>
+  <span>Full THEON planner interface with daily stack, V(Q), esoteric field, notes, ticks, state export, pinch zoom, and patch console.</span>
+</a>
+
+<div class="group-title">THEON / Framework Work</div>
+
+<a class="card" href="theon-workbench-V11.html">
+  <b>THEON Workbench v11</b>
+  <span>Artifact vault, audit packets, document versions, council outputs, hash records, framework coordination layer, and patch console.</span>
+</a>
+
+<div class="group-title">Operations / Logistics</div>
+
+<a class="card" href="inbound-dashboard-v11.html">
+  <b>Inbound Floor Control Dashboard v11</b>
+  <span>Full inbound dashboard with gates, TRI logic, logs, routing, productivity forecasts, handover tools, pinch zoom, and patch console.</span>
+</a>
+
+<a class="card" href="ai-logistics-learning-dashboard-V11.html">
+  <b>AI Logistics Learning Dashboard v11</b>
+  <span>Full 14-day AI, Excel, warehouse data, dashboard, and digital twin learning dashboard with progress persistence and patch console.</span>
+</a>
+
+<div class="group-title">Markets / Investment</div>
+
+<a class="card" href="investment-cockpit-v11.html">
+  <b>Investment Cockpit v1.3.3</b>
+  <span>Portfolio, macro field, seven-day numerology resonance radar, safe rotation logic, snapshots, USDC values, and final patch console.</span>
+</a>
+
+<div class="group-title">Creative Studio</div>
+
+<a class="card" href="flamewalker-studio-v11.html">
+  <b>Flamewalker Studio v11</b>
+  <span>Creative forge for books, poetry, Word Forge, Image Explorer, Veo prompts, release board, creative vault, and patch console.</span>
+</a>
+
+<div class="group-title">Runtime / Modular Pack</div>
+
+<a class="card" href="index.html">
+  <b>Universal Runtime</b>
+  <span>Back to the generic pack runtime for modular dashboards and lived-data export.</span>
+</a>
+
+<div class="footer">
+Keep these pages as standalone full apps. Use Runtime for future modular packs and lived-data export.<br>
+If a filename changes in GitHub, change only the matching <code>href="..."</code> value.
+</div>
+
 </div>
 </body>
 </html>
