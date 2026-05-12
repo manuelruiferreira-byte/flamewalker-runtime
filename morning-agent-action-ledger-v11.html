@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0" />
+<title>Flamewalker Morning Agent · Action Ledger v0.1</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#070710;color:#e2e8f0;font-family:Georgia,serif;padding:10px;min-height:100vh}
+.container{max-width:1120px;margin:0 auto}
+h1{text-align:center;color:#B8860B;font-size:20px;letter-spacing:2px;margin-bottom:3px}
+h2{text-align:center;color:#8B0000;font-size:12px;font-weight:normal;letter-spacing:1px;margin-bottom:2px}
+h3{text-align:center;color:#64748b;font-size:9.5px;font-weight:normal;font-style:italic;margin-bottom:10px}
+button,input,select,textarea{font-family:Arial,sans-serif}
+.panel{background:#10101c;border:1px solid #252542;border-radius:9px;padding:11px;margin-bottom:9px}
+.panel-title{font-size:10.5px;color:#B8860B;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:8px;text-align:center;font-weight:bold}
+.notice{padding:8px 10px;background:rgba(184,134,11,.08);border-left:2px solid #B8860B;border-radius:0 5px 5px 0;font-size:10.5px;color:#f0d080;line-height:1.5;margin-bottom:7px}
+.danger{padding:8px 10px;background:rgba(220,38,38,.08);border-left:2px solid #dc2626;border-radius:0 5px 5px 0;font-size:10.5px;color:#fca5a5;line-height:1.5;margin-bottom:7px}
+.success{padding:8px 10px;background:rgba(34,197,94,.08);border-left:2px solid #22c55e;border-radius:0 5px 5px 0;font-size:10.5px;color:#86efac;line-height:1.5;margin-bottom:7px}
+.info{padding:8px 10px;background:rgba(59,130,246,.08);border-left:2px solid #3b82f6;border-radius:0 5px 5px 0;font-size:10.5px;color:#93c5fd;line-height:1.5;margin-bottom:7px}
+.top-bar{position:sticky;top:0;z-index:20;background:#070710;padding:6px 0 8px;border-bottom:1px solid #1a1a2e;margin-bottom:8px}
+.top-bar-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.top-cell{background:rgba(255,255,255,.035);border:1px solid #272744;border-radius:7px;padding:7px 5px;text-align:center}
+.top-label{font-size:8px;color:#94a3b8;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px}
+.top-value{font-size:14px;font-weight:bold;line-height:1.15}
+.top-sub{font-size:8.5px;color:#94a3b8;margin-top:1px;line-height:1.15}
+.tabs{display:flex;gap:5px;margin-bottom:9px;overflow-x:auto;padding:5px 0;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:8px 10px;background:#0e0e18;border:1px solid #30304f;border-radius:7px;color:#94a3b8;cursor:pointer;font-size:9.5px;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.tab.active{background:#17172a;color:#f0d080;border-color:#B8860B}
+.section{display:none}
+.section.active{display:block}
+.field{margin-bottom:8px}
+.field label{display:block;font-size:9px;color:#a5b4fc;text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px}
+.field input,.field select,.field textarea{width:100%;background:#0a0a14;border:1px solid #2c2c48;color:#e2e8f0;border-radius:5px;padding:7px;font-size:12px}
+.field textarea{min-height:90px;resize:vertical;line-height:1.35;font-family:'Courier New',monospace}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+.btn{background:#1d1d30;border:1px solid #38385a;color:#e2e8f0;border-radius:6px;padding:8px 11px;font-size:11px;cursor:pointer;flex:0 0 auto}
+.btn:hover{background:#292944}
+.btn-primary{border-color:#B8860B;color:#fde68a}
+.btn-green{border-color:#22c55e;color:#86efac}
+.btn-red{border-color:#dc2626;color:#fca5a5}
+.btn-blue{border-color:#3b82f6;color:#93c5fd}
+.btn-purple{border-color:#8b5cf6;color:#c4b5fd}
+.btn-full{width:100%;padding:10px;font-size:12px}
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.stat-card{background:rgba(255,255,255,.035);border:1px solid #272744;border-radius:7px;padding:9px 5px;text-align:center}
+.stat-value{font-size:19px;font-weight:bold;line-height:1.1}
+.stat-label{font-size:8.5px;color:#94a3b8;letter-spacing:.4px;text-transform:uppercase;margin-top:2px}
+.stat-green{color:#86efac}
+.stat-blue{color:#93c5fd}
+.stat-yellow{color:#fde68a}
+.stat-orange{color:#fdba74}
+.stat-red{color:#fca5a5}
+.action-card{background:#0a0a14;border:1px solid #252542;border-radius:10px;padding:10px;margin-bottom:8px}
+.action-head{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.action-title{font-size:13px;font-weight:bold;color:#fde68a;line-height:1.3}
+.action-meta{font-size:9.5px;color:#94a3b8;margin-top:3px;line-height:1.35}
+.action-body{font-size:10.8px;color:#cbd5e1;line-height:1.45;margin-top:7px}
+.pill{display:inline-block;font-size:8.5px;font-weight:bold;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.16);margin:2px 3px 2px 0;white-space:nowrap}
+.p-domain{background:rgba(59,130,246,.08);color:#93c5fd;border-color:#3b82f6}
+.p-status{background:rgba(148,163,184,.08);color:#cbd5e1;border-color:#64748b}
+.p-priority-high{background:rgba(220,38,38,.12);color:#fca5a5;border-color:#dc2626}
+.p-priority-medium{background:rgba(245,158,11,.12);color:#fde68a;border-color:#f59e0b}
+.p-priority-low{background:rgba(34,197,94,.10);color:#86efac;border-color:#22c55e}
+.p-mode{background:rgba(139,92,246,.10);color:#c4b5fd;border-color:#8b5cf6}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{background:#11111f;color:#a5b4fc;font-size:9px;text-transform:uppercase;letter-spacing:.6px;padding:7px 5px;border-bottom:1px solid #252542;text-align:left;white-space:nowrap}
+td{border-bottom:1px solid rgba(255,255,255,.04);padding:7px 5px;font-size:10.5px;vertical-align:top}
+.empty{font-size:10.5px;color:#64748b;text-align:center;padding:14px;font-style:italic}
+.brief-output{width:100%;min-height:260px;background:#0a0a14;border:1px solid #2c2c48;color:#e2e8f0;border-radius:6px;padding:9px;font-family:'Courier New',monospace;font-size:10.5px;line-height:1.5;white-space:pre;resize:vertical}
+.disclaimer{font-size:9.5px;color:#64748b;text-align:center;padding:10px;font-style:italic;line-height:1.5}
+
+/* Safe Patch Console */
+.patch-console textarea{font-family:'Courier New',monospace;font-size:10.5px;line-height:1.45}
+.patch-output{background:#070710;border:1px solid #252542;border-radius:6px;padding:8px;margin-top:8px;font-family:'Courier New',monospace;font-size:10px;line-height:1.45;color:#cbd5e1;white-space:pre-wrap;max-height:240px;overflow:auto}
+.patch-output.ok{border-color:#22c55e;color:#86efac}
+.patch-output.warn{border-color:#f59e0b;color:#fde68a}
+.patch-output.err{border-color:#dc2626;color:#fca5a5}
+.patch-help{font-size:10px;color:#94a3b8;line-height:1.5;margin-top:6px}
+.patch-help code{color:#fde68a}
+
+@media(max-width:700px){
+  .field-row,.field-row-3{grid-template-columns:1fr}
+  .card-grid{grid-template-columns:1fr 1fr}
+  .top-bar-grid{grid-template-columns:1fr 1fr 1fr}
+  .action-head{display:block}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>FLAMEWALKER MORNING AGENT</h1>
+<h2>ACTION LEDGER · INTELLIGENCE PLANNER</h2>
+<h3>v0.1 · daily task ideas → JSON packet → local action memory</h3>
+
+<div class="top-bar">
+  <div class="top-bar-grid">
+    <div class="top-cell"><div class="top-label">Local Time</div><div class="top-value" id="clock">--:--</div><div class="top-sub" id="date">—</div></div>
+    <div class="top-cell"><div class="top-label">Open Actions</div><div class="top-value" id="topOpen">0</div><div class="top-sub" id="topDue">—</div></div>
+    <div class="top-cell"><div class="top-label">Storage</div><div class="top-value" id="topStorage" style="font-size:12px">—</div><div class="top-sub" id="topUpdated">—</div></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="dashboard" onclick="switchTab('dashboard',this)">Dashboard</div>
+  <div class="tab" data-tab="inbox" onclick="switchTab('inbox',this)">Import</div>
+  <div class="tab" data-tab="actions" onclick="switchTab('actions',this)">Actions</div>
+  <div class="tab" data-tab="map" onclick="switchTab('map',this)">Signal Map</div>
+  <div class="tab" data-tab="prompt" onclick="switchTab('prompt',this)">Task Prompt</div>
+  <div class="tab" data-tab="data" onclick="switchTab('data',this)">Data</div>
+</div>
+
+<section class="section active" id="sec-dashboard">
+  <div class="notice">
+    This app stores ideas and concrete actions produced by the Morning Agent daily task. The task should output a normal briefing plus a JSON action packet. Paste/import the packet here, review actions, and export state at night.
+  </div>
+  <div class="card-grid">
+    <div class="stat-card"><div class="stat-value stat-yellow" id="statOpen">0</div><div class="stat-label">Open</div></div>
+    <div class="stat-card"><div class="stat-value stat-blue" id="statNext">0</div><div class="stat-label">Next</div></div>
+    <div class="stat-card"><div class="stat-value stat-red" id="statHigh">0</div><div class="stat-label">High Priority</div></div>
+    <div class="stat-card"><div class="stat-value stat-green" id="statDone">0</div><div class="stat-label">Done</div></div>
+    <div class="stat-card"><div class="stat-value stat-orange" id="statPackets">0</div><div class="stat-label">Packets</div></div>
+    <div class="stat-card"><div class="stat-value" id="statDomains">0</div><div class="stat-label">Domains</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Today’s Command Queue</div>
+    <div id="todayQueue"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Domain Distribution</div>
+    <div id="domainDistribution" class="table-wrap"></div>
+  </div>
+</section>
+
+<section class="section" id="sec-inbox">
+  <div class="panel">
+    <div class="panel-title">Import Morning Agent Action Packet</div>
+    <div class="info">Paste the JSON block from the daily briefing. Accepted packet type: <b>morning_agent_action_packet</b>. Existing actions are deduped by date + domain + title.</div>
+    <div class="field"><label>JSON Packet</label><textarea id="packetInput" placeholder='{"packet_type":"morning_agent_action_packet","date":"2026-05-11","summary":"...","actions":[...]}'></textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="importPacketFromTextarea()">Import Packet</button>
+      <button class="btn btn-blue" onclick="loadExamplePacket()">Load Example</button>
+      <button class="btn" onclick="document.getElementById('packetFile').click()">Import File</button>
+      <input type="file" id="packetFile" accept="application/json" style="display:none" onchange="importPacketFile(event)" />
+    </div>
+    <div id="importStatus" style="margin-top:8px"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Manual Quick Add</div>
+    <div class="field"><label>Title</label><input id="addTitle" placeholder="Patch Triangulation data gaps" /></div>
+    <div class="field-row">
+      <div class="field"><label>Domain</label><select id="addDomain"></select></div>
+      <div class="field"><label>Priority</label><select id="addPriority"></select></div>
+    </div>
+    <div class="field"><label>Next Action</label><input id="addNext" placeholder="Open app, inspect DATA GAP coins, freeze 1 hypothesis" /></div>
+    <div class="field"><label>Rationale</label><textarea id="addRationale" placeholder="Why this matters..."></textarea></div>
+    <button class="btn btn-primary btn-full" onclick="manualAddAction()">Add Action</button>
+  </div>
+</section>
+
+<section class="section" id="sec-actions">
+  <div class="panel">
+    <div class="panel-title">Filters</div>
+    <div class="field-row-3">
+      <div class="field"><label>Status</label><select id="filterStatus" onchange="renderAll()"></select></div>
+      <div class="field"><label>Domain</label><select id="filterDomain" onchange="renderAll()"></select></div>
+      <div class="field"><label>Priority</label><select id="filterPriority" onchange="renderAll()"></select></div>
+    </div>
+    <div class="field"><label>Search</label><input id="filterSearch" oninput="renderActions()" placeholder="coin, THEON, supplement, app..." /></div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Actions</div>
+    <div id="actionList"></div>
+  </div>
+</section>
+
+<section class="section" id="sec-map">
+  <div class="panel">
+    <div class="panel-title">Latest Imported Signals</div>
+    <div id="signalList"></div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Action Matrix</div>
+    <div id="actionMatrix" class="table-wrap"></div>
+  </div>
+</section>
+
+<section class="section" id="sec-prompt">
+  <div class="panel">
+    <div class="panel-title">Prompt Add-On for Morning Agent Task</div>
+    <div class="info">Add this to the Morning Agent task or project instructions. It forces the daily report to include a clean JSON packet that this app can import.</div>
+    <textarea id="taskPromptBox" class="brief-output" readonly></textarea>
+    <div class="btn-row">
+      <button class="btn btn-blue" onclick="copyTaskPrompt()">Copy Prompt</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">JSON Schema Template</div>
+    <textarea id="schemaBox" class="brief-output" readonly></textarea>
+    <div class="btn-row"><button class="btn btn-blue" onclick="copySchema()">Copy Schema</button></div>
+  </div>
+</section>
+
+<section class="section" id="sec-data">
+  <div class="panel">
+    <div class="panel-title">Export / Import Full App State</div>
+    <div class="info">Export this JSON at night if you want the Morning Agent to include action history in the next synthesis.</div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="exportState()">Export JSON</button>
+      <button class="btn btn-blue" onclick="document.getElementById('stateFile').click()">Import JSON</button>
+      <input type="file" id="stateFile" accept="application/json" style="display:none" onchange="importStateFile(event)" />
+      <button class="btn btn-red" onclick="resetAll()">Reset</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Storage Health</div>
+    <div id="storageInfo" style="font-size:11px;color:#cbd5e1;line-height:1.6"></div>
+  </div>
+
+  <div class="panel patch-console">
+    <div class="panel-title">Safe Patch Console</div>
+    <div class="notice">JSON only. No JavaScript execution. Allowed targets: <b>settings</b>, <b>actions</b>, <b>signals</b>, <b>packets</b>, and <b>archive</b>. A rollback copy is saved before every applied patch.</div>
+    <div class="field"><label>Patch JSON</label><textarea id="patchConsoleInput" placeholder='Examples:
+{"mode":"merge","target":"settings","data":{"defaultMode":"backtest"}}
+
+{"mode":"append","target":"actions","data":{"title":"Review exported JSON","domain":"Admin","priority":"medium","horizon":"today","next_action":"Export ledger state tonight"}}
+
+{"ops":[{"op":"set","path":"settings.defaultMode","value":"backtest"}]}'></textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-blue" onclick="previewPatchConsole()">Preview Patch</button>
+      <button class="btn btn-primary" onclick="applyPatchConsole()">Apply Patch</button>
+      <button class="btn" onclick="loadPatchTemplate()">Load Template</button>
+      <button class="btn btn-red" onclick="rollbackPatchConsole()">Rollback Last Patch</button>
+      <button class="btn" onclick="clearPatchConsole()">Clear</button>
+    </div>
+    <div class="patch-help">Accepted formats: <code>{"mode":"merge","target":"settings","data":{...}}</code>, <code>{"mode":"append","target":"actions","data":[...]}</code>, <code>{"op":"set","path":"settings.key","value":...}</code>, or <code>{"ops":[...]}</code>. Unknown targets are rejected fail-closed.</div>
+    <div id="patchConsoleOutput" class="patch-output">Patch Console ready. Export a full backup before major changes.</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Raw State Preview</div>
+    <textarea id="rawPreview" class="brief-output" readonly></textarea>
+  </div>
+</section>
+
+<div class="disclaimer">
+Local-only PWA pattern. No execution. No API keys. This app organizes intelligence into actions. The ledger decides what mattered.
+</div>
+
+</div>
+
+<script>
+"use strict";
+
+const STORAGE_KEY = "fw_morning_agent_action_ledger_v01";
+const STATE_VERSION = "0.1.0";
+const DOMAINS = ["THEON","Investment","PlannerHealth","OperationsApp","AppBuild","AISystems","LogisticsRobotics","CryptoMarkets","QuantumCosmology","CreativeAI","Culture","WorkCareer","Admin"];
+const PRIORITIES = ["high","medium","low"];
+const STATUSES = ["inbox","next","doing","waiting","done","snoozed","dropped"];
+const HORIZONS = ["today","24h","48h","7d","later"];
+
+function uid(){ return "ma_"+Date.now()+"_"+Math.random().toString(36).slice(2,7); }
+function nowIso(){ return new Date().toISOString(); }
+function todayIso(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+function escapeHtml(v){ return String(v ?? "").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+function safeArr(v){ return Array.isArray(v) ? v : []; }
+function norm(s){ return String(s||"").trim(); }
+function normKey(s){ return norm(s).toLowerCase().replace(/\s+/g," "); }
+
+function defaultState(){
+  return {
+    version:STATE_VERSION,
+    createdAt:nowIso(),
+    updatedAt:nowIso(),
+    settings:{defaultMode:"backtest"},
+    packets:[],
+    signals:[],
+    actions:[],
+    archive:[]
+  };
+}
+
+let state = loadState();
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return defaultState();
+    const s = JSON.parse(raw);
+    return Object.assign(defaultState(), s, {version:STATE_VERSION});
+  }catch(e){
+    console.error(e);
+    return defaultState();
+  }
+}
+
+function saveState(){
+  state.updatedAt = nowIso();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  renderAll();
+}
+
+function switchTab(name, btn){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  document.getElementById("sec-"+name)?.classList.add("active");
+  if(name==="data") renderRawPreview();
+}
+
+function updateClock(){
+  const now = new Date();
+  document.getElementById("clock").textContent = `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+  document.getElementById("date").textContent = now.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"});
+}
+
+function initSelects(){
+  const addDomain=document.getElementById("addDomain");
+  const addPriority=document.getElementById("addPriority");
+  addDomain.innerHTML = DOMAINS.map(x=>`<option value="${x}">${x}</option>`).join("");
+  addPriority.innerHTML = PRIORITIES.map(x=>`<option value="${x}">${x}</option>`).join("");
+  const fs=document.getElementById("filterStatus");
+  const fd=document.getElementById("filterDomain");
+  const fp=document.getElementById("filterPriority");
+  fs.innerHTML = `<option value="all">All</option>` + STATUSES.map(x=>`<option value="${x}">${x}</option>`).join("");
+  fd.innerHTML = `<option value="all">All</option>` + DOMAINS.map(x=>`<option value="${x}">${x}</option>`).join("");
+  fp.innerHTML = `<option value="all">All</option>` + PRIORITIES.map(x=>`<option value="${x}">${x}</option>`).join("");
+}
+
+function normalizeAction(a, packetDate){
+  const title = norm(a.title || a.action || "Untitled action");
+  const domain = DOMAINS.includes(a.domain) ? a.domain : inferDomain(title, a);
+  const priority = PRIORITIES.includes(a.priority) ? a.priority : "medium";
+  const status = STATUSES.includes(a.status) ? a.status : "inbox";
+  const horizon = HORIZONS.includes(a.horizon) ? a.horizon : "today";
+  return {
+    id:a.id || uid(),
+    createdAt:a.createdAt || nowIso(),
+    updatedAt:nowIso(),
+    date:a.date || packetDate || todayIso(),
+    title,
+    domain,
+    priority,
+    status,
+    horizon,
+    effort:a.effort || "",
+    impact:a.impact || "",
+    dueDate:a.due_date || a.dueDate || "",
+    sourceSignal:a.source_signal || a.sourceSignal || "",
+    rationale:a.rationale || a.why || "",
+    nextAction:a.next_action || a.nextAction || "",
+    related:Object.assign({app:"", coin:"", theonDoc:"", plannerDomain:""}, a.related || {}),
+    links:safeArr(a.links || a.sources).map(String),
+    tags:safeArr(a.tags).map(String),
+    notes:a.notes || "",
+    mode:a.mode || state.settings.defaultMode || "backtest",
+    originPacketId:a.originPacketId || null,
+    result:"",
+    resultNotes:""
+  };
+}
+
+function inferDomain(title, a){
+  const text = `${title} ${a.rationale||""} ${a.next_action||""} ${JSON.stringify(a.related||{})}`.toLowerCase();
+  if(text.includes("theon") || text.includes("ocf") || text.includes("sipr") || text.includes("doc")) return "THEON";
+  if(text.includes("coin") || text.includes("adx") || text.includes("portfolio") || text.includes("crypto") || text.includes("usdc")) return "Investment";
+  if(text.includes("supplement") || text.includes("skin") || text.includes("sleep") || text.includes("planner") || text.includes("health")) return "PlannerHealth";
+  if(text.includes("warehouse") || text.includes("logistics") || text.includes("robot")) return "LogisticsRobotics";
+  if(text.includes("app") || text.includes("html") || text.includes("json") || text.includes("pwa")) return "AppBuild";
+  if(text.includes("sora") || text.includes("music") || text.includes("video") || text.includes("creative")) return "CreativeAI";
+  return "Admin";
+}
+
+function actionKey(a){
+  return [a.date, a.domain, normKey(a.title)].join("|");
+}
+
+function importPacket(packet){
+  if(!packet || typeof packet !== "object") throw new Error("Invalid JSON object.");
+  if(packet.packet_type && packet.packet_type !== "morning_agent_action_packet") throw new Error("Unsupported packet_type: "+packet.packet_type);
+  const packetId = packet.id || "packet_"+Date.now();
+  const date = packet.date || todayIso();
+  const storedPacket = {
+    id:packetId,
+    packet_type:"morning_agent_action_packet",
+    importedAt:nowIso(),
+    date,
+    summary:packet.summary || "",
+    source:packet.source || "Morning Agent",
+    raw:packet
+  };
+  state.packets.push(storedPacket);
+
+  safeArr(packet.signals).forEach(sig=>{
+    state.signals.push({
+      id:sig.id || uid(),
+      packetId,
+      date,
+      title:sig.title || "Untitled signal",
+      domain:DOMAINS.includes(sig.domain) ? sig.domain : inferDomain(sig.title||"", sig),
+      why:sig.why || sig.rationale || "",
+      sources:safeArr(sig.sources || sig.links).map(String),
+      importedAt:nowIso()
+    });
+  });
+
+  const existing = new Map(state.actions.map(a=>[actionKey(a), a]));
+  let added=0, updated=0;
+  safeArr(packet.actions).forEach(raw=>{
+    const a = normalizeAction(Object.assign({}, raw, {originPacketId:packetId}), date);
+    const key = actionKey(a);
+    if(existing.has(key)){
+      const old = existing.get(key);
+      Object.assign(old, {...a, id:old.id, createdAt:old.createdAt, status:old.status==="done" ? "done" : a.status, notes:old.notes || a.notes, updatedAt:nowIso()});
+      updated++;
+    }else{
+      state.actions.push(a);
+      existing.set(key,a);
+      added++;
+    }
+  });
+  saveState();
+  return {packetId, added, updated, signals:safeArr(packet.signals).length};
+}
+
+function importPacketFromTextarea(){
+  const box=document.getElementById("packetInput");
+  try{
+    const packet = JSON.parse(box.value);
+    const res = importPacket(packet);
+    document.getElementById("importStatus").innerHTML = `<div class="success">Imported ${res.added} new actions, updated ${res.updated}, signals ${res.signals}.</div>`;
+    box.value="";
+  }catch(e){
+    document.getElementById("importStatus").innerHTML = `<div class="danger">Import failed: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+function importPacketFile(ev){
+  const file=ev.target.files && ev.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    document.getElementById("packetInput").value = reader.result;
+    importPacketFromTextarea();
+  };
+  reader.readAsText(file);
+  ev.target.value="";
+}
+
+function manualAddAction(){
+  const raw = {
+    title:document.getElementById("addTitle").value,
+    domain:document.getElementById("addDomain").value,
+    priority:document.getElementById("addPriority").value,
+    next_action:document.getElementById("addNext").value,
+    rationale:document.getElementById("addRationale").value,
+    status:"inbox",
+    horizon:"today",
+    date:todayIso()
+  };
+  const a=normalizeAction(raw,todayIso());
+  if(!a.title || a.title==="Untitled action"){ alert("Title required."); return; }
+  state.actions.push(a);
+  ["addTitle","addNext","addRationale"].forEach(id=>document.getElementById(id).value="");
+  saveState();
+}
+
+function renderAll(){
+  renderStats();
+  renderDashboard();
+  renderActions();
+  renderSignals();
+  renderMatrix();
+  renderStorage();
+  renderPrompts();
+}
+
+function renderStats(){
+  const open = state.actions.filter(a=>!["done","dropped"].includes(a.status)).length;
+  const next = state.actions.filter(a=>a.status==="next" || a.horizon==="today").length;
+  const high = state.actions.filter(a=>a.priority==="high" && !["done","dropped"].includes(a.status)).length;
+  const done = state.actions.filter(a=>a.status==="done").length;
+  const domains = new Set(state.actions.map(a=>a.domain)).size;
+  document.getElementById("statOpen").textContent=open;
+  document.getElementById("statNext").textContent=next;
+  document.getElementById("statHigh").textContent=high;
+  document.getElementById("statDone").textContent=done;
+  document.getElementById("statPackets").textContent=state.packets.length;
+  document.getElementById("statDomains").textContent=domains;
+  document.getElementById("topOpen").textContent=open;
+  document.getElementById("topDue").textContent=high ? `${high} high priority` : "stable";
+  document.getElementById("topUpdated").textContent=state.updatedAt ? "upd "+new Date(state.updatedAt).toLocaleTimeString().slice(0,5) : "—";
+}
+
+function actionScore(a){
+  const p = a.priority==="high"?30:a.priority==="medium"?15:5;
+  const h = a.horizon==="today"?20:a.horizon==="24h"?15:a.horizon==="48h"?10:a.horizon==="7d"?5:0;
+  const st = a.status==="next"?20:a.status==="doing"?18:a.status==="inbox"?10:a.status==="waiting"?2:0;
+  return p+h+st;
+}
+
+function renderDashboard(){
+  const q = state.actions.filter(a=>!["done","dropped","snoozed"].includes(a.status)).sort((a,b)=>actionScore(b)-actionScore(a)).slice(0,8);
+  const el=document.getElementById("todayQueue");
+  el.innerHTML = q.length ? q.map(renderActionCard).join("") : `<div class="empty">No open actions yet. Import a Morning Agent packet.</div>`;
+
+  const counts={};
+  state.actions.forEach(a=>counts[a.domain]=(counts[a.domain]||0)+1);
+  const rows=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([d,c])=>`<tr><td>${escapeHtml(d)}</td><td>${c}</td><td>${state.actions.filter(a=>a.domain===d && !["done","dropped"].includes(a.status)).length} open</td></tr>`).join("");
+  document.getElementById("domainDistribution").innerHTML = rows ? `<table><thead><tr><th>Domain</th><th>Total</th><th>Open</th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="empty">No domains yet.</div>`;
+}
+
+function renderActionCard(a){
+  return `<div class="action-card">
+    <div class="action-head">
+      <div>
+        <div class="action-title">${escapeHtml(a.title)}</div>
+        <div class="action-meta">${escapeHtml(a.date)} · ${escapeHtml(a.horizon)} · ${escapeHtml(a.mode)}</div>
+      </div>
+      <div>
+        ${pill(a.domain,"p-domain")}
+        ${pill(a.priority,"p-priority-"+a.priority)}
+        ${pill(a.status,"p-status")}
+      </div>
+    </div>
+    <div class="action-body">
+      ${a.nextAction ? `<b>Next:</b> ${escapeHtml(a.nextAction)}<br/>` : ""}
+      ${a.rationale ? `<b>Why:</b> ${escapeHtml(a.rationale)}<br/>` : ""}
+      ${a.related && (a.related.coin||a.related.app||a.related.theonDoc) ? `<b>Related:</b> ${escapeHtml([a.related.coin,a.related.app,a.related.theonDoc].filter(Boolean).join(" · "))}<br/>` : ""}
+      ${a.tags.length ? `<b>Tags:</b> ${a.tags.map(t=>"#"+escapeHtml(t)).join(" ")}` : ""}
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-blue" onclick="setActionStatus('${a.id}','next')">Next</button>
+      <button class="btn btn-purple" onclick="setActionStatus('${a.id}','doing')">Doing</button>
+      <button class="btn btn-green" onclick="setActionStatus('${a.id}','done')">Done</button>
+      <button class="btn" onclick="editAction('${a.id}')">Edit</button>
+      <button class="btn btn-red" onclick="deleteAction('${a.id}')">Delete</button>
+    </div>
+  </div>`;
+}
+
+function pill(text, cls){ return `<span class="pill ${cls}">${escapeHtml(text)}</span>`; }
+
+function renderActions(){
+  const status=document.getElementById("filterStatus")?.value || "all";
+  const domain=document.getElementById("filterDomain")?.value || "all";
+  const priority=document.getElementById("filterPriority")?.value || "all";
+  const search=normKey(document.getElementById("filterSearch")?.value || "");
+  let list=state.actions.slice();
+  if(status!=="all") list=list.filter(a=>a.status===status);
+  if(domain!=="all") list=list.filter(a=>a.domain===domain);
+  if(priority!=="all") list=list.filter(a=>a.priority===priority);
+  if(search) list=list.filter(a=>normKey(JSON.stringify(a)).includes(search));
+  list.sort((a,b)=>actionScore(b)-actionScore(a));
+  const el=document.getElementById("actionList");
+  el.innerHTML = list.length ? list.map(renderActionCard).join("") : `<div class="empty">No actions match filters.</div>`;
+}
+
+function setActionStatus(id,status){
+  const a=state.actions.find(x=>x.id===id);
+  if(!a) return;
+  a.status=status;
+  a.updatedAt=nowIso();
+  if(status==="done") a.result = a.result || "completed";
+  saveState();
+}
+
+function editAction(id){
+  const a=state.actions.find(x=>x.id===id);
+  if(!a) return;
+  const title=prompt("Title:",a.title);
+  if(title===null) return;
+  const next=prompt("Next action:",a.nextAction || "");
+  if(next===null) return;
+  const notes=prompt("Notes:",a.notes || "");
+  if(notes===null) return;
+  a.title=title; a.nextAction=next; a.notes=notes; a.updatedAt=nowIso();
+  saveState();
+}
+
+function deleteAction(id){
+  if(!confirm("Delete this action?")) return;
+  state.actions=state.actions.filter(x=>x.id!==id);
+  saveState();
+}
+
+function renderSignals(){
+  const el=document.getElementById("signalList");
+  const latest = state.signals.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,30);
+  el.innerHTML = latest.length ? latest.map(s=>`<div class="action-card"><div class="action-title">${escapeHtml(s.title)}</div><div class="action-meta">${escapeHtml(s.date)} · ${escapeHtml(s.domain)}</div><div class="action-body">${escapeHtml(s.why || "")}${s.sources.length?`<br/><b>Sources:</b> ${s.sources.map(escapeHtml).join(" · ")}`:""}</div></div>`).join("") : `<div class="empty">No signals imported yet.</div>`;
+}
+
+function renderMatrix(){
+  const rows = DOMAINS.map(d=>{
+    const items=state.actions.filter(a=>a.domain===d);
+    const open=items.filter(a=>!["done","dropped"].includes(a.status)).length;
+    const high=items.filter(a=>a.priority==="high" && !["done","dropped"].includes(a.status)).length;
+    return `<tr><td>${escapeHtml(d)}</td><td>${items.length}</td><td>${open}</td><td>${high}</td><td>${items.slice(-1)[0]?.title ? escapeHtml(items.slice(-1)[0].title) : "—"}</td></tr>`;
+  }).join("");
+  document.getElementById("actionMatrix").innerHTML = `<table><thead><tr><th>Domain</th><th>Total</th><th>Open</th><th>High</th><th>Latest</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function renderStorage(){
+  const raw=JSON.stringify(state);
+  const bytes=new Blob([raw]).size;
+  document.getElementById("topStorage").textContent = (bytes/1024).toFixed(1)+"KB";
+  const el=document.getElementById("storageInfo");
+  if(el) el.innerHTML = `State size: ${(bytes/1024).toFixed(1)}KB<br/>Actions: ${state.actions.length}<br/>Packets: ${state.packets.length}<br/>Signals: ${state.signals.length}<br/>Last update: ${escapeHtml(state.updatedAt || "—")}`;
+}
+
+function renderRawPreview(){
+  const el=document.getElementById("rawPreview");
+  if(el) el.value=JSON.stringify(state,null,2);
+}
+
+const TASK_PROMPT_ADDON = `At the end of every Morning Agent daily briefing, include a machine-readable JSON block for the Morning Agent Action Ledger.
+
+Do not replace the human report. Add the JSON after the checklist.
+
+JSON requirements:
+- Valid JSON only inside the block.
+- packet_type must be "morning_agent_action_packet".
+- date must be YYYY-MM-DD using Brussels date.
+- actions must be concrete, not vague.
+- Each action must include title, domain, priority, horizon, rationale, next_action, related, tags, and links when available.
+- Use only these domains when possible: THEON, Investment, PlannerHealth, OperationsApp, AppBuild, AISystems, LogisticsRobotics, CryptoMarkets, QuantumCosmology, CreativeAI, Culture, WorkCareer, Admin.
+- priority must be high, medium, or low.
+- horizon must be today, 24h, 48h, 7d, or later.
+- status should default to inbox unless the action is urgent, then next.
+- related can include app, coin, theonDoc, plannerDomain.
+- Do not invent app state. If JSON exports are missing, create actions requesting the missing export instead of pretending state exists.
+
+Return JSON shaped like:
+{
+  "packet_type": "morning_agent_action_packet",
+  "date": "YYYY-MM-DD",
+  "source": "Morning Agent Daily Briefing",
+  "summary": "One concise synthesis sentence.",
+  "signals": [
+    {"title":"...", "domain":"AISystems", "why":"...", "sources":["..."]}
+  ],
+  "actions": [
+    {
+      "title":"...",
+      "domain":"Investment",
+      "priority":"high",
+      "horizon":"today",
+      "status":"inbox",
+      "source_signal":"...",
+      "rationale":"...",
+      "next_action":"...",
+      "due_date":"",
+      "related":{"app":"Investment Cockpit","coin":"ADX","theonDoc":"","plannerDomain":""},
+      "tags":["morning-agent","triangulation"],
+      "links":["..."],
+      "mode":"backtest"
+    }
+  ]
+}`;
+
+const SCHEMA = {
+  packet_type:"morning_agent_action_packet",
+  date:"YYYY-MM-DD",
+  source:"Morning Agent Daily Briefing",
+  summary:"One sentence daily synthesis.",
+  signals:[
+    {title:"Signal title", domain:"AISystems", why:"Why it matters", sources:["citation or URL label"]}
+  ],
+  actions:[
+    {
+      title:"Concrete action title",
+      domain:"THEON | Investment | PlannerHealth | OperationsApp | AppBuild | AISystems | LogisticsRobotics | CryptoMarkets | QuantumCosmology | CreativeAI | Culture | WorkCareer | Admin",
+      priority:"high | medium | low",
+      horizon:"today | 24h | 48h | 7d | later",
+      status:"inbox | next | doing | waiting | done | snoozed | dropped",
+      source_signal:"Signal that generated this action",
+      rationale:"Reason this action matters",
+      next_action:"Specific next step",
+      due_date:"",
+      related:{app:"", coin:"", theonDoc:"", plannerDomain:""},
+      tags:["morning-agent"],
+      links:[],
+      mode:"backtest | paper | live"
+    }
+  ]
+};
+
+function renderPrompts(){
+  const p=document.getElementById("taskPromptBox");
+  const s=document.getElementById("schemaBox");
+  if(p) p.value=TASK_PROMPT_ADDON;
+  if(s) s.value=JSON.stringify(SCHEMA,null,2);
+}
+
+async function copyText(text){
+  try{ await navigator.clipboard.writeText(text); alert("Copied."); }
+  catch(e){ prompt("Copy manually:", text); }
+}
+function copyTaskPrompt(){ copyText(TASK_PROMPT_ADDON); }
+function copySchema(){ copyText(JSON.stringify(SCHEMA,null,2)); }
+
+function loadExamplePacket(){
+  const example = {
+    packet_type:"morning_agent_action_packet",
+    date:todayIso(),
+    source:"Morning Agent Daily Briefing",
+    summary:"AI systems, logistics robotics, crypto triangulation, and THEON document actions converge on execution discipline today.",
+    signals:[
+      {title:"AI agents moving into workflow orchestration", domain:"AISystems", why:"Supports your app/runtime architecture and Morning Agent workflow.", sources:["daily briefing citations"]},
+      {title:"ADX narrative active but needs volume confirmation", domain:"Investment", why:"Connects Investment Cockpit triangulation to crypto news cycle.", sources:["Grok/X/project chatter"]}
+    ],
+    actions:[
+      {
+        title:"Freeze only one high-quality Investment Cockpit thesis today",
+        domain:"Investment",
+        priority:"high",
+        horizon:"today",
+        status:"next",
+        source_signal:"ADX and triangulation workflow need clean ledger proof",
+        rationale:"One logged thesis with 24h/48h/7d outcome is more valuable than ten untracked instincts.",
+        next_action:"Open Investment Cockpit, run Triangulation scan, inspect Yellow/Blue/Green candidates, freeze one thesis only if chart structure is defined.",
+        related:{app:"Investment Cockpit", coin:"ADX", theonDoc:"", plannerDomain:""},
+        tags:["triangulation","ledger","crypto"],
+        links:[],
+        mode:"backtest"
+      },
+      {
+        title:"Choose one THEON document for next patch pass",
+        domain:"THEON",
+        priority:"medium",
+        horizon:"24h",
+        status:"inbox",
+        source_signal:"THEON remains strategic priority above app upgrades",
+        rationale:"Morning Agent should reduce app-noise and redirect focus to framework crystallization.",
+        next_action:"Use the latest THEON index or patch log to select one document with the highest closure value.",
+        related:{app:"", coin:"", theonDoc:"TODO from THEON index", plannerDomain:""},
+        tags:["theon","document-action"],
+        links:[],
+        mode:"backtest"
+      }
+    ]
+  };
+  document.getElementById("packetInput").value=JSON.stringify(example,null,2);
+}
+
+function exportState(){
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href=url; a.download=`morning-agent-action-ledger-${todayIso()}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function importStateFile(ev){
+  const file=ev.target.files && ev.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const s=JSON.parse(reader.result);
+      if(!s.actions || !Array.isArray(s.actions)) throw new Error("Not a Morning Agent Action Ledger state.");
+      state=Object.assign(defaultState(), s, {version:STATE_VERSION, updatedAt:nowIso()});
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      renderAll();
+      alert("State imported.");
+    }catch(e){ alert("Import failed: "+e.message); }
+  };
+  reader.readAsText(file);
+  ev.target.value="";
+}
+
+function resetAll(){
+  if(!confirm("Reset all Morning Agent action data? Export first.")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state=defaultState();
+  renderAll();
+}
+
+
+const PATCH_ROLLBACK_KEY = STORAGE_KEY + "_patch_rollbacks";
+const PATCH_TARGETS = ["settings","actions","signals","packets","archive"];
+
+function patchConsoleWrite(message, cls){
+  const el = document.getElementById("patchConsoleOutput");
+  if(!el) return;
+  el.className = "patch-output" + (cls ? " " + cls : "");
+  el.textContent = message;
+}
+
+function readPatchConsolePayload(){
+  const raw = document.getElementById("patchConsoleInput")?.value || "";
+  if(!raw.trim()) throw new Error("Patch box is empty.");
+  return JSON.parse(raw);
+}
+
+function getPatchRollbacks(){
+  try{ return JSON.parse(localStorage.getItem(PATCH_ROLLBACK_KEY) || "[]"); }
+  catch(e){ return []; }
+}
+
+function pushPatchRollback(){
+  const stack = getPatchRollbacks();
+  stack.unshift({savedAt:nowIso(), state:JSON.parse(JSON.stringify(state))});
+  localStorage.setItem(PATCH_ROLLBACK_KEY, JSON.stringify(stack.slice(0,5)));
+}
+
+function validatePatchTarget(target){
+  if(!PATCH_TARGETS.includes(target)) throw new Error("Rejected target: " + target);
+}
+
+function cloneStateForPatch(){
+  return JSON.parse(JSON.stringify(state));
+}
+
+function normalizePatchOps(payload){
+  if(payload && Array.isArray(payload.ops)) return payload.ops;
+  if(payload && payload.op) return [payload];
+  if(payload && payload.mode && payload.target) return [{op:payload.mode, target:payload.target, data:payload.data, key:payload.key, path:payload.path, id:payload.id, value:payload.value}];
+  if(payload && typeof payload === "object" && !Array.isArray(payload)){
+    const keys = Object.keys(payload);
+    const direct = keys.filter(k=>PATCH_TARGETS.includes(k));
+    const unknown = keys.filter(k=>!["version","createdAt","updatedAt",...PATCH_TARGETS].includes(k));
+    if(unknown.length) throw new Error("Plain object rejected because it contains unknown top-level keys: " + unknown.join(", "));
+    return direct.map(k=>({op:"replace", target:k, data:payload[k]}));
+  }
+  throw new Error("Unsupported patch format.");
+}
+
+function setByPath(targetState, path, value){
+  const parts = String(path||"").split(".").filter(Boolean);
+  if(parts.length < 2) throw new Error("Path must include target and key, for example settings.defaultMode");
+  const target = parts[0];
+  validatePatchTarget(target);
+  if(parts.some(p=>p === "__proto__" || p === "constructor" || p === "prototype")) throw new Error("Unsafe path rejected.");
+  let obj = targetState;
+  for(let i=0;i<parts.length-1;i++){
+    const p = parts[i];
+    if(typeof obj[p] !== "object" || obj[p] === null){ obj[p] = {}; }
+    obj = obj[p];
+  }
+  obj[parts[parts.length-1]] = value;
+}
+
+function deleteByPath(targetState, path){
+  const parts = String(path||"").split(".").filter(Boolean);
+  if(parts.length < 2) throw new Error("Delete path must include target and key.");
+  const target = parts[0];
+  validatePatchTarget(target);
+  if(parts.some(p=>p === "__proto__" || p === "constructor" || p === "prototype")) throw new Error("Unsafe path rejected.");
+  let obj = targetState;
+  for(let i=0;i<parts.length-1;i++){
+    obj = obj[parts[i]];
+    if(!obj || typeof obj !== "object") return;
+  }
+  delete obj[parts[parts.length-1]];
+}
+
+function applyPatchOpToState(targetState, op){
+  if(!op || typeof op !== "object") throw new Error("Patch op must be an object.");
+  const verb = String(op.op || "").toLowerCase();
+  if(!["set","merge","append","replace","delete"].includes(verb)) throw new Error("Unsupported op: " + (op.op || "missing"));
+
+  if(verb === "set"){
+    if(!op.path) throw new Error("set requires path.");
+    setByPath(targetState, op.path, op.value);
+    return "set " + op.path;
+  }
+
+  if(verb === "delete"){
+    if(op.path){ deleteByPath(targetState, op.path); return "deleted " + op.path; }
+    const target = op.target;
+    validatePatchTarget(target);
+    if(target === "settings"){
+      if(!op.key) throw new Error("delete settings requires key.");
+      delete targetState.settings[op.key];
+      return "deleted settings." + op.key;
+    }
+    if(!op.id) throw new Error("delete array target requires id.");
+    targetState[target] = safeArr(targetState[target]).filter(x=>x && x.id !== op.id);
+    return "deleted " + target + " id " + op.id;
+  }
+
+  const target = op.target;
+  validatePatchTarget(target);
+
+  if(verb === "merge"){
+    if(!op.data || typeof op.data !== "object" || Array.isArray(op.data)) throw new Error("merge requires object data.");
+    if(target !== "settings") throw new Error("merge is only allowed for settings. Use append/replace for arrays.");
+    targetState.settings = Object.assign({}, targetState.settings || {}, op.data);
+    return "merged settings";
+  }
+
+  if(verb === "append"){
+    const data = Array.isArray(op.data) ? op.data : [op.data];
+    if(!Array.isArray(targetState[target])) throw new Error("append target must be an array.");
+    data.forEach(item=>{
+      if(!item || typeof item !== "object" || Array.isArray(item)) throw new Error("append data must contain objects.");
+      if(target === "actions") targetState.actions.push(normalizeAction(item, item.date || todayIso()));
+      else targetState[target].push(Object.assign({id:uid(), importedAt:nowIso()}, item));
+    });
+    return "appended " + data.length + " item(s) to " + target;
+  }
+
+  if(verb === "replace"){
+    if(target === "settings"){
+      if(!op.data || typeof op.data !== "object" || Array.isArray(op.data)) throw new Error("replace settings requires object data.");
+      targetState.settings = Object.assign({}, op.data);
+      return "replaced settings";
+    }
+    if(!Array.isArray(op.data)) throw new Error("replace " + target + " requires array data.");
+    if(target === "actions") targetState.actions = op.data.map(item=>normalizeAction(item, item.date || todayIso()));
+    else targetState[target] = op.data.map(item=>Object.assign({id:uid(), importedAt:nowIso()}, item));
+    return "replaced " + target + " with " + op.data.length + " item(s)";
+  }
+}
+
+function runPatchConsoleSimulation(payload){
+  const ops = normalizePatchOps(payload);
+  const trial = cloneStateForPatch();
+  const messages = ops.map(op=>applyPatchOpToState(trial, op));
+  return {ops, trial, messages};
+}
+
+function previewPatchConsole(){
+  try{
+    const payload = readPatchConsolePayload();
+    const sim = runPatchConsoleSimulation(payload);
+    patchConsoleWrite("Preview OK. No changes applied.\n\nOperations:\n- " + sim.messages.join("\n- ") + "\n\nResult counts:\nActions: " + sim.trial.actions.length + "\nSignals: " + sim.trial.signals.length + "\nPackets: " + sim.trial.packets.length + "\nArchive: " + sim.trial.archive.length, "ok");
+  }catch(e){
+    patchConsoleWrite("Preview rejected: " + e.message, "err");
+  }
+}
+
+function applyPatchConsole(){
+  try{
+    const payload = readPatchConsolePayload();
+    const sim = runPatchConsoleSimulation(payload);
+    if(!confirm("Apply patch?\n\n" + sim.messages.join("\n"))) return;
+    pushPatchRollback();
+    state = Object.assign(defaultState(), sim.trial, {version:STATE_VERSION, updatedAt:nowIso()});
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    renderAll();
+    patchConsoleWrite("Patch applied.\n\nOperations:\n- " + sim.messages.join("\n- "), "ok");
+  }catch(e){
+    patchConsoleWrite("Patch failed: " + e.message, "err");
+  }
+}
+
+function rollbackPatchConsole(){
+  const stack = getPatchRollbacks();
+  if(!stack.length){ patchConsoleWrite("No rollback state available.", "warn"); return; }
+  if(!confirm("Rollback to the state saved before the last patch?")) return;
+  const last = stack.shift();
+  state = Object.assign(defaultState(), last.state, {version:STATE_VERSION, updatedAt:nowIso()});
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  localStorage.setItem(PATCH_ROLLBACK_KEY, JSON.stringify(stack));
+  renderAll();
+  patchConsoleWrite("Rollback restored from " + last.savedAt, "ok");
+}
+
+function loadPatchTemplate(){
+  const template = {
+    mode:"append",
+    target:"actions",
+    data:[{
+      title:"Export Morning Agent Action Ledger JSON tonight",
+      domain:"Admin",
+      priority:"medium",
+      horizon:"today",
+      status:"inbox",
+      rationale:"Keep the Morning Agent loop longitudinal and auditable.",
+      next_action:"Open Data tab and export full app state JSON.",
+      related:{app:"Morning Agent Action Ledger", coin:"", theonDoc:"", plannerDomain:""},
+      tags:["morning-agent","json-export"],
+      links:[],
+      mode:"backtest"
+    }]
+  };
+  const el = document.getElementById("patchConsoleInput");
+  if(el) el.value = JSON.stringify(template,null,2);
+  patchConsoleWrite("Template loaded. Preview before applying.", "warn");
+}
+
+function clearPatchConsole(){
+  const input = document.getElementById("patchConsoleInput");
+  if(input) input.value = "";
+  patchConsoleWrite("Patch Console ready. Export a full backup before major changes.");
+}
+
+initSelects();
+renderAll();
+updateClock();
+setInterval(updateClock, 30000);
+</script>
+</body>
+</html>
