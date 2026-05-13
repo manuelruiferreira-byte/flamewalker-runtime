@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0" />
+<title>Flamewalker Morning Agent · Unified Path Council v0.2b</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#070710;color:#e2e8f0;font-family:Georgia,serif;padding:10px;min-height:100vh}
+.container{max-width:1120px;margin:0 auto}
+h1{text-align:center;color:#B8860B;font-size:20px;letter-spacing:2px;margin-bottom:3px}
+h2{text-align:center;color:#8B0000;font-size:12px;font-weight:normal;letter-spacing:1px;margin-bottom:2px}
+h3{text-align:center;color:#64748b;font-size:9.5px;font-weight:normal;font-style:italic;margin-bottom:10px}
+button,input,select,textarea{font-family:Arial,sans-serif}
+.panel{background:#10101c;border:1px solid #252542;border-radius:9px;padding:11px;margin-bottom:9px}
+.panel-title{font-size:10.5px;color:#B8860B;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:8px;text-align:center;font-weight:bold}
+.notice{padding:8px 10px;background:rgba(184,134,11,.08);border-left:2px solid #B8860B;border-radius:0 5px 5px 0;font-size:10.5px;color:#f0d080;line-height:1.5;margin-bottom:7px}
+.danger{padding:8px 10px;background:rgba(220,38,38,.08);border-left:2px solid #dc2626;border-radius:0 5px 5px 0;font-size:10.5px;color:#fca5a5;line-height:1.5;margin-bottom:7px}
+.success{padding:8px 10px;background:rgba(34,197,94,.08);border-left:2px solid #22c55e;border-radius:0 5px 5px 0;font-size:10.5px;color:#86efac;line-height:1.5;margin-bottom:7px}
+.info{padding:8px 10px;background:rgba(59,130,246,.08);border-left:2px solid #3b82f6;border-radius:0 5px 5px 0;font-size:10.5px;color:#93c5fd;line-height:1.5;margin-bottom:7px}
+.top-bar{position:sticky;top:0;z-index:20;background:#070710;padding:6px 0 8px;border-bottom:1px solid #1a1a2e;margin-bottom:8px}
+.top-bar-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.top-cell{background:rgba(255,255,255,.035);border:1px solid #272744;border-radius:7px;padding:7px 5px;text-align:center}
+.top-label{font-size:8px;color:#94a3b8;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px}
+.top-value{font-size:14px;font-weight:bold;line-height:1.15}
+.top-sub{font-size:8.5px;color:#94a3b8;margin-top:1px;line-height:1.15}
+.tabs{display:flex;gap:5px;margin-bottom:9px;overflow-x:auto;padding:5px 0;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:8px 10px;background:#0e0e18;border:1px solid #30304f;border-radius:7px;color:#94a3b8;cursor:pointer;font-size:9.5px;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.tab.active{background:#17172a;color:#f0d080;border-color:#B8860B}
+.section{display:none}
+.section.active{display:block}
+.field{margin-bottom:8px}
+.field label{display:block;font-size:9px;color:#a5b4fc;text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px}
+.field input,.field select,.field textarea{width:100%;background:#0a0a14;border:1px solid #2c2c48;color:#e2e8f0;border-radius:5px;padding:7px;font-size:12px}
+.field textarea{min-height:90px;resize:vertical;line-height:1.35;font-family:'Courier New',monospace}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+.btn{background:#1d1d30;border:1px solid #38385a;color:#e2e8f0;border-radius:6px;padding:8px 11px;font-size:11px;cursor:pointer;flex:0 0 auto}
+.btn:hover{background:#292944}
+.btn-primary{border-color:#B8860B;color:#fde68a}
+.btn-green{border-color:#22c55e;color:#86efac}
+.btn-red{border-color:#dc2626;color:#fca5a5}
+.btn-blue{border-color:#3b82f6;color:#93c5fd}
+.btn-purple{border-color:#8b5cf6;color:#c4b5fd}
+.btn-full{width:100%;padding:10px;font-size:12px}
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.stat-card{background:rgba(255,255,255,.035);border:1px solid #272744;border-radius:7px;padding:9px 5px;text-align:center}
+.stat-value{font-size:19px;font-weight:bold;line-height:1.1}
+.stat-label{font-size:8.5px;color:#94a3b8;letter-spacing:.4px;text-transform:uppercase;margin-top:2px}
+.stat-green{color:#86efac}
+.stat-blue{color:#93c5fd}
+.stat-yellow{color:#fde68a}
+.stat-orange{color:#fdba74}
+.stat-red{color:#fca5a5}
+.action-card{background:#0a0a14;border:1px solid #252542;border-radius:10px;padding:10px;margin-bottom:8px}
+.action-head{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.action-title{font-size:13px;font-weight:bold;color:#fde68a;line-height:1.3}
+.action-meta{font-size:9.5px;color:#94a3b8;margin-top:3px;line-height:1.35}
+.action-body{font-size:10.8px;color:#cbd5e1;line-height:1.45;margin-top:7px}
+.pill{display:inline-block;font-size:8.5px;font-weight:bold;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.16);margin:2px 3px 2px 0;white-space:nowrap}
+.p-domain{background:rgba(59,130,246,.08);color:#93c5fd;border-color:#3b82f6}
+.p-status{background:rgba(148,163,184,.08);color:#cbd5e1;border-color:#64748b}
+.p-priority-high{background:rgba(220,38,38,.12);color:#fca5a5;border-color:#dc2626}
+.p-priority-medium{background:rgba(245,158,11,.12);color:#fde68a;border-color:#f59e0b}
+.p-priority-low{background:rgba(34,197,94,.10);color:#86efac;border-color:#22c55e}
+.p-mode{background:rgba(139,92,246,.10);color:#c4b5fd;border-color:#8b5cf6}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{background:#11111f;color:#a5b4fc;font-size:9px;text-transform:uppercase;letter-spacing:.6px;padding:7px 5px;border-bottom:1px solid #252542;text-align:left;white-space:nowrap}
+td{border-bottom:1px solid rgba(255,255,255,.04);padding:7px 5px;font-size:10.5px;vertical-align:top}
+.empty{font-size:10.5px;color:#64748b;text-align:center;padding:14px;font-style:italic}
+.brief-output{width:100%;min-height:260px;background:#0a0a14;border:1px solid #2c2c48;color:#e2e8f0;border-radius:6px;padding:9px;font-family:'Courier New',monospace;font-size:10.5px;line-height:1.5;white-space:pre;resize:vertical}
+.disclaimer{font-size:9.5px;color:#64748b;text-align:center;padding:10px;font-style:italic;line-height:1.5}
+
+/* Safe Patch Console */
+.patch-console textarea{font-family:'Courier New',monospace;font-size:10.5px;line-height:1.45}
+.patch-output{background:#070710;border:1px solid #252542;border-radius:6px;padding:8px;margin-top:8px;font-family:'Courier New',monospace;font-size:10px;line-height:1.45;color:#cbd5e1;white-space:pre-wrap;max-height:240px;overflow:auto}
+.patch-output.ok{border-color:#22c55e;color:#86efac}
+.patch-output.warn{border-color:#f59e0b;color:#fde68a}
+.patch-output.err{border-color:#dc2626;color:#fca5a5}
+.patch-help{font-size:10px;color:#94a3b8;line-height:1.5;margin-top:6px}
+.patch-help code{color:#fde68a}
+
+@media(max-width:700px){
+  .field-row,.field-row-3{grid-template-columns:1fr}
+  .card-grid{grid-template-columns:1fr 1fr}
+  .top-bar-grid{grid-template-columns:1fr 1fr 1fr}
+  .action-head{display:block}
+}
+
+
+/* Path Engine + Council v0.2 */
+.quest-card{background:linear-gradient(135deg,rgba(184,134,11,.13),rgba(139,0,0,.09));border:1px solid rgba(184,134,11,.45);border-radius:12px;padding:12px;margin-bottom:10px}
+.quest-title{font-size:16px;color:#fde68a;font-weight:bold;text-align:center;margin-bottom:4px;letter-spacing:.8px}
+.quest-sub{font-size:10.5px;color:#cbd5e1;text-align:center;line-height:1.45}
+.path-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.path-card{background:#0a0a14;border:1px solid #252542;border-radius:10px;padding:9px}
+.path-card.primary{border-color:#B8860B;background:rgba(184,134,11,.07)}
+.path-card.caution{border-color:#dc2626;background:rgba(220,38,38,.05)}
+.path-name{font-size:12.5px;font-weight:bold;color:#fde68a;margin-bottom:3px}
+.path-score{font-size:18px;font-weight:bold;color:#93c5fd;float:right}
+.path-meta{font-size:9.5px;color:#94a3b8;line-height:1.4;margin-bottom:5px}
+.path-reasons{font-size:10px;color:#cbd5e1;line-height:1.45;clear:both}
+.scorebar{height:6px;background:#17172a;border-radius:999px;overflow:hidden;margin:5px 0}
+.scorebar span{display:block;height:100%;background:linear-gradient(90deg,#64748b,#B8860B);border-radius:999px}
+.prompt-card{background:#0a0a14;border:1px solid #252542;border-radius:10px;padding:10px;margin-bottom:8px}
+.prompt-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}
+.prompt-role{font-size:12px;color:#fde68a;font-weight:bold}
+.prompt-text{width:100%;min-height:150px;background:#070710;border:1px solid #2c2c48;color:#e2e8f0;border-radius:6px;padding:8px;font-family:'Courier New',monospace;font-size:10px;line-height:1.45;white-space:pre;resize:vertical}
+.gate-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.gate-card{background:#0a0a14;border:1px solid #252542;border-radius:8px;padding:8px;text-align:center}
+.gate-label{font-size:8.5px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px}
+.gate-value{font-size:13px;font-weight:bold;margin-top:2px}
+.gate-pass{color:#86efac}.gate-cond{color:#fde68a}.gate-fail{color:#fca5a5}.gate-info{color:#93c5fd}
+.model-status-row{display:grid;grid-template-columns:90px 1fr 80px;gap:6px;align-items:center;font-size:10px;border-bottom:1px solid rgba(255,255,255,.05);padding:5px 0}
+.mini-list{font-size:10px;line-height:1.5;color:#cbd5e1}
+.import-pill{display:inline-block;border:1px solid #334155;border-radius:999px;padding:2px 8px;font-size:9px;color:#cbd5e1;margin:2px}
+@media(max-width:700px){.path-grid,.gate-grid{grid-template-columns:1fr}.model-status-row{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div class="container">
+<h1>FLAMEWALKER MORNING AGENT</h1>
+<h2>UNIFIED PACKET · PATH ENGINE · AI COUNCIL</h2>
+<h3>v0.2b · Morning Agent synthesis packet → path measurement → council prompts → action memory</h3>
+
+<div class="top-bar">
+  <div class="top-bar-grid">
+    <div class="top-cell"><div class="top-label">Local Time</div><div class="top-value" id="clock">--:--</div><div class="top-sub" id="date">—</div></div>
+    <div class="top-cell"><div class="top-label">Open Actions</div><div class="top-value" id="topOpen">0</div><div class="top-sub" id="topDue">—</div></div>
+    <div class="top-cell"><div class="top-label">Storage</div><div class="top-value" id="topStorage" style="font-size:12px">—</div><div class="top-sub" id="topUpdated">—</div></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="dashboard" onclick="switchTab('dashboard',this)">Dashboard</div>
+  <div class="tab" data-tab="inbox" onclick="switchTab('inbox',this)">Import</div>
+  <div class="tab" data-tab="actions" onclick="switchTab('actions',this)">Actions</div>
+  <div class="tab" data-tab="map" onclick="switchTab('map',this)">Signal Map</div>
+  <div class="tab" data-tab="path" onclick="switchTab('path',this)">Path</div>
+  <div class="tab" data-tab="council" onclick="switchTab('council',this)">Council</div>
+  <div class="tab" data-tab="theon" onclick="switchTab('theon',this)">THEON</div>
+  <div class="tab" data-tab="prompt" onclick="switchTab('prompt',this)">Task Prompt</div>
+  <div class="tab" data-tab="data" onclick="switchTab('data',this)">Data</div>
+</div>
+
+<section class="section active" id="sec-dashboard">
+  <div class="notice">
+    This app stores the governed output of the Morning Agent. Raw app JSONs are digested in the Morning Agent chat/project. This local app imports one unified packet, then tracks the path, actions, council prompts, response scoring, and calibration.
+  </div>
+  <div class="card-grid">
+    <div class="stat-card"><div class="stat-value stat-yellow" id="statOpen">0</div><div class="stat-label">Open</div></div>
+    <div class="stat-card"><div class="stat-value stat-blue" id="statNext">0</div><div class="stat-label">Next</div></div>
+    <div class="stat-card"><div class="stat-value stat-red" id="statHigh">0</div><div class="stat-label">High Priority</div></div>
+    <div class="stat-card"><div class="stat-value stat-green" id="statDone">0</div><div class="stat-label">Done</div></div>
+    <div class="stat-card"><div class="stat-value stat-orange" id="statPackets">0</div><div class="stat-label">Packets</div></div>
+    <div class="stat-card"><div class="stat-value" id="statDomains">0</div><div class="stat-label">Domains</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Latest Unified Packet</div>
+    <div id="latestUnifiedBox" class="mini-list"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Today’s Command Queue</div>
+    <div id="todayQueue"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Domain Distribution</div>
+    <div id="domainDistribution" class="table-wrap"></div>
+  </div>
+</section>
+
+<section class="section" id="sec-inbox">
+  <div class="panel">
+    <div class="panel-title">Import Morning Agent Unified Packet</div>
+    <div class="info">Normal workflow: paste the single JSON packet produced by the Morning Agent chat after it has already read Investment Cockpit, Planner, THEON, Action Ledger, calendar/path files, and fresh web signals. Accepted packet types: <b>morning_agent_unified_packet</b> or legacy <b>morning_agent_action_packet</b>.</div>
+    <div class="field"><label>Unified Packet JSON</label><textarea id="packetInput" placeholder='{"packet_type":"morning_agent_unified_packet","date":"2026-05-13","path_engine":{"primary_quest":{}},"actions":[...]}'></textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="importPacketFromTextarea()">Import Unified Packet</button>
+      <button class="btn btn-blue" onclick="loadExamplePacket()">Load Example</button>
+      <button class="btn" onclick="document.getElementById('packetFile').click()">Import File</button>
+      <input type="file" id="packetFile" accept="application/json" style="display:none" onchange="importPacketFile(event)" />
+    </div>
+    <div id="importStatus" style="margin-top:8px"></div>
+  </div>
+
+
+
+  <div class="panel">
+    <div class="panel-title">Recovery Raw Import · Optional</div>
+    <div class="info">Use only for testing, recovery, or when the Morning Agent task failed. In normal operation, do not import raw app JSONs here. Upload raw exports to the Morning Agent chat/project and import only its unified packet above.</div>
+    <div class="field"><label>Optional Raw JSON or ICS</label><textarea id="dailyStateInput" placeholder='Optional only: paste esoteric field JSON or BEGIN:VCALENDAR...'></textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="importDailyStateFromTextarea()">Import Optional Raw State</button>
+      <button class="btn" onclick="document.getElementById('dailyStateFile').click()">Import File</button>
+      <input type="file" id="dailyStateFile" accept=".json,.ics,text/calendar,application/json,text/plain" style="display:none" onchange="importDailyStateFile(event)" />
+      <button class="btn btn-blue" onclick="loadEsotericTemplate()">Load Esoteric Template</button>
+      <button class="btn btn-purple" onclick="runPathEngine()">Run Path Engine</button>
+    </div>
+    <div id="dailyImportStatus" style="margin-top:8px"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Manual Quick Add</div>
+    <div class="field"><label>Title</label><input id="addTitle" placeholder="Patch Triangulation data gaps" /></div>
+    <div class="field-row">
+      <div class="field"><label>Domain</label><select id="addDomain"></select></div>
+      <div class="field"><label>Priority</label><select id="addPriority"></select></div>
+    </div>
+    <div class="field"><label>Next Action</label><input id="addNext" placeholder="Open app, inspect DATA GAP coins, freeze 1 hypothesis" /></div>
+    <div class="field"><label>Rationale</label><textarea id="addRationale" placeholder="Why this matters..."></textarea></div>
+    <button class="btn btn-primary btn-full" onclick="manualAddAction()">Add Action</button>
+  </div>
+</section>
+
+<section class="section" id="sec-actions">
+  <div class="panel">
+    <div class="panel-title">Filters</div>
+    <div class="field-row-3">
+      <div class="field"><label>Status</label><select id="filterStatus" onchange="renderAll()"></select></div>
+      <div class="field"><label>Domain</label><select id="filterDomain" onchange="renderAll()"></select></div>
+      <div class="field"><label>Priority</label><select id="filterPriority" onchange="renderAll()"></select></div>
+    </div>
+    <div class="field"><label>Search</label><input id="filterSearch" oninput="renderActions()" placeholder="coin, THEON, supplement, app..." /></div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Actions</div>
+    <div id="actionList"></div>
+  </div>
+</section>
+
+<section class="section" id="sec-map">
+  <div class="panel">
+    <div class="panel-title">Latest Imported Signals</div>
+    <div id="signalList"></div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Action Matrix</div>
+    <div id="actionMatrix" class="table-wrap"></div>
+  </div>
+</section>
+
+
+
+<section class="section" id="sec-path">
+  <div class="panel">
+    <div class="panel-title">Path Engine · Whole-Life Quest Vector</div>
+    <div class="notice">Measures all life departments, not only career. Scoring uses imported JSON, calendar commitments, open actions, body state, THEON priority, esoteric field, and strategic weights. The output is orientation, not command.</div>
+    <div class="field-row-3">
+      <div class="field"><label>Body State</label><select id="bodyState" onchange="saveManualPathState()"><option value="green">Green</option><option value="amber" selected>Amber</option><option value="red">Red</option></select></div>
+      <div class="field"><label>Social/Love Openness</label><select id="socialLoveState" onchange="saveManualPathState()"><option value="open">Open</option><option value="neutral" selected>Neutral</option><option value="closed">Closed/Protect</option></select></div>
+      <div class="field"><label>Execution Capacity</label><select id="executionCapacity" onchange="saveManualPathState()"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select></div>
+    </div>
+    <div class="field"><label>Human Path Note</label><textarea id="humanPathNote" oninput="saveManualPathState()" placeholder="What does your lived state say today? Body, mood, work pressure, social/love openness..."></textarea></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="runPathEngine()">Run Path Engine</button><button class="btn btn-blue" onclick="createPathActions()">Create Actions from Quest</button><button class="btn btn-purple" onclick="generateCouncilFromPath()">Generate Council Prompts</button></div>
+  </div>
+  <div id="questVectorBox"></div>
+  <div class="panel"><div class="panel-title">Life Department Scores</div><div id="pathDepartmentGrid" class="path-grid"></div></div>
+  <div class="panel"><div class="panel-title">Upcoming Path Commitments</div><div id="pathCommitments" class="table-wrap"></div></div>
+</section>
+
+<section class="section" id="sec-council">
+  <div class="panel">
+    <div class="panel-title">AI Agent Council · Auto Prompt Pack</div>
+    <div class="notice">No manual question needed. The app uses today’s imports and Path Engine to generate five role-specific prompt JSON cards. The models reason. The app measures their structured JSON responses with THEON and esoteric logic.</div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="generateCouncilFromPath()">Generate 5 Prompts from Daily State</button><button class="btn btn-blue" onclick="downloadCouncilPromptPack()">Download Prompt Pack JSON</button><button class="btn" onclick="clearCouncilResponses()">Clear Responses</button></div>
+  </div>
+  <div class="panel"><div class="panel-title">Council Target</div><div id="councilTargetBox" class="mini-list"></div></div>
+  <div class="panel"><div class="panel-title">Five Model Prompts</div><div id="councilPromptList"></div></div>
+  <div class="panel"><div class="panel-title">Import Model Response Cards</div>
+    <div class="info">Paste one model’s JSON response card at a time. The app validates fields, scores THEON compliance, scores esoteric alignment, and builds the final synthesis request.</div>
+    <div class="field"><label>Model Response JSON</label><textarea id="modelResponseInput" placeholder='{"model":"Claude","role":"Auditor","claim":"...","confidence":0.72,"facts":[],"assumptions":[],"risks":[],"falsifiers":[],"action_mode":"PROBE","veto_flags":[],"ledger_required":true}'></textarea></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="importCouncilResponse()">Import Response</button><button class="btn btn-blue" onclick="loadCouncilResponseTemplate()">Load Response Template</button></div>
+    <div id="responseImportStatus" style="margin-top:8px"></div>
+  </div>
+  <div class="panel"><div class="panel-title">Council Scoring</div><div id="councilScoringBox"></div></div>
+  <div class="panel"><div class="panel-title">Final ChatGPT Synthesis JSON</div><textarea id="finalSynthesisBox" class="brief-output" readonly></textarea><div class="btn-row"><button class="btn btn-blue" onclick="copyFinalSynthesis()">Copy Final Synthesis JSON</button><button class="btn btn-green" onclick="createCouncilAction()">Create Action from Council</button></div></div>
+</section>
+
+<section class="section" id="sec-theon">
+  <div class="panel">
+    <div class="panel-title">THEON Governance Layer · Deterministic Rules</div>
+    <div class="notice">This layer does not reason. It measures structure: evidence separation, assumptions, falsifiers, risk severity, body veto, data freshness, contradiction, action-mode caps, and calibration hook.</div>
+    <div id="theonGateBox"></div>
+  </div>
+  <div class="panel"><div class="panel-title">Esoteric Field</div><div id="esotericFieldBox" class="mini-list"></div></div>
+  <div class="panel"><div class="panel-title">THEON Config Preview</div><textarea id="theonConfigBox" class="brief-output" readonly></textarea></div>
+</section>
+
+<section class="section" id="sec-prompt">
+  <div class="panel">
+    <div class="panel-title">Prompt Add-On for Morning Agent Task</div>
+    <div class="info">Add this to the Morning Agent task or project instructions. It forces the daily report to include a clean JSON packet that this app can import.</div>
+    <textarea id="taskPromptBox" class="brief-output" readonly></textarea>
+    <div class="btn-row">
+      <button class="btn btn-blue" onclick="copyTaskPrompt()">Copy Prompt</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">JSON Schema Template</div>
+    <textarea id="schemaBox" class="brief-output" readonly></textarea>
+    <div class="btn-row"><button class="btn btn-blue" onclick="copySchema()">Copy Schema</button></div>
+  </div>
+</section>
+
+<section class="section" id="sec-data">
+  <div class="panel">
+    <div class="panel-title">Export / Import Full App State</div>
+    <div class="info">Export this JSON at night if you want the Morning Agent to include action history in the next synthesis.</div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="exportState()">Export JSON</button>
+      <button class="btn btn-blue" onclick="document.getElementById('stateFile').click()">Import JSON</button>
+      <input type="file" id="stateFile" accept="application/json" style="display:none" onchange="importStateFile(event)" />
+      <button class="btn btn-red" onclick="resetAll()">Reset</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Storage Health</div>
+    <div id="storageInfo" style="font-size:11px;color:#cbd5e1;line-height:1.6"></div>
+  </div>
+
+  <div class="panel patch-console">
+    <div class="panel-title">Safe Patch Console</div>
+    <div class="notice">JSON only. No JavaScript execution. Allowed targets: <b>settings</b>, <b>actions</b>, <b>signals</b>, <b>packets</b>, and <b>archive</b>. A rollback copy is saved before every applied patch.</div>
+    <div class="field"><label>Patch JSON</label><textarea id="patchConsoleInput" placeholder='Examples:
+{"mode":"merge","target":"settings","data":{"defaultMode":"backtest"}}
+
+{"mode":"append","target":"actions","data":{"title":"Review exported JSON","domain":"Admin","priority":"medium","horizon":"today","next_action":"Export ledger state tonight"}}
+
+{"ops":[{"op":"set","path":"settings.defaultMode","value":"backtest"}]}'></textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-blue" onclick="previewPatchConsole()">Preview Patch</button>
+      <button class="btn btn-primary" onclick="applyPatchConsole()">Apply Patch</button>
+      <button class="btn" onclick="loadPatchTemplate()">Load Template</button>
+      <button class="btn btn-red" onclick="rollbackPatchConsole()">Rollback Last Patch</button>
+      <button class="btn" onclick="clearPatchConsole()">Clear</button>
+    </div>
+    <div class="patch-help">Accepted formats: <code>{"mode":"merge","target":"settings","data":{...}}</code>, <code>{"mode":"append","target":"actions","data":[...]}</code>, <code>{"op":"set","path":"settings.key","value":...}</code>, or <code>{"ops":[...]}</code>. Unknown targets are rejected fail-closed.</div>
+    <div id="patchConsoleOutput" class="patch-output">Patch Console ready. Export a full backup before major changes.</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Raw State Preview</div>
+    <textarea id="rawPreview" class="brief-output" readonly></textarea>
+  </div>
+</section>
+
+<div class="disclaimer">
+Local-only PWA pattern. No execution. No API keys. This app organizes intelligence into actions. The ledger decides what mattered.
+</div>
+
+</div>
+
+<script>
+"use strict";
+
+const STORAGE_KEY = "fw_morning_agent_action_ledger_v02b_unified";
+const STATE_VERSION = "0.2.1-unified-path-council";
+const DOMAINS = ["THEON","Investment","PlannerHealth","OperationsApp","AppBuild","AISystems","LogisticsRobotics","CryptoMarkets","QuantumCosmology","CreativeAI","Culture","WorkCareer","Admin"];
+const PRIORITIES = ["high","medium","low"];
+const STATUSES = ["inbox","next","doing","waiting","done","snoozed","dropped"];
+const HORIZONS = ["today","24h","48h","7d","later"];
+
+const PATH_DEPARTMENTS = [
+  {key:"career", label:"Career / Work", domains:["WorkCareer","OperationsApp","LogisticsRobotics"], base:9},
+  {key:"theon", label:"THEON", domains:["THEON"], base:10},
+  {key:"health", label:"Health / Body", domains:["PlannerHealth"], base:10},
+  {key:"love", label:"Love / Romance", domains:["Culture"], base:5},
+  {key:"social", label:"Social Field", domains:["Culture","WorkCareer"], base:5},
+  {key:"investment", label:"Investment / Crypto", domains:["Investment","CryptoMarkets"], base:7},
+  {key:"creative", label:"Creative / Studio", domains:["CreativeAI","Culture"], base:6},
+  {key:"learning", label:"Learning / Skills", domains:["AISystems","LogisticsRobotics","AppBuild"], base:6},
+  {key:"spiritual", label:"Spiritual / Esoteric", domains:["QuantumCosmology"], base:7},
+  {key:"admin", label:"Admin / Stability", domains:["Admin","AppBuild"], base:5}
+];
+const MODEL_ROLES = [
+  {model:"Grok", role:"Field Scout", jurisdiction:"fresh social chatter, X signals, narrative heat, weak signals, culture and crypto pulse"},
+  {model:"Gemini", role:"Archivist", jurisdiction:"long context, uploaded files, continuity, project map, stable documents"},
+  {model:"Claude", role:"Auditor", jurisdiction:"bugs, prose rigor, implementation critique, risk and clarity audit"},
+  {model:"DeepSeek", role:"Red-Team Reasoner", jurisdiction:"logic, algorithms, thresholds, falsifiers, alternative implementations"},
+  {model:"ChatGPT", role:"Governor Preview", jurisdiction:"THEON synthesis, action packet, final governance, contradiction map"}
+];
+const ACTION_MODES = ["OBSERVE","RESEARCH","PROBE","REGULATE","COMMIT","VETO"];
+
+
+function uid(){ return "ma_"+Date.now()+"_"+Math.random().toString(36).slice(2,7); }
+function nowIso(){ return new Date().toISOString(); }
+function todayIso(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+function escapeHtml(v){ return String(v ?? "").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+function safeArr(v){ return Array.isArray(v) ? v : []; }
+function norm(s){ return String(s||"").trim(); }
+function normKey(s){ return norm(s).toLowerCase().replace(/\s+/g," "); }
+
+
+function defaultTheonConfig(){
+  return {
+    evidenceTypes:["uploaded_json","web_source","manual_note","inference","symbolic_esoteric","opinion","unknown"],
+    requiredFields:["facts","assumptions","risks","falsifiers","action_mode","ledger_required"],
+    actionCaps:{body_red:"VETO", body_amber:"REGULATE", stale_data:"PROBE", severe_risk:"PROBE", missing_falsifiers:"RESEARCH", contradiction_heavy:"RESEARCH"},
+    riskSevereAt:4,
+    maxCommitConfidenceWithoutFacts:0.74,
+    ledgerRequiredDomains:["Investment","PlannerHealth","THEON","WorkCareer","AppBuild"],
+    doctrine:"Evidence separation, fail-closed gates, body veto, falsifiers, assumptions, risk severity, action-mode caps, ledger requirement, freshness, contradiction detection, calibration hook."
+  };
+}
+function defaultEsotericField(){
+  return {
+    date:todayIso(),
+    source:"manual_or_morning_agent",
+    world_number:null,
+    personal_number:null,
+    mayan:null,
+    bazi:null,
+    moon:null,
+    hot_cold:"unknown",
+    favored_departments:["theon","career","health"],
+    caution_departments:["investment"],
+    recommended_modes:["RESEARCH","PROBE","REGULATE"],
+    forbidden_modes:["COMMIT_WITHOUT_CONFIRMATION"],
+    notes:"Import daily esoteric field from Morning Agent for best scoring."
+  };
+}
+
+function defaultState(){
+  return {
+    version:STATE_VERSION,
+    createdAt:nowIso(),
+    updatedAt:nowIso(),
+    settings:{defaultMode:"backtest"},
+    packets:[],
+    signals:[],
+    actions:[],
+    archive:[],
+    dailyImports:[],
+    pathEvents:[],
+    pathScores:null,
+    manualPathState:{bodyState:"amber", socialLoveState:"neutral", executionCapacity:"medium", note:""},
+    esotericField:defaultEsotericField(),
+    councilPromptPack:null,
+    councilResponses:[],
+    councilScoring:null,
+    decisionLedger:[],
+    unifiedPackets:[],
+    latestUnifiedPacket:null,
+    councilTargets:[],
+    dataAvailability:{},
+    theonSummary:null,
+    theonConfig:defaultTheonConfig()
+  };
+}
+
+let state = loadState();
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return defaultState();
+    const s = JSON.parse(raw);
+    return Object.assign(defaultState(), s, {version:STATE_VERSION});
+  }catch(e){
+    console.error(e);
+    return defaultState();
+  }
+}
+
+function saveState(){
+  state.updatedAt = nowIso();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  renderAll();
+}
+
+function switchTab(name, btn){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  document.getElementById("sec-"+name)?.classList.add("active");
+  if(name==="data") renderRawPreview();
+}
+
+function updateClock(){
+  const now = new Date();
+  document.getElementById("clock").textContent = `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+  document.getElementById("date").textContent = now.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"});
+}
+
+function initSelects(){
+  const addDomain=document.getElementById("addDomain");
+  const addPriority=document.getElementById("addPriority");
+  addDomain.innerHTML = DOMAINS.map(x=>`<option value="${x}">${x}</option>`).join("");
+  addPriority.innerHTML = PRIORITIES.map(x=>`<option value="${x}">${x}</option>`).join("");
+  const fs=document.getElementById("filterStatus");
+  const fd=document.getElementById("filterDomain");
+  const fp=document.getElementById("filterPriority");
+  fs.innerHTML = `<option value="all">All</option>` + STATUSES.map(x=>`<option value="${x}">${x}</option>`).join("");
+  fd.innerHTML = `<option value="all">All</option>` + DOMAINS.map(x=>`<option value="${x}">${x}</option>`).join("");
+  fp.innerHTML = `<option value="all">All</option>` + PRIORITIES.map(x=>`<option value="${x}">${x}</option>`).join("");
+}
+
+function normalizeAction(a, packetDate){
+  const title = norm(a.title || a.action || "Untitled action");
+  const domain = DOMAINS.includes(a.domain) ? a.domain : inferDomain(title, a);
+  const priority = PRIORITIES.includes(a.priority) ? a.priority : "medium";
+  const status = STATUSES.includes(a.status) ? a.status : "inbox";
+  const horizon = HORIZONS.includes(a.horizon) ? a.horizon : "today";
+  return {
+    id:a.id || uid(),
+    createdAt:a.createdAt || nowIso(),
+    updatedAt:nowIso(),
+    date:a.date || packetDate || todayIso(),
+    title,
+    domain,
+    priority,
+    status,
+    horizon,
+    effort:a.effort || "",
+    impact:a.impact || "",
+    dueDate:a.due_date || a.dueDate || "",
+    sourceSignal:a.source_signal || a.sourceSignal || "",
+    rationale:a.rationale || a.why || "",
+    nextAction:a.next_action || a.nextAction || "",
+    related:Object.assign({app:"", coin:"", theonDoc:"", plannerDomain:""}, a.related || {}),
+    links:safeArr(a.links || a.sources).map(String),
+    tags:safeArr(a.tags).map(String),
+    notes:a.notes || "",
+    mode:a.mode || state.settings.defaultMode || "backtest",
+    originPacketId:a.originPacketId || null,
+    result:"",
+    resultNotes:""
+  };
+}
+
+function inferDomain(title, a){
+  const text = `${title} ${a.rationale||""} ${a.next_action||""} ${JSON.stringify(a.related||{})}`.toLowerCase();
+  if(text.includes("theon") || text.includes("ocf") || text.includes("sipr") || text.includes("doc")) return "THEON";
+  if(text.includes("coin") || text.includes("adx") || text.includes("portfolio") || text.includes("crypto") || text.includes("usdc")) return "Investment";
+  if(text.includes("supplement") || text.includes("skin") || text.includes("sleep") || text.includes("planner") || text.includes("health")) return "PlannerHealth";
+  if(text.includes("warehouse") || text.includes("logistics") || text.includes("robot")) return "LogisticsRobotics";
+  if(text.includes("app") || text.includes("html") || text.includes("json") || text.includes("pwa")) return "AppBuild";
+  if(text.includes("sora") || text.includes("music") || text.includes("video") || text.includes("creative")) return "CreativeAI";
+  return "Admin";
+}
+
+function actionKey(a){
+  return [a.date, a.domain, normKey(a.title)].join("|");
+}
+
+function importPacket(packet){
+  if(!packet || typeof packet !== "object") throw new Error("Invalid JSON object.");
+  const ptype = packet.packet_type || "morning_agent_action_packet";
+  if(ptype === "morning_agent_unified_packet") return importUnifiedPacket(packet);
+  if(ptype !== "morning_agent_action_packet") throw new Error("Unsupported packet_type: "+ptype);
+  return importActionPacket(packet, {legacy:true});
+}
+
+function importActionPacket(packet, opts={}){
+  const packetId = packet.id || "packet_"+Date.now();
+  const date = packet.date || todayIso();
+  const storedPacket = {
+    id:packetId,
+    packet_type:packet.packet_type || "morning_agent_action_packet",
+    importedAt:nowIso(),
+    date,
+    summary:packet.summary || "",
+    source:packet.source || "Morning Agent",
+    raw:packet
+  };
+  state.packets.push(storedPacket);
+
+  safeArr(packet.signals).forEach(sig=>{
+    state.signals.push({
+      id:sig.id || uid(),
+      packetId,
+      date,
+      title:sig.title || "Untitled signal",
+      domain:DOMAINS.includes(sig.domain) ? sig.domain : inferDomain(sig.title||"", sig),
+      why:sig.why || sig.rationale || "",
+      sources:safeArr(sig.sources || sig.links).map(String),
+      importedAt:nowIso()
+    });
+  });
+
+  const existing = new Map(state.actions.map(a=>[actionKey(a), a]));
+  let added=0, updated=0;
+  safeArr(packet.actions).forEach(raw=>{
+    const a = normalizeAction(Object.assign({}, raw, {originPacketId:packetId}), date);
+    const key = actionKey(a);
+    if(existing.has(key)){
+      const old = existing.get(key);
+      Object.assign(old, {...a, id:old.id, createdAt:old.createdAt, status:old.status==="done" ? "done" : a.status, notes:old.notes || a.notes, updatedAt:nowIso()});
+      updated++;
+    }else{
+      state.actions.push(a);
+      existing.set(key,a);
+      added++;
+    }
+  });
+  return {packetId, added, updated, signals:safeArr(packet.signals).length, type:storedPacket.packet_type};
+}
+
+function importUnifiedPacket(packet){
+  const date = packet.date || todayIso();
+  const packetId = packet.id || "unified_" + Date.now();
+  const actionRes = importActionPacket(Object.assign({}, packet, {id:packetId, packet_type:"morning_agent_unified_packet"}), {unified:true});
+  const clean = {
+    id:packetId,
+    date,
+    importedAt:nowIso(),
+    source:packet.source || "Morning Agent Unified Briefing",
+    summary:packet.summary || "",
+    data_availability:packet.data_availability || packet.dataAvailability || {},
+    esoteric_field:packet.esoteric_field || packet.esotericField || null,
+    path_engine:packet.path_engine || packet.pathEngine || null,
+    theon_gate:packet.theon_gate || packet.theonGate || packet.theon_summary || null,
+    council_targets:safeArr(packet.council_targets || packet.councilTargets),
+    raw:packet
+  };
+  state.latestUnifiedPacket = clean;
+  state.unifiedPackets.push(clean);
+  state.unifiedPackets = state.unifiedPackets.slice(-30);
+  state.dataAvailability = clean.data_availability;
+  if(clean.esoteric_field) state.esotericField = normalizeEsotericField(clean.esoteric_field);
+  if(clean.theon_gate) state.theonSummary = clean.theon_gate;
+  state.councilTargets = clean.council_targets;
+  if(clean.path_engine) state.pathScores = normalizeUnifiedPathEngine(clean.path_engine);
+  state.dailyImports.push({id:uid(), type:"morning_agent_unified_packet", name:clean.source, importedAt:nowIso(), summary:clean.summary || "Unified packet imported", raw:packet});
+  saveState();
+  return Object.assign({}, actionRes, {type:"morning_agent_unified_packet", unified:true, councilTargets:state.councilTargets.length});
+}
+
+function normalizeUnifiedPathEngine(pe){
+  const primaryRaw = pe.primary_quest || pe.primaryQuest || pe.primary || {};
+  const secondRaw = safeArr(pe.secondary_vectors || pe.secondaryVectors || pe.secondaries);
+  const depts = pe.life_departments || pe.departments || {};
+  const toPath = (x, fallbackKey="admin") => {
+    const key = String(x.department || x.key || fallbackKey).toLowerCase().replace(/[^a-z]/g,"") || fallbackKey;
+    const matched = PATH_DEPARTMENTS.find(d=>d.key===key || d.label.toLowerCase().replace(/[^a-z]/g,"").includes(key));
+    const finalKey = matched ? matched.key : fallbackKey;
+    return {
+      key:finalKey,
+      label:x.label || x.department || (matched?matched.label:finalKey),
+      score:Number(x.score ?? x.weight ?? 0),
+      mode:String(x.mode || x.action_mode || x.actionMode || "RESEARCH").toUpperCase(),
+      reasons:safeArr(x.reasons || [x.reason || x.rationale]).filter(Boolean),
+      events:safeArr(x.events),
+      openActions:Number(x.openActions || x.open_actions || 0)
+    };
+  };
+  const allFromDepartments = Object.entries(depts).map(([k,v])=>toPath(Object.assign({key:k,department:k}, v||{}), k));
+  const primary = toPath(primaryRaw, allFromDepartments[0]?.key || "admin");
+  let all = allFromDepartments.length ? allFromDepartments : [primary, ...secondRaw.map((x,i)=>toPath(x, PATH_DEPARTMENTS[i+1]?.key || "admin"))];
+  const seen = new Set();
+  all = all.filter(x=>{ if(seen.has(x.key)) return false; seen.add(x.key); return true; });
+  if(!all.find(x=>x.key===primary.key)) all.unshift(primary);
+  all.sort((a,b)=>(b.score||0)-(a.score||0));
+  const secondaries = secondRaw.length ? secondRaw.map((x,i)=>toPath(x, PATH_DEPARTMENTS[i+1]?.key || "admin")) : all.filter(x=>x.key!==primary.key).slice(0,3);
+  return {
+    date:pe.date || todayIso(),
+    createdAt:nowIso(),
+    source:"morning_agent_unified_packet",
+    primary,
+    secondaries,
+    all,
+    field:state.esotericField,
+    manual:state.manualPathState,
+    doNotScatter:safeArr(pe.do_not_scatter || pe.doNotScatter),
+    calibrationHook:pe.calibration_hook || pe.calibrationHook || `Tomorrow check whether ${primary.label} produced one concrete result without violating body state.`
+  };
+}
+
+function importPacketFromTextarea(){
+  const box=document.getElementById("packetInput");
+  try{
+    const packet = JSON.parse(box.value);
+    const res = importPacket(packet);
+    document.getElementById("importStatus").innerHTML = `<div class="success">Imported ${escapeHtml(res.type || "packet")}: ${res.added} new actions, updated ${res.updated}, signals ${res.signals}${res.unified ? ", council targets " + res.councilTargets : ""}.</div>`;
+    box.value="";
+  }catch(e){
+    document.getElementById("importStatus").innerHTML = `<div class="danger">Import failed: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+function importPacketFile(ev){
+  const file=ev.target.files && ev.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    document.getElementById("packetInput").value = reader.result;
+    importPacketFromTextarea();
+  };
+  reader.readAsText(file);
+  ev.target.value="";
+}
+
+function manualAddAction(){
+  const raw = {
+    title:document.getElementById("addTitle").value,
+    domain:document.getElementById("addDomain").value,
+    priority:document.getElementById("addPriority").value,
+    next_action:document.getElementById("addNext").value,
+    rationale:document.getElementById("addRationale").value,
+    status:"inbox",
+    horizon:"today",
+    date:todayIso()
+  };
+  const a=normalizeAction(raw,todayIso());
+  if(!a.title || a.title==="Untitled action"){ alert("Title required."); return; }
+  state.actions.push(a);
+  ["addTitle","addNext","addRationale"].forEach(id=>document.getElementById(id).value="");
+  saveState();
+}
+
+function renderAll(){
+  renderStats();
+  renderDashboard();
+  renderActions();
+  renderSignals();
+  renderMatrix();
+  renderStorage();
+  renderPrompts();
+  renderPathEngine();
+  renderCouncil();
+  renderTheon();
+}
+
+function renderStats(){
+  const open = state.actions.filter(a=>!["done","dropped"].includes(a.status)).length;
+  const next = state.actions.filter(a=>a.status==="next" || a.horizon==="today").length;
+  const high = state.actions.filter(a=>a.priority==="high" && !["done","dropped"].includes(a.status)).length;
+  const done = state.actions.filter(a=>a.status==="done").length;
+  const domains = new Set(state.actions.map(a=>a.domain)).size;
+  document.getElementById("statOpen").textContent=open;
+  document.getElementById("statNext").textContent=next;
+  document.getElementById("statHigh").textContent=high;
+  document.getElementById("statDone").textContent=done;
+  document.getElementById("statPackets").textContent=state.packets.length;
+  document.getElementById("statDomains").textContent=domains;
+  document.getElementById("topOpen").textContent=open;
+  document.getElementById("topDue").textContent=high ? `${high} high priority` : "stable";
+  document.getElementById("topUpdated").textContent=state.updatedAt ? "upd "+new Date(state.updatedAt).toLocaleTimeString().slice(0,5) : "—";
+}
+
+function actionScore(a){
+  const p = a.priority==="high"?30:a.priority==="medium"?15:5;
+  const h = a.horizon==="today"?20:a.horizon==="24h"?15:a.horizon==="48h"?10:a.horizon==="7d"?5:0;
+  const st = a.status==="next"?20:a.status==="doing"?18:a.status==="inbox"?10:a.status==="waiting"?2:0;
+  return p+h+st;
+}
+
+function renderDashboard(){
+  const uni=document.getElementById("latestUnifiedBox");
+  if(uni){
+    const u=state.latestUnifiedPacket;
+    uni.innerHTML = u ? `<b>${escapeHtml(u.date||"")} · ${escapeHtml(u.source||"Morning Agent")}</b><br/>${escapeHtml(u.summary||"")}<br/>Data: ${Object.entries(state.dataAvailability||{}).map(([k,v])=>`<span class="import-pill">${escapeHtml(k)}: ${escapeHtml(String(v))}</span>`).join(" ")}` : `<div class="empty">No unified packet imported yet. Import the Morning Agent unified packet in the Import tab.</div>`;
+  }
+  const q = state.actions.filter(a=>!["done","dropped","snoozed"].includes(a.status)).sort((a,b)=>actionScore(b)-actionScore(a)).slice(0,8);
+  const el=document.getElementById("todayQueue");
+  el.innerHTML = q.length ? q.map(renderActionCard).join("") : `<div class="empty">No open actions yet. Import a Morning Agent packet.</div>`;
+
+  const counts={};
+  state.actions.forEach(a=>counts[a.domain]=(counts[a.domain]||0)+1);
+  const rows=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([d,c])=>`<tr><td>${escapeHtml(d)}</td><td>${c}</td><td>${state.actions.filter(a=>a.domain===d && !["done","dropped"].includes(a.status)).length} open</td></tr>`).join("");
+  document.getElementById("domainDistribution").innerHTML = rows ? `<table><thead><tr><th>Domain</th><th>Total</th><th>Open</th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="empty">No domains yet.</div>`;
+}
+
+function renderActionCard(a){
+  return `<div class="action-card">
+    <div class="action-head">
+      <div>
+        <div class="action-title">${escapeHtml(a.title)}</div>
+        <div class="action-meta">${escapeHtml(a.date)} · ${escapeHtml(a.horizon)} · ${escapeHtml(a.mode)}</div>
+      </div>
+      <div>
+        ${pill(a.domain,"p-domain")}
+        ${pill(a.priority,"p-priority-"+a.priority)}
+        ${pill(a.status,"p-status")}
+      </div>
+    </div>
+    <div class="action-body">
+      ${a.nextAction ? `<b>Next:</b> ${escapeHtml(a.nextAction)}<br/>` : ""}
+      ${a.rationale ? `<b>Why:</b> ${escapeHtml(a.rationale)}<br/>` : ""}
+      ${a.related && (a.related.coin||a.related.app||a.related.theonDoc) ? `<b>Related:</b> ${escapeHtml([a.related.coin,a.related.app,a.related.theonDoc].filter(Boolean).join(" · "))}<br/>` : ""}
+      ${a.tags.length ? `<b>Tags:</b> ${a.tags.map(t=>"#"+escapeHtml(t)).join(" ")}` : ""}
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-blue" onclick="setActionStatus('${a.id}','next')">Next</button>
+      <button class="btn btn-purple" onclick="setActionStatus('${a.id}','doing')">Doing</button>
+      <button class="btn btn-green" onclick="setActionStatus('${a.id}','done')">Done</button>
+      <button class="btn" onclick="editAction('${a.id}')">Edit</button>
+      <button class="btn btn-red" onclick="deleteAction('${a.id}')">Delete</button>
+    </div>
+  </div>`;
+}
+
+function pill(text, cls){ return `<span class="pill ${cls}">${escapeHtml(text)}</span>`; }
+
+function renderActions(){
+  const status=document.getElementById("filterStatus")?.value || "all";
+  const domain=document.getElementById("filterDomain")?.value || "all";
+  const priority=document.getElementById("filterPriority")?.value || "all";
+  const search=normKey(document.getElementById("filterSearch")?.value || "");
+  let list=state.actions.slice();
+  if(status!=="all") list=list.filter(a=>a.status===status);
+  if(domain!=="all") list=list.filter(a=>a.domain===domain);
+  if(priority!=="all") list=list.filter(a=>a.priority===priority);
+  if(search) list=list.filter(a=>normKey(JSON.stringify(a)).includes(search));
+  list.sort((a,b)=>actionScore(b)-actionScore(a));
+  const el=document.getElementById("actionList");
+  el.innerHTML = list.length ? list.map(renderActionCard).join("") : `<div class="empty">No actions match filters.</div>`;
+}
+
+function setActionStatus(id,status){
+  const a=state.actions.find(x=>x.id===id);
+  if(!a) return;
+  a.status=status;
+  a.updatedAt=nowIso();
+  if(status==="done") a.result = a.result || "completed";
+  saveState();
+}
+
+function editAction(id){
+  const a=state.actions.find(x=>x.id===id);
+  if(!a) return;
+  const title=prompt("Title:",a.title);
+  if(title===null) return;
+  const next=prompt("Next action:",a.nextAction || "");
+  if(next===null) return;
+  const notes=prompt("Notes:",a.notes || "");
+  if(notes===null) return;
+  a.title=title; a.nextAction=next; a.notes=notes; a.updatedAt=nowIso();
+  saveState();
+}
+
+function deleteAction(id){
+  if(!confirm("Delete this action?")) return;
+  state.actions=state.actions.filter(x=>x.id!==id);
+  saveState();
+}
+
+function renderSignals(){
+  const el=document.getElementById("signalList");
+  const latest = state.signals.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,30);
+  el.innerHTML = latest.length ? latest.map(s=>`<div class="action-card"><div class="action-title">${escapeHtml(s.title)}</div><div class="action-meta">${escapeHtml(s.date)} · ${escapeHtml(s.domain)}</div><div class="action-body">${escapeHtml(s.why || "")}${s.sources.length?`<br/><b>Sources:</b> ${s.sources.map(escapeHtml).join(" · ")}`:""}</div></div>`).join("") : `<div class="empty">No signals imported yet.</div>`;
+}
+
+function renderMatrix(){
+  const rows = DOMAINS.map(d=>{
+    const items=state.actions.filter(a=>a.domain===d);
+    const open=items.filter(a=>!["done","dropped"].includes(a.status)).length;
+    const high=items.filter(a=>a.priority==="high" && !["done","dropped"].includes(a.status)).length;
+    return `<tr><td>${escapeHtml(d)}</td><td>${items.length}</td><td>${open}</td><td>${high}</td><td>${items.slice(-1)[0]?.title ? escapeHtml(items.slice(-1)[0].title) : "—"}</td></tr>`;
+  }).join("");
+  document.getElementById("actionMatrix").innerHTML = `<table><thead><tr><th>Domain</th><th>Total</th><th>Open</th><th>High</th><th>Latest</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function renderStorage(){
+  const raw=JSON.stringify(state);
+  const bytes=new Blob([raw]).size;
+  document.getElementById("topStorage").textContent = (bytes/1024).toFixed(1)+"KB";
+  const el=document.getElementById("storageInfo");
+  if(el) el.innerHTML = `State size: ${(bytes/1024).toFixed(1)}KB<br/>Actions: ${state.actions.length}<br/>Packets: ${state.packets.length}<br/>Signals: ${state.signals.length}<br/>Last update: ${escapeHtml(state.updatedAt || "—")}`;
+}
+
+function renderRawPreview(){
+  const el=document.getElementById("rawPreview");
+  if(el) el.value=JSON.stringify(state,null,2);
+}
+
+const TASK_PROMPT_ADDON = `At the end of every Morning Agent daily briefing, include one machine-readable JSON block for the Morning Agent app.
+
+Do not output separate raw app states. The Morning Agent chat/project already digests raw JSON exports, project files, web signals, and esoteric field. The local app imports only this unified packet.
+
+JSON requirements:
+- Valid JSON only inside the block.
+- packet_type must be "morning_agent_unified_packet".
+- date must be YYYY-MM-DD using Brussels date.
+- Clearly separate uploaded/export facts, stable project-file facts, fresh web facts, and inferred synthesis.
+- Do not invent app state. If exports are missing, mark them in data_availability and create actions requesting the missing export.
+- Include esoteric_field, path_engine, theon_gate, council_targets, signals, and actions.
+- actions must be concrete, not vague.
+- Each action must include title, domain, priority, horizon, rationale, next_action, related, tags, links, and mode when available.
+- Use domains: THEON, Investment, PlannerHealth, OperationsApp, AppBuild, AISystems, LogisticsRobotics, CryptoMarkets, QuantumCosmology, CreativeAI, Culture, WorkCareer, Admin.
+- council_targets should contain only the highest-value issue(s) needing model-council review today.
+
+Return JSON shaped like:
+{
+  "packet_type": "morning_agent_unified_packet",
+  "date": "YYYY-MM-DD",
+  "source": "Morning Agent Daily Briefing",
+  "summary": "One concise synthesis sentence.",
+  "data_availability": {
+    "investment_cockpit": "fresh | missing | stale | unavailable",
+    "planner": "fresh | missing | stale | unavailable",
+    "theon": "fresh | missing | stale | unavailable",
+    "action_ledger": "fresh | missing | stale | unavailable",
+    "career_timeline": "fresh | missing | stale | unavailable"
+  },
+  "esoteric_field": {
+    "date":"YYYY-MM-DD",
+    "favored_departments":["theon","career","health"],
+    "caution_departments":["investment"],
+    "recommended_modes":["RESEARCH","PROBE","REGULATE"],
+    "forbidden_modes":["COMMIT_WITHOUT_CONFIRMATION"],
+    "notes":"..."
+  },
+  "path_engine": {
+    "primary_quest": {"department":"THEON","score":45,"mode":"BUILD","reasons":["..."]},
+    "secondary_vectors": [],
+    "do_not_scatter": [],
+    "calibration_hook": "What to verify tomorrow."
+  },
+  "theon_gate": {
+    "status":"PASS | CONDITIONAL_PASS | FAIL_CLOSED",
+    "evidence_summary": [],
+    "veto_flags": [],
+    "action_caps": [],
+    "failure_modes": [],
+    "ledger_required": true
+  },
+  "council_targets": [
+    {"title":"Council-worthy issue", "domain":"THEON", "question":"What should the council resolve?", "evidence_refs":[], "risk":"medium", "desired_output":"decision + action cap + calibration"}
+  ],
+  "signals": [
+    {"title":"...", "domain":"AISystems", "why":"...", "sources":["..."]}
+  ],
+  "actions": [
+    {
+      "title":"...",
+      "domain":"Investment",
+      "priority":"high",
+      "horizon":"today",
+      "status":"inbox",
+      "source_signal":"...",
+      "rationale":"...",
+      "next_action":"...",
+      "due_date":"",
+      "related":{"app":"Investment Cockpit","coin":"ADX","theonDoc":"","plannerDomain":""},
+      "tags":["morning-agent"],
+      "links":["..."],
+      "mode":"backtest"
+    }
+  ]
+}`;
+
+const SCHEMA = {
+  packet_type:"morning_agent_unified_packet",
+  date:"YYYY-MM-DD",
+  source:"Morning Agent Daily Briefing",
+  summary:"One sentence daily synthesis.",
+  data_availability:{investment_cockpit:"fresh", planner:"fresh", theon:"fresh", action_ledger:"fresh", career_timeline:"fresh"},
+  esoteric_field:{date:"YYYY-MM-DD", favored_departments:["theon","career","health"], caution_departments:["investment"], recommended_modes:["RESEARCH","PROBE","REGULATE"], forbidden_modes:["COMMIT_WITHOUT_CONFIRMATION"], notes:""},
+  path_engine:{primary_quest:{department:"THEON",score:45,mode:"BUILD",reasons:[]}, secondary_vectors:[], do_not_scatter:[], calibration_hook:""},
+  theon_gate:{status:"PASS | CONDITIONAL_PASS | FAIL_CLOSED", evidence_summary:[], veto_flags:[], action_caps:[], failure_modes:[], ledger_required:true},
+  council_targets:[{title:"Council-worthy issue", domain:"THEON", question:"What should the council resolve?", evidence_refs:[], risk:"medium", desired_output:"decision + action cap + calibration"}],
+  signals:[{title:"Signal title", domain:"AISystems", why:"Why it matters", sources:["citation or source label"]}],
+  actions:[{title:"Concrete action title", domain:"THEON", priority:"high", horizon:"today", status:"inbox", source_signal:"Signal that generated this action", rationale:"Reason this action matters", next_action:"Specific next step", due_date:"", related:{app:"", coin:"", theonDoc:"", plannerDomain:""}, tags:["morning-agent"], links:[], mode:"backtest"}]
+};
+
+function renderPrompts(){
+  const p=document.getElementById("taskPromptBox");
+  const s=document.getElementById("schemaBox");
+  if(p) p.value=TASK_PROMPT_ADDON;
+  if(s) s.value=JSON.stringify(SCHEMA,null,2);
+}
+
+async function copyText(text){
+  try{ await navigator.clipboard.writeText(text); alert("Copied."); }
+  catch(e){ prompt("Copy manually:", text); }
+}
+function copyTaskPrompt(){ copyText(TASK_PROMPT_ADDON); }
+function copySchema(){ copyText(JSON.stringify(SCHEMA,null,2)); }
+
+function loadExamplePacket(){
+  const example = {
+    packet_type:"morning_agent_unified_packet",
+    date:todayIso(),
+    source:"Morning Agent Daily Briefing",
+    summary:"THEON, career path, health regulation, and crypto observation converge on one disciplined quest today.",
+    data_availability:{investment_cockpit:"fresh", planner:"fresh", theon:"fresh", action_ledger:"fresh", career_timeline:"fresh"},
+    esoteric_field:{date:todayIso(), source:"example", favored_departments:["theon","career","health"], caution_departments:["investment"], recommended_modes:["RESEARCH","PROBE","REGULATE"], forbidden_modes:["COMMIT_WITHOUT_CONFIRMATION","CHASE","OVERSTACK"], notes:"Example only. Replace with Morning Agent daily field."},
+    path_engine:{primary_quest:{department:"THEON", score:52, mode:"BUILD", reasons:["Strategic focus until mid-June", "Document refinement block active"]}, secondary_vectors:[{department:"Career",score:43,mode:"BUILD",reasons:["Universal Runtime positioning"]},{department:"Health",score:38,mode:"REGULATE",reasons:["Body veto remains standing law"]}], do_not_scatter:["large app rebuild", "unplanned crypto rotation"], calibration_hook:"Tomorrow verify one THEON or career deliverable was completed without body cost."},
+    theon_gate:{status:"CONDITIONAL_PASS", evidence_summary:["Example packet only"], veto_flags:[], action_caps:["one deliverable only"], failure_modes:["scatter", "overbuilding"], ledger_required:true},
+    council_targets:[{title:"Choose the one deliverable for today", domain:"THEON", question:"Given the unified packet, which single deliverable should receive the main attention today and what action cap applies?", evidence_refs:["path_engine.primary_quest"], risk:"medium", desired_output:"one action, cap, falsifiers, calibration"}],
+    signals:[{title:"AI agents moving into workflow orchestration", domain:"AISystems", why:"Supports the Morning Agent and SDAE architecture.", sources:["daily briefing citations"]}],
+    actions:[{title:"Complete one THEON/career deliverable only", domain:"THEON", priority:"high", horizon:"today", status:"next", source_signal:"Path Engine primary quest", rationale:"One finished artifact beats five open loops.", next_action:"Choose one document section or one Universal Runtime paragraph and finish it.", related:{app:"Morning Agent", coin:"", theonDoc:"TODO from THEON index", plannerDomain:""}, tags:["quest-vector","one-deliverable"], links:[], mode:"backtest"}]
+  };
+  document.getElementById("packetInput").value=JSON.stringify(example,null,2);
+}
+function exportState(){
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href=url; a.download=`morning-agent-action-ledger-${todayIso()}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function importStateFile(ev){
+  const file=ev.target.files && ev.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const s=JSON.parse(reader.result);
+      if(!s.actions || !Array.isArray(s.actions)) throw new Error("Not a Morning Agent Action Ledger state.");
+      state=Object.assign(defaultState(), s, {version:STATE_VERSION, updatedAt:nowIso()});
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      renderAll();
+      alert("State imported.");
+    }catch(e){ alert("Import failed: "+e.message); }
+  };
+  reader.readAsText(file);
+  ev.target.value="";
+}
+
+function resetAll(){
+  if(!confirm("Reset all Morning Agent action data? Export first.")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state=defaultState();
+  renderAll();
+}
+
+
+const PATCH_ROLLBACK_KEY = STORAGE_KEY + "_patch_rollbacks";
+const PATCH_TARGETS = ["settings","actions","signals","packets","archive"];
+
+function patchConsoleWrite(message, cls){
+  const el = document.getElementById("patchConsoleOutput");
+  if(!el) return;
+  el.className = "patch-output" + (cls ? " " + cls : "");
+  el.textContent = message;
+}
+
+function readPatchConsolePayload(){
+  const raw = document.getElementById("patchConsoleInput")?.value || "";
+  if(!raw.trim()) throw new Error("Patch box is empty.");
+  return JSON.parse(raw);
+}
+
+function getPatchRollbacks(){
+  try{ return JSON.parse(localStorage.getItem(PATCH_ROLLBACK_KEY) || "[]"); }
+  catch(e){ return []; }
+}
+
+function pushPatchRollback(){
+  const stack = getPatchRollbacks();
+  stack.unshift({savedAt:nowIso(), state:JSON.parse(JSON.stringify(state))});
+  localStorage.setItem(PATCH_ROLLBACK_KEY, JSON.stringify(stack.slice(0,5)));
+}
+
+function validatePatchTarget(target){
+  if(!PATCH_TARGETS.includes(target)) throw new Error("Rejected target: " + target);
+}
+
+function cloneStateForPatch(){
+  return JSON.parse(JSON.stringify(state));
+}
+
+function normalizePatchOps(payload){
+  if(payload && Array.isArray(payload.ops)) return payload.ops;
+  if(payload && payload.op) return [payload];
+  if(payload && payload.mode && payload.target) return [{op:payload.mode, target:payload.target, data:payload.data, key:payload.key, path:payload.path, id:payload.id, value:payload.value}];
+  if(payload && typeof payload === "object" && !Array.isArray(payload)){
+    const keys = Object.keys(payload);
+    const direct = keys.filter(k=>PATCH_TARGETS.includes(k));
+    const unknown = keys.filter(k=>!["version","createdAt","updatedAt",...PATCH_TARGETS].includes(k));
+    if(unknown.length) throw new Error("Plain object rejected because it contains unknown top-level keys: " + unknown.join(", "));
+    return direct.map(k=>({op:"replace", target:k, data:payload[k]}));
+  }
+  throw new Error("Unsupported patch format.");
+}
+
+function setByPath(targetState, path, value){
+  const parts = String(path||"").split(".").filter(Boolean);
+  if(parts.length < 2) throw new Error("Path must include target and key, for example settings.defaultMode");
+  const target = parts[0];
+  validatePatchTarget(target);
+  if(parts.some(p=>p === "__proto__" || p === "constructor" || p === "prototype")) throw new Error("Unsafe path rejected.");
+  let obj = targetState;
+  for(let i=0;i<parts.length-1;i++){
+    const p = parts[i];
+    if(typeof obj[p] !== "object" || obj[p] === null){ obj[p] = {}; }
+    obj = obj[p];
+  }
+  obj[parts[parts.length-1]] = value;
+}
+
+function deleteByPath(targetState, path){
+  const parts = String(path||"").split(".").filter(Boolean);
+  if(parts.length < 2) throw new Error("Delete path must include target and key.");
+  const target = parts[0];
+  validatePatchTarget(target);
+  if(parts.some(p=>p === "__proto__" || p === "constructor" || p === "prototype")) throw new Error("Unsafe path rejected.");
+  let obj = targetState;
+  for(let i=0;i<parts.length-1;i++){
+    obj = obj[parts[i]];
+    if(!obj || typeof obj !== "object") return;
+  }
+  delete obj[parts[parts.length-1]];
+}
+
+function applyPatchOpToState(targetState, op){
+  if(!op || typeof op !== "object") throw new Error("Patch op must be an object.");
+  const verb = String(op.op || "").toLowerCase();
+  if(!["set","merge","append","replace","delete"].includes(verb)) throw new Error("Unsupported op: " + (op.op || "missing"));
+
+  if(verb === "set"){
+    if(!op.path) throw new Error("set requires path.");
+    setByPath(targetState, op.path, op.value);
+    return "set " + op.path;
+  }
+
+  if(verb === "delete"){
+    if(op.path){ deleteByPath(targetState, op.path); return "deleted " + op.path; }
+    const target = op.target;
+    validatePatchTarget(target);
+    if(target === "settings"){
+      if(!op.key) throw new Error("delete settings requires key.");
+      delete targetState.settings[op.key];
+      return "deleted settings." + op.key;
+    }
+    if(!op.id) throw new Error("delete array target requires id.");
+    targetState[target] = safeArr(targetState[target]).filter(x=>x && x.id !== op.id);
+    return "deleted " + target + " id " + op.id;
+  }
+
+  const target = op.target;
+  validatePatchTarget(target);
+
+  if(verb === "merge"){
+    if(!op.data || typeof op.data !== "object" || Array.isArray(op.data)) throw new Error("merge requires object data.");
+    if(target !== "settings") throw new Error("merge is only allowed for settings. Use append/replace for arrays.");
+    targetState.settings = Object.assign({}, targetState.settings || {}, op.data);
+    return "merged settings";
+  }
+
+  if(verb === "append"){
+    const data = Array.isArray(op.data) ? op.data : [op.data];
+    if(!Array.isArray(targetState[target])) throw new Error("append target must be an array.");
+    data.forEach(item=>{
+      if(!item || typeof item !== "object" || Array.isArray(item)) throw new Error("append data must contain objects.");
+      if(target === "actions") targetState.actions.push(normalizeAction(item, item.date || todayIso()));
+      else targetState[target].push(Object.assign({id:uid(), importedAt:nowIso()}, item));
+    });
+    return "appended " + data.length + " item(s) to " + target;
+  }
+
+  if(verb === "replace"){
+    if(target === "settings"){
+      if(!op.data || typeof op.data !== "object" || Array.isArray(op.data)) throw new Error("replace settings requires object data.");
+      targetState.settings = Object.assign({}, op.data);
+      return "replaced settings";
+    }
+    if(!Array.isArray(op.data)) throw new Error("replace " + target + " requires array data.");
+    if(target === "actions") targetState.actions = op.data.map(item=>normalizeAction(item, item.date || todayIso()));
+    else targetState[target] = op.data.map(item=>Object.assign({id:uid(), importedAt:nowIso()}, item));
+    return "replaced " + target + " with " + op.data.length + " item(s)";
+  }
+}
+
+function runPatchConsoleSimulation(payload){
+  const ops = normalizePatchOps(payload);
+  const trial = cloneStateForPatch();
+  const messages = ops.map(op=>applyPatchOpToState(trial, op));
+  return {ops, trial, messages};
+}
+
+function previewPatchConsole(){
+  try{
+    const payload = readPatchConsolePayload();
+    const sim = runPatchConsoleSimulation(payload);
+    patchConsoleWrite("Preview OK. No changes applied.\n\nOperations:\n- " + sim.messages.join("\n- ") + "\n\nResult counts:\nActions: " + sim.trial.actions.length + "\nSignals: " + sim.trial.signals.length + "\nPackets: " + sim.trial.packets.length + "\nArchive: " + sim.trial.archive.length, "ok");
+  }catch(e){
+    patchConsoleWrite("Preview rejected: " + e.message, "err");
+  }
+}
+
+function applyPatchConsole(){
+  try{
+    const payload = readPatchConsolePayload();
+    const sim = runPatchConsoleSimulation(payload);
+    if(!confirm("Apply patch?\n\n" + sim.messages.join("\n"))) return;
+    pushPatchRollback();
+    state = Object.assign(defaultState(), sim.trial, {version:STATE_VERSION, updatedAt:nowIso()});
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    renderAll();
+    patchConsoleWrite("Patch applied.\n\nOperations:\n- " + sim.messages.join("\n- "), "ok");
+  }catch(e){
+    patchConsoleWrite("Patch failed: " + e.message, "err");
+  }
+}
+
+function rollbackPatchConsole(){
+  const stack = getPatchRollbacks();
+  if(!stack.length){ patchConsoleWrite("No rollback state available.", "warn"); return; }
+  if(!confirm("Rollback to the state saved before the last patch?")) return;
+  const last = stack.shift();
+  state = Object.assign(defaultState(), last.state, {version:STATE_VERSION, updatedAt:nowIso()});
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  localStorage.setItem(PATCH_ROLLBACK_KEY, JSON.stringify(stack));
+  renderAll();
+  patchConsoleWrite("Rollback restored from " + last.savedAt, "ok");
+}
+
+function loadPatchTemplate(){
+  const template = {
+    mode:"append",
+    target:"actions",
+    data:[{
+      title:"Export Morning Agent Action Ledger JSON tonight",
+      domain:"Admin",
+      priority:"medium",
+      horizon:"today",
+      status:"inbox",
+      rationale:"Keep the Morning Agent loop longitudinal and auditable.",
+      next_action:"Open Data tab and export full app state JSON.",
+      related:{app:"Morning Agent Action Ledger", coin:"", theonDoc:"", plannerDomain:""},
+      tags:["morning-agent","json-export"],
+      links:[],
+      mode:"backtest"
+    }]
+  };
+  const el = document.getElementById("patchConsoleInput");
+  if(el) el.value = JSON.stringify(template,null,2);
+  patchConsoleWrite("Template loaded. Preview before applying.", "warn");
+}
+
+function clearPatchConsole(){
+  const input = document.getElementById("patchConsoleInput");
+  if(input) input.value = "";
+  patchConsoleWrite("Patch Console ready. Export a full backup before major changes.");
+}
+
+
+
+// ================= UNIFIED PACKET + PATH ENGINE + COUNCIL v0.2b =================
+function inferImportType(obj, raw){
+  if(typeof raw === "string" && raw.trim().startsWith("BEGIN:VCALENDAR")) return "calendar_ics";
+  if(obj && obj.packet_type === "morning_agent_unified_packet") return "morning_agent_unified_packet";
+  if(obj && obj.packet_type === "morning_agent_action_packet") return "morning_agent_packet";
+  if(obj && (obj.currentPortfolioLive || obj.portfolio || obj.state?.portfolio || obj.fetchStatus)) return "investment_cockpit";
+  if(obj && (obj.esotericField || obj.favored_departments || obj.mayan || obj.bazi || obj.hot_cold)) return "esoteric_field";
+  if(obj && (obj.theon || obj.documents || obj.patchLog || obj.docIndex)) return "theon_index";
+  if(obj && (obj.actions && obj.signals && obj.packets)) return "action_ledger_state";
+  if(obj && (obj.health || obj.supplements || obj.planner || obj.bodyState || obj.vq)) return "planner_health";
+  return "unknown_json";
+}
+function importDailyState(raw, name){
+  const text = String(raw||"").trim();
+  if(!text) throw new Error("No input.");
+  let parsed=null, type="unknown";
+  if(text.startsWith("BEGIN:VCALENDAR")){
+    type="calendar_ics";
+    const events=parseIcsEvents(text);
+    state.pathEvents = mergePathEvents(state.pathEvents, events);
+    state.dailyImports.push({id:uid(), type, name:name||"Transition_Timeline.ics", importedAt:nowIso(), summary:`${events.length} calendar events imported`, rawText:text.slice(0,5000)});
+  }else{
+    parsed=JSON.parse(text);
+    type=inferImportType(parsed,text);
+    if(type==="esoteric_field"){
+      state.esotericField = normalizeEsotericField(parsed.esotericField || parsed);
+    }
+    if(type==="morning_agent_packet" || type==="morning_agent_unified_packet"){
+      importPacket(parsed);
+    }
+    state.dailyImports.push({id:uid(), type, name:name||type, importedAt:nowIso(), summary:summarizeImport(parsed,type), raw:parsed});
+  }
+  runPathEngine(false);
+  saveState();
+  return type;
+}
+function importDailyStateFromTextarea(){
+  const box=document.getElementById("dailyStateInput");
+  try{
+    const type=importDailyState(box.value,"pasted_daily_state");
+    document.getElementById("dailyImportStatus").innerHTML=`<div class="success">Imported ${escapeHtml(type)} and refreshed Path Engine.</div>`;
+    box.value="";
+  }catch(e){ document.getElementById("dailyImportStatus").innerHTML=`<div class="danger">Import failed: ${escapeHtml(e.message)}</div>`; }
+}
+function importDailyStateFile(ev){
+  const file=ev.target.files && ev.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{ try{ const type=importDailyState(reader.result,file.name); document.getElementById("dailyImportStatus").innerHTML=`<div class="success">Imported ${escapeHtml(file.name)} as ${escapeHtml(type)}.</div>`; }catch(e){ document.getElementById("dailyImportStatus").innerHTML=`<div class="danger">Import failed: ${escapeHtml(e.message)}</div>`; } };
+  reader.readAsText(file); ev.target.value="";
+}
+function summarizeImport(obj,type){
+  try{
+    if(type==="investment_cockpit"){
+      const p=obj.currentPortfolioLive || obj.state?.currentPortfolioLive || {};
+      return `Portfolio ${p.value ?? "?"} value, ${p.pnlPct ?? "?"}% PnL, exported ${obj.exportedAt || obj.createdAt || "unknown"}`;
+    }
+    if(type==="morning_agent_unified_packet") return `Unified packet ${obj.date || todayIso()} · ${safeArr(obj.actions).length} actions · ${safeArr(obj.council_targets || obj.councilTargets).length} council target(s)`;
+    if(type==="action_ledger_state") return `${safeArr(obj.actions).length} actions, ${safeArr(obj.signals).length} signals`;
+    if(type==="esoteric_field") return `Field ${obj.date || todayIso()} · favored ${(obj.favored_departments||[]).join(",")}`;
+    return Object.keys(obj||{}).slice(0,8).join(", ");
+  }catch(e){ return type; }
+}
+function normalizeEsotericField(f){
+  const d=Object.assign(defaultEsotericField(), f||{});
+  d.favored_departments=safeArr(d.favored_departments || d.favoredDomains).map(x=>String(x).toLowerCase());
+  d.caution_departments=safeArr(d.caution_departments || d.cautionDomains).map(x=>String(x).toLowerCase());
+  d.recommended_modes=safeArr(d.recommended_modes || d.recommendedModes).map(x=>String(x).toUpperCase());
+  d.forbidden_modes=safeArr(d.forbidden_modes || d.forbiddenModes).map(String);
+  return d;
+}
+function parseIcsEvents(text){
+  const chunks = text.split("BEGIN:VEVENT").slice(1).map(x=>x.split("END:VEVENT")[0]);
+  return chunks.map(ch=>{
+    const line=(key)=>{ const m=ch.match(new RegExp(key+"(?:;[^:]*)?:(.*)")); return m?m[1].replace(/\\n/g,"\n").trim():""; };
+    const dt=line("DTSTART");
+    return {id:uid(), title:line("SUMMARY")||"Untitled event", start:dt, date:icsDateToIso(dt), description:line("DESCRIPTION"), rrule:line("RRULE"), importedAt:nowIso(), domain:inferPathDepartmentFromText((line("SUMMARY")+" "+line("DESCRIPTION"))).key};
+  }).filter(e=>e.title);
+}
+function icsDateToIso(s){
+  const m=String(s||"").match(/(\d{4})(\d{2})(\d{2})/); if(!m) return ""; return `${m[1]}-${m[2]}-${m[3]}`;
+}
+function mergePathEvents(existing, incoming){
+  const map=new Map(safeArr(existing).map(e=>[(e.date||"")+"|"+normKey(e.title),e]));
+  incoming.forEach(e=>map.set((e.date||"")+"|"+normKey(e.title),Object.assign(map.get((e.date||"")+"|"+normKey(e.title))||{},e)));
+  return Array.from(map.values()).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+}
+function inferPathDepartmentFromText(text){
+  const t=String(text||"").toLowerCase();
+  if(t.includes("theon") || t.includes("document") || t.includes("framework")) return PATH_DEPARTMENTS.find(d=>d.key==="theon");
+  if(t.includes("supplement") || t.includes("body") || t.includes("health") || t.includes("nervous") || t.includes("skin") || t.includes("liver")) return PATH_DEPARTMENTS.find(d=>d.key==="health");
+  if(t.includes("crypto") || t.includes("investment") || t.includes("coin") || t.includes("portfolio")) return PATH_DEPARTMENTS.find(d=>d.key==="investment");
+  if(t.includes("dashboard") || t.includes("runtime") || t.includes("inbound") || t.includes("process") || t.includes("career") || t.includes("hr") || t.includes("manager") || t.includes("work")) return PATH_DEPARTMENTS.find(d=>d.key==="career");
+  if(t.includes("poetry") || t.includes("music") || t.includes("video") || t.includes("creative") || t.includes("studio")) return PATH_DEPARTMENTS.find(d=>d.key==="creative");
+  if(t.includes("love") || t.includes("romance") || t.includes("peach")) return PATH_DEPARTMENTS.find(d=>d.key==="love");
+  if(t.includes("social") || t.includes("friend") || t.includes("outreach")) return PATH_DEPARTMENTS.find(d=>d.key==="social");
+  if(t.includes("excel") || t.includes("learning") || t.includes("ai")) return PATH_DEPARTMENTS.find(d=>d.key==="learning");
+  return PATH_DEPARTMENTS.find(d=>d.key==="admin");
+}
+function dateDiffDays(iso){
+  if(!iso) return 9999;
+  const today=new Date(todayIso()+"T00:00:00");
+  const d=new Date(iso+"T00:00:00");
+  return Math.round((d-today)/(24*3600*1000));
+}
+function saveManualPathState(){
+  state.manualPathState={bodyState:document.getElementById("bodyState")?.value||"amber", socialLoveState:document.getElementById("socialLoveState")?.value||"neutral", executionCapacity:document.getElementById("executionCapacity")?.value||"medium", note:document.getElementById("humanPathNote")?.value||""};
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+function hydrateManualPathFields(){
+  const m=state.manualPathState||{};
+  if(document.getElementById("bodyState")) document.getElementById("bodyState").value=m.bodyState||"amber";
+  if(document.getElementById("socialLoveState")) document.getElementById("socialLoveState").value=m.socialLoveState||"neutral";
+  if(document.getElementById("executionCapacity")) document.getElementById("executionCapacity").value=m.executionCapacity||"medium";
+  if(document.getElementById("humanPathNote")) document.getElementById("humanPathNote").value=m.note||"";
+}
+function runPathEngine(shouldSave=true){
+  const field=state.esotericField||defaultEsotericField();
+  const manual=state.manualPathState||{};
+  const imports=safeArr(state.dailyImports);
+  const openActions=safeArr(state.actions).filter(a=>!["done","dropped"].includes(a.status));
+  const scores=PATH_DEPARTMENTS.map(dep=>{
+    let score=dep.base, reasons=[`Base strategic weight ${dep.base}`], mode="RESEARCH";
+    const acts=openActions.filter(a=>dep.domains.includes(a.domain) || inferPathDepartmentFromText(a.title+" "+a.rationale).key===dep.key);
+    if(acts.length){ score += Math.min(12, acts.length*2); reasons.push(`${acts.length} open action(s)`); }
+    const high=acts.filter(a=>a.priority==="high").length; if(high){ score += high*5; reasons.push(`${high} high-priority action(s)`); }
+    const events=safeArr(state.pathEvents).filter(e=>e.domain===dep.key).filter(e=>{ const dd=dateDiffDays(e.date); return dd>=0 && dd<=7; });
+    if(events.length){ score += Math.min(20, events.length*6); reasons.push(`${events.length} path commitment(s) within 7 days`); mode="BUILD"; }
+    const todayEvents=events.filter(e=>dateDiffDays(e.date)===0); if(todayEvents.length){ score += 12; reasons.push("Commitment today"); mode="BUILD"; }
+    if(field.favored_departments?.includes(dep.key)){ score += 8; reasons.push("Favored by esoteric field"); }
+    if(field.caution_departments?.includes(dep.key)){ score -= 8; reasons.push("Caution from esoteric field"); mode="REGULATE"; }
+    imports.forEach(im=>{
+      if(dep.key==="investment" && im.type==="investment_cockpit"){ score += 6; reasons.push("Fresh Investment Cockpit state imported"); }
+      if(dep.key==="theon" && im.type==="theon_index"){ score += 6; reasons.push("Fresh THEON index/doc state imported"); }
+      if(dep.key==="health" && im.type==="planner_health"){ score += 8; reasons.push("Fresh planner/health state imported"); }
+      if(dep.key==="career" && im.type==="calendar_ics"){ score += 4; reasons.push("Career/path calendar imported"); }
+    });
+    if(dep.key==="health" && manual.bodyState==="red"){ score += 25; reasons.push("Body veto active: health becomes primary regulator"); mode="VETO_REPAIR"; }
+    if(dep.key!=="health" && manual.bodyState==="red"){ score -= 10; reasons.push("Body red caps non-health execution"); }
+    if(dep.key==="health" && manual.bodyState==="amber"){ score += 8; reasons.push("Body amber: regulation support needed"); }
+    if(["love","social"].includes(dep.key) && manual.socialLoveState==="open"){ score += 8; reasons.push("Social/love field open"); mode="PROBE"; }
+    if(["love","social"].includes(dep.key) && manual.socialLoveState==="closed"){ score -= 7; reasons.push("Social/love protect mode"); mode="REGULATE"; }
+    if(manual.executionCapacity==="low" && !["health","admin"].includes(dep.key)){ score -= 6; reasons.push("Low capacity caps heavy execution"); mode="REGULATE"; }
+    if(dep.key==="theon") score += 6; // standing strategic priority
+    if(dep.key==="career") score += 5; // mid-May career path seed
+    if(score>=32 && mode==="RESEARCH") mode="PROBE";
+    if(score>=45 && !["VETO_REPAIR","REGULATE"].includes(mode)) mode="BUILD";
+    return {key:dep.key,label:dep.label,score:Math.max(0,Math.round(score)),mode,reasons:reasons.slice(-6),events:events.slice(0,4),openActions:acts.length};
+  }).sort((a,b)=>b.score-a.score);
+  const primary=scores[0];
+  const secondaries=scores.slice(1,4);
+  state.pathScores={date:todayIso(), createdAt:nowIso(), primary, secondaries, all:scores, field, manual, calibrationHook:`Tomorrow check whether ${primary?.label||"the primary path"} produced a concrete result without violating body state.`};
+  if(shouldSave) saveState();
+  return state.pathScores;
+}
+function renderPathEngine(){
+  hydrateManualPathFields();
+  if(!state.pathScores) runPathEngine(false);
+  const ps=state.pathScores;
+  const q=document.getElementById("questVectorBox");
+  if(q && ps?.primary){
+    q.innerHTML=`<div class="quest-card"><div class="quest-title">Quest Vector · ${escapeHtml(ps.primary.label)}</div><div class="quest-sub">Mode: <b>${escapeHtml(ps.primary.mode)}</b> · Score ${ps.primary.score}<br/>${escapeHtml(ps.primary.reasons.join(" · "))}<br/><b>Calibration:</b> ${escapeHtml(ps.calibrationHook)}</div></div>`;
+  }
+  const grid=document.getElementById("pathDepartmentGrid");
+  if(grid && ps?.all){
+    grid.innerHTML=ps.all.map((d,i)=>`<div class="path-card ${i===0?'primary':''} ${d.mode==='VETO_REPAIR'?'caution':''}"><div class="path-score">${d.score}</div><div class="path-name">${escapeHtml(d.label)}</div><div class="path-meta">${escapeHtml(d.mode)} · ${d.openActions} open · ${d.events.length} due soon</div><div class="scorebar"><span style="width:${Math.min(100,d.score)}%"></span></div><div class="path-reasons">${d.reasons.map(escapeHtml).join("<br/>")}</div></div>`).join("");
+  }
+  const ev=document.getElementById("pathCommitments");
+  if(ev){
+    const rows=safeArr(state.pathEvents).filter(e=>dateDiffDays(e.date)>=0 && dateDiffDays(e.date)<=30).sort((a,b)=>String(a.date).localeCompare(String(b.date))).slice(0,20).map(e=>`<tr><td>${escapeHtml(e.date||"")}</td><td>${escapeHtml(e.title)}</td><td>${escapeHtml(e.domain)}</td><td>${escapeHtml((e.description||"").slice(0,180))}</td></tr>`).join("");
+    ev.innerHTML=rows?`<table><thead><tr><th>Date</th><th>Commitment</th><th>Path</th><th>Description</th></tr></thead><tbody>${rows}</tbody></table>`:`<div class="empty">No upcoming path commitments imported.</div>`;
+  }
+}
+function createPathActions(){
+  const ps=state.pathScores || runPathEngine(false);
+  if(!ps?.primary) return alert("Run Path Engine first.");
+  const a=normalizeAction({title:`Quest Vector: ${ps.primary.label}`, domain:domainForPath(ps.primary.key), priority:"high", horizon:"today", status:"next", rationale:ps.primary.reasons.join("; "), next_action:`Execute one concrete ${ps.primary.mode} action in ${ps.primary.label}. Do not scatter.`, tags:["path-engine","quest-vector",ps.primary.key], mode:"backtest"}, todayIso());
+  state.actions.push(a); saveState();
+}
+function domainForPath(key){
+  const map={career:"WorkCareer",theon:"THEON",health:"PlannerHealth",love:"Culture",social:"Culture",investment:"Investment",creative:"CreativeAI",learning:"AISystems",spiritual:"QuantumCosmology",admin:"Admin"};
+  return map[key]||"Admin";
+}
+function loadEsotericTemplate(){
+  const f=defaultEsotericField();
+  f.date=todayIso(); f.world_number=8; f.personal_number=4; f.hot_cold="neutral_caution"; f.favored_departments=["theon","career","health","learning"]; f.caution_departments=["investment","love"]; f.recommended_modes=["RESEARCH","PROBE","REGULATE"]; f.forbidden_modes=["COMMIT_WITHOUT_CONFIRMATION","CHASE","OVERSTACK"]; f.notes="Template only. Replace with Morning Agent daily esoteric field.";
+  document.getElementById("dailyStateInput").value=JSON.stringify(f,null,2);
+}
+function generateCouncilFromPath(){
+  const ps=state.pathScores || runPathEngine(false);
+  const target=buildCouncilTarget(ps);
+  const prompts=MODEL_ROLES.map(r=>buildModelPrompt(r,target));
+  state.councilPromptPack={id:uid(), createdAt:nowIso(), date:todayIso(), target, prompts};
+  state.councilResponses=[]; state.councilScoring=null;
+  saveState();
+}
+function buildCouncilTarget(ps){
+  const imports=safeArr(state.dailyImports).slice(-8).map(i=>({type:i.type,name:i.name,importedAt:i.importedAt,summary:i.summary}));
+  const primary=ps?.primary || {label:"Unknown",key:"admin",mode:"RESEARCH",reasons:["No path score"]};
+  const open=safeArr(state.actions).filter(a=>!["done","dropped"].includes(a.status)).sort((a,b)=>actionScore(b)-actionScore(a)).slice(0,8);
+  const commitments=safeArr(state.pathEvents).filter(e=>dateDiffDays(e.date)>=0 && dateDiffDays(e.date)<=7).slice(0,8);
+  const packetTarget=safeArr(state.councilTargets)[0] || null;
+  const baseQuestion = packetTarget?.question || packetTarget?.title || `Given the Morning Agent unified packet, should the primary path be ${primary.label}, and what exact action mode is admissible?`;
+  return {
+    date:todayIso(),
+    question:baseQuestion,
+    primaryQuest:primary,
+    councilSeed:packetTarget,
+    secondaryVectors:ps?.secondaries||[],
+    doNotScatter:ps?.doNotScatter||[],
+    openActions:open,
+    commitments,
+    imports,
+    dataAvailability:state.dataAvailability||{},
+    theonSummary:state.theonSummary||null,
+    esotericField:state.esotericField,
+    manualPathState:state.manualPathState,
+    latestUnifiedPacket:state.latestUnifiedPacket ? {date:state.latestUnifiedPacket.date, summary:state.latestUnifiedPacket.summary, source:state.latestUnifiedPacket.source} : null,
+    theonConfig:state.theonConfig
+  };
+}
+function buildModelPrompt(role,target){
+  return {packet_type:"ai_council_prompt_card", version:"0.2b", date:todayIso(), model:role.model, role:role.role, jurisdiction:role.jurisdiction, target, instructions:["Return JSON only.","Use the Morning Agent unified packet as the already-digested state. Do not request raw app JSON unless the data_availability field says it is missing.","Separate facts from assumptions and inferences.","Respect THEON fail-closed governance.","Treat esoterics as timing/focus, not proof.","Do not authorize execution beyond the action_mode supported by evidence, body state, and field.","Include falsifiers, risks with severity 1-5, veto_flags, ledger_required, and calibration_hook."], required_response_schema:councilResponseSchema(role)};
+}
+function councilResponseSchema(role){
+  return {packet_type:"ai_council_response_card", model:role.model, role:role.role, claim:"one sentence", confidence:0.0, evidence_type:["uploaded_json","inference"], facts:[], assumptions:[], inferences:[], risks:[{risk:"",severity:1}], falsifiers:[], recommended_action:"", action_mode:"OBSERVE | RESEARCH | PROBE | REGULATE | COMMIT | VETO", veto_flags:[], body_state_requirement:"", esoteric_alignment:{status:"supports | neutral | caution | opposes", reason:""}, ledger_required:true, calibration_hook:"How to judge tomorrow if this routing was correct."};
+}
+function renderCouncil(){
+  const targetBox=document.getElementById("councilTargetBox");
+  if(targetBox){
+    const t=state.councilPromptPack?.target;
+    targetBox.innerHTML=t?`<b>${escapeHtml(t.question)}</b><br/>Primary: ${escapeHtml(t.primaryQuest.label)} · ${escapeHtml(t.primaryQuest.mode)} · score ${t.primaryQuest.score||"—"}<br/>Imports: ${t.imports.map(i=>`<span class="import-pill">${escapeHtml(i.type)}</span>`).join(" ")}`:`<div class="empty">Generate prompts from Path Engine.</div>`;
+  }
+  const list=document.getElementById("councilPromptList");
+  if(list){
+    const prompts=state.councilPromptPack?.prompts||[];
+    list.innerHTML=prompts.length?prompts.map((p,i)=>`<div class="prompt-card"><div class="prompt-head"><div class="prompt-role">${escapeHtml(p.model)} · ${escapeHtml(p.role)}</div><button class="btn btn-blue" onclick="copyCouncilPrompt(${i})">Copy</button></div><textarea class="prompt-text" readonly id="councilPrompt_${i}">${escapeHtml(JSON.stringify(p,null,2))}</textarea></div>`).join(""):`<div class="empty">No prompt pack yet.</div>`;
+  }
+  renderCouncilScoring();
+}
+function copyCouncilPrompt(i){ const p=state.councilPromptPack?.prompts?.[i]; if(p) copyText(JSON.stringify(p,null,2)); }
+function downloadCouncilPromptPack(){
+  if(!state.councilPromptPack) return alert("Generate a prompt pack first.");
+  const blob=new Blob([JSON.stringify(state.councilPromptPack,null,2)],{type:"application/json"}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=`morning-agent-council-prompts-${todayIso()}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+function loadCouncilResponseTemplate(){
+  const tpl=councilResponseSchema({model:"Claude",role:"Auditor"}); tpl.claim="Proceed only after evidence and body-state checks."; tpl.confidence=0.68; tpl.facts=["Path Engine selected a primary quest."]; tpl.assumptions=["Imported JSON is fresh."]; tpl.risks=[{risk:"Over-scattering attention",severity:4}]; tpl.falsifiers=["Body state becomes red","Key imported data is stale"]; tpl.action_mode="PROBE"; tpl.ledger_required=true; tpl.calibration_hook="Check tomorrow whether one concrete action was completed without body cost."; document.getElementById("modelResponseInput").value=JSON.stringify(tpl,null,2);
+}
+function importCouncilResponse(){
+  try{
+    const r=JSON.parse(document.getElementById("modelResponseInput").value||"");
+    if(r.packet_type && r.packet_type!=="ai_council_response_card") throw new Error("Wrong packet_type.");
+    const scored=scoreCouncilResponse(r);
+    const idx=state.councilResponses.findIndex(x=>normKey(x.model)===normKey(r.model));
+    if(idx>=0) state.councilResponses[idx]=scored; else state.councilResponses.push(scored);
+    state.councilScoring=scoreCouncilSet();
+    document.getElementById("modelResponseInput").value="";
+    document.getElementById("responseImportStatus").innerHTML=`<div class="success">Imported ${escapeHtml(r.model||"model")} · THEON ${scored.theon.status} · Esoteric ${scored.esoteric.status}</div>`;
+    saveState();
+  }catch(e){ document.getElementById("responseImportStatus").innerHTML=`<div class="danger">Response rejected: ${escapeHtml(e.message)}</div>`; }
+}
+function scoreCouncilResponse(r){
+  const facts=safeArr(r.facts), assumptions=safeArr(r.assumptions), falsifiers=safeArr(r.falsifiers), risks=safeArr(r.risks), veto=safeArr(r.veto_flags);
+  let score=100, flags=[];
+  if(!facts.length){score-=20;flags.push("no_facts");}
+  if(!assumptions.length){score-=12;flags.push("no_assumptions");}
+  if(!falsifiers.length){score-=20;flags.push("no_falsifiers");}
+  if(r.ledger_required!==true){score-=12;flags.push("ledger_not_required");}
+  const severe=risks.filter(x=>(Number(x.severity)||0)>=state.theonConfig.riskSevereAt).length; if(severe){score-=severe*10; flags.push("severe_risk");}
+  if((Number(r.confidence)||0)>.85 && facts.length<2){score-=10; flags.push("confidence_too_high_for_facts");}
+  const mode=String(r.action_mode||"OBSERVE").toUpperCase();
+  if(mode==="COMMIT" && (severe || veto.length || (state.manualPathState?.bodyState!=="green"))){score-=30; flags.push("commit_blocked");}
+  let status=score>=80?"PASS":score>=55?"COND_PASS":"FAIL_CLOSED";
+  const ef=state.esotericField||defaultEsotericField();
+  let es=0, esFlags=[];
+  if(safeArr(ef.recommended_modes).map(String).includes(mode)){es+=12; esFlags.push("mode_supported");}
+  if(safeArr(ef.forbidden_modes).join(" ").toUpperCase().includes(mode)){es-=20; esFlags.push("mode_forbidden");}
+  const pkey=state.pathScores?.primary?.key; if(pkey && safeArr(ef.favored_departments).includes(pkey)){es+=8; esFlags.push("primary_favored");}
+  if(pkey && safeArr(ef.caution_departments).includes(pkey)){es-=8; esFlags.push("primary_caution");}
+  const esStatus=es>=12?"SUPPORTS_ACTION":es>=0?"SUPPORTS_ATTENTION":"CAUTION";
+  return Object.assign({}, r, {importedAt:nowIso(), theon:{score:Math.max(0,Math.round(score)),status,flags}, esoteric:{score:es,status:esStatus,flags:esFlags}});
+}
+function scoreCouncilSet(){
+  const rs=safeArr(state.councilResponses);
+  const modes=rs.map(r=>String(r.action_mode||"OBSERVE").toUpperCase());
+  const counts=modes.reduce((a,m)=>(a[m]=(a[m]||0)+1,a),{});
+  const hardVeto=rs.some(r=>safeArr(r.veto_flags).length || r.theon.status==="FAIL_CLOSED" || String(r.action_mode).toUpperCase()==="VETO");
+  const avg=rs.length?Math.round(rs.reduce((a,r)=>a+r.theon.score,0)/rs.length):0;
+  let gate=hardVeto?"FAIL_CLOSED":avg>=80?"PASS":avg>=60?"COND_PASS":"INSUFFICIENT";
+  const final=buildFinalSynthesisRequest(rs,counts,gate,avg);
+  return {createdAt:nowIso(), responseCount:rs.length, modeCounts:counts, hardVeto, avgTheonScore:avg, gate, final};
+}
+function buildFinalSynthesisRequest(rs,counts,gate,avg){
+  const conflicts=[];
+  if(Object.keys(counts).length>1) conflicts.push("Models disagree on action_mode: "+JSON.stringify(counts));
+  rs.forEach(r=>{ if(r.theon.flags.length) conflicts.push(`${r.model}: ${r.theon.flags.join(",")}`); });
+  const cap=gate==="PASS"?"PROBE_OR_REGULATE":gate==="COND_PASS"?"PROBE_ONLY":"RESEARCH_OR_VETO";
+  return {packet_type:"council_final_synthesis_request", version:"0.2", date:todayIso(), target:state.councilPromptPack?.target||null, theon_gate:{status:gate, avg_score:avg, action_cap:cap}, esoteric_gate:{field:state.esotericField, primary_path:state.pathScores?.primary||null}, model_votes:counts, response_summaries:rs.map(r=>({model:r.model, role:r.role, claim:r.claim, action_mode:r.action_mode, theon:r.theon, esoteric:r.esoteric})), conflicts, final_prompt_for_chatgpt:"Synthesize the council using THEON fail-closed logic and the imported esoteric field. Separate facts, assumptions, inferences, and symbolic timing. Respect body veto and action cap. Produce final decision, concrete action packet, and calibration hook. Do not overrule the human; provide the admissible path for human authorization."};
+}
+function renderCouncilScoring(){
+  const box=document.getElementById("councilScoringBox"); if(!box) return;
+  const rs=safeArr(state.councilResponses); state.councilScoring=state.councilScoring || scoreCouncilSet();
+  const s=state.councilScoring;
+  box.innerHTML=`<div class="gate-grid"><div class="gate-card"><div class="gate-label">Responses</div><div class="gate-value gate-info">${rs.length}/5</div></div><div class="gate-card"><div class="gate-label">THEON Gate</div><div class="gate-value ${s.gate==='PASS'?'gate-pass':s.gate==='COND_PASS'?'gate-cond':'gate-fail'}">${escapeHtml(s.gate)}</div></div><div class="gate-card"><div class="gate-label">Avg Score</div><div class="gate-value gate-info">${s.avgTheonScore}</div></div></div>` + (rs.length?rs.map(r=>`<div class="model-status-row"><b>${escapeHtml(r.model||"?")}</b><span>${escapeHtml(r.claim||"")}</span><span>${escapeHtml(r.action_mode||"")}</span></div>`).join(""):`<div class="empty">No responses imported.</div>`);
+  const final=document.getElementById("finalSynthesisBox"); if(final) final.value=JSON.stringify(s.final,null,2);
+}
+function copyFinalSynthesis(){ const v=document.getElementById("finalSynthesisBox")?.value||""; if(v) copyText(v); }
+function createCouncilAction(){
+  const s=state.councilScoring || scoreCouncilSet(); const target=state.councilPromptPack?.target; if(!target) return alert("Generate council first.");
+  state.actions.push(normalizeAction({title:`Council synthesis: ${target.primaryQuest?.label||"Daily path"}`, domain:domainForPath(target.primaryQuest?.key||"admin"), priority:s.gate==="FAIL_CLOSED"?"medium":"high", horizon:"today", status:"inbox", rationale:`THEON gate ${s.gate}; model votes ${JSON.stringify(s.modeCounts)}`, next_action:"Paste final synthesis JSON into ChatGPT for governed final answer.", tags:["council","theon-gate","sdae"], mode:"backtest"}, todayIso()));
+  saveState();
+}
+function clearCouncilResponses(){ state.councilResponses=[]; state.councilScoring=null; saveState(); }
+function renderTheon(){
+  const gate=document.getElementById("theonGateBox");
+  if(gate){
+    const s=state.councilScoring || scoreCouncilSet();
+    gate.innerHTML=`<div class="gate-grid"><div class="gate-card"><div class="gate-label">Evidence</div><div class="gate-value gate-info">separated</div></div><div class="gate-card"><div class="gate-label">Body</div><div class="gate-value ${state.manualPathState?.bodyState==='red'?'gate-fail':state.manualPathState?.bodyState==='green'?'gate-pass':'gate-cond'}">${escapeHtml(state.manualPathState?.bodyState||"amber")}</div></div><div class="gate-card"><div class="gate-label">Council</div><div class="gate-value ${s.gate==='PASS'?'gate-pass':s.gate==='COND_PASS'?'gate-cond':'gate-fail'}">${escapeHtml(s.gate||"not run")}</div></div></div><div class="mini-list"><b>Doctrine:</b> ${escapeHtml(state.theonConfig?.doctrine||"")}<br/><b>Action caps:</b> ${escapeHtml(JSON.stringify(state.theonConfig?.actionCaps||{}))}</div>`;
+  }
+  const ef=document.getElementById("esotericFieldBox");
+  if(ef){ const f=state.esotericField||defaultEsotericField(); ef.innerHTML=`<b>Date:</b> ${escapeHtml(f.date)}<br/><b>Hot/Cold:</b> ${escapeHtml(f.hot_cold)}<br/><b>Favored:</b> ${safeArr(f.favored_departments).map(x=>`<span class="import-pill">${escapeHtml(x)}</span>`).join(" ")}<br/><b>Caution:</b> ${safeArr(f.caution_departments).map(x=>`<span class="import-pill">${escapeHtml(x)}</span>`).join(" ")}<br/><b>Recommended modes:</b> ${safeArr(f.recommended_modes).join(", ")}<br/><b>Notes:</b> ${escapeHtml(f.notes||"")}`; }
+  const tc=document.getElementById("theonConfigBox"); if(tc) tc.value=JSON.stringify(state.theonConfig,null,2);
+}
+
+initSelects();
+renderAll();
+updateClock();
+setInterval(updateClock, 30000);
+</script>
+</body>
+</html>
