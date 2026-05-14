@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0" />
+<title>Flamewalker Studio · v0.2b · Multimodal Resonance BaZi Seal</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#070710;color:#e2e8f0;font-family:Georgia,serif;padding:10px;min-height:100vh;line-height:1.45}
+.container{max-width:1120px;margin:0 auto}
+h1{text-align:center;color:#B8860B;font-size:22px;letter-spacing:2px;margin:4px 0 2px;background:linear-gradient(90deg,#8B7000,#fde68a,#B8860B,#fde68a,#8B7000);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 12px rgba(184,134,11,.18))}
+h2{text-align:center;color:#8B0000;font-size:12px;font-weight:normal;letter-spacing:1px;margin-bottom:2px}
+h3{text-align:center;color:#64748b;font-size:9.5px;font-weight:normal;font-style:italic;margin-bottom:10px}
+button,input,select,textarea{font-family:Arial,sans-serif}
+.panel{background:linear-gradient(145deg,#0f0f1c 0%,#121220 100%);border:1px solid #252542;border-radius:9px;padding:11px;margin-bottom:9px;box-shadow:0 2px 16px rgba(0,0,0,.32)}
+.panel-title{font-size:10.5px;color:#B8860B;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:8px;text-align:center;font-weight:bold}
+.notice{padding:8px 10px;background:rgba(184,134,11,.08);border-left:2px solid #B8860B;border-radius:0 5px 5px 0;font-size:10.5px;color:#f0d080;line-height:1.5;margin-bottom:7px}
+.info{padding:8px 10px;background:rgba(59,130,246,.08);border-left:2px solid #3b82f6;border-radius:0 5px 5px 0;font-size:10.5px;color:#93c5fd;line-height:1.5;margin-bottom:7px}
+.danger{padding:8px 10px;background:rgba(220,38,38,.08);border-left:2px solid #dc2626;border-radius:0 5px 5px 0;font-size:10.5px;color:#fca5a5;line-height:1.5;margin-bottom:7px}
+.success{padding:8px 10px;background:rgba(34,197,94,.08);border-left:2px solid #22c55e;border-radius:0 5px 5px 0;font-size:10.5px;color:#86efac;line-height:1.5;margin-bottom:7px}
+.top-bar{position:sticky;top:0;z-index:20;background:#070710;padding:6px 0 8px;border-bottom:1px solid #1a1a2e;margin-bottom:8px}
+.top-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.top-cell{background:rgba(255,255,255,.035);border:1px solid #272744;border-radius:7px;padding:7px 5px;text-align:center}
+.top-label{font-size:8px;color:#94a3b8;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px}
+.top-value{font-size:15px;font-weight:bold;line-height:1.15;color:#fde68a}
+.top-sub{font-size:8.5px;color:#94a3b8;margin-top:1px;line-height:1.15}
+.tabs{display:flex;gap:5px;margin-bottom:9px;overflow-x:auto;padding:5px 0;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:8px 10px;background:#0e0e18;border:1px solid #30304f;border-radius:7px;color:#94a3b8;cursor:pointer;font-size:9.5px;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}.tab.active{background:#17172a;color:#f0d080;border-color:#B8860B;box-shadow:0 -2px 0 #B8860B inset,0 0 14px rgba(184,134,11,.12)}
+.section{display:none}.section.active{display:block}
+.field{margin-bottom:8px}.field label{display:block;font-size:9px;color:#a5b4fc;text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px}.field input,.field select,.field textarea{width:100%;background:#0a0a14;border:1px solid #2c2c48;color:#e2e8f0;border-radius:5px;padding:9px;font-size:13px}.field textarea{min-height:86px;resize:vertical;line-height:1.4;font-family:Georgia,serif;font-size:12px}.field input:focus,.field select:focus,.field textarea:focus{border-color:#B8860B;box-shadow:0 0 0 2px rgba(184,134,11,.15);outline:none}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.btn{background:#1d1d30;border:1px solid #38385a;color:#e2e8f0;border-radius:6px;padding:9px 12px;font-size:11.5px;cursor:pointer;flex:0 0 auto;transition:all .15s}.btn:hover{background:#292944;transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.45)}.btn:active{transform:translateY(0)}.btn-primary{border-color:#B8860B;color:#fde68a}.btn-green{border-color:#22c55e;color:#86efac}.btn-red{border-color:#dc2626;color:#fca5a5}.btn-blue{border-color:#3b82f6;color:#93c5fd}.btn-purple{border-color:#8b5cf6;color:#c4b5fd}.btn-full{width:100%;padding:12px;font-size:13px}
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.book-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.card{background:#0e0e18;border:1px solid #2a2a44;border-radius:8px;padding:10px;margin-bottom:8px;transition:border-color .15s}.card:hover{border-color:#B8860B}.card.selected{border-color:#fde68a;background:#15152a}.card-title{font-size:12.5px;color:#fde68a;font-weight:bold;line-height:1.3;margin-bottom:5px}.card-meta{font-size:10px;color:#94a3b8;line-height:1.5}.card-body{font-size:11.5px;color:#cbd5e1;line-height:1.55;margin-top:6px;white-space:pre-wrap}.tag-row{margin-top:5px;display:flex;gap:4px;flex-wrap:wrap}.tag{font-size:9px;padding:2px 6px;background:rgba(255,255,255,.06);border-radius:8px;color:#94a3b8}.pill{display:inline-block;font-size:8.5px;font-weight:bold;letter-spacing:.6px;padding:3px 7px;border-radius:10px;text-transform:uppercase;white-space:nowrap}.pill-spark{background:rgba(59,130,246,.15);color:#93c5fd}.pill-draft{background:rgba(245,158,11,.15);color:#fcd34d}.pill-forged{background:rgba(139,92,246,.15);color:#c4b5fd}.pill-ready{background:rgba(34,197,94,.15);color:#86efac}.pill-posted{background:rgba(184,134,11,.18);color:#fde68a}.pill-archived{background:rgba(100,116,139,.18);color:#cbd5e1}
+.quick-capture{min-height:72px;font-size:14px}.empty{font-size:11px;color:#64748b;text-align:center;padding:18px;font-style:italic}.small{font-size:9.5px;color:#64748b;line-height:1.45}.copybox{background:#070710;border:1px solid #1a1a2e;border-radius:6px;padding:8px;margin-top:6px;font-family:'Courier New',monospace;font-size:10.5px;line-height:1.5;color:#cbd5e1;white-space:pre-wrap;max-height:260px;overflow:auto}.search-input{width:100%;background:#0a0a14;border:1px solid #2c2c48;color:#e2e8f0;border-radius:5px;padding:9px;font-size:12px;margin-bottom:7px}.word-list{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}.word-card{background:rgba(255,255,255,.035);border:1px solid #252542;border-radius:7px;padding:8px}.word-cat{font-size:8.5px;color:#B8860B;text-transform:uppercase;letter-spacing:.7px;font-weight:bold;margin-bottom:4px}.word-items{font-size:12px;color:#cbd5e1;line-height:1.6}.release-board{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.release-col{background:#0a0a14;border:1px solid #252542;border-radius:8px;padding:8px}.release-title{text-align:center;color:#f0d080;font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}.storage-bar{height:6px;background:#0a0a14;border-radius:3px;overflow:hidden;margin:6px 0}.storage-fill{height:100%;background:linear-gradient(90deg,#22c55e 0%,#fde68a 60%,#dc2626 100%);transition:width .3s}.patch-console textarea{font-family:'Courier New',monospace;font-size:10.5px}.footer{text-align:center;color:#475569;font-size:9.5px;margin-top:14px;line-height:1.6;padding-bottom:20px}
+@media(max-width:900px){.top-grid{grid-template-columns:repeat(2,1fr)}.field-row,.field-row-3,.card-grid,.book-grid,.release-board{grid-template-columns:1fr}.word-list{grid-template-columns:1fr}.btn{flex:1 1 auto}.tabs{position:sticky;top:64px;background:#070710;z-index:15}}
+
+/* ===== v0.2 Multimodal Resonance Upgrade ===== */
+.res-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:8px}
+.res-cell{background:rgba(255,255,255,.035);border:1px solid #272744;border-radius:7px;padding:8px;text-align:center}
+.res-k{font-size:8px;color:#94a3b8;letter-spacing:.7px;text-transform:uppercase;margin-bottom:3px}
+.res-v{font-size:13px;color:#fde68a;font-weight:bold;line-height:1.25}
+.res-note{font-size:10px;color:#cbd5e1;line-height:1.5;margin-top:4px}
+.route-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.route-card{background:#0a0a14;border:1px solid #252542;border-radius:8px;padding:8px;position:relative}
+.route-score{position:absolute;top:6px;right:7px;font-size:10px;color:#86efac;font-weight:bold}
+.route-title{font-size:11px;color:#f0d080;text-transform:uppercase;letter-spacing:.8px;font-weight:bold;margin-bottom:5px;padding-right:28px}
+.route-body{font-size:10.5px;color:#cbd5e1;line-height:1.45}
+.prompt-stack{display:grid;grid-template-columns:1fr;gap:8px}
+.prompt-card{background:#0a0a14;border:1px solid #30304f;border-radius:8px;padding:9px}
+.prompt-card summary{cursor:pointer;color:#fde68a;font-size:11px;letter-spacing:.8px;text-transform:uppercase;font-weight:bold}
+.prompt-card-body{font-size:10.5px;color:#cbd5e1;line-height:1.55;margin-top:8px}
+.asset-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.asset-pill{font-size:8.5px;border-radius:999px;border:1px solid rgba(255,255,255,.16);padding:2px 7px;color:#cbd5e1;background:rgba(255,255,255,.04)}
+.story-chain{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.scene-card{background:#0a0a14;border:1px solid #252542;border-radius:8px;padding:9px}
+.scene-num{font-size:8px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase}
+.scene-title{font-size:12px;color:#fde68a;font-weight:bold;margin-top:2px}
+.scene-body{font-size:10.5px;color:#cbd5e1;line-height:1.5;margin-top:5px;white-space:pre-wrap}
+.gate-pass{color:#86efac}.gate-watch{color:#fde68a}.gate-caution{color:#fca5a5}
+.tool-link{display:inline-block;margin:3px 4px 3px 0;padding:5px 8px;border:1px solid #30304f;border-radius:6px;color:#93c5fd;text-decoration:none;font-size:10px;background:rgba(59,130,246,.07)}
+.lazy-box{display:none;margin-top:8px}.lazy-box.open{display:block}
+@media(max-width:900px){.res-grid,.route-grid,.story-chain{grid-template-columns:1fr}.prompt-card summary{font-size:10.5px}}
+
+</style>
+</head>
+<body>
+<div class="container">
+<h1>FLAMEWALKER STUDIO</h1>
+<h2>CREATIVE FORGE · BOOKS · POETRY · IMAGE · VEO · RELEASE</h2>
+<h3>v0.2b · local-first · no APIs · Gemini/Veo/Lyria prompt cockpit · resonance-routed creative memory · BaZi corrected</h3>
+
+<div class="top-bar">
+  <div class="top-grid">
+    <div class="top-cell"><div class="top-label">Active Project</div><div class="top-value" id="topProject">—</div><div class="top-sub">current forge</div></div>
+    <div class="top-cell"><div class="top-label">Fragments</div><div class="top-value" id="topFragments">0</div><div class="top-sub">raw sparks</div></div>
+    <div class="top-cell"><div class="top-label">Pieces</div><div class="top-value" id="topPieces">0</div><div class="top-sub">drafts / posts</div></div>
+    <div class="top-cell"><div class="top-label">Ready</div><div class="top-value" id="topReady">0</div><div class="top-sub">release queue</div></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('studio',this)">Studio</button>
+  <button class="tab" onclick="switchTab('resonance',this)">Resonance</button>
+  <button class="tab" onclick="switchTab('inbox',this)">Inbox</button>
+  <button class="tab" onclick="switchTab('books',this)">Books</button>
+  <button class="tab" onclick="switchTab('poetry',this)">Poetry Forge</button>
+  <button class="tab" onclick="switchTab('word',this)">Word Forge</button>
+  <button class="tab" onclick="switchTab('image',this)">Image Explorer</button>
+  <button class="tab" onclick="switchTab('lyria',this)">Lyria</button>
+  <button class="tab" onclick="switchTab('veo',this)">Veo</button>
+  <button class="tab" onclick="switchTab('storyboard',this)">Storyboard</button>
+  <button class="tab" onclick="switchTab('live',this)">Live</button>
+  <button class="tab" onclick="switchTab('release',this)">Release</button>
+  <button class="tab" onclick="switchTab('vault',this)">Vault</button>
+  <button class="tab" onclick="switchTab('data',this)">Data</button>
+</div>
+
+<section id="sec-studio" class="section active">
+  <div class="panel">
+    <div class="panel-title">Studio Dashboard</div>
+    <div class="notice"><b>Capture fast. Forge later. Release only what carries charge.</b> This prototype stores fragments, poems, book notes, prompts, hashtags, and release status locally in your browser.</div>
+    <div class="field-row">
+      <div class="field"><label>Active Project</label><select id="activeProject" onchange="setActiveProject(this.value)"></select></div>
+      <div class="field"><label>Today’s creative vector</label><select id="todayVector" onchange="setSetting('todayVector',this.value)"><option>Logos · structure</option><option>Sophia · beauty</option><option>Shadow · fracture</option><option>Solar · visibility</option><option>Lunar · memory</option><option>Machine · glitch</option><option>Earth · work/body</option></select></div>
+    </div>
+    <div class="field"><label>Quick capture</label><textarea id="quickCapture" class="quick-capture" placeholder="Write the spark before it escapes..."></textarea></div>
+    <div class="field-row-3">
+      <div class="field"><label>Type</label><select id="quickType"><option>fragment</option><option>line</option><option>image idea</option><option>symbol</option><option>title</option><option>lyric</option><option>scene seed</option><option>cultural spark</option></select></div>
+      <div class="field"><label>Mood</label><select id="quickMood"><option>dark</option><option>sacred</option><option>glitch</option><option>romantic</option><option>mythic</option><option>cosmic</option><option>warehouse</option><option>dream</option><option>raw</option></select></div>
+      <div class="field"><label>Symbols</label><input id="quickSymbols" placeholder="lion, mirror, fire"></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="captureFragment()">Capture Spark</button><button class="btn btn-blue" onclick="switchTabByName('poetry')">Open Poetry Forge</button><button class="btn btn-purple" onclick="switchTabByName('books')">Open Books</button></div>
+  </div>
+  <div class="card-grid" id="dashboardCards"></div>
+</section>
+
+<section id="sec-resonance" class="section">
+  <div class="panel">
+    <div class="panel-title">Resonance Router · Mayan / Numerology / BaZi</div>
+    <div class="notice"><b>Creative timing, not superstition.</b> This layer does not override the work. It routes the day’s symbolic field into the best production mode: word, image, video, audio, release, archive, or recovery.</div>
+    <div class="field-row-3">
+      <div class="field"><label>Resonance date</label><input id="resDate" type="date" onchange="updateResonanceFromUI()"></div>
+      <div class="field"><label>Manual body / attention state</label><select id="resBodyState" onchange="setSetting('resBodyState',this.value);renderResonance()"><option>green · clear</option><option>yellow · sensitive</option><option>orange · overloaded</option><option>red · recovery only</option></select></div>
+      <div class="field"><label>Use field in prompts</label><select id="resUseMode" onchange="setSetting('resUseMode',this.value)"><option>always embed</option><option>only summary line</option><option>off</option></select></div>
+    </div>
+    <div id="resonanceOutput"></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="refreshResonanceToday()">Set Today</button><button class="btn btn-blue" onclick="copyResonancePacket()">Copy Resonance Packet</button></div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Creative Route Scores</div>
+    <div id="creativeRoutes" class="route-grid"></div>
+  </div>
+</section>
+
+
+<section id="sec-inbox" class="section">
+  <div class="panel">
+    <div class="panel-title">Capture Inbox</div>
+    <input id="inboxSearch" class="search-input" placeholder="Search fragments..." oninput="renderInbox()">
+    <div class="field-row"><div class="field"><label>Filter project</label><select id="inboxProjectFilter" onchange="renderInbox()"></select></div><div class="field"><label>Filter type</label><select id="inboxTypeFilter" onchange="renderInbox()"><option value="">All types</option><option>fragment</option><option>line</option><option>image idea</option><option>symbol</option><option>title</option><option>lyric</option><option>scene seed</option><option>cultural spark</option></select></div></div>
+    <div id="inboxList"></div>
+  </div>
+</section>
+
+<section id="sec-books" class="section">
+  <div class="panel">
+    <div class="panel-title">Book Shelves</div>
+    <div class="info">Fixed book pillars: <b>The Day The Oracle Went Silent</b>, <b>Omega</b>, <b>The Void Shard</b>, <b>The Shimmerline</b>, and <b>Raw Atomic</b>.</div>
+    <div class="book-grid" id="bookGrid"></div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Book Fragment / Scene Seed</div>
+    <div class="field-row"><div class="field"><label>Book</label><select id="bookSeedProject"></select></div><div class="field"><label>Seed type</label><select id="bookSeedType"><option>scene seed</option><option>chapter idea</option><option>character note</option><option>symbol</option><option>dialogue line</option><option>continuity note</option></select></div></div>
+    <div class="field"><label>Seed text</label><textarea id="bookSeedText" placeholder="Scene, fragment, symbol, dialogue, unresolved thread..."></textarea></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="captureBookSeed()">Save Book Seed</button></div>
+  </div>
+</section>
+
+<section id="sec-poetry" class="section">
+  <div class="panel">
+    <div class="panel-title">Poetry Forge · Instagram Builder</div>
+    <div class="field-row"><div class="field"><label>Select piece</label><select id="pieceSelect" onchange="loadSelectedPiece()"></select></div><div class="field"><label>Status</label><select id="pieceStatus"><option>spark</option><option>draft</option><option>forged</option><option>ready</option><option>posted</option><option>archived</option></select></div></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="newPoetryPiece()">New Poem Piece</button><button class="btn btn-green" onclick="saveCurrentPiece()">Save Piece</button><button class="btn btn-blue" onclick="copyPieceBlock()">Copy Piece Block</button></div>
+    <div class="field-row"><div class="field"><label>Title</label><input id="pieceTitle" placeholder="Dark flooding from a darker lamp"></div><div class="field"><label>Project</label><select id="pieceProject"></select></div></div>
+    <div class="field-row"><div class="field"><label>Mood</label><input id="pieceMood" placeholder="dark, sacred, glitch"></div><div class="field"><label>Symbols</label><input id="pieceSymbols" placeholder="mirror, lion, rain"></div></div>
+    <div class="field"><label>Poem draft</label><textarea id="pieceText" style="min-height:190px" placeholder="Write the poem here..."></textarea></div>
+    <div class="field"><label>Caption</label><textarea id="pieceCaption" placeholder="Instagram caption..."></textarea></div>
+    <div class="field-row"><div class="field"><label>Hashtag mood</label><select id="hashtagMood"><option>dark</option><option>sacred</option><option>glitch</option><option>mythic</option><option>romantic</option><option>cosmic</option><option>raw</option></select></div><div class="field"><label>Hashtag set size</label><select id="hashtagSize"><option>12</option><option>18</option><option>24</option></select></div></div>
+    <div class="btn-row"><button class="btn btn-purple" onclick="generateHashtags()">Generate Hashtags</button><button class="btn btn-blue" onclick="copyHashtags()">Copy Hashtags</button></div>
+    <div class="copybox" id="hashtagOutput">Hashtags will appear here.</div>
+  </div>
+</section>
+
+<section id="sec-word" class="section">
+  <div class="panel">
+    <div class="panel-title">Word Forge · Synonym Finder</div>
+    <div class="notice">Local poetic synonym bank. It works offline. For rare words, it gives stylistic transformations rather than pretending to be a full dictionary.</div>
+    <div class="field-row"><div class="field"><label>Word</label><input id="wordInput" placeholder="silence" oninput="suggestWords()"></div><div class="field"><label>Mode</label><select id="wordMode" onchange="suggestWords()"><option>all</option><option>literal</option><option>poetic</option><option>dark</option><option>spiritual</option><option>glitch</option><option>strong verbs</option></select></div></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="suggestWords()">Find Words</button><button class="btn btn-blue" onclick="copyWordSuggestions()">Copy Suggestions</button></div>
+    <div id="wordResults" class="word-list"></div>
+  </div>
+</section>
+
+<section id="sec-image" class="section">
+  <div class="panel">
+    <div class="panel-title">Image Explorer · Prompt Builder</div>
+    <div class="info">No images are generated inside the app. This builds clean visual prompts and search links. <b>No text in image</b> is ON by default.</div>
+    <div class="field-row"><div class="field"><label>Subject</label><input id="imgSubject" placeholder="a mirror Stonehenge under stormlight"></div><div class="field"><label>Format</label><select id="imgFormat"><option>Instagram vertical 4:5</option><option>Instagram story 9:16</option><option>Square album cover</option><option>Cinematic widescreen</option></select></div></div>
+    <div class="field-row"><div class="field"><label>Mood</label><input id="imgMood" placeholder="dark mythic, sacred, cinematic"></div><div class="field"><label>Symbols</label><input id="imgSymbols" placeholder="lion, scorpion, eagle, tiger, mirror"></div></div>
+    <div class="field-row"><div class="field"><label>Palette</label><input id="imgPalette" placeholder="black, gold, rain blue"></div><div class="field"><label>Texture / style</label><input id="imgStyle" placeholder="surreal realism, high contrast, mist, glass"></div></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="buildImagePrompt()">Build Image Prompt</button><button class="btn btn-blue" onclick="copyImagePrompt()">Copy Prompt</button><button class="btn" onclick="openImageSearch('google')">Search Google Images</button><button class="btn" onclick="openImageSearch('pinterest')">Search Pinterest</button><button class="btn" onclick="openImageSearch('unsplash')">Search Unsplash</button></div>
+    <div class="copybox" id="imagePromptOutput">Image prompt will appear here.</div>
+  </div>
+</section>
+
+<section id="sec-lyria" class="section">
+  <div class="panel">
+    <div class="panel-title">Lyria Audio Module · 30s Motif / Song Seed</div>
+    <div class="info">This app does not call Lyria. It creates precise prompts for Gemini / Google Vids / Flow / external audio tools, then stores the sonic lineage locally.</div>
+    <div class="field-row">
+      <div class="field"><label>Audio purpose</label><select id="lyriaPurpose"><option>30-second motif</option><option>spoken-word bed</option><option>chorus seed</option><option>intro atmosphere</option><option>dark club loop</option><option>trailer cue</option><option>album interlude</option></select></div>
+      <div class="field"><label>Genre hybrid</label><input id="lyriaGenre" placeholder="Lithic-wave, trip-hop, dark ambient, Belgian new beat"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Vocal / lead</label><input id="lyriaVocal" placeholder="baritone whisper, female ghost vocal, no vocal, choir fragments"></div>
+      <div class="field"><label>Tempo / motion</label><input id="lyriaTempo" placeholder="82 BPM, slow pulse, ritual walking pace"></div>
+    </div>
+    <div class="field"><label>Lyrics / poem seed</label><textarea id="lyriaLyrics" placeholder="Paste poem lines or lyric seed..."></textarea></div>
+    <div class="field"><label>Sound palette</label><input id="lyriaPalette" placeholder="sub-bass, detuned piano, rain, glass, low choir, tape decay"></div>
+    <div class="field"><label>Reference image / scene note</label><input id="lyriaImageRef" placeholder="optional: describe the image or moodboard used as reference"></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="buildLyriaPrompt()">Build Lyria Prompt</button><button class="btn btn-blue" onclick="copyLyriaPrompt()">Copy Prompt</button><button class="btn btn-green" onclick="saveLyriaPrompt()">Save Audio Prompt</button></div>
+    <div class="copybox" id="lyriaPromptOutput">Lyria prompt will appear here.</div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Saved Audio Prompts</div>
+    <div id="audioPromptList"></div>
+  </div>
+</section>
+
+
+<section id="sec-veo" class="section">
+  <div class="panel">
+    <div class="panel-title">Veo Prompt Builder · Text / Image / Extension</div>
+    <div class="info">Prompt cockpit for Veo 3.1-style workflows: text-to-video, image-to-video, first+last frame, reference images, portrait video, and extension chains.</div>
+    <div class="field-row-3">
+      <div class="field"><label>Veo mode</label><select id="veoMode"><option>text-to-video</option><option>image-to-video</option><option>first-and-last-frame</option><option>extend previous clip</option><option>reference image pack</option></select></div>
+      <div class="field"><label>Aspect ratio</label><select id="veoAspect"><option>16:9 cinematic</option><option>9:16 vertical</option><option>1:1 square</option></select></div>
+      <div class="field"><label>Duration</label><select id="veoDuration"><option>8 seconds</option><option>12 seconds</option><option>20 seconds</option><option>30 seconds</option></select></div>
+    </div>
+    <div class="field"><label>Scene</label><input id="veoScene" placeholder="a lone poet walks through mirrors in rain"></div>
+    <div class="field-row"><div class="field"><label>Reference frames / images</label><textarea id="veoRefs" placeholder="First frame: ...
+Last frame: ...
+Reference image 1/2/3: ..."></textarea></div><div class="field"><label>Continuity lock</label><textarea id="veoContinuity" placeholder="same face, same coat, same mirror motif, same gold/black palette"></textarea></div></div>
+    <div class="field-row"><div class="field"><label>Camera movement</label><input id="veoCamera" placeholder="slow dolly in, low angle, handheld drift"></div><div class="field"><label>Motion</label><input id="veoMotion" placeholder="rain falling upward, mirrors trembling"></div></div>
+    <div class="field-row"><div class="field"><label>Atmosphere</label><input id="veoAtmosphere" placeholder="sacred glitch, dark gold, storm haze"></div><div class="field"><label>Native audio cue</label><input id="veoAudio" placeholder="low sub-bass wind, no dialogue, distant choir"></div></div>
+    <div class="field"><label>Final beat</label><input id="veoEnd" placeholder="a lion appears in the reflection"></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="buildVeoPrompt()">Build Veo Prompt</button><button class="btn btn-blue" onclick="copyVeoPrompt()">Copy Veo Prompt</button><button class="btn btn-green" onclick="saveVeoPrompt()">Save Video Prompt</button></div>
+    <div class="copybox" id="veoPromptOutput">Veo prompt will appear here.</div>
+  </div>
+  <div class="panel"><div class="panel-title">Saved Video Prompts</div><div id="videoPromptList"></div></div>
+</section>
+
+<section id="sec-storyboard" class="section">
+  <div class="panel">
+    <div class="panel-title">GlitchWave Storyboard Chain</div>
+    <div class="notice">Map a project as still → video → audio → release. This is the continuity bridge for Veo extension, image-to-video, and Lyria motifs.</div>
+    <div class="field-row"><div class="field"><label>Storyboard project</label><select id="storyProject"></select></div><div class="field"><label>Scene title</label><input id="sceneTitle" placeholder="Mirror Stonehenge · Lion reflection"></div></div>
+    <div class="field-row"><div class="field"><label>Still / image prompt</label><textarea id="sceneStill" placeholder="Nano Banana / image prompt or still description"></textarea></div><div class="field"><label>Veo / motion prompt</label><textarea id="sceneVideo" placeholder="Veo prompt or clip continuation notes"></textarea></div></div>
+    <div class="field-row"><div class="field"><label>Lyria / audio cue</label><textarea id="sceneAudio" placeholder="Audio cue, motif, vocals, texture"></textarea></div><div class="field"><label>Continuity / symbols</label><textarea id="sceneContinuity" placeholder="same character, objects, palette, camera grammar, motif"></textarea></div></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="addStoryboardScene()">Add Scene</button><button class="btn btn-blue" onclick="copyStoryboardPacket()">Copy Storyboard Packet</button></div>
+    <div class="copybox" id="storyboardPacketOutput">Storyboard packet will appear here.</div>
+  </div>
+  <div class="panel"><div class="panel-title">Scene Chain</div><div id="storyboardList" class="story-chain"></div></div>
+</section>
+
+<section id="sec-live" class="section">
+  <div class="panel">
+    <div class="panel-title">Gemini Live · Over-the-Shoulder Mode</div>
+    <div class="info">Use this as a checklist/prompt for live camera or screen-share sessions. The app stores the working brief, not the live stream.</div>
+    <div class="field-row"><div class="field"><label>Session focus</label><select id="liveFocus"><option>music hardware / Maschine MK3</option><option>prompt engineering</option><option>storyboard review</option><option>poem / voice performance</option><option>app UX inspection</option><option>visual style audit</option></select></div><div class="field"><label>Session goal</label><input id="liveGoal" placeholder="debug the scene chain, review sound design, improve image prompts"></div></div>
+    <div class="field"><label>Context to give Gemini Live</label><textarea id="liveContext" placeholder="Explain what Gemini should watch/listen for, what to ignore, and what final output you need."></textarea></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="buildLiveBrief()">Build Live Brief</button><button class="btn btn-blue" onclick="copyLiveBrief()">Copy Brief</button></div>
+    <div class="copybox" id="liveBriefOutput">Live brief will appear here.</div>
+    <div style="margin-top:8px">
+      <a class="tool-link" target="_blank" rel="noopener" href="https://gemini.google.com/">Open Gemini</a>
+      <a class="tool-link" target="_blank" rel="noopener" href="https://vids.google.com/">Open Google Vids</a>
+      <a class="tool-link" target="_blank" rel="noopener" href="https://labs.google/fx/tools/flow">Open Flow</a>
+    </div>
+  </div>
+</section>
+
+<section id="sec-release" class="section">
+  <div class="panel">
+    <div class="panel-title">Release Board</div>
+    <div class="release-board" id="releaseBoard"></div>
+  </div>
+</section>
+
+<section id="sec-vault" class="section">
+  <div class="panel">
+    <div class="panel-title">Vault</div>
+    <input id="vaultSearch" class="search-input" placeholder="Search pieces and fragments..." oninput="renderVault()">
+    <div class="field-row"><div class="field"><label>Project</label><select id="vaultProjectFilter" onchange="renderVault()"></select></div><div class="field"><label>Kind</label><select id="vaultKindFilter" onchange="renderVault()"><option value="">All</option><option value="piece">Pieces</option><option value="fragment">Fragments</option></select></div></div>
+    <div id="vaultList"></div>
+  </div>
+</section>
+
+<section id="sec-data" class="section">
+  <div class="panel">
+    <div class="panel-title">Data · Export / Import</div>
+    <div class="btn-row"><button class="btn btn-blue" onclick="exportState()">Export JSON</button><button class="btn btn-blue" onclick="document.getElementById('importFile').click()">Import JSON</button><button class="btn btn-red" onclick="clearStudio()">Clear Studio</button><input id="importFile" type="file" accept="application/json,.json" style="display:none" onchange="importState(event)"></div>
+    <div id="storageInfo" class="small" style="margin-top:8px"></div><div class="storage-bar"><div id="storageBar" class="storage-fill" style="width:0%"></div></div>
+  </div>
+  <div class="panel patch-console">
+    <div class="panel-title">Safe Patch Console</div>
+    <div class="notice">Accepted operations: <b>merge settings</b>, <b>append fragments</b>, <b>append pieces</b>, <b>replace activeProject</b>. No JavaScript execution. Rollback is saved before each patch.</div>
+    <div class="field"><label>Patch JSON</label><textarea id="patchInput" style="min-height:150px" placeholder='{"op":"merge","target":"settings","value":{"todayVector":"Machine · glitch"}}'></textarea></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="previewPatch()">Preview Patch</button><button class="btn btn-green" onclick="applyPatch()">Apply Patch</button><button class="btn btn-purple" onclick="rollbackPatch()">Rollback Last</button></div>
+    <div class="copybox" id="patchOutput">Patch preview will appear here.</div>
+  </div>
+</section>
+
+<div class="footer">Flamewalker Studio v0.2b · multimodal myth engine · BaZi corrected against Wu Zi anchor · local prompt memory · export JSON often · no cloud dependency</div>
+</div>
+<script>
+"use strict";
+var STORAGE_KEY = "flamewalker_studio_v02_state";
+var APP_VERSION = "0.2.2-bazi-seal";
+var rollbackStack = [];
+var currentPieceId = null;
+var lastImagePrompt = "";
+var lastVeoPrompt = "";
+var lastHashtags = "";
+var lastWordText = "";
+
+var FIXED_PROJECTS = [
+  {id:"the-day-the-oracle-went-silent", name:"The Day The Oracle Went Silent", type:"book", note:"Oracle silence, collapse of signal, sacred absence."},
+  {id:"omega", name:"Omega", type:"book", note:"War of Destiny, Christ-Sophia field, timeline memory."},
+  {id:"the-void-shard", name:"The Void Shard", type:"book", note:"Dark fragment, cosmic wound, unknown artifact."},
+  {id:"the-shimmerline", name:"The Shimmerline", type:"book", note:"Amazon, Antarctica, Denmark, Greece, India."},
+  {id:"raw-atomic", name:"Raw Atomic", type:"book", note:"Raw force, atomic language, direct ignition."},
+  {id:"glitchwave-poetry", name:"GlitchWave Poetry", type:"poetry", note:"Instagram poetry, fragments, dark mythic compression."},
+  {id:"malfunction-vagabond", name:"Malfunction Vagabond", type:"persona", note:"Public artistic persona and release identity."},
+  {id:"dark-malfunction", name:"Dark Malfunction", type:"music", note:"Album concepts, track titles, lyrics, sonic moods."},
+  {id:"creative-ai-video", name:"Veo / Creative AI Video", type:"video", note:"Veo prompts, visual scenes, cinematic short-form."}
+];
+
+var SYNONYMS = {
+  "dark":{literal:["shadowed","dim","black","obscure"],poetic:["night-veiled","ink-deep","starless","eclipse-worn"],dark:["grave-black","void-lit","dead-sunned","underworld"],spiritual:["mystery-cloaked","hidden","apophatic","unseen"],glitch:["signal-black","pixel-night","error-shadow","frequency-dead"],verbs:["blacken","veil","swallow","eclipse"]},
+  "fire":{literal:["flame","blaze","burning","heat"],poetic:["ember","sunstorm","altar-flame","gold wound"],dark:["ash-fire","funeral blaze","black flame","smoke-blood"],spiritual:["sacred flame","Logos spark","purifying fire","living altar"],glitch:["thermal code","burning signal","syntax flame","redline"],verbs:["ignite","kindle","scorch","consecrate"]},
+  "silence":{literal:["quiet","stillness","hush","mute"],poetic:["hushbound","unsounded","prayer-quiet","the held breath"],dark:["dead-mouthed","buried hush","sealed throat","grave quiet"],spiritual:["listening","inner chapel","sacred pause","contemplation"],glitch:["signal-lost","noise-dead","frequencyless","null channel"],verbs:["hush","seal","quiet","mute"]},
+  "love":{literal:["affection","devotion","desire","care"],poetic:["heart-flame","gravity of the soul","soft thunder","gold ache"],dark:["wound-light","beautiful ruin","blood-tender","sacred hunger"],spiritual:["agape","Sophia field","Christ flame","covenant"],glitch:["heartcode","signal-bond","recursive ache","soft protocol"],verbs:["cherish","bind","magnetize","redeem"]},
+  "mirror":{literal:["reflection","glass","surface","looking glass"],poetic:["silver witness","reversed water","truth-glass","moon door"],dark:["black glass","shadow witness","broken witness","dead reflection"],spiritual:["soul mirror","divine witness","Ma’at glass","inner oracle"],glitch:["feedback pane","recursive glass","rendered self","mirror-loop"],verbs:["reflect","split","reveal","invert"]},
+  "storm":{literal:["tempest","squall","thunderstorm","rainstorm"],poetic:["sky rupture","thunder veil","rain crown","cloud war"],dark:["black weather","grave thunder","flooded omen","night squall"],spiritual:["cleansing storm","trial wind","prophetic weather","baptismal rain"],glitch:["static weather","signal storm","noise-front","data squall"],verbs:["thunder","flood","rupture","unmake"]},
+  "soul":{literal:["spirit","self","essence","being"],poetic:["inner flame","old witness","breath-body","hidden sun"],dark:["wounded witness","night-self","buried star","ash-heart"],spiritual:["divine spark","Logos seed","eternal witness","Sophia breath"],glitch:["ghost signal","recursive self","soulcode","identity echo"],verbs:["remember","ascend","haunt","return"]},
+  "machine":{literal:["device","engine","system","mechanism"],poetic:["iron oracle","metal mind","cold engine","synthetic god"],dark:["dead engine","control idol","steel mouth","black circuit"],spiritual:["false idol","counterfeit throne","image without breath","soulless altar"],glitch:["protocol beast","recursive engine","syntax idol","algorithmic mouth"],verbs:["compute","simulate","devour","route"]},
+  "memory":{literal:["remembrance","recall","record","trace"],poetic:["old light","echo-blood","time-seed","remembering flame"],dark:["haunted record","dead archive","bone echo","scarred time"],spiritual:["Akashic trace","soul record","covenant memory","eternal witness"],glitch:["cache","ghost data","recursive trace","backup soul"],verbs:["recall","restore","haunt","rethread"]},
+  "god":{literal:["divine","creator","lord","source"],poetic:["the Highest","hidden hand","first fire","the Unseen"],dark:["silent throne","terrible mercy","unanswered flame","storm crown"],spiritual:["Logos","Monad","Most High","living source"],glitch:["source code","prime signal","root process","first protocol"],verbs:["create","judge","redeem","summon"]}
+};
+
+var HASHTAG_BANK = {
+  core:["#poetry","#poetsofinstagram","#instapoetry","#poetrycommunity","#spokenword","#writersofinstagram","#poetrylovers","#poetryisnotdead"],
+  dark:["#darkpoetry","#shadowwork","#darkwords","#noirpoetry","#gothicpoetry","#darkart"],
+  sacred:["#sacredpoetry","#spiritualpoetry","#mysticpoetry","#soulwriting","#divinefeminine","#logos"],
+  glitch:["#glitchpoetry","#glitchwave","#cyberpoetry","#posthumanpoetry","#digitalpoetry","#malfunctionvagabond"],
+  mythic:["#mythicpoetry","#archetypes","#mythopoetic","#symbolism","#oraclewords","#flamewalker"],
+  romantic:["#lovepoetry","#heartwords","#soulconnection","#romanticpoetry","#desirepoetry"],
+  cosmic:["#cosmicpoetry","#starsoul","#quantumpoetry","#cosmicconsciousness","#timelinepoetry"],
+  raw:["#rawpoetry","#atomicpoetry","#rawwords","#truthwriting","#unfilteredpoetry"],
+  symbols:{lion:["#lionheart","#lionenergy"],scorpion:["#scorpioenergy","#scorpion"],mirror:["#mirrorwork","#mirrorworld"],fire:["#sacredfire","#innerflame"],storm:["#stormwithin","#thunderheart"],machine:["#machinepoetry","#aiart"],god:["#godiswithin","#faithpoetry"],sophia:["#sophia","#wisdom"],void:["#voidpoetry","#thevoid"]}
+};
+
+function defaultState(){return{appVersion:APP_VERSION,createdAt:new Date().toISOString(),activeProject:"glitchwave-poetry",settings:{todayVector:"Machine · glitch",resUseMode:"always embed",resBodyState:"green · clear",resDate:new Date().toISOString().slice(0,10)},projects:FIXED_PROJECTS,fragments:[],pieces:[],audioPrompts:[],videoPrompts:[],storyboardScenes:[],rollbacks:[]};}
+function loadState(){try{var raw=localStorage.getItem(STORAGE_KEY);if(!raw)return defaultState();var s=JSON.parse(raw);var d=defaultState();s.projects=FIXED_PROJECTS;return Object.assign({},d,s,{settings:Object.assign({},d.settings,s.settings||{}),fragments:Array.isArray(s.fragments)?s.fragments:[],pieces:Array.isArray(s.pieces)?s.pieces:[],audioPrompts:Array.isArray(s.audioPrompts)?s.audioPrompts:[],videoPrompts:Array.isArray(s.videoPrompts)?s.videoPrompts:[],storyboardScenes:Array.isArray(s.storyboardScenes)?s.storyboardScenes:[],rollbacks:Array.isArray(s.rollbacks)?s.rollbacks:[]});}catch(e){console.error(e);return defaultState();}}
+var state=loadState();
+function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));renderAll();}catch(e){alert("Save failed. Export your state now. " + e.message);}}
+function uid(){return Date.now()+"_"+Math.random().toString(36).slice(2,9);}
+function esc(v){return String(v==null?"":v).replace(/[&<>\"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
+function parseList(s){return String(s||"").split(",").map(function(x){return x.trim();}).filter(Boolean);}
+function projectName(id){var p=state.projects.find(function(x){return x.id===id;});return p?p.name:id;}
+function projectOptions(selected,includeAll){var html=includeAll?'<option value="">All projects</option>':"";state.projects.forEach(function(p){html+='<option value="'+esc(p.id)+'" '+(p.id===selected?'selected':'')+'>'+esc(p.name)+'</option>';});return html;}
+function switchTab(name,btn){document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("active");});document.querySelectorAll(".section").forEach(function(s){s.classList.remove("active");});if(btn)btn.classList.add("active");var sec=document.getElementById("sec-"+name);if(sec)sec.classList.add("active");renderAll();}
+function switchTabByName(name){var btn=[].slice.call(document.querySelectorAll(".tab")).find(function(b){return b.getAttribute("onclick")&&b.getAttribute("onclick").indexOf("'"+name+"'")>=0;});switchTab(name,btn);}
+function setActiveProject(id){state.activeProject=id;saveOnly();renderAll();}
+function setSetting(k,v){state.settings[k]=v;saveOnly();renderAll();}
+function saveOnly(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));refreshStorage();}catch(e){alert("Save failed: "+e.message);}}
+function refreshTop(){document.getElementById("topProject").textContent=projectName(state.activeProject);document.getElementById("topFragments").textContent=state.fragments.length;document.getElementById("topPieces").textContent=state.pieces.length;document.getElementById("topReady").textContent=state.pieces.filter(function(p){return p.status==="ready";}).length;}
+function renderSelectors(){var active=document.getElementById("activeProject");if(active)active.innerHTML=projectOptions(state.activeProject,false);var tv=document.getElementById("todayVector");if(tv)tv.value=state.settings.todayVector||"Machine · glitch";["inboxProjectFilter","vaultProjectFilter"].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=projectOptions(el.value,true);});["bookSeedProject"].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=state.projects.filter(function(p){return p.type==="book";}).map(function(p){return '<option value="'+esc(p.id)+'">'+esc(p.name)+'</option>';}).join("");});var pp=document.getElementById("pieceProject");if(pp)pp.innerHTML=projectOptions(pp.value||state.activeProject,false);renderPieceSelect();}
+function captureFragment(){var txt=document.getElementById("quickCapture").value.trim();if(!txt){alert("Write a spark first.");return;}var f={id:uid(),kind:"fragment",projectId:state.activeProject,type:document.getElementById("quickType").value,mood:document.getElementById("quickMood").value,symbols:parseList(document.getElementById("quickSymbols").value),text:txt,createdAt:new Date().toISOString(),used:false};state.fragments.unshift(f);document.getElementById("quickCapture").value="";document.getElementById("quickSymbols").value="";saveState();}
+function captureBookSeed(){var txt=document.getElementById("bookSeedText").value.trim();if(!txt){alert("Write the seed first.");return;}var f={id:uid(),kind:"fragment",projectId:document.getElementById("bookSeedProject").value,type:document.getElementById("bookSeedType").value,mood:"book",symbols:[],text:txt,createdAt:new Date().toISOString(),used:false};state.fragments.unshift(f);document.getElementById("bookSeedText").value="";saveState();}
+function cardForFragment(f){return '<div class="card"><div class="card-title">'+esc(f.type)+' · '+esc(projectName(f.projectId))+'</div><div class="card-meta">'+new Date(f.createdAt).toLocaleString()+' · '+esc(f.mood||"")+'</div><div class="card-body">'+esc(f.text)+'</div><div class="tag-row">'+(f.symbols||[]).map(function(s){return '<span class="tag">'+esc(s)+'</span>';}).join("")+'</div><div class="btn-row"><button class="btn btn-blue" onclick="sendFragmentToPoetry(\''+f.id+'\')">Use in Poem</button><button class="btn btn-red" onclick="deleteFragment(\''+f.id+'\')">Delete</button></div></div>';}
+function deleteFragment(id){if(!confirm("Delete this fragment?"))return;state.fragments=state.fragments.filter(function(f){return f.id!==id;});saveState();}
+function sendFragmentToPoetry(id){var f=state.fragments.find(function(x){return x.id===id;});if(!f)return;switchTabByName("poetry");if(!currentPieceId)newPoetryPiece();var area=document.getElementById("pieceText");area.value=(area.value?area.value+"\n":"")+f.text;f.used=true;saveOnly();}
+function renderInbox(){var list=document.getElementById("inboxList");if(!list)return;var q=(document.getElementById("inboxSearch").value||"").toLowerCase();var pf=document.getElementById("inboxProjectFilter").value;var tf=document.getElementById("inboxTypeFilter").value;var arr=state.fragments.filter(function(f){if(pf&&f.projectId!==pf)return false;if(tf&&f.type!==tf)return false;if(q){var hay=[f.text,f.type,f.mood,projectName(f.projectId),(f.symbols||[]).join(" ")].join(" ").toLowerCase();if(hay.indexOf(q)<0)return false;}return true;});list.innerHTML=arr.length?arr.map(cardForFragment).join(""):'<div class="empty">No fragments found.</div>';}
+function renderBooks(){var grid=document.getElementById("bookGrid");if(!grid)return;var books=state.projects.filter(function(p){return p.type==="book";});grid.innerHTML=books.map(function(p){var fr=state.fragments.filter(function(f){return f.projectId===p.id;}).length;var pc=state.pieces.filter(function(x){return x.projectId===p.id;}).length;return '<div class="card"><div class="card-title">'+esc(p.name)+'</div><div class="card-meta">'+fr+' fragments · '+pc+' pieces</div><div class="card-body">'+esc(p.note)+'</div><div class="btn-row"><button class="btn btn-primary" onclick="setActiveProject(\''+p.id+'\');switchTabByName(\'studio\')">Activate</button><button class="btn btn-blue" onclick="filterVaultProject(\''+p.id+'\')">Open Vault</button></div></div>';}).join("");}
+function filterVaultProject(id){switchTabByName("vault");setTimeout(function(){document.getElementById("vaultProjectFilter").value=id;renderVault();},50);}
+function renderDashboard(){var box=document.getElementById("dashboardCards");if(!box)return;var recent=state.fragments.slice(0,3);var ready=state.pieces.filter(function(p){return p.status==="ready";}).slice(0,3);var html='<div class="card"><div class="card-title">Current Vector</div><div class="card-body">'+esc(state.settings.todayVector||"Machine · glitch")+'</div><div class="card-meta">Active project: '+esc(projectName(state.activeProject))+'</div></div>';html+='<div class="card"><div class="card-title">Next Actions</div><div class="card-body">Capture sparks, forge one poem, build one image prompt, prepare one release.</div><div class="card-meta">v0.1 favors flow over complexity.</div></div>';html+='<div class="card"><div class="card-title">Recent Sparks</div>'+(recent.length?recent.map(function(f){return '<div class="card-meta">'+esc(f.type)+' · '+esc(f.text.slice(0,70))+'</div>';}).join(""):'<div class="empty">No sparks yet.</div>')+'</div>';html+='<div class="card"><div class="card-title">Ready Queue</div>'+(ready.length?ready.map(function(p){return '<div class="card-meta">'+esc(p.title||"Untitled")+' · '+esc(projectName(p.projectId))+'</div>';}).join(""):'<div class="empty">Nothing ready yet.</div>')+'</div>';box.innerHTML=html;}
+function renderPieceSelect(){var sel=document.getElementById("pieceSelect");if(!sel)return;var opts='<option value="">Select or create...</option>';state.pieces.forEach(function(p){opts+='<option value="'+esc(p.id)+'" '+(p.id===currentPieceId?'selected':'')+'>'+esc(p.title||"Untitled")+' · '+esc(p.status)+'</option>';});sel.innerHTML=opts;}
+function newPoetryPiece(){var p={id:uid(),kind:"piece",type:"poem",projectId:state.activeProject||"glitchwave-poetry",status:"spark",title:"",mood:"",symbols:[],text:"",caption:"",hashtags:"",imagePrompt:"",veoPrompt:"",createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};state.pieces.unshift(p);currentPieceId=p.id;saveOnly();renderPieceSelect();loadSelectedPiece();}
+function loadSelectedPiece(){var sel=document.getElementById("pieceSelect");if(sel)currentPieceId=sel.value||currentPieceId;var p=state.pieces.find(function(x){return x.id===currentPieceId;});if(!p)return;document.getElementById("pieceStatus").value=p.status||"spark";document.getElementById("pieceTitle").value=p.title||"";document.getElementById("pieceProject").value=p.projectId||state.activeProject;document.getElementById("pieceMood").value=p.mood||"";document.getElementById("pieceSymbols").value=(p.symbols||[]).join(", ");document.getElementById("pieceText").value=p.text||"";document.getElementById("pieceCaption").value=p.caption||"";document.getElementById("hashtagOutput").textContent=p.hashtags||"Hashtags will appear here.";lastHashtags=p.hashtags||"";}
+function saveCurrentPiece(){if(!currentPieceId)newPoetryPiece();var p=state.pieces.find(function(x){return x.id===currentPieceId;});if(!p)return;p.status=document.getElementById("pieceStatus").value;p.title=document.getElementById("pieceTitle").value.trim()||"Untitled poem";p.projectId=document.getElementById("pieceProject").value;p.mood=document.getElementById("pieceMood").value.trim();p.symbols=parseList(document.getElementById("pieceSymbols").value);p.text=document.getElementById("pieceText").value;p.caption=document.getElementById("pieceCaption").value;p.hashtags=lastHashtags||p.hashtags||"";p.updatedAt=new Date().toISOString();saveState();}
+function generateHashtags(){var mood=document.getElementById("hashtagMood").value;var size=Number(document.getElementById("hashtagSize").value)||12;var symbols=parseList(document.getElementById("pieceSymbols").value).map(function(s){return s.toLowerCase();});var tags=[];function add(a){a.forEach(function(t){if(tags.indexOf(t)<0)tags.push(t);});}add(HASHTAG_BANK.core);if(HASHTAG_BANK[mood])add(HASHTAG_BANK[mood]);symbols.forEach(function(s){if(HASHTAG_BANK.symbols[s])add(HASHTAG_BANK.symbols[s]);});var proj=document.getElementById("pieceProject").value;if(proj==="glitchwave-poetry")add(["#glitchwave","#malfunctionvagabond","#flamewalker"]);if(proj==="omega")add(["#omegawarofdestiny","#mythicfiction"]);lastHashtags=tags.slice(0,size).join(" ");document.getElementById("hashtagOutput").textContent=lastHashtags;}
+function copyHashtags(){copyText(lastHashtags||document.getElementById("hashtagOutput").textContent,"Hashtags copied.");}
+function copyPieceBlock(){saveCurrentPiece();var p=state.pieces.find(function(x){return x.id===currentPieceId;});if(!p)return;var txt="Title: "+p.title+"\nProject: "+projectName(p.projectId)+"\nStatus: "+p.status+"\nMood: "+p.mood+"\nSymbols: "+(p.symbols||[]).join(", ")+"\n\nPoem:\n"+p.text+"\n\nCaption:\n"+p.caption+"\n\nHashtags:\n"+(p.hashtags||"");copyText(txt,"Piece block copied.");}
+function suggestWords(){var w=(document.getElementById("wordInput").value||"").trim().toLowerCase();var mode=document.getElementById("wordMode").value;var out=document.getElementById("wordResults");if(!out)return;if(!w){out.innerHTML='<div class="empty">Type a word to begin.</div>';return;}var data=SYNONYMS[w];if(!data){data={literal:[w+"-like",w+"-formed",w+"-touched"],poetic:["old "+w,"hidden "+w,"golden "+w],dark:["black "+w,"broken "+w,"buried "+w],spiritual:["sacred "+w,"inner "+w,"prayer of "+w],glitch:[w+".exe","signal-"+w,"recursive "+w],verbs:["carry "+w,"break "+w,"summon "+w]};}
+var keys=Object.keys(data).filter(function(k){return mode==="all"||k===mode|| (mode==="strong verbs"&&k==="verbs");});lastWordText=keys.map(function(k){return k.toUpperCase()+": "+data[k].join(", ");}).join("\n");out.innerHTML=keys.map(function(k){return '<div class="word-card"><div class="word-cat">'+esc(k)+'</div><div class="word-items">'+esc(data[k].join(", "))+'</div></div>';}).join("");}
+function copyWordSuggestions(){copyText(lastWordText||"","Word suggestions copied.");}
+function buildImagePrompt(){var parts=[];var subject=document.getElementById("imgSubject").value.trim();var mood=document.getElementById("imgMood").value.trim();var symbols=document.getElementById("imgSymbols").value.trim();var pal=document.getElementById("imgPalette").value.trim();var style=document.getElementById("imgStyle").value.trim();var format=document.getElementById("imgFormat").value;parts.push(subject||"mythic poetic visual");if(mood)parts.push("mood: "+mood);if(symbols)parts.push("symbols: "+symbols);if(pal)parts.push("color palette: "+pal);if(style)parts.push("style: "+style);parts.push(format);parts.push("cinematic composition, high emotional charge, no text, no words, no letters, no logos");lastImagePrompt=parts.join(", ");document.getElementById("imagePromptOutput").textContent=lastImagePrompt;}
+function copyImagePrompt(){copyText(lastImagePrompt||document.getElementById("imagePromptOutput").textContent,"Image prompt copied.");}
+function openImageSearch(kind){var q=[document.getElementById("imgSubject").value,document.getElementById("imgMood").value,document.getElementById("imgSymbols").value].join(" ").trim()||"dark mythic poetry visual";var url="";if(kind==="google")url="https://www.google.com/search?tbm=isch&q="+encodeURIComponent(q);if(kind==="pinterest")url="https://www.pinterest.com/search/pins/?q="+encodeURIComponent(q);if(kind==="unsplash")url="https://unsplash.com/s/photos/"+encodeURIComponent(q);window.open(url,"_blank");}
+function currentResonancePacket(){return buildResonancePacket(state.settings.resDate||new Date().toISOString().slice(0,10));}
+function resonanceLine(){var r=currentResonancePacket();if((state.settings.resUseMode||"always embed")==="off")return "";return "Resonance field: Mayan "+r.mayan.kin+" · "+r.mayan.tone+" "+r.mayan.sign+"; Numerology W"+r.numerology.worldRoot+" / P"+r.numerology.personalRoot+"; BaZi "+r.bazi.pillar+" · "+r.bazi.relation+". Creative route: "+r.primaryRoute+". ";}
+function reduceNum(n){n=Math.abs(Number(n)||0);while(n>9&&![11,22,33].includes(n)){n=String(n).split("").reduce(function(a,b){return a+Number(b);},0);}return n;}
+function digitSum(s){return String(s).replace(/\D/g,"").split("").reduce(function(a,b){return a+Number(b);},0);}
+function daysBetween(a,b){return Math.round((Date.UTC(b.getFullYear(),b.getMonth(),b.getDate())-Date.UTC(a.getFullYear(),a.getMonth(),a.getDate()))/86400000);}
+function calcMayan(dateStr){var signs=["Imix","Ik","Akbal","Kan","Chicchan","Cimi","Manik","Lamat","Muluc","Oc","Chuen","Eb","Ben","Ix","Men","Cib","Caban","Etznab","Cauac","Ahau"];var themes={Imix:"primordial creation",Ik:"breath and message",Akbal:"dream sanctuary",Kan:"seed potential",Chicchan:"life force",Cimi:"release and bridge",Manik:"healing hand",Lamat:"beauty and star",Muluc:"offering and water",Oc:"loyalty and heart",Chuen:"artist trickster",Eb:"path and body",Ben:"pillar between worlds",Ix:"jaguar magic",Men:"eagle vision",Cib:"ancestral warrior",Caban:"earth movement",Etznab:"mirror truth",Cauac:"storm purification",Ahau:"solar completion"};var d=new Date(dateStr+"T00:00:00");var anchor=new Date("2026-05-14T00:00:00");var offset=daysBetween(anchor,d);var kin=((33-1+offset)%260+260)%260+1;var tone=((kin-1)%13)+1;var sign=signs[(kin-1)%20];return{kin:"K"+kin,tone:tone,sign:sign,theme:themes[sign]||"creative field"};}
+function calcBazi(dateStr){
+  var stems=["Jia","Yi","Bing","Ding","Wu","Ji","Geng","Xin","Ren","Gui"];
+  var branches=["Zi","Chou","Yin","Mao","Chen","Si","Wu","Wei","Shen","You","Xu","Hai"];
+  var stemEl={Jia:"Wood",Yi:"Wood",Bing:"Fire",Ding:"Fire",Wu:"Earth",Ji:"Earth",Geng:"Metal",Xin:"Metal",Ren:"Water",Gui:"Water"};
+  var branchEl={Zi:"Water",Chou:"Earth",Yin:"Wood",Mao:"Wood",Chen:"Earth",Si:"Fire",Wu:"Fire",Wei:"Earth",Shen:"Metal",You:"Metal",Xu:"Earth",Hai:"Water"};
+  var rel={
+    Fire:"Resource · inner ignition",
+    Earth:"Peer · body/stability",
+    Metal:"Output · writing/voice",
+    Water:"Wealth/Challenge · flow/resources",
+    Wood:"Authority/Drain · structure/duty"
+  };
+  /*
+    BaZi seal v0.2b:
+    The old router used index 39 for 2026-05-14, which renders Gui Mao.
+    The verified planner/forecast anchor for this fortnight is 2026-05-14 = Wu Zi.
+    In the Jia-Zi cycle where Jia Zi = index 0, Wu Zi = index 24.
+    Every other date is computed as anchor index 24 + day offset modulo 60.
+  */
+  var d=new Date(dateStr+"T00:00:00");
+  var anchor=new Date("2026-05-14T00:00:00");
+  var idx=(24+daysBetween(anchor,d))%60;
+  if(idx<0)idx+=60;
+  var stem=stems[idx%10], branch=branches[idx%12], se=stemEl[stem], be=branchEl[branch];
+  return{
+    pillar:stem+" "+branch,
+    stem:stem,
+    branch:branch,
+    stemElement:se,
+    branchElement:be,
+    relation:rel[se]||"mixed",
+    creativeBias:se,
+    baziAnchor:"2026-05-14 = Wu Zi · Jia-Zi index 24"
+  };
+}
+function calcNumerology(dateStr){var d=new Date(dateStr+"T00:00:00");var y=d.getFullYear(),m=d.getMonth()+1,day=d.getDate();var worldRaw=digitSum(String(y)+String(m).padStart(2,"0")+String(day).padStart(2,"0"));var worldRoot=reduceNum(worldRaw);var personalRaw=m+day+33;var personalRoot=reduceNum(personalRaw);var bridge=reduceNum(worldRoot+personalRoot+6);return{worldRaw:worldRaw,worldRoot:worldRoot,personalRaw:personalRaw,personalRoot:personalRoot,bridge:bridge};}
+function creativeRouteFrom(r){var scores={word:0,image:0,video:0,audio:0,storyboard:0,release:0,archive:0};var reasons={word:[],image:[],video:[],audio:[],storyboard:[],release:[],archive:[]};function add(k,n,why){scores[k]+=n;reasons[k].push(why);}var el=r.bazi.creativeBias;if(el==="Metal"){add("word",4,"Metal Output favors writing/voice");add("release",2,"Output wants expression");}if(el==="Fire"){add("audio",3,"Fire Resource favors inspiration and resonance");add("video",2,"Fire carries visibility");add("word",1,"Fire clarifies message");}if(el==="Water"){add("video",3,"Water favors dream/motion");add("audio",2,"Water carries flow");add("archive",1,"Water asks containment");}if(el==="Wood"){add("storyboard",4,"Wood Authority favors structure and sequence");add("word",1,"Wood channels duty into form");}if(el==="Earth"){add("archive",3,"Earth favors vault/stability");add("storyboard",2,"Earth stabilizes sequence");add("release",1,"Earth supports grounded delivery");}var sign=r.mayan.sign;if(["Ik","Ben","Chuen","Etznab"].includes(sign))add("word",2,"Mayan "+sign+" sharpens language/signal");if(["Ix","Men","Lamat","Ahau"].includes(sign))add("image",3,"Mayan "+sign+" favors image/beauty/vision");if(["Akbal","Cimi","Caban","Cauac"].includes(sign))add("video",2,"Mayan "+sign+" favors transition and motion");if(["Chicchan","Muluc","Oc"].includes(sign))add("audio",2,"Mayan "+sign+" favors body/heart/water tone");if(["Kan","Manik","Eb","Cib","Imix"].includes(sign))add("storyboard",2,"Mayan "+sign+" favors path/healing/seed structure");var nr=r.numerology.worldRoot;if([1,3,5].includes(nr))add("word",1,"World number supports output");if([2,6].includes(nr))add("image",1,"World number supports beauty/relationship");if([7,9].includes(nr))add("audio",1,"World number supports inner/mystic tone");if([4,8,22].includes(nr))add("storyboard",1,"World number supports structure");var body=state.settings.resBodyState||"green · clear";if(body.indexOf("red")===0){add("archive",5,"Body red: recovery and containment only");scores.release-=4;scores.video-=2;}if(body.indexOf("orange")===0){add("archive",3,"Body orange: reduce production load");scores.release-=2;}var ranked=Object.keys(scores).sort(function(a,b){return scores[b]-scores[a];});return{scores:scores,reasons:reasons,ranked:ranked,primary:ranked[0]};}
+function buildResonancePacket(dateStr){var mayan=calcMayan(dateStr),bazi=calcBazi(dateStr),num=calcNumerology(dateStr);var r={date:dateStr,mayan:mayan,bazi:bazi,numerology:num,bodyState:state.settings.resBodyState||"green · clear"};var route=creativeRouteFrom(r);r.routes=route;r.primaryRoute=route.primary;return r;}
+function renderResonance(){var dateEl=document.getElementById("resDate");if(dateEl){dateEl.value=state.settings.resDate||new Date().toISOString().slice(0,10);}var bs=document.getElementById("resBodyState");if(bs)bs.value=state.settings.resBodyState||"green · clear";var um=document.getElementById("resUseMode");if(um)um.value=state.settings.resUseMode||"always embed";var r=currentResonancePacket();var out=document.getElementById("resonanceOutput");if(out){out.innerHTML='<div class="res-grid"><div class="res-cell"><div class="res-k">Mayan</div><div class="res-v">'+esc(r.mayan.kin+' · '+r.mayan.tone+' '+r.mayan.sign)+'</div><div class="res-note">'+esc(r.mayan.theme)+'</div></div><div class="res-cell"><div class="res-k">Numerology</div><div class="res-v">W'+r.numerology.worldRoot+' · P'+r.numerology.personalRoot+' · B'+r.numerology.bridge+'</div><div class="res-note">raw '+r.numerology.worldRaw+' / '+r.numerology.personalRaw+'</div></div><div class="res-cell"><div class="res-k">BaZi</div><div class="res-v">'+esc(r.bazi.pillar)+'</div><div class="res-note">'+esc(r.bazi.relation)+'</div></div><div class="res-cell"><div class="res-k">Route</div><div class="res-v">'+esc(r.primaryRoute)+'</div><div class="res-note">body: '+esc(r.bodyState)+'</div></div></div>';}
+var cr=document.getElementById("creativeRoutes");if(cr){cr.innerHTML=r.routes.ranked.map(function(k){return '<div class="route-card"><div class="route-score">'+r.routes.scores[k]+'</div><div class="route-title">'+esc(k)+'</div><div class="route-body">'+esc((r.routes.reasons[k]||[]).filter(Boolean).join(" · ")||"neutral support")+'</div></div>';}).join("");}}
+function updateResonanceFromUI(){var el=document.getElementById("resDate");if(el&&el.value){state.settings.resDate=el.value;saveOnly();renderResonance();}}
+function refreshResonanceToday(){state.settings.resDate=new Date().toISOString().slice(0,10);saveOnly();renderResonance();}
+function copyResonancePacket(){copyText(JSON.stringify(currentResonancePacket(),null,2),"Resonance packet copied.");}
+function buildLyriaPrompt(){var purpose=document.getElementById("lyriaPurpose").value;var genre=document.getElementById("lyriaGenre").value.trim()||"GlitchWave / Lithic-wave dark ambient";var vocal=document.getElementById("lyriaVocal").value.trim()||"no lead vocal unless lyrics require it";var tempo=document.getElementById("lyriaTempo").value.trim()||"slow ritual pulse";var lyrics=document.getElementById("lyriaLyrics").value.trim();var pal=document.getElementById("lyriaPalette").value.trim()||"sub-bass, glass texture, low choir, rain, tape decay";var img=document.getElementById("lyriaImageRef").value.trim();lastLyriaPrompt=resonanceLine()+"Create a "+purpose+" using Lyria-style music generation. Genre hybrid: "+genre+". Tempo/motion: "+tempo+". Vocal/lead: "+vocal+". Sound palette: "+pal+". "+(lyrics?"Lyrics/poem seed: "+lyrics+". ":"")+(img?"Image or moodboard reference: "+img+". ":"")+"Make it emotionally cinematic, coherent, not generic, suitable for later chopping/arrangement in Maschine MK3. Avoid copyrighted artist imitation.";document.getElementById("lyriaPromptOutput").textContent=lastLyriaPrompt;}
+var lastLyriaPrompt="";
+function copyLyriaPrompt(){copyText(lastLyriaPrompt||document.getElementById("lyriaPromptOutput").textContent,"Lyria prompt copied.");}
+function saveLyriaPrompt(){if(!lastLyriaPrompt)buildLyriaPrompt();state.audioPrompts=state.audioPrompts||[];state.audioPrompts.unshift({id:uid(),projectId:state.activeProject,createdAt:new Date().toISOString(),prompt:lastLyriaPrompt,resonance:currentResonancePacket(),purpose:document.getElementById("lyriaPurpose").value});saveState();}
+function buildVeoPrompt(){var mode=document.getElementById("veoMode")?document.getElementById("veoMode").value:"text-to-video";var aspect=document.getElementById("veoAspect")?document.getElementById("veoAspect").value:"16:9 cinematic";var scene=document.getElementById("veoScene").value.trim()||"a mythic poetic scene";var duration=document.getElementById("veoDuration").value;var refs=(document.getElementById("veoRefs")?document.getElementById("veoRefs").value.trim():"");var cont=(document.getElementById("veoContinuity")?document.getElementById("veoContinuity").value.trim():"");var camera=document.getElementById("veoCamera").value.trim();var motion=document.getElementById("veoMotion").value.trim();var atmo=document.getElementById("veoAtmosphere").value.trim();var audio=(document.getElementById("veoAudio")?document.getElementById("veoAudio").value.trim():"");var end=document.getElementById("veoEnd").value.trim();lastVeoPrompt=resonanceLine()+"Create a "+duration+" Veo video. Mode: "+mode+". Aspect: "+aspect+". Scene: "+scene+". "+(refs?"Reference/frame instructions: "+refs+". ":"")+(cont?"Continuity lock: "+cont+". ":"")+(camera?"Camera: "+camera+". ":"")+(motion?"Motion: "+motion+". ":"")+(atmo?"Atmosphere: "+atmo+". ":"")+(audio?"Native audio cue: "+audio+". ":"")+(end?"Final beat: "+end+". ":"")+"No text, no words, no subtitles, no logos. Cinematic, symbolic, emotionally charged. Preserve continuity if extending a prior clip.";document.getElementById("veoPromptOutput").textContent=lastVeoPrompt;}
+function copyVeoPrompt(){copyText(lastVeoPrompt||document.getElementById("veoPromptOutput").textContent,"Veo prompt copied.");}
+function saveVeoPrompt(){if(!lastVeoPrompt)buildVeoPrompt();state.videoPrompts=state.videoPrompts||[];state.videoPrompts.unshift({id:uid(),projectId:state.activeProject,createdAt:new Date().toISOString(),prompt:lastVeoPrompt,resonance:currentResonancePacket(),mode:document.getElementById("veoMode").value});saveState();}
+function escBacktick(v){return String(v||"").replace(/\\/g,"\\\\").replace(/`/g,"\\`").replace(/\$/g,"\\$");}
+function renderAudioVideoLists(){var a=document.getElementById("audioPromptList");if(a){var arr=state.audioPrompts||[];a.innerHTML=arr.length?arr.slice(0,20).map(function(x){return '<div class="card"><div class="card-title">'+esc(x.purpose||"audio prompt")+'</div><div class="card-meta">'+esc(projectName(x.projectId))+' · '+new Date(x.createdAt).toLocaleString()+'</div><div class="card-body">'+esc(x.prompt.slice(0,500))+'</div><div class="btn-row"><button class="btn btn-blue" onclick="copyText(`'+escBacktick(x.prompt)+'`,`Prompt copied.`)">Copy</button></div></div>';}).join(""):'<div class="empty">No audio prompts saved yet.</div>';}
+var v=document.getElementById("videoPromptList");if(v){var vids=state.videoPrompts||[];v.innerHTML=vids.length?vids.slice(0,20).map(function(x){return '<div class="card"><div class="card-title">'+esc(x.mode||"video prompt")+'</div><div class="card-meta">'+esc(projectName(x.projectId))+' · '+new Date(x.createdAt).toLocaleString()+'</div><div class="card-body">'+esc(x.prompt.slice(0,500))+'</div><div class="btn-row"><button class="btn btn-blue" onclick="copyText(`'+escBacktick(x.prompt)+'`,`Prompt copied.`)">Copy</button></div></div>';}).join(""):'<div class="empty">No video prompts saved yet.</div>';}}
+function addStoryboardScene(){var title=document.getElementById("sceneTitle").value.trim()||"Untitled scene";var sc={id:uid(),projectId:document.getElementById("storyProject").value||state.activeProject,title:title,still:document.getElementById("sceneStill").value,video:document.getElementById("sceneVideo").value,audio:document.getElementById("sceneAudio").value,continuity:document.getElementById("sceneContinuity").value,resonance:currentResonancePacket(),createdAt:new Date().toISOString()};state.storyboardScenes=state.storyboardScenes||[];state.storyboardScenes.push(sc);["sceneTitle","sceneStill","sceneVideo","sceneAudio","sceneContinuity"].forEach(function(id){var el=document.getElementById(id);if(el)el.value="";});saveState();}
+function renderStoryboard(){var sp=document.getElementById("storyProject");if(sp)sp.innerHTML=projectOptions(sp.value||state.activeProject,false);var list=document.getElementById("storyboardList");if(!list)return;var arr=state.storyboardScenes||[];list.innerHTML=arr.length?arr.map(function(x,i){return '<div class="scene-card"><div class="scene-num">Scene '+(i+1)+' · '+esc(projectName(x.projectId))+'</div><div class="scene-title">'+esc(x.title)+'</div><div class="asset-row"><span class="asset-pill">'+esc(x.resonance&&x.resonance.primaryRoute||"route")+'</span><span class="asset-pill">'+esc(x.resonance&&x.resonance.mayan?x.resonance.mayan.kin:"res")+'</span></div><div class="scene-body"><b>Still:</b> '+esc((x.still||"").slice(0,240))+'\n<b>Video:</b> '+esc((x.video||"").slice(0,240))+'\n<b>Audio:</b> '+esc((x.audio||"").slice(0,180))+'</div><div class="btn-row"><button class="btn btn-blue" onclick="copyScenePacket(\''+x.id+'\')">Copy</button><button class="btn btn-red" onclick="deleteScene(\''+x.id+'\')">Delete</button></div></div>';}).join(""):'<div class="empty">No storyboard scenes yet.</div>';}
+function copyScenePacket(id){var x=(state.storyboardScenes||[]).find(function(s){return s.id===id;});if(x)copyText(JSON.stringify(x,null,2),"Scene packet copied.");}
+function deleteScene(id){if(!confirm("Delete scene?"))return;state.storyboardScenes=(state.storyboardScenes||[]).filter(function(x){return x.id!==id;});saveState();}
+function copyStoryboardPacket(){var packet={packet_type:"flamewalker_storyboard_chain",projectId:state.activeProject,projectName:projectName(state.activeProject),resonance:currentResonancePacket(),scenes:state.storyboardScenes||[]};var out=document.getElementById("storyboardPacketOutput");if(out)out.textContent=JSON.stringify(packet,null,2);copyText(JSON.stringify(packet,null,2),"Storyboard packet copied.");}
+function buildLiveBrief(){var focus=document.getElementById("liveFocus").value;var goal=document.getElementById("liveGoal").value.trim();var ctx=document.getElementById("liveContext").value.trim();lastLiveBrief=resonanceLine()+"Gemini Live over-the-shoulder session. Focus: "+focus+". Goal: "+(goal||"observe and improve the creative workflow")+". Context: "+(ctx||"Watch for practical improvements, continuity breaks, prompt weaknesses, and release-ready next actions.")+" Return: 1) what you observed, 2) what is blocking quality, 3) three concrete next actions, 4) one prompt or patch suggestion.";document.getElementById("liveBriefOutput").textContent=lastLiveBrief;}
+var lastLiveBrief="";
+function copyLiveBrief(){copyText(lastLiveBrief||document.getElementById("liveBriefOutput").textContent,"Live brief copied.");}
+
+function renderRelease(){var board=document.getElementById("releaseBoard");if(!board)return;var statuses=["spark","draft","forged","ready","posted","archived"];board.innerHTML=statuses.map(function(st){var pcs=state.pieces.filter(function(p){return p.status===st;});return '<div class="release-col"><div class="release-title">'+esc(st)+' ('+pcs.length+')</div>'+(pcs.length?pcs.map(function(p){return '<div class="card"><div class="card-title">'+esc(p.title||"Untitled")+'</div><div class="card-meta">'+esc(projectName(p.projectId))+'</div><div class="btn-row"><button class="btn btn-blue" onclick="openPiece(\''+p.id+'\')">Open</button></div></div>';}).join(""):'<div class="empty">None</div>')+'</div>';}).join("");}
+function openPiece(id){currentPieceId=id;switchTabByName("poetry");setTimeout(function(){loadSelectedPiece();},50);}
+function renderVault(){var list=document.getElementById("vaultList");if(!list)return;var q=(document.getElementById("vaultSearch").value||"").toLowerCase();var pf=document.getElementById("vaultProjectFilter").value;var kind=document.getElementById("vaultKindFilter").value;var items=[];if(!kind||kind==="piece")state.pieces.forEach(function(p){items.push(Object.assign({vaultKind:"piece"},p));});if(!kind||kind==="fragment")state.fragments.forEach(function(f){items.push(Object.assign({vaultKind:"fragment"},f));});items=items.filter(function(x){if(pf&&x.projectId!==pf)return false;if(q){var hay=[x.title,x.text,x.caption,x.type,x.mood,projectName(x.projectId),(x.symbols||[]).join(" ")].join(" ").toLowerCase();if(hay.indexOf(q)<0)return false;}return true;});items.sort(function(a,b){return String(b.updatedAt||b.createdAt).localeCompare(String(a.updatedAt||a.createdAt));});list.innerHTML=items.length?items.map(function(x){if(x.vaultKind==="piece")return '<div class="card"><div class="card-title">'+esc(x.title||"Untitled")+' <span class="pill pill-'+esc(x.status||"spark")+'">'+esc(x.status||"spark")+'</span></div><div class="card-meta">Piece · '+esc(projectName(x.projectId))+' · '+new Date(x.updatedAt||x.createdAt).toLocaleString()+'</div><div class="card-body">'+esc((x.text||"").slice(0,420))+'</div><div class="btn-row"><button class="btn btn-blue" onclick="openPiece(\''+x.id+'\')">Open</button><button class="btn btn-red" onclick="deletePiece(\''+x.id+'\')">Delete</button></div></div>';return cardForFragment(x);}).join(""):'<div class="empty">Vault empty.</div>';}
+function deletePiece(id){if(!confirm("Delete this piece?"))return;state.pieces=state.pieces.filter(function(p){return p.id!==id;});if(currentPieceId===id)currentPieceId=null;saveState();}
+function refreshStorage(){try{var raw=localStorage.getItem(STORAGE_KEY)||"";var bytes=new Blob([raw]).size;var mb=(bytes/(1024*1024)).toFixed(2);var pct=Math.min(100,bytes/(5*1024*1024)*100);var el=document.getElementById("storageInfo");if(el)el.innerHTML="Storage key: <b>"+STORAGE_KEY+"</b><br>Size: "+bytes.toLocaleString()+" bytes ("+mb+" MB)<br>Estimated browser cap: ~5MB · Used: "+pct.toFixed(1)+"%";var bar=document.getElementById("storageBar");if(bar)bar.style.width=pct+"%";}catch(e){}}
+function exportState(){var payload=JSON.stringify(state,null,2);var blob=new Blob([payload],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="flamewalker_studio_v01_"+new Date().toISOString().slice(0,19).replace(/[:T]/g,"-")+".json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);}
+function importState(ev){var fileInput=ev.target;var file=fileInput&&fileInput.files?fileInput.files[0]:null;if(!file)return;var r=new FileReader();r.onload=function(e){try{var imported=JSON.parse(e.target.result);if(!imported||!Array.isArray(imported.fragments)||!Array.isArray(imported.pieces)){alert("Import rejected: not a Flamewalker Studio state.");return;}if(!confirm("Import this state and replace current Studio data? Export first if needed."))return;imported.projects=FIXED_PROJECTS;state=Object.assign(defaultState(),imported);state.audioPrompts=Array.isArray(state.audioPrompts)?state.audioPrompts:[];state.videoPrompts=Array.isArray(state.videoPrompts)?state.videoPrompts:[];state.storyboardScenes=Array.isArray(state.storyboardScenes)?state.storyboardScenes:[];saveState();alert("State imported.");}catch(err){alert("Import failed: "+err.message);}finally{fileInput.value="";}};r.readAsText(file);}
+function clearStudio(){if(!confirm("Clear all Studio data? Export first if needed."))return;var code=prompt("Type CLEAR to confirm");if(code!=="CLEAR")return;state=defaultState();localStorage.removeItem(STORAGE_KEY);renderAll();}
+function clone(obj){return JSON.parse(JSON.stringify(obj));}
+function validatePatch(p){if(!p||typeof p!=="object")return"Patch must be a JSON object.";if(["merge","append","replace"].indexOf(p.op)<0)return"Unsupported op.";if(["settings","fragments","pieces","activeProject"].indexOf(p.target)<0)return"Unsupported target.";if(p.op==="merge"&&p.target!=="settings")return"merge is allowed only for settings.";if(p.op==="append"&&["fragments","pieces"].indexOf(p.target)<0)return"append is allowed only for fragments or pieces.";if(p.op==="replace"&&p.target!=="activeProject")return"replace is allowed only for activeProject.";return"";}
+function previewPatch(){try{var p=JSON.parse(document.getElementById("patchInput").value);var err=validatePatch(p);document.getElementById("patchOutput").textContent=err?"REJECTED: "+err:"Patch accepted for preview:\n"+JSON.stringify(p,null,2);}catch(e){document.getElementById("patchOutput").textContent="Invalid JSON: "+e.message;}}
+function applyPatch(){try{var p=JSON.parse(document.getElementById("patchInput").value);var err=validatePatch(p);if(err){alert("Rejected: "+err);return;}state.rollbacks=state.rollbacks||[];state.rollbacks.push({at:new Date().toISOString(),state:clone(state)});if(state.rollbacks.length>5)state.rollbacks=state.rollbacks.slice(-5);if(p.op==="merge"&&p.target==="settings")state.settings=Object.assign({},state.settings,p.value||{});if(p.op==="append"&&p.target==="fragments"){var arr=Array.isArray(p.value)?p.value:[p.value];arr.forEach(function(f){f.id=f.id||uid();f.kind="fragment";f.createdAt=f.createdAt||new Date().toISOString();state.fragments.unshift(f);});}if(p.op==="append"&&p.target==="pieces"){var arr2=Array.isArray(p.value)?p.value:[p.value];arr2.forEach(function(x){x.id=x.id||uid();x.kind="piece";x.createdAt=x.createdAt||new Date().toISOString();x.updatedAt=x.updatedAt||x.createdAt;x.status=x.status||"spark";state.pieces.unshift(x);});}if(p.op==="replace"&&p.target==="activeProject"){if(!state.projects.some(function(pr){return pr.id===p.value;})){alert("Unknown project id.");return;}state.activeProject=p.value;}saveState();document.getElementById("patchOutput").textContent="Patch applied.";}catch(e){alert("Patch failed: "+e.message);}}
+function rollbackPatch(){if(!state.rollbacks||!state.rollbacks.length){alert("No rollback available.");return;}var rb=state.rollbacks.pop();state=rb.state;saveState();alert("Rolled back to "+rb.at);}
+function copyText(text,msg){if(!text){alert("Nothing to copy.");return;}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){alert(msg||"Copied.");}).catch(function(){fallbackCopy(text,msg);});}else fallbackCopy(text,msg);}
+function fallbackCopy(text,msg){var ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");alert(msg||"Copied.");}catch(e){alert("Copy failed. Long-press and select manually.");}ta.remove();}
+function renderAll(){refreshTop();renderSelectors();renderDashboard();renderResonance();renderInbox();renderBooks();renderRelease();renderVault();renderAudioVideoLists();renderStoryboard();refreshStorage();}
+(function init(){renderAll();})();
+</script>
+</body>
+</html>

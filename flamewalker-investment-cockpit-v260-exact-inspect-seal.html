@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0" />
+<title>Flamewalker Investment Cockpit · v2.6.0 Exact Inspect Seal</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#070710;color:#e2e8f0;font-family:Georgia,serif;padding:10px;min-height:100vh}
+.container{max-width:1120px;margin:0 auto}
+h1{text-align:center;color:#B8860B;font-size:20px;letter-spacing:2px;margin-bottom:3px}
+h2{text-align:center;color:#8B0000;font-size:11px;font-weight:normal;letter-spacing:1px;margin-bottom:2px}
+h3{text-align:center;color:#64748b;font-size:9.5px;font-style:italic;margin-bottom:10px}
+button,input,select,textarea{font-family:Arial,sans-serif}
+
+.panel{background:#10101c;border:1px solid #252542;border-radius:9px;padding:11px;margin-bottom:9px}
+.panel-title{font-size:10.5px;color:#B8860B;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:8px;text-align:center;font-weight:bold}
+.notice{padding:8px 10px;background:rgba(184,134,11,.08);border-left:2px solid #B8860B;border-radius:0 5px 5px 0;font-size:10.5px;color:#f0d080;line-height:1.5;margin-bottom:7px}
+.info{padding:8px 10px;background:rgba(59,130,246,.08);border-left:2px solid #3b82f6;border-radius:0 5px 5px 0;font-size:10.5px;color:#93c5fd;line-height:1.5;margin-bottom:7px}
+.danger{padding:8px 10px;background:rgba(220,38,38,.08);border-left:2px solid #dc2626;border-radius:0 5px 5px 0;font-size:10.5px;color:#fca5a5;line-height:1.5;margin-bottom:7px}
+.success{padding:8px 10px;background:rgba(34,197,94,.08);border-left:2px solid #22c55e;border-radius:0 5px 5px 0;font-size:10.5px;color:#86efac;line-height:1.5;margin-bottom:7px}
+
+.tabs{display:flex;gap:5px;margin-bottom:9px;overflow-x:auto;padding:5px 0;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:8px 11px;background:#0e0e18;border:1px solid #30304f;border-radius:7px;color:#94a3b8;cursor:pointer;font-size:10px;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.tab.active{background:#17172a;color:#f0d080;border-color:#B8860B}
+.section{display:none}
+.section.active{display:block}
+
+/* Hero */
+.hero{background:linear-gradient(145deg,#1a1530,#0e0e18);border:1px solid #B8860B;border-radius:10px;padding:18px;text-align:center;margin-bottom:9px}
+.hero-kicker{font-size:9.5px;letter-spacing:2.5px;color:#fde68a;text-transform:uppercase;margin-bottom:6px}
+.hero-command{font-size:22px;font-weight:bold;color:#fde68a;letter-spacing:2px;margin-bottom:6px}
+.hero-status{display:inline-block;padding:4px 12px;border-radius:5px;font-size:10px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase}
+.status-PROBE{background:rgba(245,158,11,.18);color:#fcd34d;border:1px solid #f59e0b}
+.status-REGULATE{background:rgba(59,130,246,.18);color:#93c5fd;border:1px solid #3b82f6}
+.status-COMMIT{background:rgba(34,197,94,.18);color:#86efac;border:1px solid #22c55e}
+.status-VETO{background:rgba(220,38,38,.18);color:#fca5a5;border:1px solid #dc2626}
+.hero-reason{font-size:11px;color:#cbd5e1;margin-top:8px;line-height:1.5;font-style:italic}
+
+/* Top strip */
+.strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:9px}
+.strip-card{background:#10101c;border:1px solid #252542;border-radius:7px;padding:9px;text-align:center;position:relative}
+.strip-label{font-size:8.5px;color:#94a3b8;letter-spacing:.7px;text-transform:uppercase;margin-bottom:2px}
+.strip-value{font-size:14px;color:#fde68a;font-weight:bold}
+.strip-sub{font-size:8.5px;color:#94a3b8;margin-top:1px}
+.ephemeris-warn{color:#dc2626; font-size: 8px; position:absolute; bottom: 3px; right: 5px; font-weight:bold;}
+
+/* Coin table */
+table{width:100%;border-collapse:collapse;font-size:10.5px;color:#e2e8f0}
+th{background:#0a0a14;color:#94a3b8;font-weight:bold;padding:7px 5px;text-align:left;border-bottom:1px solid #1a1a2e;letter-spacing:.5px;text-transform:uppercase;font-size:9px;position:sticky;top:0}
+td{padding:7px 5px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+tr:hover{background:rgba(255,255,255,.02)}
+.coin-sym{font-weight:bold;color:#fde68a;cursor:pointer}
+.coin-sym:hover{color:#fff}
+.sector-tag{font-size:8px; padding:2px 4px; background:#1e1e30; border-radius:4px; color:#a5b4fc;}
+.qty-edit-v259{width:86px;background:#0a0a14;border:1px solid #2c2c48;color:#e2e8f0;border-radius:5px;padding:6px 7px;font-size:10.5px}
+.qty-edit-v259:focus{outline:none;border-color:#B8860B;box-shadow:0 0 0 2px rgba(184,134,11,.12)}
+.entry-readout-v259{font-size:10.5px;color:#fde68a;font-weight:bold;line-height:1.25}
+.entry-meta-v259{font-size:8.5px;color:#94a3b8;line-height:1.3;margin-top:3px;max-width:150px}
+.move-note-v259{font-size:8.5px;color:#86efac;line-height:1.3;margin-top:3px;max-width:160px}
+
+/* Triangulation badges */
+.badge{display:inline-block;font-size:8.5px;font-weight:bold;letter-spacing:.5px;padding:3px 7px;border-radius:8px;text-transform:uppercase;white-space:nowrap}
+.b-GREEN{background:rgba(34,197,94,.2);color:#86efac;border:1px solid #22c55e}
+.b-BLUE{background:rgba(59,130,246,.2);color:#93c5fd;border:1px solid #3b82f6}
+.b-YELLOW_EARLY{background:rgba(245,158,11,.18);color:#fcd34d;border:1px solid #f59e0b}
+.b-YELLOW_LATE{background:rgba(245,158,11,.13);color:#fcd34d;border:1px solid rgba(245,158,11,.6)}
+.b-ORANGE{background:rgba(249,115,22,.2);color:#fdba74;border:1px solid #f97316}
+.b-RED{background:rgba(220,38,38,.2);color:#fca5a5;border:1px solid #dc2626}
+.b-STALE{background:rgba(100,116,139,.2);color:#cbd5e1;border:1px solid #475569}
+.b-LITE{background:rgba(139,92,246,.18);color:#c4b5fd;border:1px solid #8b5cf6}
+
+.module-pill{display:inline-block;font-size:8.5px;padding:2px 6px;border-radius:6px;letter-spacing:.5px;margin-right:3px}
+.m-strong{background:rgba(34,197,94,.18);color:#86efac}
+.m-mod{background:rgba(245,158,11,.18);color:#fcd34d}
+.m-neutral{background:rgba(100,116,139,.18);color:#cbd5e1}
+.m-weak{background:rgba(220,38,38,.15);color:#fca5a5}
+.m-unavail{background:rgba(139,92,246,.13);color:#c4b5fd}
+
+.field{margin-bottom:8px}
+.field label{display:block;font-size:9px;color:#a5b4fc;text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px}
+.field input,.field select,.field textarea{width:100%;background:#0a0a14;border:1px solid #2c2c48;color:#e2e8f0;border-radius:5px;padding:9px;font-size:12.5px}
+.field textarea{min-height:65px;font-family:'Courier New',monospace;font-size:11px;line-height:1.4}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+
+.btn{background:#1d1d30;border:1px solid #38385a;color:#e2e8f0;border-radius:6px;padding:10px 13px;font-size:11.5px;cursor:pointer;font-weight:500}
+.btn:hover{background:#292944}
+.btn-primary{border-color:#B8860B;color:#fde68a}
+.btn-green{border-color:#22c55e;color:#86efac}
+.btn-red{border-color:#dc2626;color:#fca5a5}
+.btn-blue{border-color:#3b82f6;color:#93c5fd}
+.btn-purple{border-color:#8b5cf6;color:#c4b5fd}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+
+.empty{font-size:11px;color:#64748b;text-align:center;padding:18px;font-style:italic}
+
+.detail-row{display:grid;grid-template-columns:115px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px}
+.detail-row:last-child{border-bottom:none}
+.detail-key{color:#94a3b8;font-size:9.5px;letter-spacing:.7px;text-transform:uppercase;font-weight:bold}
+.detail-val{color:#e2e8f0;line-height:1.45;word-break:break-word}
+
+
+.patch-console{min-height:145px;font-family:'Courier New',monospace;font-size:10.5px}
+.patch-output{background:#0a0a14;border:1px solid #2c2c48;border-radius:6px;padding:8px;font-family:'Courier New',monospace;font-size:10px;line-height:1.45;white-space:pre-wrap;color:#cbd5e1;margin-top:8px}
+.small-note{font-size:9.5px;color:#94a3b8;line-height:1.45;margin-top:6px}
+
+.fetch-status{font-size:10px;color:#93c5fd;line-height:1.45;margin-top:7px;padding:7px 9px;background:rgba(59,130,246,.07);border-left:2px solid #3b82f6;border-radius:0 5px 5px 0;min-height:28px}
+.fetch-status.warn{color:#fde68a;background:rgba(245,158,11,.07);border-left-color:#f59e0b}
+.fetch-status.error{color:#fca5a5;background:rgba(220,38,38,.07);border-left-color:#dc2626}
+.fetch-status.ok{color:#86efac;background:rgba(34,197,94,.07);border-left-color:#22c55e}
+.fetch-mini{font-size:8.5px;color:#94a3b8;margin-top:3px;line-height:1.3}
+
+/* v2.5.7 strategic import layer */
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:9px}
+.summary-card{background:#10101c;border:1px solid #252542;border-radius:7px;padding:9px;text-align:center}
+.summary-value{font-size:16px;font-weight:bold;color:#fde68a;line-height:1.15}
+.summary-label{font-size:8px;color:#94a3b8;text-transform:uppercase;letter-spacing:.6px;margin-top:2px}
+.summary-sub{font-size:8.5px;color:#64748b;margin-top:2px;line-height:1.25}
+.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.macro-grid{display:grid;grid-template-columns:1fr;gap:7px}
+@media(min-width:760px){.macro-grid{grid-template-columns:1fr 1fr}.mini-grid{grid-template-columns:1fr 1fr}}
+.macro-card{background:#0d0d18;border:1px solid #262642;border-radius:9px;padding:10px}
+.macro-title{font-size:12px;color:#fde68a;font-weight:bold;letter-spacing:.4px}
+.macro-value{font-size:15px;font-weight:bold;margin-top:3px;color:#e2e8f0}
+.macro-meta{font-size:9.5px;color:#94a3b8;line-height:1.45;margin-top:3px}
+.radar-card{background:#0d0d18;border:1px solid #262642;border-radius:8px;padding:9px;margin-bottom:6px}
+.radar-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.radar-title{font-size:12.5px;color:#fde68a;font-weight:bold;line-height:1.25}
+.radar-line{font-size:9.5px;color:#cbd5e1;line-height:1.45;margin-top:5px}
+.radar-muted{font-size:8.8px;color:#94a3b8;line-height:1.35;margin-top:3px}
+.value-pos{color:#86efac}.value-neg{color:#fca5a5}.value-neutral{color:#cbd5e1}
+@media(max-width:560px){.summary-grid{grid-template-columns:repeat(2,1fr)}.mini-grid{grid-template-columns:1fr}}
+
+.disclaimer{font-size:9.5px;color:#64748b;text-align:center;padding:14px;font-style:italic;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>FLAMEWALKER INVESTMENT COCKPIT</h1>
+<h2>v2.6.0 EXACT INSPECT SEAL · V142 Future Green Concepts · Portfolio Trade Editor</h2>
+<h3>Local-only · No execution · No financial advice</h3>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" data-tab="compass" onclick="switchTab('compass',this)">Compass</div>
+  <div class="tab" data-tab="watch" onclick="switchTab('watch',this)">Watch &amp; Triangulation</div>
+  <div class="tab" data-tab="macro" onclick="switchTab('macro',this)">Portfolio/Macro</div>
+  <div class="tab" data-tab="coin" onclick="switchTab('coin',this)">Coin Inspect</div>
+  <div class="tab" data-tab="ledger" onclick="switchTab('ledger',this)">Outcome Ledger</div>
+  <div class="tab" data-tab="settings" onclick="switchTab('settings',this)">Settings &amp; Data</div>
+</div>
+
+<!-- ============ COMPASS ============ -->
+<div class="section active" id="sec-compass">
+  <div class="hero">
+    <div class="hero-kicker">Today's Posture · Move Engine</div>
+    <div class="hero-command" id="heroCommand">Loading…</div>
+    <div id="heroStatusWrap"></div>
+    <div class="hero-reason" id="heroReason">Initializing…</div>
+  </div>
+
+  <div class="strip">
+    <div class="strip-card">
+      <div class="strip-label">BaZi Day</div>
+      <div class="strip-value" id="stripBazi">—</div>
+      <div class="strip-sub" id="stripBaziSub">—</div>
+      <div class="ephemeris-warn" title="Day pillar uses fixed verified sexagenary reference">✓ DAY REF FIXED</div>
+    </div>
+    <div class="strip-card">
+      <div class="strip-label">Personal Day</div>
+      <div class="strip-value" id="stripPD">—</div>
+      <div class="strip-sub" id="stripPDSub">—</div>
+    </div>
+    <div class="strip-card">
+      <div class="strip-label">Cycle Position</div>
+      <div class="strip-value" id="stripCycle">—</div>
+      <div class="strip-sub" id="stripCycleSub">—</div>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-card"><div class="summary-value" id="sumTotalValue">—</div><div class="summary-label">All Value</div><div class="summary-sub">USDC, dust included</div></div>
+    <div class="summary-card"><div class="summary-value" id="sumPnl">—</div><div class="summary-label">PnL</div><div class="summary-sub">seed cost basis</div></div>
+    <div class="summary-card"><div class="summary-value" id="sumStrategic">—</div><div class="summary-label">Strategic</div><div class="summary-sub">above dust gate</div></div>
+    <div class="summary-card"><div class="summary-value" id="sumDust">—</div><div class="summary-label">Dust Hidden</div><div class="summary-sub">counted in value</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">v1.4.2 Strategic Import · Compass Filter</div>
+    <div class="notice"><b>Imported rule:</b> Compass stays clean. GREEN means current buy setup. RED means sell / hard caution. BLUE, YELLOW and ORANGE remain in Triangulation and Coin Inspect so the main page does not become noise.</div>
+    <div id="compassGreenRedBox" class="empty">Waiting for triangulation…</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">7-Day Future Green / Red Radar</div>
+    <div class="small-note">Future radar uses future numerology against today's C/E market structure. It shows only Green and Red on Compass, matching the v1.4.2 noise-filter doctrine.</div>
+    <div id="futureRadarBox" class="empty">Calculating future resonance…</div>
+  </div>
+
+  <div class="mini-grid">
+    <div class="panel"><div class="panel-title">Rotation Advice</div><div id="rotationAdviceBox" class="empty">Waiting for triangulation…</div></div>
+    <div class="panel"><div class="panel-title">Macro Field Summary</div><div id="macroSummaryBox" class="empty">Waiting for macro fetch…</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Today's Resonance Coins</div>
+    <div id="resonanceList"></div>
+  </div>
+
+  <div class="info">
+    <b>How posture is decided:</b><br/>
+    <b>PROBE</b> — explore positions, small size only<br/>
+    <b>REGULATE</b> — manage existing, no new exposure<br/>
+    <b>COMMIT</b> — full thesis can execute<br/>
+    <b>VETO</b> — no moves today, esoteric field is closed<br/>
+    Posture combines: BaZi day compatibility with Wu Earth + Personal Day number + 60-day cycle position.
+  </div>
+</div>
+
+<!-- ============ WATCH & TRIANGULATION ============ -->
+<div class="section" id="sec-watch">
+  <div class="panel">
+    <div class="panel-title">Triangulation · All Watched Coins</div>
+    <div style="overflow-x:auto;">
+      <table id="watchTable">
+        <thead>
+          <tr>
+            <th>Coin</th>
+            <th>Sector</th>
+            <th>Amount</th>
+            <th>Avg Entry</th>
+            <th>Price (USDC)</th>
+            <th>Value</th>
+            <th>C</th>
+            <th>E</th>
+            <th>N</th>
+            <th>Badge</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="watchTableBody"></tbody>
+      </table>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="openAddCoin()">+ Add Coin</button>
+      <button class="btn btn-green" onclick="fetchStrategicMarketData()">Fetch Strategic Data</button>
+      <button class="btn btn-blue" onclick="fetchAllMarketData()">Fetch All Market Data</button>
+      <button class="btn btn-purple" onclick="fetchTopResonanceMarketData()">Fetch Resonance Coins</button>
+      <button class="btn" onclick="renderWatchTable()">Refresh</button>
+    </div>
+    <div id="marketFetchStatus" class="fetch-status">Market fetch ready. Uses public Binance spot/futures endpoints when available. Whale activity remains manual unless a flow proxy is inferred from volume + BTC-relative strength.</div>
+  </div>
+
+  <div id="addCoinForm" style="display:none">
+    <div class="panel">
+      <div class="panel-title">Add Coin</div>
+      <div class="field-row-3">
+        <div class="field"><label>Symbol</label><input id="newSym" placeholder="ADX, INJ, etc" /></div>
+        <div class="field"><label>Core Rating</label>
+          <select id="newRating">
+            <option value="">—</option>
+            <option>S</option><option>A+</option><option>A</option><option>A-</option>
+            <option>B+</option><option>B</option><option>B-</option>
+            <option>C+</option><option>C</option><option>C-</option>
+          </select>
+        </div>
+        <div class="field"><label>Sector</label>
+          <select id="newSector">
+            <option value="Unassigned">—</option>
+            <option value="AI">AI</option>
+            <option value="DeFi">DeFi</option>
+            <option value="Gaming">Gaming</option>
+            <option value="L1/L2">L1/L2</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Has Futures?</label>
+        <select id="newFutures">
+          <option value="false">No (Lite Mode)</option>
+          <option value="true">Yes (Full Mode)</option>
+        </select>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="saveCoin()">Save</button>
+        <button class="btn" onclick="closeAddCoin()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ PORTFOLIO / MACRO ============ -->
+<div class="section" id="sec-macro">
+  <div class="panel">
+    <div class="panel-title">Portfolio Value Audit · v1.4.2 Import</div>
+    <div id="portfolioValueAudit" class="info">Calculating portfolio value…</div>
+    <div class="summary-grid">
+      <div class="summary-card"><div class="summary-value" id="macroTotalValue">—</div><div class="summary-label">Total Value</div><div class="summary-sub">USDC</div></div>
+      <div class="summary-card"><div class="summary-value" id="macroStrategicValue">—</div><div class="summary-label">Strategic</div><div class="summary-sub">above dust gate</div></div>
+      <div class="summary-card"><div class="summary-value" id="macroDustValue">—</div><div class="summary-label">Dust</div><div class="summary-sub">hidden only from strategy</div></div>
+      <div class="summary-card"><div class="summary-value" id="macroPnl">—</div><div class="summary-label">PnL</div><div class="summary-sub">seed basis</div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Macro Watch · Fixed Environment Board</div>
+    <div class="notice">Imported v1.4.2 macro doctrine: watch BTC, ETH, TOTAL3/OTHERS, TOTALDEFI, DXY, BTC.D, ETH.D, OTHERS.D, USDC.D, USDT.D and Fear & Greed. This does not execute trades. It conditions the move posture and Morning Agent packet.</div>
+    <div class="btn-row"><button class="btn btn-blue" onclick="fetchMacroV257()">Fetch Macro Data</button><button class="btn" onclick="renderMacroV257()">Refresh Macro View</button></div>
+    <div id="macroGrid" class="macro-grid" style="margin-top:8px"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Future Radar · Green / Red Only</div>
+    <div id="futureRadarMacroBox" class="empty">Calculating future radar…</div>
+  </div>
+</div>
+
+<!-- ============ COIN INSPECT ============ -->
+<div class="section" id="sec-coin">
+  <div class="panel">
+    <div class="panel-title">Inspect Coin</div>
+    <div class="field">
+      <label>Select Coin</label>
+      <select id="inspectSelect" onchange="selectInspectCoin(this.value)"></select>
+    </div>
+    <div id="inspectBody"></div>
+  </div>
+
+  <div id="inspectInputs" style="display:none">
+    <div class="panel">
+      <div class="panel-title">Manual Market Inputs · Updates Triangulation</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Volume 4h vs 7d-median</label>
+          <select id="inpVol4h" onchange="saveInspectInputs()">
+            <option value="0">Unknown</option>
+            <option value="1">Below baseline (&lt;1x)</option>
+            <option value="2">At baseline (1x)</option>
+            <option value="3">Moderate (1.5-2x)</option>
+            <option value="4">Strong (2-3x)</option>
+            <option value="5">Extreme (&gt;3x)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Whale Activity / Flow Proxy</label>
+          <select id="inpWhale" onchange="saveInspectInputs()">
+            <option value="0">Unknown</option>
+            <option value="1">Heavy Distribution</option>
+            <option value="2">Flat / Retail Only</option>
+            <option value="3">Slight Accumulation</option>
+            <option value="4">Strong Accumulation</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>BTC pair 7d strength</label>
+          <select id="inpBtcPair" onchange="saveInspectInputs()">
+            <option value="0">Unknown</option>
+            <option value="1">Weak vs BTC</option>
+            <option value="2">Flat</option>
+            <option value="3">Strengthening</option>
+            <option value="4">Strong outperformance</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Price extension (vs 30d low)</label>
+          <select id="inpExt" onchange="saveInspectInputs()">
+            <option value="0">Unknown</option>
+            <option value="1">Near 30d low (early)</option>
+            <option value="2">+5-15% (building)</option>
+            <option value="3">+15-30% (mid)</option>
+            <option value="4">+30-50% (late)</option>
+            <option value="5">+50% (extended)</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row" id="futuresInputs">
+        <div class="field">
+          <label>Open Interest (24h trend)</label>
+          <select id="inpOI" onchange="saveInspectInputs()">
+            <option value="0">Unknown / Unavailable</option>
+            <option value="1">OI dropping</option>
+            <option value="2">OI flat</option>
+            <option value="3">OI rising (accumulation)</option>
+            <option value="4">OI rising rapidly</option>
+            <option value="5">Over-leveraged (crowded long)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Funding Rate</label>
+          <select id="inpFunding" onchange="saveInspectInputs()">
+            <option value="0">Unknown / Unavailable</option>
+            <option value="1">Strongly negative</option>
+            <option value="2">Neutral / near-zero</option>
+            <option value="3">Slightly positive</option>
+            <option value="4">High positive (overheated)</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Manual Numerology Override (0-4)</label>
+        <select id="inpManualN" onchange="saveInspectInputs()">
+          <option value="0">No override (auto only)</option>
+          <option value="1">Weak (N: -1)</option>
+          <option value="2">Neutral (N: 0)</option>
+          <option value="3">Watch (N: +1)</option>
+          <option value="4">Primary (N: +2)</option>
+        </select>
+      </div>
+      <div class="field"><label>Current Price (USDC)</label><input id="inpPrice" type="number" step="0.0001" onchange="saveInspectInputs()" placeholder="0.0000" /></div>
+      <div class="field"><label>Manual Thesis / Notes</label><textarea id="inpThesis" onchange="saveInspectInputs()" placeholder="Chart pattern, invalidation level, target..."></textarea></div>
+      <div class="btn-row">
+        <button class="btn btn-blue" onclick="fetchSelectedCoinMarketData()">Fetch Selected Coin Data</button>
+        <button class="btn btn-purple" onclick="freezeSignal()">Freeze Signal to Ledger</button>
+      </div>
+      <div id="inspectFetchStatus" class="fetch-status">Selected coin fetch ready.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ OUTCOME LEDGER ============ -->
+<div class="section" id="sec-ledger">
+  <div class="panel">
+    <div class="panel-title">Outcome Ledger · Frozen Signals</div>
+    <div class="field-row">
+      <div class="field"><label>Filter by mode</label>
+        <select id="filterMode" onchange="renderLedger()">
+          <option value="">All</option>
+          <option value="live">Live</option>
+          <option value="backtest">Backtest</option>
+          <option value="paper">Paper</option>
+        </select>
+      </div>
+      <div class="field"><label>Filter by coin</label>
+        <select id="filterCoin" onchange="renderLedger()"><option value="">All</option></select>
+      </div>
+    </div>
+    <div id="ledgerList"></div>
+    <div class="btn-row">
+      <button class="btn btn-blue" onclick="exportLedger()">Export Ledger JSON</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SETTINGS & DATA ============ -->
+<div class="section" id="sec-settings">
+  <div class="panel">
+    <div class="panel-title">Strategic Filter · v1.4.2 Import</div>
+    <div class="field-row">
+      <div class="field"><label>Dust Threshold USDC</label><input id="setDustThreshold" type="number" min="0" step="1" onchange="saveStrategicSettings()" /></div>
+      <div class="field"><label>Strategic Fetch Limit</label><input id="setStrategicFetchLimit" type="number" min="5" max="40" step="1" onchange="saveStrategicSettings()" /></div>
+    </div>
+    <div class="small-note">Dust is hidden from strategy only. It remains included in total portfolio value and Morning Agent export.</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Default Mode</div>
+    <div class="field">
+      <label>Current ledger entries default to:</label>
+      <select id="defaultMode" onchange="saveDefaultMode()">
+        <option value="backtest">Backtest (safe default)</option>
+        <option value="paper">Paper trading</option>
+        <option value="live">Live trading</option>
+      </select>
+    </div>
+    <div class="info">
+      <b>Recommended workflow:</b><br/>
+      Start in <b>Backtest</b> mode. Freeze 10-15 historical setups. Update outcomes when known. Review accuracy.<br/>
+      Only switch to <b>Live</b> after the engine proves itself.
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Identity (Wu Earth Day Master)</div>
+    <div class="detail-row"><span class="detail-key">Birth</span><span class="detail-val">August 15, 1972 · 3:00 PM · Porto</span></div>
+    <div class="detail-row"><span class="detail-key">Day Master</span><span class="detail-val">Wu Earth (Yang Earth)</span></div>
+    <div class="detail-row"><span class="detail-key">LP / Expression</span><span class="detail-val">33/6 · 111/3</span></div>
+    <div class="detail-row"><span class="detail-key">Personal Year</span><span class="detail-val" id="setPY">—</span></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Data Management</div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="exportMorningAgentPacket()">Export Morning Agent JSON</button>
+      <button class="btn btn-blue" onclick="copyMorningAgentPacket()">Copy Morning Agent JSON</button>
+      <button class="btn btn-blue" onclick="exportAll()">Export Full State</button>
+      <button class="btn btn-blue" onclick="document.getElementById('importFile').click()">Import State</button>
+      <input type="file" id="importFile" accept="application/json" style="display:none" onchange="importAll(event)" />
+      <button class="btn btn-red" onclick="clearAllConfirm()">Clear All Data</button>
+    </div>
+    <div class="small-note">Morning Agent export is the clean daily packet to upload with your other app JSON files. Full State remains the backup/restore file.</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Safe Patch Console · JSON Only</div>
+    <div class="notice">No code execution. Use this for small state edits, coin patches, Morning Agent suggestions, and quick fixes. A rollback copy is saved before every applied patch.</div>
+    <div class="field"><label>Patch JSON</label><textarea id="patchInput" class="patch-console" placeholder='{"label":"Example","merge":{"defaultMode":"paper"},"addCoins":[{"symbol":"TAO","sector":"AI","hasFutures":true}]}'></textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-blue" onclick="previewPatchConsole()">Preview Patch</button>
+      <button class="btn btn-primary" onclick="applyPatchConsole()">Apply Patch</button>
+      <button class="btn" onclick="loadPatchTemplate()">Load Template</button>
+      <button class="btn btn-red" onclick="rollbackLastPatch()">Rollback Last Patch</button>
+    </div>
+    <div id="patchConsoleOutput" class="patch-output">Patch console ready.</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Storage Health</div>
+    <div id="storageInfo" style="font-size:11px;color:#cbd5e1;line-height:1.7"></div>
+  </div>
+</div>
+
+<div class="disclaimer">
+  Investment Cockpit v2.6.0 · Timezone-safe BaZi · Public market fetch · v1.4.2 strategic imports · portfolio trade editor · exact coin inspect routing.<br/>
+  <b>Notice:</b> BaZi day pillar now uses verified Wu Zi / Earth Rat reference for May 14, 2026. Month/year solar-term precision can be audited externally if needed.<br/>
+  This tool does not execute trades. All decisions are yours.
+</div>
+
+</div>
+
+<script>
+"use strict";
+
+const STORAGE_KEY = "fw_invest_cockpit_v25_augmented";
+const APP_VERSION = "2.6.0-exact-inspect-seal";
+
+const FW_PROFILE = {
+  name: "Manuel Rui Santos Ferreira",
+  birth: "1972-08-15",
+  birthMonth: 8,
+  birthDay: 15,
+  birthHour: 15,
+  dayMaster: "Wu",
+  dayMasterElement: "Earth",
+  lifePathRaw: 33,
+  lifePathReduced: 6,
+  expressionRaw: 111,
+  expressionReduced: 3
+};
+
+// BaZi reference: May 14, 2026 = Wu Zi / Yang Earth Rat (pos 24 in 0-based 60-cycle)
+// Day-pillar calculation uses a UTC-normalized calendar-day count to avoid timezone off-by-one drift.
+const BAZI_REF_DATE_UTC = Date.UTC(2026, 4, 14); // 2026-05-14 00:00 UTC
+const BAZI_REF_POS = 24;
+const STEMS = ["Jia","Yi","Bing","Ding","Wu","Ji","Geng","Xin","Ren","Gui"];
+const BRANCHES = ["Zi","Chou","Yin","Mao","Chen","Si","Wu","Wei","Shen","You","Xu","Hai"];
+const ANIMALS = ["Rat","Ox","Tiger","Rabbit","Dragon","Snake","Horse","Goat","Monkey","Rooster","Dog","Pig"];
+const STEM_ELEMENT = ["Yang Wood","Yin Wood","Yang Fire","Yin Fire","Yang Earth","Yin Earth","Yang Metal","Yin Metal","Yang Water","Yin Water"];
+const COMPAT = ["draining","draining","supportive","supportive","peer","peer","productive","productive","challenging","challenging"];
+
+// ================ STATE ================
+
+
+const SEED_COIN_LIST_V142 = [{"symbol":"ILV","coreRating":"","sector":"Gaming","hasFutures":true,"seedQty":28.0,"seedAvgEntry":11.97,"seedCostBasis":335.16,"addedAt":"seed-v142"},{"symbol":"RENDER","coreRating":"","sector":"AI","hasFutures":true,"seedQty":55.0,"seedAvgEntry":3.13,"seedCostBasis":172.15,"addedAt":"seed-v142"},{"symbol":"PENDLE","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":55.0,"seedAvgEntry":3.2,"seedCostBasis":176.0,"addedAt":"seed-v142"},{"symbol":"EGLD","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":20.0,"seedAvgEntry":10.2,"seedCostBasis":204.0,"addedAt":"seed-v142"},{"symbol":"CVX","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":40,"seedAvgEntry":3.33,"seedCostBasis":133.2,"addedAt":"seed-v142","portfolioQtyUpdate":"v258-user-confirmed-current-amount"},{"symbol":"ICP","coreRating":"","sector":"AI","hasFutures":true,"seedQty":23,"seedAvgEntry":3.42,"seedCostBasis":78.66,"addedAt":"seed-v142","portfolioQtyUpdate":"v258-user-confirmed-current-amount"},{"symbol":"AR","coreRating":"","sector":"AI","hasFutures":true,"seedQty":30.0,"seedAvgEntry":3.67,"seedCostBasis":110.1,"addedAt":"seed-v142"},{"symbol":"PYR","coreRating":"","sector":"Gaming","hasFutures":true,"seedQty":200.0,"seedAvgEntry":0.8680082,"seedCostBasis":173.60164,"addedAt":"seed-v142"},{"symbol":"DASH","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":1.0,"seedAvgEntry":52.16,"seedCostBasis":52.16,"addedAt":"seed-v142"},{"symbol":"ZEN","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":7.0,"seedAvgEntry":9.5,"seedCostBasis":66.5,"addedAt":"seed-v142"},{"symbol":"AAVE","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":0.5,"seedAvgEntry":266.66,"seedCostBasis":133.33,"addedAt":"seed-v142"},{"symbol":"SOL","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":0.5,"seedAvgEntry":169.35,"seedCostBasis":84.675,"addedAt":"seed-v142"},{"symbol":"RAY","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":50.0,"seedAvgEntry":2.17,"seedCostBasis":108.5,"addedAt":"seed-v142"},{"symbol":"KSM","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":10.45,"seedAvgEntry":9.28,"seedCostBasis":96.976,"addedAt":"seed-v142","portfolioQtyUpdate":"v258-user-confirmed-current-amount"},{"symbol":"SCRT","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":350.0,"seedAvgEntry":0.17576472,"seedCostBasis":61.517652,"addedAt":"seed-v142"},{"symbol":"CRV","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":150.0,"seedAvgEntry":0.76514093,"seedCostBasis":114.7711395,"addedAt":"seed-v142"},{"symbol":"SNX","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":116.4,"seedAvgEntry":0.67850311,"seedCostBasis":78.977762004,"addedAt":"seed-v142","portfolioQtyUpdate":"v258-user-confirmed-current-amount"},{"symbol":"CFG","coreRating":"","sector":"DeFi","hasFutures":false,"seedQty":100.0,"seedAvgEntry":0.21888673,"seedCostBasis":21.888673,"addedAt":"seed-v142"},{"symbol":"INJ","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":6,"seedAvgEntry":9.55,"seedCostBasis":57.3,"addedAt":"seed-v142","portfolioQtyUpdate":"v258-user-confirmed-current-amount"},{"symbol":"ALCX","coreRating":"","sector":"DeFi","hasFutures":false,"seedQty":5.0,"seedAvgEntry":9.05,"seedCostBasis":45.25,"addedAt":"seed-v142"},{"symbol":"AUCTION","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":5.0,"seedAvgEntry":7.4,"seedCostBasis":37.0,"addedAt":"seed-v142"},{"symbol":"BANANA","coreRating":"","sector":"Gaming","hasFutures":true,"seedQty":5.00944084,"seedAvgEntry":13.53,"seedCostBasis":67.7777345652,"addedAt":"seed-v142"},{"symbol":"FET","coreRating":"","sector":"AI","hasFutures":true,"seedQty":100.0,"seedAvgEntry":0.4169505,"seedCostBasis":41.69505,"addedAt":"seed-v142"},{"symbol":"ATOM","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":12.0,"seedAvgEntry":3.48,"seedCostBasis":41.76,"addedAt":"seed-v142"},{"symbol":"ETHFI","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":50.0,"seedAvgEntry":0.76047837,"seedCostBasis":38.0239185,"addedAt":"seed-v142"},{"symbol":"ENS","coreRating":"","sector":"Other","hasFutures":true,"seedQty":3.0,"seedAvgEntry":18.4,"seedCostBasis":55.2,"addedAt":"seed-v142"},{"symbol":"METIS","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":5.0,"seedAvgEntry":14.15,"seedCostBasis":70.75,"addedAt":"seed-v142"},{"symbol":"MASK","coreRating":"","sector":"Other","hasFutures":true,"seedQty":35.0,"seedAvgEntry":0.53507911,"seedCostBasis":18.72776885,"addedAt":"seed-v142"},{"symbol":"NMR","coreRating":"","sector":"AI","hasFutures":true,"seedQty":2.0,"seedAvgEntry":12.38,"seedCostBasis":24.76,"addedAt":"seed-v142"},{"symbol":"RLC","coreRating":"","sector":"AI","hasFutures":true,"seedQty":35.0,"seedAvgEntry":0.97061818,"seedCostBasis":33.9716363,"addedAt":"seed-v142"},{"symbol":"BIO","coreRating":"","sector":"AI","hasFutures":false,"seedQty":300.0,"seedAvgEntry":0.07842613,"seedCostBasis":23.527839,"addedAt":"seed-v142"},{"symbol":"ORCA","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":9.0,"seedAvgEntry":2.37,"seedCostBasis":21.33,"addedAt":"seed-v142"},{"symbol":"JUV","coreRating":"","sector":"Gaming","hasFutures":false,"seedQty":30.0,"seedAvgEntry":0.6421001,"seedCostBasis":19.263003,"addedAt":"seed-v142"},{"symbol":"RAD","coreRating":"","sector":"Other","hasFutures":true,"seedQty":50.0,"seedAvgEntry":0.66867962,"seedCostBasis":33.433981,"addedAt":"seed-v142"},{"symbol":"VTHO","coreRating":"","sector":"Other","hasFutures":false,"seedQty":1000.0,"seedAvgEntry":0.00161824,"seedCostBasis":1.61824,"addedAt":"seed-v142"},{"symbol":"SYN","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":250.0,"seedAvgEntry":0.10024434,"seedCostBasis":25.061085,"addedAt":"seed-v142"},{"symbol":"EPIC","coreRating":"","sector":"Other","hasFutures":false,"seedQty":40.0,"seedAvgEntry":0.90543275,"seedCostBasis":36.21731,"addedAt":"seed-v142"},{"symbol":"W","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":900.0,"seedAvgEntry":0.05739797,"seedCostBasis":51.658173,"addedAt":"seed-v142"},{"symbol":"API3","coreRating":"","sector":"AI","hasFutures":true,"seedQty":35.0,"seedAvgEntry":0.6839251,"seedCostBasis":23.9373785,"addedAt":"seed-v142"},{"symbol":"BAND","coreRating":"","sector":"AI","hasFutures":true,"seedQty":50.0,"seedAvgEntry":0.62194536,"seedCostBasis":31.097268,"addedAt":"seed-v142"},{"symbol":"LUMIA","coreRating":"","sector":"L1/L2","hasFutures":false,"seedQty":100.0,"seedAvgEntry":0.24748411,"seedCostBasis":24.748411,"addedAt":"seed-v142"},{"symbol":"PROVE","coreRating":"","sector":"Other","hasFutures":false,"seedQty":40.0,"seedAvgEntry":0.65753131,"seedCostBasis":26.3012524,"addedAt":"seed-v142"},{"symbol":"ORDI","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":2.00539808,"seedAvgEntry":7.49,"seedCostBasis":15.0204316192,"addedAt":"seed-v142"},{"symbol":"STX","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":40.0,"seedAvgEntry":0.33971881,"seedCostBasis":13.5887524,"addedAt":"seed-v142"},{"symbol":"DUSK","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":70.0,"seedAvgEntry":0.10595991,"seedCostBasis":7.4171937,"addedAt":"seed-v142"},{"symbol":"BNT","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":30.0,"seedAvgEntry":0.57994853,"seedCostBasis":17.3984559,"addedAt":"seed-v142"},{"symbol":"MINA","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":150.0,"seedAvgEntry":0.32111516,"seedCostBasis":48.167274,"addedAt":"seed-v142"},{"symbol":"QTUM","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":10.00181089,"seedAvgEntry":1.97,"seedCostBasis":19.7035674533,"addedAt":"seed-v142"},{"symbol":"STORJ","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":80.0,"seedAvgEntry":0.18037451,"seedCostBasis":14.4299608,"addedAt":"seed-v142"},{"symbol":"VET","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":1200.0,"seedAvgEntry":0.03801221,"seedCostBasis":45.614652,"addedAt":"seed-v142"},{"symbol":"C98","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":400.0,"seedAvgEntry":0.03720344,"seedCostBasis":14.881376,"addedAt":"seed-v142"},{"symbol":"PYTH","coreRating":"","sector":"AI","hasFutures":true,"seedQty":150.0,"seedAvgEntry":0.09139107,"seedCostBasis":13.7086605,"addedAt":"seed-v142"},{"symbol":"FLUX","coreRating":"","sector":"AI","hasFutures":true,"seedQty":100.0,"seedAvgEntry":0.13756568,"seedCostBasis":13.756568,"addedAt":"seed-v142"},{"symbol":"ACE","coreRating":"","sector":"Gaming","hasFutures":true,"seedQty":50.0,"seedAvgEntry":0.38340917,"seedCostBasis":19.1704585,"addedAt":"seed-v142"},{"symbol":"CHZ","coreRating":"","sector":"Gaming","hasFutures":true,"seedQty":150.0,"seedAvgEntry":0.03882624,"seedCostBasis":5.823936,"addedAt":"seed-v142"},{"symbol":"RVN","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":1000.0,"seedAvgEntry":0.00809127,"seedCostBasis":8.09127,"addedAt":"seed-v142"},{"symbol":"TLM","coreRating":"","sector":"Gaming","hasFutures":true,"seedQty":3000.0,"seedAvgEntry":0.00404563,"seedCostBasis":12.13689,"addedAt":"seed-v142"},{"symbol":"CHR","coreRating":"","sector":"Gaming","hasFutures":true,"seedQty":200.0,"seedAvgEntry":0.04531111,"seedCostBasis":9.062222,"addedAt":"seed-v142"},{"symbol":"THE","coreRating":"","sector":"DeFi","hasFutures":false,"seedQty":50.0,"seedAvgEntry":0.44169003,"seedCostBasis":22.0845015,"addedAt":"seed-v142"},{"symbol":"PHA","coreRating":"","sector":"AI","hasFutures":true,"seedQty":140.0,"seedAvgEntry":0.10759116,"seedCostBasis":15.0627624,"addedAt":"seed-v142"},{"symbol":"EDU","coreRating":"","sector":"Gaming","hasFutures":true,"seedQty":100.00729704,"seedAvgEntry":0.13185984,"seedCostBasis":13.1869461865,"addedAt":"seed-v142"},{"symbol":"RUNE","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":8.0,"seedAvgEntry":1.78,"seedCostBasis":14.24,"addedAt":"seed-v142"},{"symbol":"HEI","coreRating":"","sector":"L1/L2","hasFutures":false,"seedQty":50.0,"seedAvgEntry":0.26048386,"seedCostBasis":13.024193,"addedAt":"seed-v142"},{"symbol":"ZIL","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":1000.0,"seedAvgEntry":0.00889852,"seedCostBasis":8.89852,"addedAt":"seed-v142"},{"symbol":"AUDIO","coreRating":"","sector":"Gaming","hasFutures":true,"seedQty":200.0,"seedAvgEntry":0.03478511,"seedCostBasis":6.957022,"addedAt":"seed-v142"},{"symbol":"GRT","coreRating":"","sector":"AI","hasFutures":true,"seedQty":150.0,"seedAvgEntry":0.05986274,"seedCostBasis":8.979411,"addedAt":"seed-v142"},{"symbol":"ADX","coreRating":"","sector":"AI","hasFutures":true,"seedQty":125.6,"seedAvgEntry":0.10516428,"seedCostBasis":13.208633568,"addedAt":"seed-v142","portfolioQtyUpdate":"v258-user-confirmed-current-amount"},{"symbol":"CFX","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":60.0,"seedAvgEntry":0.13024192,"seedCostBasis":7.8145152,"addedAt":"seed-v142"},{"symbol":"RARE","coreRating":"","sector":"Gaming","hasFutures":true,"seedQty":200.0,"seedAvgEntry":0.10678219,"seedCostBasis":21.356438,"addedAt":"seed-v142"},{"symbol":"SEI","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":50.0,"seedAvgEntry":0.24754054,"seedCostBasis":12.377027,"addedAt":"seed-v142"},{"symbol":"PIXEL","coreRating":"","sector":"Gaming","hasFutures":true,"seedQty":400.0,"seedAvgEntry":0.0169862,"seedCostBasis":6.79448,"addedAt":"seed-v142"},{"symbol":"ROSE","coreRating":"","sector":"L1/L2","hasFutures":true,"seedQty":300.0,"seedAvgEntry":0.01132539,"seedCostBasis":3.397617,"addedAt":"seed-v142"},{"symbol":"TFUEL","coreRating":"","sector":"L1/L2","hasFutures":false,"seedQty":200.0,"seedAvgEntry":0.03478127,"seedCostBasis":6.956254,"addedAt":"seed-v142"},{"symbol":"RSR","coreRating":"","sector":"DeFi","hasFutures":true,"seedQty":500.0,"seedAvgEntry":0.00566207,"seedCostBasis":2.831035,"addedAt":"seed-v142"}];
+
+const PORTFOLIO_QTY_UPDATE_V258 = { CVX: 40, ICP: 23, KSM: 10.45, ADX: 125.6, SNX: 116.4, INJ: 6 };
+const PORTFOLIO_QTY_UPDATE_V258_KEY = "2026-05-14-user-current-qty-cvx-icp-ksm-adx-snx-inj";
+
+function applyPortfolioQuantityUpdateV258(stateObj){
+  if(!stateObj || typeof stateObj !== "object") return stateObj;
+  if(stateObj.portfolioQtyUpdateV258Key === PORTFOLIO_QTY_UPDATE_V258_KEY) return stateObj;
+  if(!stateObj.coins || typeof stateObj.coins !== "object" || Array.isArray(stateObj.coins)) stateObj.coins = {};
+  Object.keys(PORTFOLIO_QTY_UPDATE_V258).forEach(function(sym){
+    const row = stateObj.coins[sym] || { symbol: sym };
+    const qty = Number(PORTFOLIO_QTY_UPDATE_V258[sym]);
+    const avg = Number(row.avgEntry ?? row.seedAvgEntry ?? 0) || 0;
+    row.symbol = sym;
+    row.qty = qty;
+    row.costBasis = avg ? Number((qty * avg).toFixed(12)) : (Number(row.costBasis) || 0);
+    row.portfolioQtyUpdatedAt = nowIso();
+    row.portfolioQtyUpdateSource = "user-current-amount-v258";
+    stateObj.coins[sym] = row;
+  });
+  stateObj.portfolioQtyUpdateV258Key = PORTFOLIO_QTY_UPDATE_V258_KEY;
+  stateObj.portfolioQtyUpdateV258AppliedAt = nowIso();
+  return stateObj;
+}
+
+function seedCoinsObjectFromV142(){
+  const out = {};
+  SEED_COIN_LIST_V142.forEach(c => {
+    out[c.symbol] = {
+      symbol: c.symbol,
+      coreRating: c.coreRating || "",
+      sector: c.sector || "Unassigned",
+      hasFutures: !!c.hasFutures,
+      addedAt: c.addedAt || "seed-v142",
+      seedQty: c.seedQty,
+      seedAvgEntry: c.seedAvgEntry,
+      seedCostBasis: c.seedCostBasis
+    };
+  });
+  return out;
+}
+
+function mergeSeedCoinsFromV142(existingCoins){
+  const existing = existingCoins && typeof existingCoins === "object" && !Array.isArray(existingCoins) ? existingCoins : {};
+  const merged = Object.assign(seedCoinsObjectFromV142(), existing);
+  SEED_COIN_LIST_V142.forEach(c => {
+    const row = merged[c.symbol] || {};
+    row.symbol = row.symbol || c.symbol;
+    if(row.sector === undefined || row.sector === null || row.sector === "") row.sector = c.sector || "Unassigned";
+    if(row.coreRating === undefined || row.coreRating === null) row.coreRating = c.coreRating || "";
+    if(row.hasFutures === undefined || row.hasFutures === null) row.hasFutures = !!c.hasFutures;
+    if(row.seedQty === undefined) row.seedQty = c.seedQty;
+    if(row.seedAvgEntry === undefined) row.seedAvgEntry = c.seedAvgEntry;
+    if(row.seedCostBasis === undefined) row.seedCostBasis = c.seedCostBasis;
+    if(!row.addedAt) row.addedAt = "seed-v142";
+    merged[c.symbol] = row;
+  });
+  return merged;
+}
+
+function ensureV142Coins(stateObj){
+  const before = stateObj && stateObj.coins ? Object.keys(stateObj.coins).length : 0;
+  stateObj.coins = mergeSeedCoinsFromV142(stateObj.coins);
+  const after = Object.keys(stateObj.coins || {}).length;
+  stateObj.seededFromV142 = true;
+  stateObj.seededFromV142Count = SEED_COIN_LIST_V142.length;
+  stateObj.seededFromV142AppliedAt = stateObj.seededFromV142AppliedAt || nowIso();
+  stateObj.seededFromV142MergedCoins = after - before;
+  return stateObj;
+}
+
+function defaultState(){
+  const base = {
+    appVersion: APP_VERSION,
+    coins: seedCoinsObjectFromV142(),
+    inspectInputs: {},
+    ledger: [],
+    portfolioMoves: [],
+    defaultMode: "backtest",
+    selectedCoin: null,
+    patchHistory: [],
+    lastMorningAgentExportAt: null,
+    settings: { dustThreshold: 10, strategicFetchLimit: 18 },
+    macro: {},
+    macroFetchedAt: null
+  };
+  return applyPortfolioQuantityUpdateV258(base);
+}
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    const def = defaultState();
+    const loaded = Object.assign({}, def, parsed, {
+      coins: mergeSeedCoinsFromV142(parsed.coins),
+      inspectInputs: parsed.inspectInputs || {},
+      ledger: Array.isArray(parsed.ledger) ? parsed.ledger : [],
+      portfolioMoves: Array.isArray(parsed.portfolioMoves) ? parsed.portfolioMoves : [],
+      patchHistory: Array.isArray(parsed.patchHistory) ? parsed.patchHistory : [],
+      settings: Object.assign({}, def.settings || {}, parsed.settings || {}),
+      macro: parsed.macro && typeof parsed.macro === "object" && !Array.isArray(parsed.macro) ? parsed.macro : {},
+      macroFetchedAt: parsed.macroFetchedAt || null
+    });
+    return applyPortfolioQuantityUpdateV258(loaded);
+  }catch(e){
+    console.error("Load fail",e);
+    return defaultState();
+  }
+}
+
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    refreshStorage();
+  }catch(e){
+    console.error("Save fail",e);
+    alert("Storage save failed: "+e.message+". Export now.");
+  }
+}
+
+let state = ensureV142Coins(loadState());
+saveState();
+
+// ================ UTILS ================
+function uid(){ return Date.now()+"_"+Math.random().toString(36).slice(2,9); }
+function nowIso(){ return new Date().toISOString(); }
+function todayIsoLocal(){
+  const d = new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function escapeHtml(v){ return String(v ?? "").replace(/[&<>"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[ch])); }
+function clamp(v,lo,hi){ return Math.max(lo, Math.min(hi, v)); }
+
+function reduceToRoot(n){
+  let v = Math.abs(Number(n)||0);
+  if(v === 0) return 0;
+  while(v > 9 && v !== 11 && v !== 22 && v !== 33){
+    let s = 0;
+    String(v).split("").forEach(c => s += Number(c)||0);
+    v = s;
+  }
+  return v;
+}
+
+function digitSum(n){
+  let s = 0;
+  String(Math.abs(Number(n)||0)).split("").forEach(c => s += Number(c)||0);
+  return s;
+}
+
+// ================ BAZI DAY CALCULATION ================
+function parseIsoDateParts(dateIso){
+  if(!dateIso) return null;
+  const m = String(dateIso).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(!m) return null;
+  const y = Number(m[1]), mo = Number(m[2]), da = Number(m[3]);
+  if(!Number.isFinite(y) || !Number.isFinite(mo) || !Number.isFinite(da)) return null;
+  if(mo < 1 || mo > 12 || da < 1 || da > 31) return null;
+  return {year:y, month:mo, day:da};
+}
+
+function localIsoFromDate(d){
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+function getDaysSinceRefUTC(dateIso){
+  let parts = null;
+  if(dateIso){
+    parts = parseIsoDateParts(dateIso);
+    if(!parts) return null;
+  } else {
+    const now = new Date();
+    parts = {year:now.getFullYear(), month:now.getMonth()+1, day:now.getDate()};
+  }
+  const dUTC = Date.UTC(parts.year, parts.month - 1, parts.day);
+  return Math.floor((dUTC - BAZI_REF_DATE_UTC) / 86400000);
+}
+
+function calculateBaziDay(dateIso){
+  let daysDiff = getDaysSinceRefUTC(dateIso);
+  if(daysDiff === null || !Number.isFinite(daysDiff)){
+    if(dateIso) return calculateBaziDay();
+    daysDiff = 0;
+  }
+  let pos = (BAZI_REF_POS + daysDiff) % 60;
+  if(pos < 0) pos += 60;
+  const stemIdx = pos % 10;
+  const branchIdx = pos % 12;
+  return {
+    stem: STEMS[stemIdx],
+    branch: BRANCHES[branchIdx],
+    animal: ANIMALS[branchIdx],
+    element: STEM_ELEMENT[stemIdx],
+    compatibility: COMPAT[stemIdx],
+    stemIdx, branchIdx, pos
+  };
+}
+
+// ================ NUMEROLOGY ================
+function makeLocalDateFromIso(dateIso){
+  const parts = parseIsoDateParts(dateIso);
+  if(!parts) return null;
+  return new Date(parts.year, parts.month - 1, parts.day);
+}
+
+function calculateFlamewalkerDay(dateIso){
+  let useDate = dateIso ? makeLocalDateFromIso(dateIso) : new Date();
+  if(!useDate || isNaN(useDate.getTime())){
+    if(dateIso) return calculateFlamewalkerDay();
+    useDate = new Date();
+  }
+
+  // Apply birth-hour hinge only for live "today" calculations, never for fixed ISO backtests.
+  if(!dateIso){
+    const now = new Date();
+    if(now.getHours() < FW_PROFILE.birthHour){
+      useDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+    }
+  }
+
+  const day = useDate.getDate();
+  const month = useDate.getMonth()+1;
+  const year = useDate.getFullYear();
+
+  const yearSum = digitSum(year);
+  const worldRaw = month + day + yearSum;
+  const worldReduced = reduceToRoot(worldRaw);
+
+  const personalYearRaw = FW_PROFILE.birthMonth + FW_PROFILE.birthDay + yearSum;
+  const personalYearReduced = reduceToRoot(personalYearRaw);
+  const personalMonthRaw = personalYearRaw + month;
+  const personalMonthReduced = reduceToRoot(personalMonthRaw);
+  const personalDayRaw = personalMonthRaw + day;
+  const personalDayReduced = reduceToRoot(personalDayRaw);
+
+  return {
+    date: localIsoFromDate(useDate),
+    world: {raw: worldRaw, reduced: worldReduced},
+    personalYear: {raw: personalYearRaw, reduced: personalYearReduced},
+    personalMonth: {raw: personalMonthRaw, reduced: personalMonthReduced},
+    personalDay: {raw: personalDayRaw, reduced: personalDayReduced},
+    lp: {raw: FW_PROFILE.lifePathRaw, reduced: FW_PROFILE.lifePathReduced},
+    expression: {raw: FW_PROFILE.expressionRaw, reduced: FW_PROFILE.expressionReduced}
+  };
+}
+
+function calculateCoinNumerology(symbol, dateIso){
+  const fw = calculateFlamewalkerDay(dateIso);
+  const letterMap = {A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:1,K:2,L:3,M:4,N:5,O:6,P:7,Q:8,R:9,S:1,T:2,U:3,V:4,W:5,X:6,Y:7,Z:8};
+  const upper = String(symbol||"").toUpperCase();
+  let sum = 0;
+  upper.split("").forEach(c => { if(letterMap[c]) sum += letterMap[c]; });
+  const reduced = reduceToRoot(sum);
+  
+  const fwSignatures = new Set([
+    fw.world.raw, fw.world.reduced,
+    fw.personalDay.raw, fw.personalDay.reduced,
+    fw.personalMonth.reduced, fw.personalYear.reduced,
+    fw.lp.raw, fw.lp.reduced,
+    fw.expression.raw, fw.expression.reduced,
+    makeLocalDateFromIso(dateIso || todayIsoLocal()).getDate()
+  ]);
+  
+  let resonanceScore = 0;
+  const matches = [];
+  if(fwSignatures.has(sum)){ resonanceScore += 2; matches.push("raw="+sum); }
+  if(fwSignatures.has(reduced)){ resonanceScore += 1; matches.push("reduced="+reduced); }
+  if([11,22,33].includes(reduced)){ resonanceScore += 1; matches.push("master "+reduced); }
+  if(reduced === fw.personalDay.reduced){ resonanceScore += 1; matches.push("PD match"); }
+  
+  return {
+    symbol: upper,
+    rawSum: sum,
+    reduced: reduced,
+    score: clamp(resonanceScore, 0, 5),
+    matches: matches
+  };
+}
+
+
+// ================ PUBLIC MARKET DATA FETCH ================
+// Uses public Binance endpoints from the browser. No API key. If Binance blocks a symbol/region/CORS,
+// the app keeps manual fields intact and writes a fetch warning into marketFetch.
+const MARKET_DATA_SOURCE = "Binance public spot/futures endpoints";
+const SPOT_API_BASE = "https://api.binance.com";
+const FUTURES_API_BASE = "https://fapi.binance.com";
+const marketFetchCache = { btcDaily: null };
+
+function setFetchStatus(msg, kind){
+  ["marketFetchStatus","inspectFetchStatus"].forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.className = "fetch-status" + (kind ? " " + kind : "");
+    el.textContent = msg;
+  });
+}
+
+function wait(ms){ return new Promise(resolve => setTimeout(resolve, ms)); }
+
+async function fetchJsonWithTimeout(url, timeoutMs=12000){
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try{
+    const res = await fetch(url, {signal: controller.signal, cache:"no-store"});
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    return await res.json();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function pairCandidates(sym){
+  const s = String(sym||"").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  return [s+"USDT", s+"USDC", s+"BUSD"];
+}
+
+async function firstWorkingSpotPair(sym){
+  const errors = [];
+  for(const pair of pairCandidates(sym)){
+    try{
+      const price = await fetchJsonWithTimeout(SPOT_API_BASE + "/api/v3/ticker/price?symbol=" + encodeURIComponent(pair), 9000);
+      if(price && price.price !== undefined) return pair;
+    }catch(e){ errors.push(pair+":"+e.message); }
+  }
+  throw new Error("No Binance spot pair found for " + sym + " (" + errors.join("; ") + ")");
+}
+
+async function firstWorkingFuturesPair(sym){
+  const errors = [];
+  for(const pair of pairCandidates(sym)){
+    try{
+      const oi = await fetchJsonWithTimeout(FUTURES_API_BASE + "/fapi/v1/openInterest?symbol=" + encodeURIComponent(pair), 9000);
+      if(oi && oi.openInterest !== undefined) return pair;
+    }catch(e){ errors.push(pair+":"+e.message); }
+  }
+  throw new Error("No Binance futures pair found for " + sym + " (" + errors.join("; ") + ")");
+}
+
+async function fetchSpotKlines(pair, interval, limit){
+  return fetchJsonWithTimeout(SPOT_API_BASE + "/api/v3/klines?symbol=" + encodeURIComponent(pair) + "&interval=" + encodeURIComponent(interval) + "&limit=" + encodeURIComponent(limit), 12000);
+}
+
+async function fetchFuturesOpenInterestHistory(pair){
+  return fetchJsonWithTimeout(FUTURES_API_BASE + "/futures/data/openInterestHist?symbol=" + encodeURIComponent(pair) + "&period=1d&limit=2", 12000);
+}
+
+async function fetchFuturesPremium(pair){
+  return fetchJsonWithTimeout(FUTURES_API_BASE + "/fapi/v1/premiumIndex?symbol=" + encodeURIComponent(pair), 12000);
+}
+
+function median(nums){
+  const arr = (nums||[]).map(Number).filter(Number.isFinite).sort((a,b)=>a-b);
+  if(!arr.length) return null;
+  const mid = Math.floor(arr.length/2);
+  return arr.length % 2 ? arr[mid] : (arr[mid-1]+arr[mid])/2;
+}
+
+function pctChange(a,b){
+  a = Number(a); b = Number(b);
+  if(!Number.isFinite(a) || !Number.isFinite(b) || a === 0) return null;
+  return ((b-a)/a)*100;
+}
+
+function mapVolRatioToInput(ratio){
+  if(!Number.isFinite(ratio)) return 0;
+  if(ratio < 0.8) return 1;
+  if(ratio < 1.25) return 2;
+  if(ratio < 2) return 3;
+  if(ratio < 3) return 4;
+  return 5;
+}
+
+function mapExtensionToInput(pct){
+  if(!Number.isFinite(pct)) return 0;
+  if(pct <= 5) return 1;
+  if(pct <= 15) return 2;
+  if(pct <= 30) return 3;
+  if(pct <= 50) return 4;
+  return 5;
+}
+
+function mapBtcRelativeToInput(relPct){
+  if(!Number.isFinite(relPct)) return 0;
+  if(relPct <= -5) return 1;
+  if(relPct < 5) return 2;
+  if(relPct < 15) return 3;
+  return 4;
+}
+
+function mapOIChangeToInput(changePct){
+  if(!Number.isFinite(changePct)) return 0;
+  if(changePct <= -5) return 1;
+  if(changePct < 5) return 2;
+  if(changePct < 15) return 3;
+  if(changePct < 60) return 4;
+  return 5;
+}
+
+function mapFundingRateToInput(rate){
+  rate = Number(rate);
+  if(!Number.isFinite(rate)) return 0;
+  if(rate <= -0.0005) return 1;
+  if(Math.abs(rate) <= 0.0001) return 2;
+  if(rate < 0.0005) return 3;
+  return 4;
+}
+
+function inferFlowProxy(volInput, btcInput, extInput){
+  // This is not chain whale data. It is a conservative flow proxy used only when manual whale field is unknown.
+  if(volInput >= 5 && extInput >= 4) return 1; // likely late/distribution risk
+  if(volInput >= 4 && btcInput >= 3 && extInput <= 3) return 3; // accumulation-like flow proxy
+  if(volInput >= 4 && btcInput >= 4) return 3;
+  if(volInput >= 3 || btcInput >= 3) return 2;
+  return 0;
+}
+
+async function getBtcDailyKlines(){
+  if(marketFetchCache.btcDaily) return marketFetchCache.btcDaily;
+  marketFetchCache.btcDaily = await fetchSpotKlines("BTCUSDT", "1d", 8);
+  return marketFetchCache.btcDaily;
+}
+
+async function fetchCoinMarketData(sym, options={}){
+  sym = String(sym||"").toUpperCase().trim();
+  if(!sym || !state.coins[sym]) throw new Error("Unknown coin: " + sym);
+  const coin = state.coins[sym];
+  const inp = Object.assign({}, state.inspectInputs[sym] || {});
+  const meta = {source:MARKET_DATA_SOURCE, fetchedAt:nowIso(), symbol:sym, warnings:[]};
+  let spotPair = null;
+
+  try{
+    spotPair = await firstWorkingSpotPair(sym);
+    meta.spotPair = spotPair;
+    const ticker = await fetchJsonWithTimeout(SPOT_API_BASE + "/api/v3/ticker/24hr?symbol=" + encodeURIComponent(spotPair), 12000);
+    if(ticker && ticker.lastPrice !== undefined) inp.price = String(Number(ticker.lastPrice));
+
+    const k4 = await fetchSpotKlines(spotPair, "4h", 43);
+    if(Array.isArray(k4) && k4.length >= 8){
+      const last = k4[k4.length-1];
+      const prev = k4.slice(0, -1).map(k => Number(k[7])); // quote asset volume
+      const med = median(prev);
+      const current = Number(last[7]);
+      const ratio = med ? current / med : null;
+      meta.vol4hQuote = current;
+      meta.vol4hMedian7d = med;
+      meta.vol4hRatio = ratio;
+      inp.vol4h = mapVolRatioToInput(ratio);
+    }
+
+    const kd = await fetchSpotKlines(spotPair, "1d", 31);
+    if(Array.isArray(kd) && kd.length >= 8){
+      const lows = kd.map(k => Number(k[3])).filter(Number.isFinite);
+      const minLow = Math.min(...lows);
+      const lastClose = Number(kd[kd.length-1][4]);
+      const extensionPct = minLow > 0 ? ((lastClose - minLow) / minLow) * 100 : null;
+      meta.low30d = minLow;
+      meta.lastClose = lastClose;
+      meta.extensionPct = extensionPct;
+      inp.ext = mapExtensionToInput(extensionPct);
+
+      const btcDaily = await getBtcDailyKlines();
+      if(Array.isArray(btcDaily) && btcDaily.length >= 8){
+        const coinStart = Number(kd[Math.max(0,kd.length-8)][4]);
+        const coinEnd = Number(kd[kd.length-1][4]);
+        const btcStart = Number(btcDaily[Math.max(0,btcDaily.length-8)][4]);
+        const btcEnd = Number(btcDaily[btcDaily.length-1][4]);
+        const coinRet = pctChange(coinStart, coinEnd);
+        const btcRet = pctChange(btcStart, btcEnd);
+        const rel = (Number.isFinite(coinRet) && Number.isFinite(btcRet)) ? coinRet - btcRet : null;
+        meta.coinReturn7dPct = coinRet;
+        meta.btcReturn7dPct = btcRet;
+        meta.btcRelative7dPct = rel;
+        inp.btcPair = mapBtcRelativeToInput(rel);
+      }
+    }
+
+    const proxy = inferFlowProxy(Number(inp.vol4h||0), Number(inp.btcPair||0), Number(inp.ext||0));
+    if((!inp.whale || Number(inp.whale) === 0) && proxy){
+      inp.whale = proxy;
+      meta.whaleProxy = proxy;
+      meta.warnings.push("Whale field set as flow proxy from public volume + BTC-relative strength, not chain-level whale data.");
+    }
+  }catch(e){
+    meta.warnings.push("Spot fetch failed: " + e.message);
+  }
+
+  if(coin.hasFutures){
+    try{
+      const futuresPair = await firstWorkingFuturesPair(sym);
+      meta.futuresPair = futuresPair;
+      const [oiHist, premium] = await Promise.allSettled([fetchFuturesOpenInterestHistory(futuresPair), fetchFuturesPremium(futuresPair)]);
+      if(oiHist.status === "fulfilled" && Array.isArray(oiHist.value) && oiHist.value.length >= 2){
+        const a = Number(oiHist.value[0].sumOpenInterestValue || oiHist.value[0].sumOpenInterest);
+        const b = Number(oiHist.value[oiHist.value.length-1].sumOpenInterestValue || oiHist.value[oiHist.value.length-1].sumOpenInterest);
+        const change = pctChange(a,b);
+        meta.openInterestChangePct = change;
+        inp.oi = mapOIChangeToInput(change);
+      } else if(oiHist.status === "rejected") {
+        meta.warnings.push("OI history failed: " + oiHist.reason.message);
+      }
+      if(premium.status === "fulfilled" && premium.value){
+        const rate = Number(premium.value.lastFundingRate);
+        meta.fundingRate = rate;
+        inp.funding = mapFundingRateToInput(rate);
+      } else if(premium.status === "rejected") {
+        meta.warnings.push("Funding fetch failed: " + premium.reason.message);
+      }
+    }catch(e){
+      meta.warnings.push("Futures fetch failed: " + e.message);
+    }
+  } else {
+    meta.warnings.push("Coin marked spot-only/Lite Mode: futures OI/funding not fetched.");
+  }
+
+  inp.marketFetch = meta;
+  inp.updatedAt = nowIso();
+  state.inspectInputs[sym] = inp;
+  saveState();
+  return {symbol:sym, ok: meta.spotPair || meta.futuresPair || inp.price, meta};
+}
+
+async function fetchSelectedCoinMarketData(){
+  const sel = document.getElementById("inspectSelect");
+  const sym = (state.selectedCoin || (sel && sel.value) || "").toUpperCase();
+  if(!sym){ setFetchStatus("Select a coin first.", "warn"); return; }
+  try{
+    setFetchStatus("Fetching " + sym + " market data…", "");
+    await fetchCoinMarketData(sym);
+    setFetchStatus("Fetched " + sym + ". Triangulation inputs updated.", "ok");
+    renderWatchTable();
+    refreshInspectDropdown();
+    if(sel) sel.value = sym;
+    state.selectedCoin = sym;
+    renderInspect();
+  }catch(e){
+    setFetchStatus("Fetch failed for " + sym + ": " + e.message, "error");
+  }
+}
+
+async function fetchTopResonanceMarketData(){
+  const today = todayIsoLocal();
+  const s = strategicSettingsV257();
+  const list = strategicRowsV257().filter(c => c.strategic).map(c => ({coin:c, num:calculateCoinNumerology(c.symbol, today)})).filter(x => x.num.score >= 2).sort((a,b)=>b.num.score-a.num.score || (b.coin.value||0)-(a.coin.value||0)).slice(0,s.strategicFetchLimit).map(x=>x.coin.symbol);
+  if(!list.length){ setFetchStatus("No high-resonance strategic coins today to fetch.", "warn"); return; }
+  await fetchMarketDataForSymbols(list, "resonance strategic coins");
+}
+
+async function fetchAllMarketData(){
+  const syms = Object.keys(state.coins).sort();
+  await fetchMarketDataForSymbols(syms, "all coins");
+}
+
+async function fetchMarketDataForSymbols(symbols, label){
+  let ok = 0, fail = 0;
+  setFetchStatus("Fetching " + label + " · 0/" + symbols.length, "");
+  for(let i=0;i<symbols.length;i++){
+    const sym = symbols[i];
+    try{
+      await fetchCoinMarketData(sym);
+      ok++;
+      setFetchStatus("Fetching " + label + " · " + (i+1) + "/" + symbols.length + " · OK " + ok + " · Fail " + fail + " · last " + sym, "");
+      await wait(120);
+    }catch(e){
+      fail++;
+      setFetchStatus("Fetching " + label + " · " + (i+1) + "/" + symbols.length + " · OK " + ok + " · Fail " + fail + " · " + sym + " failed", fail ? "warn" : "");
+      await wait(120);
+    }
+  }
+  saveState();
+  renderAll();
+  setFetchStatus("Market fetch complete for " + label + ": OK " + ok + " · Fail " + fail + ". Check coin inspect for fetch warnings.", fail ? "warn" : "ok");
+}
+
+// ================ TRIANGULATION MODULES ================
+
+function computeModuleC(inp){
+  const v4h = Number(inp.vol4h||0);
+  const whale = Number(inp.whale||0);
+  const btc = Number(inp.btcPair||0);
+  const ext = Number(inp.ext||0);
+  
+  if(v4h === 0 && btc === 0 && whale === 0) return {state:"UNKNOWN", score:0, reasons:["No chart data"]};
+  
+  const reasons = [];
+  
+  if(v4h >= 5 && ext >= 4){
+    reasons.push("Vol 4h extreme + extended price = distribution risk");
+    return {state:"DISTRIBUTION_RISK", score:-1, reasons};
+  }
+  
+  if(v4h >= 4 && whale >= 3){
+    reasons.push("Vol 4h strong + Whale accumulation");
+    if(btc >= 3) reasons.push("BTC pair strengthening");
+    return {state:"STRONG", score:2, reasons};
+  }
+  
+  if(v4h >= 3 || whale >= 3 || btc >= 3){
+    if(v4h >= 3) reasons.push("Vol 4h moderate");
+    if(whale >= 3) reasons.push("Whale activity visible");
+    if(btc >= 3) reasons.push("BTC pair strength");
+    return {state:"MODERATE", score:1, reasons};
+  }
+  
+  reasons.push("Metrics below baseline");
+  return {state:"WEAK", score:-1, reasons};
+}
+
+function computeModuleE(inp, hasFutures){
+  if(!hasFutures){
+    return {state:"UNAVAILABLE", score:0, reasons:["No futures market — Lite Mode"]};
+  }
+  const oi = Number(inp.oi||0);
+  const funding = Number(inp.funding||0);
+  
+  if(oi === 0 && funding === 0) return {state:"UNKNOWN", score:0, reasons:["No OI/funding data"]};
+  
+  const reasons = [];
+  
+  if(oi >= 5 || funding >= 4){
+    if(oi >= 5) reasons.push("OI over-leveraged");
+    if(funding >= 4) reasons.push("Funding overheated");
+    return {state:"CROWDED_LONG_RISK", score:-1, reasons};
+  }
+  
+  if(oi >= 3 && funding <= 2){
+    reasons.push("OI rising");
+    reasons.push("Funding neutral/negative → accumulation");
+    return {state:"ACCUMULATION", score:2, reasons};
+  }
+  
+  if(funding === 1 && oi >= 2){
+    reasons.push("Funding negative + OI building = short-squeeze setup");
+    return {state:"SHORT_SQUEEZE_POTENTIAL", score:2, reasons};
+  }
+  
+  if(oi === 2 && funding === 2){
+    return {state:"NEUTRAL", score:0, reasons:["OI/funding flat"]};
+  }
+  
+  reasons.push("OI/funding mixed");
+  return {state:"WEAK", score:-1, reasons};
+}
+
+function computeModuleN(symbol, manualOverride, dateIso){
+  const auto = calculateCoinNumerology(symbol, dateIso);
+  const manual = Number(manualOverride||0);
+  
+  let manualScore = 0;
+  if(manual === 1) manualScore = -1;
+  else if(manual === 3) manualScore = 1;
+  else if(manual === 4) manualScore = 2;
+  
+  const autoScore = auto.score >= 3 ? 2 : auto.score >= 2 ? 1 : auto.score >= 1 ? 0 : -1;
+  const combined = manual > 0 ? Math.max(autoScore, manualScore) : autoScore;
+  
+  const reasons = [];
+  if(auto.matches.length){ reasons.push("Auto: "+auto.matches.join(", ")); }
+  if(manual > 0){ reasons.push("Manual override: level "+manual); }
+  
+  let stateStr;
+  if(combined >= 2) stateStr = "STRONG";
+  else if(combined >= 1) stateStr = "MODERATE";
+  else if(combined >= 0) stateStr = "NEUTRAL";
+  else stateStr = "WEAK";
+  
+  return {state:stateStr, score:combined, reasons, autoSum:auto.rawSum, autoReduced:auto.reduced};
+}
+
+function calculateTimeStateBadge(symbol, hasFutures, inp, dateIso){
+  const C = computeModuleC(inp);
+  const E = computeModuleE(inp, hasFutures);
+  const N = computeModuleN(symbol, inp.manualN, dateIso);
+  const ext = Number(inp.ext||0);
+  
+  const cycleLate = ext >= 4;
+  
+  if(C.state === "DISTRIBUTION_RISK"){
+    return {badge:"RED", reason:"Distribution risk detected", C, E, N, cycleLate};
+  }
+  if(E.state === "CROWDED_LONG_RISK"){
+    return {badge:"RED", reason:"Crowded long risk on derivatives", C, E, N, cycleLate};
+  }
+  
+  if(C.state === "UNKNOWN" && N.state === "WEAK"){
+    return {badge:"STALE", reason:"Need market data to triangulate", C, E, N, cycleLate};
+  }
+  
+  if(C.state === "STRONG" && N.state === "STRONG"){
+    if(E.state === "ACCUMULATION" || E.state === "SHORT_SQUEEZE_POTENTIAL"){
+      return {badge:"GREEN", reason:"Full convergence: C+E+N all strong", C, E, N, cycleLate};
+    }
+    if(E.state === "UNAVAILABLE"){
+      return {badge:"GREEN", reason:"Lite mode green: C+N strong, no futures to gate", C, E, N, cycleLate, lite:true};
+    }
+  }
+  
+  if(N.state === "STRONG" && C.state === "MODERATE" && (E.state === "ACCUMULATION" || E.state === "SHORT_SQUEEZE_POTENTIAL")){
+    return {badge:"BLUE", reason:"N+E strong, C supporting", C, E, N, cycleLate};
+  }
+  if(N.state === "STRONG" && C.state === "STRONG" && (E.state === "NEUTRAL" || E.state === "UNAVAILABLE" || E.state === "UNKNOWN")){
+    return {badge:"BLUE", reason:"C+N strong, E neutral/lite", C, E, N, cycleLate, lite: E.state === "UNAVAILABLE"};
+  }
+  
+  const strongCount = [C.state, E.state, N.state].filter(s => ["STRONG","ACCUMULATION","SHORT_SQUEEZE_POTENTIAL"].includes(s)).length;
+  const modCount = [C.state, N.state].filter(s => s === "MODERATE").length;
+  
+  if(strongCount >= 1 || (strongCount === 0 && modCount >= 1 && N.state !== "WEAK")){
+    if(cycleLate){
+      return {badge:"YELLOW_LATE", reason:"Partial convergence + cycle late = chase risk", C, E, N, cycleLate};
+    }
+    return {badge:"YELLOW_EARLY", reason:"Partial convergence, cycle early = watch", C, E, N, cycleLate};
+  }
+  
+  if(C.state !== "WEAK" || N.state !== "WEAK"){
+    return {badge:"ORANGE", reason:"Insufficient signal, monitor only", C, E, N, cycleLate};
+  }
+  
+  return {badge:"RED", reason:"No convergence — wait", C, E, N, cycleLate};
+}
+
+// ================ MOVE ENGINE ================
+function calculateMovePosture(dateIso){
+  const bazi = calculateBaziDay(dateIso);
+  const num = calculateFlamewalkerDay(dateIso);
+  
+  const reasons = [];
+  let score = 0;
+  
+  if(bazi.compatibility === "supportive"){ score += 2; reasons.push(bazi.stem+" "+bazi.branch+" Fire Resource (supportive)"); }
+  else if(bazi.compatibility === "productive"){ score += 1; reasons.push(bazi.stem+" "+bazi.branch+" Metal Output (productive)"); }
+  else if(bazi.compatibility === "peer"){ score += 0.5; reasons.push(bazi.stem+" "+bazi.branch+" Earth Peer (stable)"); }
+  else if(bazi.compatibility === "challenging"){ score -= 1; reasons.push(bazi.stem+" "+bazi.branch+" Water Challenge (testing)"); }
+  else if(bazi.compatibility === "draining"){ score -= 1.5; reasons.push(bazi.stem+" "+bazi.branch+" Wood Drain (depleting)"); }
+  
+  const pd = num.personalDay.reduced;
+  if([3,6,9].includes(pd)){ score += 1; reasons.push("PD "+pd+" (3-6-9 expression day)"); }
+  else if([1,5,8].includes(pd)){ score += 0.5; reasons.push("PD "+pd+" (action day)"); }
+  else if([4,7].includes(pd)){ score += 0; reasons.push("PD "+pd+" (analysis day)"); }
+  else if([2].includes(pd)){ score -= 0.5; reasons.push("PD 2 (patience day)"); }
+  
+  if([11,22,33].includes(num.personalDay.reduced)){ score += 1; reasons.push("Master number PD "+num.personalDay.reduced); }
+  
+  if([0,15,30,45].includes(bazi.pos)){ reasons.push("Cycle quarter-point ("+bazi.pos+"/60)"); }
+  
+  let posture, reason;
+  if(score >= 2.5){ posture = "COMMIT"; reason = "Strong field convergence"; }
+  else if(score >= 1){ posture = "REGULATE"; reason = "Moderate field, manage existing"; }
+  else if(score >= -1){ posture = "PROBE"; reason = "Mixed field, explore carefully"; }
+  else{ posture = "VETO"; reason = "Field closed, no moves"; }
+  
+  return {posture, reason, score, reasons, bazi, num};
+}
+
+
+// ================ v2.5.7 STRATEGIC IMPORT LAYER ================
+const MACRO_KEYS_V257 = ["FEAR_GREED","BTC","ETH","TOTAL3","OTHERS","TOTALDEFI","DXY","BTC.D","ETH.D","OTHERS.D","USDC.D","USDT.D","STABLECAP"];
+function formatUSDC(n){ n=Number(n); if(!isFinite(n)) return "—"; if(Math.abs(n)>=1e9) return (n/1e9).toFixed(2)+"B"; if(Math.abs(n)>=1e6) return (n/1e6).toFixed(2)+"M"; if(Math.abs(n)>=1000) return (n/1000).toFixed(1)+"K"; if(Math.abs(n)>=1) return n.toFixed(2); return n.toPrecision(3); }
+function coinQtyV257(c){ return Number(c.qty ?? c.seedQty ?? 0) || 0; }
+function coinCostBasisV257(c){ const qty=coinQtyV257(c); if(isFinite(Number(c.costBasis))) return Number(c.costBasis); if(isFinite(Number(c.seedCostBasis))) return Number(c.seedCostBasis); if(isFinite(Number(c.seedAvgEntry))) return qty*Number(c.seedAvgEntry); return 0; }
+function coinAvgEntryV259(c){ const qty=coinQtyV257(c); const basis=coinCostBasisV257(c); if(qty>0 && isFinite(Number(basis)) && Number(basis)>0) return Number(basis)/qty; const fallback=Number(c.avgEntry ?? c.seedAvgEntry ?? 0); return isFinite(fallback)?fallback:0; }
+function formatQtyV259(n){ n=Number(n); if(!isFinite(n)) return ""; if(Math.abs(n)>=1000) return String(Number(n.toFixed(8))).replace(/\.?0+$/,""); return String(Number(n.toFixed(10))).replace(/\.?0+$/,""); }
+function roundMoneyV259(n){ n=Number(n); return isFinite(n)?Number(n.toFixed(12)):0; }
+function ensurePortfolioMovesV259(){ if(!Array.isArray(state.portfolioMoves)) state.portfolioMoves=[]; return state.portfolioMoves; }
+function updatePortfolioQuantityV259(sym,newQtyRaw){
+  sym=String(sym||"").toUpperCase();
+  const coin=state.coins[sym];
+  if(!coin){ alert("Coin not found: "+sym); renderWatchTable(); return; }
+  const oldQty=coinQtyV257(coin);
+  const oldCost=coinCostBasisV257(coin);
+  const oldAvg=coinAvgEntryV259(coin);
+  const newQty=Number(String(newQtyRaw).replace(",","."));
+  if(!isFinite(newQty) || newQty<0){ alert("Invalid quantity for "+sym+"."); renderWatchTable(); return; }
+  const delta=newQty-oldQty;
+  if(Math.abs(delta)<1e-12){ renderWatchTable(); return; }
+  const side=delta>0?"BUY":"SELL";
+  const absDelta=Math.abs(delta);
+  const promptText=sym+" quantity changed from "+formatQtyV259(oldQty)+" to "+formatQtyV259(newQty)+".\n"+
+    "Detected: "+side+" "+formatQtyV259(absDelta)+" "+sym+".\n\n"+
+    "Enter the execution price per coin in USDC.\n"+
+    "Leave blank or press Cancel if this was accidental, and the quantity will revert.\n\n"+
+    "Note: SELL uses effective remaining cost-basis logic, not tax accounting.";
+  const pxRaw=prompt(promptText, "");
+  if(pxRaw===null || String(pxRaw).trim()===""){ renderWatchTable(); return; }
+  const price=Number(String(pxRaw).trim().replace(",","."));
+  if(!isFinite(price) || price<=0){ alert("Invalid execution price. Quantity reverted."); renderWatchTable(); return; }
+  const tradeValue=absDelta*price;
+  let newCost;
+  if(side==="BUY"){
+    newCost=oldCost+tradeValue;
+  }else{
+    newCost=oldCost-tradeValue;
+    if(newCost<0){
+      const keepZero=confirm("This sell price would reduce the effective remaining cost basis below zero. Clamp remaining cost basis to 0 USDC?");
+      if(!keepZero){ renderWatchTable(); return; }
+      newCost=0;
+    }
+  }
+  if(newQty===0) newCost=0;
+  const newAvg=newQty>0 ? newCost/newQty : 0;
+  coin.qty=roundMoneyV259(newQty);
+  coin.costBasis=roundMoneyV259(newCost);
+  coin.avgEntry=roundMoneyV259(newAvg);
+  coin.entryMode=side==="BUY"?"interactive buy":"interactive sell";
+  coin.entryNote=side+" "+formatQtyV259(absDelta)+" @ "+formatUSDC(price)+" USDC · avg "+formatUSDC(oldAvg)+" → "+formatUSDC(newAvg);
+  coin.lastPortfolioMove={at:nowIso(),symbol:sym,side,oldQty,newQty,deltaQty:delta,executionPrice:price,tradeValue,oldCostBasis:oldCost,newCostBasis:newCost,oldAvgEntry:oldAvg,newAvgEntry:newAvg};
+  ensurePortfolioMovesV259().unshift(Object.assign({id:uid()}, coin.lastPortfolioMove));
+  state.portfolioMoves=state.portfolioMoves.slice(0,100);
+  state.scan=null;
+  saveState();
+  renderAll();
+}
+function coinLivePriceV257(sym){ const inp = state.inspectInputs[String(sym||"").toUpperCase()] || {}; const p = Number(inp.price); return isFinite(p) && p>0 ? p : null; }
+function coinValueV257(c){ const price = coinLivePriceV257(c.symbol); const qty=coinQtyV257(c); const basis=coinCostBasisV257(c); if(price && qty) return {value: qty*price, source:"live"}; return {value:basis, source:basis?"seed basis":"no basis"}; }
+function strategicSettingsV257(){ const s=state.settings || (state.settings={}); s.dustThreshold = clamp(Number(s.dustThreshold ?? 10),0,1000000); s.strategicFetchLimit = clamp(Number(s.strategicFetchLimit ?? 18),5,40); return s; }
+function strategicRowsV257(){ const s=strategicSettingsV257(); return Object.values(state.coins).map(c=>{ const v=coinValueV257(c); const basis=coinCostBasisV257(c); const qty=coinQtyV257(c); const pnl=basis?((v.value-basis)/basis*100):0; return Object.assign({}, c, {qty:qty, value:v.value, valueSource:v.source, costBasis:basis, pnl:pnl, strategic:v.value>=s.dustThreshold}); }).sort((a,b)=>(b.value||0)-(a.value||0)); }
+function portfolioTotalsV257(){ const rows=strategicRowsV257(); const total=rows.reduce((a,b)=>a+Number(b.value||0),0); const cost=rows.reduce((a,b)=>a+Number(b.costBasis||0),0); const strategic=rows.filter(r=>r.strategic); const dust=rows.filter(r=>!r.strategic); const strategicValue=strategic.reduce((a,b)=>a+Number(b.value||0),0); const dustValue=dust.reduce((a,b)=>a+Number(b.value||0),0); return {rows,total,cost,pnl:cost?((total-cost)/cost*100):0,strategic,strategicValue,dust,dustValue,totalCount:rows.length,strategicCount:strategic.length,dustCount:dust.length}; }
+function triRowsCurrentV257(dateIso){ const date = dateIso || todayIsoLocal(); return strategicRowsV257().map(c=>{ const inp=state.inspectInputs[c.symbol] || {}; const tri=calculateTimeStateBadge(c.symbol, c.hasFutures, inp, date); return {coin:c,symbol:c.symbol,tri:tri,inp:inp,value:c.value}; }); }
+function triBadgeRankV257(b){ return {GREEN:6,RED:5,ORANGE:4,BLUE:3,YELLOW_EARLY:2,YELLOW_LATE:2,STALE:0}[b] || 0; }
+function renderCompassGreenRedV257(){ const box=document.getElementById("compassGreenRedBox"); if(!box) return; const rows=triRowsCurrentV257().filter(r=>r.coin.strategic && (r.tri.badge==="GREEN" || r.tri.badge==="RED")).sort((a,b)=>triBadgeRankV257(b.tri.badge)-triBadgeRankV257(a.tri.badge)||(b.value||0)-(a.value||0)); if(!rows.length){ box.innerHTML='<div class="empty">No current GREEN buy setup or RED hard caution in the strategic portfolio. Blue/Yellow/Orange remain inside Triangulation.</div>'; return; } box.innerHTML=rows.slice(0,12).map(r=>'<div class="radar-card"><div class="radar-head"><div><div class="radar-title">'+escapeHtml(r.symbol)+' · '+escapeHtml(r.tri.badge.replace(/_/g," "))+'</div><div class="radar-muted">'+formatUSDC(r.value)+' USDC · '+escapeHtml(r.coin.sector||"Unassigned")+'</div></div><span class="badge b-'+escapeHtml(r.tri.badge)+'">'+escapeHtml(r.tri.badge.replace(/_/g," "))+'</span></div><div class="radar-line">'+escapeHtml(r.tri.reason)+'</div><div class="radar-muted">C '+escapeHtml(r.tri.C.state)+' · E '+escapeHtml(r.tri.E.state)+' · N '+escapeHtml(r.tri.N.state)+'</div></div>').join(""); }
+function isoAddDaysV257(iso,days){ const d=makeLocalDateFromIso(iso||todayIsoLocal()) || new Date(); d.setDate(d.getDate()+Number(days||0)); return localIsoFromDate(d); }
+function shortDateV257(iso){ const d=makeLocalDateFromIso(iso); try{return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});}catch(e){return iso;} }
+function futureRadarV257(){ const out=[]; const today=todayIsoLocal(); strategicRowsV257().filter(c=>c.strategic).forEach(c=>{ for(let off=1; off<=7; off++){ const iso=isoAddDaysV257(today,off); const inp=state.inspectInputs[c.symbol] || {}; const tri=calculateTimeStateBadge(c.symbol,c.hasFutures,inp,iso); const n=calculateCoinNumerology(c.symbol,iso); const strongFuture = n.score>=2; if((tri.badge==="GREEN" || tri.badge==="RED") && strongFuture){ out.push({symbol:c.symbol, date:iso, offset:off, tri, n, value:c.value, sector:c.sector}); } } }); out.sort((a,b)=>triBadgeRankV257(b.tri.badge)-triBadgeRankV257(a.tri.badge)||b.n.score-a.n.score||a.offset-b.offset||(b.value||0)-(a.value||0)); return out.slice(0,16); }
+function renderFutureRadarV257(){ const htmlBox=(items)=>{ if(!items.length) return '<div class="empty">No future GREEN/RED convergence in the next 7 days. Blue/Yellow/Orange research windows are intentionally hidden from Compass.</div>'; return items.map(x=>'<div class="radar-card"><div class="radar-head"><div><div class="radar-title">'+escapeHtml(x.symbol)+' · D+'+x.offset+' · '+escapeHtml(shortDateV257(x.date))+'</div><div class="radar-muted">Future N '+x.n.score+'/5 · '+formatUSDC(x.value)+' USDC · '+escapeHtml(x.sector||"Unassigned")+'</div></div><span class="badge b-'+escapeHtml(x.tri.badge)+'">'+escapeHtml(x.tri.badge.replace(/_/g," "))+'</span></div><div class="radar-line">'+escapeHtml(x.tri.reason)+'</div><div class="radar-muted">N: '+escapeHtml((x.n.matches||[]).join(', ')||'no exact match')+' · C '+escapeHtml(x.tri.C.state)+' · E '+escapeHtml(x.tri.E.state)+'</div></div>').join(''); }; const items=futureRadarV257(); const b1=document.getElementById("futureRadarBox"); if(b1) b1.innerHTML=htmlBox(items); const b2=document.getElementById("futureRadarMacroBox"); if(b2) b2.innerHTML=htmlBox(items); }
+function rotationAdviceV257(){ const rows=triRowsCurrentV257().filter(r=>r.coin.strategic); const green=rows.filter(r=>r.tri.badge==="GREEN").sort((a,b)=>(b.value||0)-(a.value||0)); const red=rows.filter(r=>r.tri.badge==="RED").sort((a,b)=>(b.value||0)-(a.value||0)); const orange=rows.filter(r=>r.tri.badge==="ORANGE").sort((a,b)=>(b.value||0)-(a.value||0)); if(red.length) return {mode:"SELL / HARD CAUTION", text:"RED strategic states: "+red.slice(0,6).map(r=>r.symbol).join(', ')+". Review before adding exposure."}; if(orange.length && !green.length) return {mode:"POSSIBLE SELL WATCH", text:"Orange monitor states without green replacement: "+orange.slice(0,6).map(r=>r.symbol).join(', ')+"."}; if(green.length) return {mode:"BUY SETUP WATCH", text:"GREEN strategic setups: "+green.slice(0,5).map(r=>r.symbol).join(', ')+". Verify chart/news/liquidity before action."}; return {mode:"NO ROTATION", text:"No current GREEN or RED strategic state. Maintain observation."}; }
+function renderRotationAdviceV257(){ const box=document.getElementById("rotationAdviceBox"); if(!box) return; const a=rotationAdviceV257(); box.innerHTML='<div class="info"><b>'+escapeHtml(a.mode)+':</b> '+escapeHtml(a.text)+'</div>'; }
+function macroScoreV257(){ const m=state.macro||{}; let score=0, notes=[]; const btc=m.BTC, eth=m.ETH, btcd=m["BTC.D"], othersd=m["OTHERS.D"], usdc=m["USDC.D"], usdt=m["USDT.D"], fng=m.FEEAR_GREED||m.FEAR_GREED, dxy=m.DXY; if(btc&&Number(btc.change24h)>3){score+=0.2;notes.push("BTC constructive");} if(eth&&Number(eth.change24h)>3){score+=0.25;notes.push("ETH constructive");} if(btcd&&Number(btcd.value)>=58){score-=0.4;notes.push("BTC dominance elevated");} if(othersd&&Number(othersd.value)>=32){score+=0.25;notes.push("OTHERS.D constructive");} if(usdc&&usdt&&Number(usdc.value)+Number(usdt.value)>=10.5){score-=0.35;notes.push("stable dominance elevated");} if(fng&&Number(fng.value)>=78){score-=0.55;notes.push("greed trap risk");} if(fng&&Number(fng.value)>=25&&Number(fng.value)<=55){score+=0.25;notes.push("sentiment rebuild zone");} if(dxy&&Number(dxy.change24h)>0.25){score-=0.35;notes.push("DXY pressure");} const stateName=score>=0.7?"supportive":score>=0.2?"mild support":score<=-0.7?"hostile":score<=-0.2?"caution":"neutral"; return {score:Math.round(score*100)/100,state:stateName,notes:notes.join(" · ")||"macro neutral or incomplete"}; }
+async function fetchMacroV257(){ try{ setFetchStatus("Fetching macro board…", ""); const macro=state.macro && typeof state.macro==='object' ? Object.assign({}, state.macro) : {}; const btcPair=await firstWorkingSpotPair("BTC"); const ethPair=await firstWorkingSpotPair("ETH"); const [btc,eth] = await Promise.allSettled([fetchJsonWithTimeout(SPOT_API_BASE+"/api/v3/ticker/24hr?symbol="+btcPair,9000), fetchJsonWithTimeout(SPOT_API_BASE+"/api/v3/ticker/24hr?symbol="+ethPair,9000)]); if(btc.status==='fulfilled'){ macro.BTC={label:"BTC",value:Number(btc.value.lastPrice),change24h:Number(btc.value.priceChangePercent),source:"binance",fetchedAt:nowIso()}; } if(eth.status==='fulfilled'){ macro.ETH={label:"ETH",value:Number(eth.value.lastPrice),change24h:Number(eth.value.priceChangePercent),source:"binance",fetchedAt:nowIso()}; } const [global,fng,dxy] = await Promise.allSettled([fetchJsonWithTimeout("https://api.coingecko.com/api/v3/global",10000), fetchJsonWithTimeout("https://api.alternative.me/fng/?limit=7",10000), fetchJsonWithTimeout("https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?range=5d&interval=1d",10000)]); if(global.status==='fulfilled' && global.value && global.value.data){ const g=global.value.data; const total=g.total_market_cap&&g.total_market_cap.usd; const btcD=g.market_cap_percentage&&g.market_cap_percentage.btc; const ethD=g.market_cap_percentage&&g.market_cap_percentage.eth; const btcMC=total&&btcD?total*btcD/100:null; const ethMC=total&&ethD?total*ethD/100:null; const total3=total&&btcMC&&ethMC?total-btcMC-ethMC:null; const othersD=btcD&&ethD?100-btcD-ethD:null; macro["BTC.D"]={label:"BTC.D",value:btcD,source:"coingecko",fetchedAt:nowIso()}; macro["ETH.D"]={label:"ETH.D",value:ethD,source:"coingecko",fetchedAt:nowIso()}; macro["OTHERS.D"]={label:"OTHERS.D",value:othersD,source:"derived",fetchedAt:nowIso()}; macro.TOTAL3={label:"TOTAL3",value:total3,source:"derived",fetchedAt:nowIso()}; macro.OTHERS={label:"OTHERS",value:total3,source:"derived",fetchedAt:nowIso()}; }
+      if(fng.status==='fulfilled' && fng.value && Array.isArray(fng.value.data) && fng.value.data[0]){ const cur=fng.value.data[0]; macro.FEAR_GREED={label:"FEAR_GREED",value:Number(cur.value),classification:cur.value_classification,source:"alternative.me",fetchedAt:nowIso()}; }
+      if(dxy.status==='fulfilled' && dxy.value?.chart?.result?.[0]){ const closes=(dxy.value.chart.result[0].indicators.quote[0].close||[]).filter(Number.isFinite); if(closes.length){ const last=closes[closes.length-1], prev=closes[closes.length-2]||last; macro.DXY={label:"DXY",value:last,change24h:prev?((last-prev)/prev*100):0,source:"yahoo",fetchedAt:nowIso()}; } }
+      state.macro=macro; state.macroFetchedAt=nowIso(); saveState(); renderAll(); setFetchStatus("Macro board fetched. Some fields may remain blank if public endpoints block CORS/region.", "ok"); return macro; }catch(e){ setFetchStatus("Macro fetch failed: "+e.message, "error"); renderMacroV257(); } }
+function renderMacroV257(){ const grid=document.getElementById("macroGrid"); const m=state.macro||{}; const card=(k)=>{ const row=m[k]; if(!row) return '<div class="macro-card"><div class="macro-title">'+escapeHtml(k)+'</div><div class="macro-value">—</div><div class="macro-meta">not fetched</div></div>'; const val=(k.includes('.D')||k==='FEAR_GREED') ? (isFinite(Number(row.value))?Number(row.value).toFixed(2):'—') : formatUSDC(row.value); const ch=isFinite(Number(row.change24h)) ? ((Number(row.change24h)>=0?'+':'')+Number(row.change24h).toFixed(2)+'%') : (row.classification||''); return '<div class="macro-card"><div class="macro-title">'+escapeHtml(k)+'</div><div class="macro-value">'+escapeHtml(val)+'</div><div class="macro-meta">'+escapeHtml(ch)+'<br/>'+escapeHtml(row.source||'')+' · '+(row.fetchedAt?new Date(row.fetchedAt).toLocaleString():'never')+'</div></div>'; }; if(grid) grid.innerHTML=MACRO_KEYS_V257.map(card).join(''); const s=macroScoreV257(); const summary=document.getElementById("macroSummaryBox"); if(summary) summary.innerHTML='<div class="info"><b>'+escapeHtml(s.state)+' · score '+s.score+'</b><br/>'+escapeHtml(s.notes)+'<br/>Last macro fetch: '+escapeHtml(state.macroFetchedAt?new Date(state.macroFetchedAt).toLocaleString():'not yet')+'</div>'; }
+function renderPortfolioAuditV257(){ const t=portfolioTotalsV257(); const pnlCls=t.pnl>=0?'value-pos':'value-neg'; const set=(id,val,cls)=>{ const e=document.getElementById(id); if(e){ e.textContent=val; if(cls) e.className='summary-value '+cls; }}; set('sumTotalValue', formatUSDC(t.total)+' USDC'); set('sumPnl',(t.pnl>=0?'+':'')+t.pnl.toFixed(1)+'%',pnlCls); set('sumStrategic', String(t.strategicCount)+'/'+t.totalCount); set('sumDust', String(t.dustCount)); set('macroTotalValue', formatUSDC(t.total)); set('macroStrategicValue', formatUSDC(t.strategicValue)); set('macroDustValue', formatUSDC(t.dustValue)); set('macroPnl',(t.pnl>=0?'+':'')+t.pnl.toFixed(1)+'%',pnlCls); const audit=document.getElementById('portfolioValueAudit'); if(audit) audit.innerHTML='<b>All Portfolio Value:</b> '+formatUSDC(t.total)+' USDC · <b>Strategic:</b> '+formatUSDC(t.strategicValue)+' USDC ('+t.strategicCount+' coins) · <b>Dust:</b> '+formatUSDC(t.dustValue)+' USDC ('+t.dustCount+' coins) · <b>Cost basis:</b> '+formatUSDC(t.cost)+' USDC · <b>PnL:</b> '+(t.pnl>=0?'+':'')+t.pnl.toFixed(1)+'%<br/><span style="color:#94a3b8">Dust threshold: '+strategicSettingsV257().dustThreshold+' USDC. Dust is hidden from strategy only, not from total value.</span>'; }
+function saveStrategicSettings(){ strategicSettingsV257(); const d=document.getElementById('setDustThreshold'); const l=document.getElementById('setStrategicFetchLimit'); if(d) state.settings.dustThreshold=clamp(Number(d.value)||10,0,1000000); if(l) state.settings.strategicFetchLimit=clamp(Number(l.value)||18,5,40); saveState(); renderAll(); }
+function loadStrategicSettingsFields(){ const s=strategicSettingsV257(); const d=document.getElementById('setDustThreshold'); const l=document.getElementById('setStrategicFetchLimit'); if(d) d.value=s.dustThreshold; if(l) l.value=s.strategicFetchLimit; }
+async function fetchStrategicMarketData(){ const s=strategicSettingsV257(); const today=todayIsoLocal(); const rows=strategicRowsV257().filter(c=>c.strategic).map(c=>({symbol:c.symbol,n:calculateCoinNumerology(c.symbol,today),value:c.value})).sort((a,b)=>b.n.score-a.n.score||b.value-a.value); const selected=rows.filter(r=>r.n.score>=2).slice(0,s.strategicFetchLimit).map(r=>r.symbol); const fallback=rows.slice(0,Math.min(s.strategicFetchLimit,12)).map(r=>r.symbol); const syms=selected.length?selected:fallback; if(!syms.length){ setFetchStatus("No strategic coins to fetch.", "warn"); return; } await fetchMarketDataForSymbols(syms, "strategic resonance set"); }
+function buildMorningAgentPacketEnhanced(){ const packet=buildMorningAgentPacket(); packet.v142_strategic_import={ doctrine:"portfolio value and dust filter imported from v1.4.2; Compass shows only Green/Red; future radar uses future numerology plus current C/E structure", portfolio:portfolioTotalsV257(), macro:state.macro||{}, macro_score:macroScoreV257(), future_green_red_radar:futureRadarV257().map(x=>({symbol:x.symbol,date:x.date,offset:x.offset,badge:x.tri.badge,reason:x.tri.reason,n_score:x.n.score,value_usdc:x.value})), rotation_advice:rotationAdviceV257() }; return packet; }
+
+// ================ UI RENDERING ================
+function renderCompass(){
+  const move = calculateMovePosture();
+  document.getElementById("heroCommand").textContent = move.posture;
+  document.getElementById("heroStatusWrap").innerHTML = '<div class="hero-status status-'+move.posture+'">'+move.posture+'</div>';
+  document.getElementById("heroReason").innerHTML = "<b>"+move.reason+"</b><br/>"+move.reasons.join(" · ");
+  
+  document.getElementById("stripBazi").textContent = move.bazi.stem+" "+move.bazi.branch;
+  document.getElementById("stripBaziSub").textContent = move.bazi.element+" · "+move.bazi.compatibility;
+  document.getElementById("stripPD").textContent = move.num.personalDay.reduced;
+  document.getElementById("stripPDSub").textContent = "raw "+move.num.personalDay.raw;
+  document.getElementById("stripCycle").textContent = move.bazi.pos+"/60";
+  document.getElementById("stripCycleSub").textContent = "BaZi day cycle";
+  
+  const today = todayIsoLocal();
+  const list = [];
+  Object.values(state.coins).forEach(c => {
+    const numResult = calculateCoinNumerology(c.symbol, today);
+    if(numResult.score >= 2){ list.push({coin: c, num: numResult}); }
+  });
+  list.sort((a,b) => b.num.score - a.num.score);
+  
+  const wrap = document.getElementById("resonanceList");
+  if(list.length === 0){
+    wrap.innerHTML = '<div class="empty">No coins with strong numerology resonance today. Add coins in Watch tab.</div>';
+  } else {
+    wrap.innerHTML = list.slice(0,8).map(x => 
+      '<div style="padding:8px 10px;background:#0a0a14;border-radius:6px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="goInspect(\''+x.coin.symbol+'\')">'+
+        '<div><b style="color:#fde68a">'+escapeHtml(x.coin.symbol)+'</b>'+(x.coin.sector?' <span class="sector-tag">'+escapeHtml(x.coin.sector)+'</span>':'')+'</div>'+
+        '<div style="font-size:10px;color:#cbd5e1">resonance '+x.num.score+'/5 · sum '+x.num.rawSum+' → '+x.num.reduced+'</div>'+
+      '</div>'
+    ).join("");
+  }
+  document.getElementById("setPY").textContent = move.num.personalYear.raw + " / " + move.num.personalYear.reduced;
+}
+
+function renderWatchTable(){
+  const tbody = document.getElementById("watchTableBody");
+  const coins = Object.values(state.coins);
+  if(coins.length === 0){
+    tbody.innerHTML = '<tr><td colspan="11"><div class="empty">No coins added yet.</div></td></tr>';
+    return;
+  }
+  const today = todayIsoLocal();
+  tbody.innerHTML = coins.map(c => {
+    const inp = state.inspectInputs[c.symbol] || {};
+    const tri = calculateTimeStateBadge(c.symbol, c.hasFutures, inp, today);
+    const price = inp.price ? Number(inp.price).toFixed(4) : "—";
+    const valueInfo = coinValueV257(c);
+    const qty = coinQtyV257(c);
+    const avg = coinAvgEntryV259(c);
+    const basis = coinCostBasisV257(c);
+    const lastMove = c.lastPortfolioMove ? (String(c.lastPortfolioMove.side||"")+" "+formatQtyV259(Math.abs(Number(c.lastPortfolioMove.deltaQty||0)))+" @ "+formatUSDC(c.lastPortfolioMove.executionPrice||0)) : (c.entryNote || "");
+    return '<tr>'+
+      '<td><span class="coin-sym" onclick="goInspect(\''+c.symbol+'\')">'+escapeHtml(c.symbol)+'</span>'+(c.coreRating?'<br/><span style="font-size:9px;color:#94a3b8">'+escapeHtml(c.coreRating)+'</span>':'')+'</td>'+
+      '<td><span class="sector-tag">'+escapeHtml(c.sector || "Unassigned")+'</span></td>'+
+      '<td><input class="qty-edit-v259" type="number" step="any" value="'+escapeHtml(formatQtyV259(qty))+'" onchange="updatePortfolioQuantityV259(\''+c.symbol+'\', this.value)" title="Change amount. You will be asked for buy/sell execution price." />'+(lastMove?'<div class="move-note-v259">'+escapeHtml(lastMove)+'</div>':'')+'</td>'+
+      '<td><div class="entry-readout-v259">'+formatUSDC(avg)+'</div><div class="entry-meta-v259">cost basis '+formatUSDC(basis)+' USDC<br/>editable through amount change</div></td>'+
+      '<td>'+price+'</td>'+
+      '<td>'+formatUSDC(valueInfo.value)+'<br/><span class="small-note">'+escapeHtml(valueInfo.source)+'</span></td>'+
+      '<td><span class="module-pill m-'+modClass(tri.C.state)+'">'+tri.C.state.slice(0,4)+'</span></td>'+
+      '<td><span class="module-pill m-'+modClass(tri.E.state)+'">'+tri.E.state.slice(0,4)+'</span></td>'+
+      '<td><span class="module-pill m-'+modClass(tri.N.state)+'">'+tri.N.state.slice(0,4)+'</span></td>'+
+      '<td><span class="badge b-'+tri.badge+'">'+tri.badge.replace(/_/g," ")+(tri.lite?' L':'')+'</span></td>'+
+      '<td><button class="btn" style="padding:5px 9px;font-size:10px" onclick="goInspect(\''+c.symbol+'\')">Inspect</button></td>'+
+    '</tr>';
+  }).join("");
+  
+  refreshInspectDropdown();
+  refreshLedgerCoinFilter();
+}
+
+function modClass(s){
+  if(["STRONG","ACCUMULATION","SHORT_SQUEEZE_POTENTIAL"].includes(s)) return "strong";
+  if(["MODERATE"].includes(s)) return "mod";
+  if(["NEUTRAL"].includes(s)) return "neutral";
+  if(["UNAVAILABLE"].includes(s)) return "unavail";
+  return "weak";
+}
+
+function openAddCoin(){ document.getElementById("addCoinForm").style.display = "block"; }
+function closeAddCoin(){ document.getElementById("addCoinForm").style.display = "none"; }
+
+function saveCoin(){
+  const sym = document.getElementById("newSym").value.trim().toUpperCase();
+  if(!sym){ alert("Symbol required"); return; }
+  const rating = document.getElementById("newRating").value;
+  const sector = document.getElementById("newSector").value;
+  const futures = document.getElementById("newFutures").value === "true";
+  state.coins[sym] = {symbol:sym, coreRating:rating, sector:sector, hasFutures:futures, addedAt:nowIso()};
+  if(!state.inspectInputs[sym]) state.inspectInputs[sym] = {};
+  saveState();
+  document.getElementById("newSym").value = "";
+  document.getElementById("newRating").value = "";
+  document.getElementById("newSector").value = "Unassigned";
+  document.getElementById("newFutures").value = "false";
+  closeAddCoin();
+  renderWatchTable();
+}
+
+function goInspect(sym){
+  const normalized = String(sym || "").toUpperCase().trim();
+  if(!normalized){ return; }
+  if(!state.coins[normalized]){ alert("Coin not found: " + normalized); return; }
+  state.selectedCoin = normalized;
+  refreshInspectDropdown();
+  const sel = document.getElementById("inspectSelect");
+  if(sel) sel.value = normalized;
+  saveState();
+  switchTab("coin", document.querySelector('[data-tab="coin"]'));
+  renderInspect(normalized);
+}
+
+function selectInspectCoin(sym){
+  const normalized = String(sym || "").toUpperCase().trim();
+  state.selectedCoin = normalized;
+  const sel = document.getElementById("inspectSelect");
+  if(sel && sel.value !== normalized) sel.value = normalized;
+  saveState();
+  renderInspect(normalized);
+}
+
+function refreshInspectDropdown(){
+  const sel = document.getElementById("inspectSelect");
+  if(!sel) return;
+  const coins = Object.keys(state.coins).sort();
+  const current = state.selectedCoin || sel.value;
+  sel.innerHTML = '<option value="">— Select —</option>' + coins.map(s => '<option value="'+s+'"'+(s===current?" selected":"")+'>'+s+'</option>').join("");
+}
+
+function fetchMetaSummary(meta){
+  if(!meta) return "—";
+  const bits = [];
+  if(meta.spotPair) bits.push("spot " + meta.spotPair);
+  if(meta.futuresPair) bits.push("futures " + meta.futuresPair);
+  if(Number.isFinite(meta.vol4hRatio)) bits.push("4h vol " + meta.vol4hRatio.toFixed(2) + "× median");
+  if(Number.isFinite(meta.extensionPct)) bits.push("ext " + meta.extensionPct.toFixed(1) + "% vs 30d low");
+  if(Number.isFinite(meta.btcRelative7dPct)) bits.push("BTC-rel 7d " + meta.btcRelative7dPct.toFixed(1) + "%");
+  if(Number.isFinite(meta.openInterestChangePct)) bits.push("OI 1d " + meta.openInterestChangePct.toFixed(1) + "%");
+  if(Number.isFinite(meta.fundingRate)) bits.push("funding " + (meta.fundingRate*100).toFixed(4) + "%");
+  if(meta.fetchedAt) bits.push("at " + new Date(meta.fetchedAt).toLocaleString());
+  if(meta.warnings && meta.warnings.length) bits.push("warnings: " + meta.warnings.slice(0,2).join(" | "));
+  return bits.join(" · ") || "Fetched with no usable market fields.";
+}
+
+function renderInspect(requestedSym){
+  const sel = document.getElementById("inspectSelect");
+  let sym = String(requestedSym || state.selectedCoin || (sel && sel.value) || "").toUpperCase().trim();
+  if(sym && !state.coins[sym]) sym = "";
+  if(sel && sel.value !== sym) sel.value = sym;
+  state.selectedCoin = sym;
+  saveState();
+  const body = document.getElementById("inspectBody");
+  const inputs = document.getElementById("inspectInputs");
+  
+  if(!sym){
+    body.innerHTML = '<div class="empty">Select a coin to inspect.</div>';
+    inputs.style.display = "none";
+    return;
+  }
+  
+  const coin = state.coins[sym];
+  if(!coin){
+    body.innerHTML = '<div class="empty">Coin not found.</div>';
+    inputs.style.display = "none";
+    return;
+  }
+  
+  const inp = state.inspectInputs[sym] || {};
+  const today = todayIsoLocal();
+  const tri = calculateTimeStateBadge(sym, coin.hasFutures, inp, today);
+  const numAuto = calculateCoinNumerology(sym, today);
+  
+  body.innerHTML = 
+    '<div class="detail-row"><span class="detail-key">Symbol</span><span class="detail-val"><b>'+escapeHtml(sym)+'</b> <span class="sector-tag">'+escapeHtml(coin.sector||"")+'</span></span></div>'+
+    '<div class="detail-row"><span class="detail-key">Core Rating</span><span class="detail-val">'+escapeHtml(coin.coreRating||"—")+'</span></div>'+
+    '<div class="detail-row"><span class="detail-key">Mode</span><span class="detail-val">'+(coin.hasFutures?"Full (futures)":"Lite (spot only)")+'</span></div>'+
+    '<div class="detail-row"><span class="detail-key">Amount</span><span class="detail-val"><input class="qty-edit-v259" type="number" step="any" value="'+escapeHtml(formatQtyV259(coinQtyV257(coin)))+'" onchange="updatePortfolioQuantityV259(\''+sym+'\', this.value)" /> <span style="font-size:9px;color:#94a3b8">edit asks buy/sell price</span></span></div>'+
+    '<div class="detail-row"><span class="detail-key">Avg Entry</span><span class="detail-val"><b>'+formatUSDC(coinAvgEntryV259(coin))+' USDC</b> · cost basis '+formatUSDC(coinCostBasisV257(coin))+' USDC</span></div>'+
+    '<div class="detail-row"><span class="detail-key">Time-State</span><span class="detail-val"><span class="badge b-'+tri.badge+'">'+tri.badge.replace(/_/g," ")+(tri.lite?' LITE':'')+'</span> — '+escapeHtml(tri.reason)+'</span></div>'+
+    '<div class="detail-row"><span class="detail-key">Module C</span><span class="detail-val"><span class="module-pill m-'+modClass(tri.C.state)+'">'+tri.C.state+'</span> — '+escapeHtml(tri.C.reasons.join("; "))+'</span></div>'+
+    '<div class="detail-row"><span class="detail-key">Module E</span><span class="detail-val"><span class="module-pill m-'+modClass(tri.E.state)+'">'+tri.E.state+'</span> — '+escapeHtml(tri.E.reasons.join("; "))+'</span></div>'+
+    '<div class="detail-row"><span class="detail-key">Module N</span><span class="detail-val"><span class="module-pill m-'+modClass(tri.N.state)+'">'+tri.N.state+'</span> — '+escapeHtml(tri.N.reasons.join("; "))+'</span></div>'+
+    '<div class="detail-row"><span class="detail-key">Auto Numerology</span><span class="detail-val">sum '+numAuto.rawSum+' → '+numAuto.reduced+' · score '+numAuto.score+'/5</span></div>'+
+    '<div style="margin-top:9px"><button class="btn btn-red" onclick="deleteCoin(\''+sym+'\')">Delete coin</button></div>';
+  
+  inputs.style.display = "block";
+  document.getElementById("inpVol4h").value = inp.vol4h || 0;
+  document.getElementById("inpWhale").value = inp.whale || 0;
+  document.getElementById("inpBtcPair").value = inp.btcPair || 0;
+  document.getElementById("inpExt").value = inp.ext || 0;
+  document.getElementById("inpOI").value = inp.oi || 0;
+  document.getElementById("inpFunding").value = inp.funding || 0;
+  document.getElementById("inpManualN").value = inp.manualN || 0;
+  document.getElementById("inpPrice").value = inp.price || "";
+  document.getElementById("inpThesis").value = inp.thesis || "";
+  
+  document.getElementById("futuresInputs").style.display = coin.hasFutures ? "grid" : "none";
+}
+
+function saveInspectInputs(){
+  const sym = state.selectedCoin;
+  if(!sym) return;
+  state.inspectInputs[sym] = {
+    vol4h: Number(document.getElementById("inpVol4h").value),
+    whale: Number(document.getElementById("inpWhale").value),
+    btcPair: Number(document.getElementById("inpBtcPair").value),
+    ext: Number(document.getElementById("inpExt").value),
+    oi: Number(document.getElementById("inpOI").value),
+    funding: Number(document.getElementById("inpFunding").value),
+    manualN: Number(document.getElementById("inpManualN").value),
+    price: document.getElementById("inpPrice").value,
+    thesis: document.getElementById("inpThesis").value,
+    updatedAt: nowIso()
+  };
+  saveState();
+  renderInspect();
+}
+
+function deleteCoin(sym){
+  if(!confirm("Delete coin "+sym+"? Ledger entries are kept.")) return;
+  delete state.coins[sym];
+  delete state.inspectInputs[sym];
+  if(state.selectedCoin === sym) state.selectedCoin = null;
+  const sel = document.getElementById("inspectSelect");
+  if(sel) sel.value = "";
+  const body = document.getElementById("inspectBody");
+  const inputs = document.getElementById("inspectInputs");
+  if(body) body.innerHTML = '<div class="empty">Select a coin to inspect.</div>';
+  if(inputs) inputs.style.display = "none";
+  saveState();
+  renderWatchTable();
+  renderInspect();
+}
+
+function freezeSignal(){
+  const sym = state.selectedCoin;
+  if(!sym){ alert("Select a coin"); return; }
+  const coin = state.coins[sym];
+  const inp = state.inspectInputs[sym] || {};
+  const today = todayIsoLocal();
+  const tri = calculateTimeStateBadge(sym, coin.hasFutures, inp, today);
+  const move = calculateMovePosture();
+  
+  const entry = {
+    id: uid(),
+    frozenAt: nowIso(),
+    mode: state.defaultMode || "backtest",
+    symbol: sym,
+    coreRating: coin.coreRating,
+    sector: coin.sector,
+    price: inp.price ? Number(inp.price) : null,
+    thesis: inp.thesis || "",
+    badge: tri.badge,
+    lite: !!tri.lite,
+    badgeReason: tri.reason,
+    C: tri.C.state,
+    E: tri.E.state,
+    N: tri.N.state,
+    cycleLate: tri.cycleLate,
+    movePosture: move.posture,
+    moveScore: move.score,
+    bazi: move.bazi.stem+" "+move.bazi.branch,
+    personalDay: move.num.personalDay.reduced,
+    inputs: Object.assign({}, inp),
+    outcome: "PENDING",
+    hitMissLabel: null,
+    closedAt: null
+  };
+  state.ledger.unshift(entry);
+  saveState();
+  alert("Frozen as "+entry.mode.toUpperCase()+" signal.");
+  renderLedger();
+}
+
+function refreshLedgerCoinFilter(){
+  const sel = document.getElementById("filterCoin");
+  if(!sel) return;
+  const current = sel.value;
+  const coins = [...new Set(state.ledger.map(e => e.symbol))].sort();
+  sel.innerHTML = '<option value="">All</option>' + coins.map(s => '<option value="'+s+'"'+(s===current?" selected":"")+'>'+s+'</option>').join("");
+}
+
+function renderLedger(){
+  const wrap = document.getElementById("ledgerList");
+  if(!wrap) return;
+  const filterMode = document.getElementById("filterMode")?.value || "";
+  const filterCoin = document.getElementById("filterCoin")?.value || "";
+  
+  let entries = state.ledger.slice();
+  if(filterMode) entries = entries.filter(e => e.mode === filterMode);
+  if(filterCoin) entries = entries.filter(e => e.symbol === filterCoin);
+  
+  if(entries.length === 0){
+    wrap.innerHTML = '<div class="empty">No frozen signals yet.</div>';
+    return;
+  }
+  
+  wrap.innerHTML = entries.map(e => {
+    const date = new Date(e.frozenAt).toLocaleString("en-GB", {day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+    const outcomePill = e.outcome === "PENDING" ? '<span style="color:#fcd34d">⏳ PENDING</span>' : 
+      e.hitMissLabel === "hit" ? '<span style="color:#86efac">✓ HIT</span>' :
+      e.hitMissLabel === "miss" ? '<span style="color:#fca5a5">✗ MISS</span>' :
+      e.hitMissLabel === "fakeout" ? '<span style="color:#fdba74">↩ FAKEOUT</span>' :
+      e.hitMissLabel === "late" ? '<span style="color:#fdba74">⏱ LATE</span>' :
+      e.hitMissLabel === "early" ? '<span style="color:#93c5fd">⏰ EARLY</span>' :
+      '<span style="color:#cbd5e1">— '+escapeHtml(e.outcome)+'</span>';
+    
+    return '<div style="background:#0a0a14;border:1px solid #252542;border-radius:7px;padding:11px;margin-bottom:7px">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:5px">'+
+        '<div><b style="color:#fde68a">'+escapeHtml(e.symbol)+'</b> · <span class="badge b-'+e.badge+'">'+e.badge.replace(/_/g," ")+'</span> <span style="font-size:8.5px;padding:2px 6px;background:rgba(139,92,246,.18);color:#c4b5fd;border-radius:6px">'+e.mode.toUpperCase()+'</span></div>'+
+        '<div style="font-size:10px;color:#94a3b8">'+date+'</div>'+
+      '</div>'+
+      '<div style="font-size:10.5px;color:#cbd5e1;line-height:1.5">'+
+        'C:'+escapeHtml(e.C)+' · E:'+escapeHtml(e.E)+' · N:'+escapeHtml(e.N)+' · '+escapeHtml(e.bazi)+' · PD '+e.personalDay+' · Move: '+escapeHtml(e.movePosture)+
+      '</div>'+
+      (e.thesis ? '<div style="font-size:10.5px;color:#cbd5e1;margin-top:5px;font-style:italic">"'+escapeHtml(e.thesis)+'"</div>' : '')+
+      '<div style="margin-top:7px;display:flex;justify-content:space-between;align-items:center">'+
+        '<div>'+outcomePill+'</div>'+
+        '<div style="display:flex;gap:5px"><button class="btn" style="padding:5px 9px;font-size:10px" onclick="updateLedgerOutcome(\''+e.id+'\')">Update Outcome</button>'+
+        '<button class="btn btn-red" style="padding:5px 9px;font-size:10px" onclick="deleteLedgerEntry(\''+e.id+'\')">Del</button></div>'+
+      '</div>'+
+    '</div>';
+  }).join("");
+}
+
+function updateLedgerOutcome(id){
+  const entry = state.ledger.find(e => e.id === id);
+  if(!entry) return;
+  const label = prompt('Outcome (hit / miss / fakeout / late / early):', entry.hitMissLabel || "");
+  if(!label) return;
+  const valid = ["hit","miss","fakeout","late","early"];
+  if(!valid.includes(label.toLowerCase())){ alert("Must be valid label."); return; }
+  entry.hitMissLabel = label.toLowerCase();
+  entry.outcome = "CLOSED";
+  entry.closedAt = nowIso();
+  saveState();
+  renderLedger();
+}
+
+function deleteLedgerEntry(id){
+  if(!confirm("Delete this ledger entry permanently?")) return;
+  state.ledger = state.ledger.filter(e => e.id !== id);
+  saveState();
+  renderLedger();
+}
+
+function exportLedger(){
+  const payload = { appName: "Investment Cockpit Ledger", appVersion: APP_VERSION, exportedAt: nowIso(), entryCount: state.ledger.length, entries: state.ledger };
+  downloadJson("cockpit_ledger_"+nowIso().slice(0,10)+".json", payload);
+}
+
+function switchTab(name, btn){
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  const sec = document.getElementById("sec-"+name);
+  if(sec) sec.classList.add("active");
+  if(name === "compass") renderCompass();
+  if(name === "watch") renderWatchTable();
+  if(name === "coin") renderInspect();
+  if(name === "ledger") renderLedger();
+  if(name === "settings") refreshStorage();
+}
+
+function saveDefaultMode(){
+  state.defaultMode = document.getElementById("defaultMode").value;
+  saveState();
+}
+
+function downloadJson(filename, payload){
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+
+function buildCoinPacketRow(c){
+  const inp = state.inspectInputs[c.symbol] || {};
+  const today = todayIsoLocal();
+  const tri = calculateTimeStateBadge(c.symbol, c.hasFutures, inp, today);
+  const num = calculateCoinNumerology(c.symbol, today);
+  return {
+    symbol: c.symbol,
+    sector: c.sector || "Unassigned",
+    core_rating: c.coreRating || "",
+    has_futures: !!c.hasFutures,
+    seed: {
+      qty: c.seedQty ?? null,
+      avg_entry: c.seedAvgEntry ?? null,
+      cost_basis: c.seedCostBasis ?? null
+    },
+    manual_inputs: {
+      price_usdc: inp.price ? Number(inp.price) : null,
+      volume_4h_vs_7d: Number(inp.vol4h || 0),
+      whale_activity: Number(inp.whale || 0),
+      btc_pair_strength_7d: Number(inp.btcPair || 0),
+      extension_vs_30d_low: Number(inp.ext || 0),
+      open_interest_24h: Number(inp.oi || 0),
+      funding_rate: Number(inp.funding || 0),
+      manual_numerology_override: Number(inp.manualN || 0),
+      thesis: inp.thesis || "",
+      updated_at: inp.updatedAt || null
+    },
+    triangulation: {
+      badge: tri.badge,
+      action_color_meaning: actionColorMeaning(tri.badge),
+      reason: tri.reason,
+      lite_mode: !!tri.lite,
+      cycle_late: !!tri.cycleLate,
+      C: { state: tri.C.state, score: tri.C.score, reasons: tri.C.reasons || [] },
+      E: { state: tri.E.state, score: tri.E.score, reasons: tri.E.reasons || [] },
+      N: { state: tri.N.state, score: tri.N.score, reasons: tri.N.reasons || [], auto_sum: tri.N.autoSum, auto_reduced: tri.N.autoReduced }
+    },
+    numerology: {
+      raw_sum: num.rawSum,
+      reduced: num.reduced,
+      score: num.score,
+      matches: num.matches || []
+    }
+  };
+}
+
+function actionColorMeaning(badge){
+  if(badge === "GREEN") return "buy setup";
+  if(badge === "BLUE") return "watch";
+  if(badge === "YELLOW_EARLY" || badge === "YELLOW_LATE") return "possible next buy";
+  if(badge === "ORANGE") return "possible sell / monitor";
+  if(badge === "RED") return "sell / hard caution";
+  return "stale / insufficient data";
+}
+
+function buildMorningAgentPacket(){
+  const today = todayIsoLocal();
+  const move = calculateMovePosture(today);
+  const coins = Object.values(state.coins).sort((a,b) => String(a.symbol).localeCompare(String(b.symbol))).map(buildCoinPacketRow);
+  const counts = coins.reduce((acc,row) => {
+    const b = row.triangulation.badge || "STALE";
+    acc[b] = (acc[b] || 0) + 1;
+    return acc;
+  }, {});
+  const sectors = coins.reduce((acc,row) => {
+    const s = row.sector || "Unassigned";
+    if(!acc[s]) acc[s] = {count:0, green:0, blue:0, yellow:0, orange:0, red:0, stale:0};
+    acc[s].count++;
+    const b = row.triangulation.badge;
+    if(b === "GREEN") acc[s].green++;
+    else if(b === "BLUE") acc[s].blue++;
+    else if(b === "YELLOW_EARLY" || b === "YELLOW_LATE") acc[s].yellow++;
+    else if(b === "ORANGE") acc[s].orange++;
+    else if(b === "RED") acc[s].red++;
+    else acc[s].stale++;
+    return acc;
+  }, {});
+  const strongest_n = coins.slice().sort((a,b) => (b.numerology.score || 0) - (a.numerology.score || 0)).slice(0,12);
+  const action_rows = coins.filter(r => ["GREEN","BLUE","YELLOW_EARLY","YELLOW_LATE","ORANGE","RED"].includes(r.triangulation.badge));
+  const pending_ledger = (state.ledger || []).filter(e => e.outcome === "PENDING").slice(0,20);
+  return {
+    packet_type: "investment_cockpit_state_export",
+    schema_version: "1.0",
+    source: "Flamewalker Investment Cockpit",
+    app_version: APP_VERSION,
+    exported_at: nowIso(),
+    date_local: today,
+    currency: "USDC",
+    doctrine: {
+      color_grammar: {
+        GREEN: "buy setup",
+        BLUE: "watch",
+        YELLOW: "possible next buy",
+        ORANGE: "possible sell / monitor",
+        RED: "sell / hard caution",
+        STALE: "insufficient data"
+      },
+      execution_note: "Manual triangulation only. No automatic execution. Morning Agent may recommend review actions, not trades."
+    },
+    daily_field: {
+      bazi_day: move.bazi,
+      numerology: move.num,
+      move_posture: {
+        posture: move.posture,
+        reason: move.reason,
+        score: move.score,
+        reasons: move.reasons
+      }
+    },
+    summary: {
+      coin_count: coins.length,
+      seeded_from_v142_count: state.seededFromV142Count || SEED_COIN_LIST_V142.length,
+      ledger_entries: (state.ledger || []).length,
+      pending_ledger_entries: pending_ledger.length,
+      triangulation_counts: counts,
+      sector_rotation: sectors,
+      strongest_numerology: strongest_n.map(r => ({symbol:r.symbol, sector:r.sector, score:r.numerology.score, raw_sum:r.numerology.raw_sum, reduced:r.numerology.reduced, matches:r.numerology.matches, badge:r.triangulation.badge}))
+    },
+    triangulation_rows: coins,
+    action_rows: action_rows.map(r => ({symbol:r.symbol, sector:r.sector, badge:r.triangulation.badge, meaning:r.triangulation.action_color_meaning, reason:r.triangulation.reason, C:r.triangulation.C.state, E:r.triangulation.E.state, N:r.triangulation.N.state, price_usdc:r.manual_inputs.price_usdc, thesis:r.manual_inputs.thesis})),
+    ledger_summary: {
+      pending: pending_ledger,
+      last_10: (state.ledger || []).slice(0,10)
+    }
+  };
+}
+
+function exportMorningAgentPacket(){
+  const packet = buildMorningAgentPacketEnhanced();
+  state.lastMorningAgentExportAt = packet.exported_at;
+  saveState();
+  downloadJson("investment_cockpit_morning_agent_"+todayIsoLocal()+".json", packet);
+}
+
+function copyMorningAgentPacket(){
+  const packet = buildMorningAgentPacketEnhanced();
+  const text = JSON.stringify(packet, null, 2);
+  state.lastMorningAgentExportAt = packet.exported_at;
+  saveState();
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(() => alert("Morning Agent JSON copied."), () => prompt("Copy manually:", text));
+  } else {
+    prompt("Copy manually:", text);
+  }
+}
+
+function safeDeepMerge(target, source){
+  // Object merge is recursive. Arrays are merged only for known append-only ledger/history fields.
+  // Other arrays are replaced intentionally and a console warning is emitted.
+  if(!source || typeof source !== "object" || Array.isArray(source)) return target;
+  Object.keys(source).forEach(k => {
+    const sv = source[k];
+    if(Array.isArray(sv)){
+      if((k === "ledger" || k === "patchHistory") && Array.isArray(target[k])){
+        target[k] = target[k].concat(sv);
+      } else {
+        console.warn("safeDeepMerge replacing array field:", k);
+        target[k] = sv.slice();
+      }
+    } else if(sv && typeof sv === "object"){
+      if(!target[k] || typeof target[k] !== "object" || Array.isArray(target[k])) target[k] = {};
+      safeDeepMerge(target[k], sv);
+    } else {
+      target[k] = sv;
+    }
+  });
+  return target;
+}
+
+function normalizePatchCoin(c){
+  const sym = String(c.symbol || "").trim().toUpperCase();
+  if(!sym) return null;
+  return {
+    symbol: sym,
+    coreRating: c.coreRating || c.core_rating || "",
+    sector: c.sector || "Unassigned",
+    hasFutures: c.hasFutures === true || c.has_futures === true || String(c.hasFutures || c.has_futures).toLowerCase() === "true",
+    addedAt: c.addedAt || "patch-console",
+    seedQty: c.seedQty ?? c.seed_qty ?? null,
+    seedAvgEntry: c.seedAvgEntry ?? c.seed_avg_entry ?? null,
+    seedCostBasis: c.seedCostBasis ?? c.seed_cost_basis ?? null
+  };
+}
+
+function summarizePatch(patch){
+  const lines = [];
+  if(patch.label) lines.push("Label: " + patch.label);
+  if(patch.merge) lines.push("Merge keys: " + Object.keys(patch.merge).join(", "));
+  if(Array.isArray(patch.addCoins)) lines.push("Add coins: " + patch.addCoins.map(c => String(c.symbol||"").toUpperCase()).join(", "));
+  if(patch.coins && typeof patch.coins === "object") lines.push("Coin map updates: " + Object.keys(patch.coins).join(", "));
+  if(patch.inspectInputs && typeof patch.inspectInputs === "object") lines.push("Inspect input updates: " + Object.keys(patch.inspectInputs).join(", "));
+  if(Array.isArray(patch.appendLedger)) lines.push("Append ledger entries: " + patch.appendLedger.length);
+  if(patch.defaultMode) lines.push("Default mode: " + patch.defaultMode);
+  if(!lines.length) lines.push("No recognized operations found.");
+  return lines.join("\n");
+}
+
+function readPatchJSON(){
+  const raw = document.getElementById("patchInput").value.trim();
+  if(!raw) throw new Error("Patch box is empty.");
+  return JSON.parse(raw);
+}
+
+function previewPatchConsole(){
+  const out = document.getElementById("patchConsoleOutput");
+  try{
+    const patch = readPatchJSON();
+    out.textContent = "Preview OK\n" + summarizePatch(patch);
+  }catch(err){
+    out.textContent = "Preview failed: " + err.message + "\nStrict JSON only: double quotes, no trailing commas, no smart quotes.";
+  }
+}
+
+function applyPatchOperations(target, patch){
+  if(patch.merge && typeof patch.merge === "object") safeDeepMerge(target, patch.merge);
+  if(patch.defaultMode) target.defaultMode = String(patch.defaultMode);
+  if(patch.coins && typeof patch.coins === "object"){
+    Object.keys(patch.coins).forEach(sym => {
+      const coin = normalizePatchCoin(Object.assign({symbol:sym}, patch.coins[sym]));
+      if(coin) target.coins[coin.symbol] = Object.assign({}, target.coins[coin.symbol] || {}, coin);
+    });
+  }
+  if(Array.isArray(patch.addCoins)){
+    patch.addCoins.forEach(c => {
+      const coin = normalizePatchCoin(c);
+      if(coin){
+        target.coins[coin.symbol] = Object.assign({}, target.coins[coin.symbol] || {}, coin);
+        if(!target.inspectInputs[coin.symbol]) target.inspectInputs[coin.symbol] = {};
+      }
+    });
+  }
+  if(patch.inspectInputs && typeof patch.inspectInputs === "object"){
+    Object.keys(patch.inspectInputs).forEach(sym => {
+      const s = String(sym).toUpperCase();
+      target.inspectInputs[s] = Object.assign({}, target.inspectInputs[s] || {}, patch.inspectInputs[s], {updatedAt: nowIso()});
+    });
+  }
+  if(Array.isArray(patch.appendLedger)){
+    patch.appendLedger.forEach(e => target.ledger.unshift(Object.assign({id:uid(), frozenAt:nowIso(), outcome:"PENDING"}, e)));
+  }
+  return ensureV142Coins(target);
+}
+
+function applyPatchConsole(){
+  const out = document.getElementById("patchConsoleOutput");
+  try{
+    const patch = readPatchJSON();
+    const before = JSON.parse(JSON.stringify(state));
+    const next = applyPatchOperations(JSON.parse(JSON.stringify(state)), patch);
+    next.patchHistory = Array.isArray(next.patchHistory) ? next.patchHistory : [];
+    next.patchHistory.unshift({label: patch.label || "Manual patch", appliedAt: nowIso(), rollbackState: before});
+    next.patchHistory = next.patchHistory.slice(0,3);
+    state = next;
+    saveState();
+    renderAll();
+    out.textContent = "Patch applied.\n" + summarizePatch(patch);
+  }catch(err){
+    out.textContent = "Patch failed: " + err.message;
+  }
+}
+
+function rollbackLastPatch(){
+  const out = document.getElementById("patchConsoleOutput");
+  try{
+    const hist = Array.isArray(state.patchHistory) ? state.patchHistory : [];
+    if(!hist.length) throw new Error("No rollback copy available.");
+    const last = hist[0];
+    state = ensureV142Coins(last.rollbackState || defaultState());
+    state.patchHistory = hist.slice(1);
+    saveState();
+    renderAll();
+    out.textContent = "Rolled back patch: " + (last.label || "manual patch");
+  }catch(err){
+    out.textContent = "Rollback failed: " + err.message;
+  }
+}
+
+function loadPatchTemplate(){
+  const tpl = {
+    label: "Morning Agent suggested update",
+    addCoins: [
+      {symbol:"TAO", sector:"AI", hasFutures:true, coreRating:""}
+    ],
+    inspectInputs: {
+      CRV: {manualN:4, vol4h:3, whale:3, btcPair:3, ext:2, thesis:"Example only. Replace with real observation."}
+    },
+    merge: {
+      defaultMode: "backtest"
+    }
+  };
+  document.getElementById("patchInput").value = JSON.stringify(tpl, null, 2);
+  document.getElementById("patchConsoleOutput").textContent = "Template loaded. Edit before applying.";
+}
+
+function exportAll(){
+  const payload = { appName: "Flamewalker Investment Cockpit", appVersion: APP_VERSION, exportedAt: nowIso(), state: state };
+  downloadJson("cockpit_state_"+nowIso().replace(/[:.]/g,"-").slice(0,19)+".json", payload);
+}
+
+function importAll(ev){
+  const file = ev.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try{
+      const parsed = JSON.parse(e.target.result);
+      if(!parsed.state || !parsed.appName) return alert("Invalid file");
+      if(!confirm("Replace current state with imported data?")) return;
+      state = ensureV142Coins(Object.assign(defaultState(), parsed.state));
+      saveState();
+      renderAll();
+      alert("Imported successfully.");
+    }catch(err){ alert("Import failed: "+err.message); }
+  };
+  reader.readAsText(file);
+  ev.target.value = "";
+}
+
+function clearAllConfirm(){
+  if(!confirm("Clear ALL state?")) return;
+  if(prompt('Type CLEAR to confirm:') !== "CLEAR"){ alert("Cancelled"); return; }
+  state = ensureV142Coins(defaultState());
+  saveState();
+  renderAll();
+}
+
+function refreshStorage(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY) || "";
+    const bytes = new Blob([raw]).size;
+    const mb = (bytes/(1024*1024)).toFixed(2);
+    const el = document.getElementById("storageInfo");
+    if(el){
+      el.innerHTML = "Storage key: <b>"+STORAGE_KEY+"</b><br/>"+
+        "Size: "+bytes.toLocaleString()+" bytes ("+mb+" MB)<br/>"+
+        "Coins: <b>"+Object.keys(state.coins).length+"</b> / seeded from v1.4.2: <b>"+(state.seededFromV142Count||SEED_COIN_LIST_V142.length)+"</b><br/>"+
+        "Ledger entries: <b>"+state.ledger.length+"</b><br/>"+
+        "Portfolio moves: <b>"+((state.portfolioMoves||[]).length)+"</b><br/>"+
+        "Patch rollback copies: <b>"+((state.patchHistory||[]).length)+"</b><br/>"+
+        "Morning Agent export: <b>"+(state.lastMorningAgentExportAt ? new Date(state.lastMorningAgentExportAt).toLocaleString() : "not yet")+"</b><br/>"+
+        "Default mode: <b>"+state.defaultMode+"</b><br/>"+
+        "<span style=\"color:#94a3b8\">Seed quantity / entry / cost basis exists only for original v1.4.2 seed coins. Newly added coins may not carry seed fields.</span>";
+    }
+  }catch(e){}
+}
+
+function renderAll(){
+  renderCompass();
+  renderPortfolioAuditV257();
+  renderCompassGreenRedV257();
+  renderFutureRadarV257();
+  renderRotationAdviceV257();
+  renderMacroV257();
+  renderWatchTable();
+  refreshInspectDropdown();
+  renderInspect();
+  renderLedger();
+  refreshStorage();
+  loadStrategicSettingsFields();
+  document.getElementById("defaultMode").value = state.defaultMode || "backtest";
+}
+
+(function init(){
+  if(state.selectedCoin){
+    setTimeout(() => { const sel = document.getElementById("inspectSelect"); if(sel) sel.value = state.selectedCoin; }, 0);
+  }
+  renderAll();
+})();
+</script>
+</body>
+</html>
