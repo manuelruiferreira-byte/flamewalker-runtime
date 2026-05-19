@@ -4,7 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
 <meta name="theme-color" content="#020818" />
-<title>Jester Engine · Master Shell v1.1</title>
+<title>Jester Engine · Master Shell v1.2</title>
+<link rel="preload" as="image" href="../shared/assets/logos/jester-intelligence.png" />
+<link rel="preload" as="image" href="./shared/assets/logos/aced.png" />
 <style>
 :root{
   --bg:#050611;--bg2:#020818;--navy:#040e24;--panel:#0b1020;--panel2:#10162a;
@@ -25,7 +27,7 @@ body{
 body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.01) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(circle at 50% 20%,black 0%,transparent 84%)}
 button,textarea,input,select{font-family:inherit}button{cursor:pointer}.hidden{display:none!important}.app{max-width:820px;margin:0 auto}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.small{font-size:10px;color:var(--muted);line-height:1.52}.code{color:#a5f3fc;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .boot{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 50% 18%,rgba(0,198,198,.14),transparent 28%),radial-gradient(circle at 64% 54%,rgba(214,168,79,.1),transparent 28%),#020818;transition:opacity .9s ease,transform .9s ease}.boot.out{opacity:0;pointer-events:none;transform:scale(1.018)}
-.boot-card{width:min(86vw,430px);min-height:min(82vh,570px);border-radius:32px;border:1px solid rgba(214,168,79,.46);background:radial-gradient(circle at 50% 18%,rgba(34,211,238,.13),transparent 34%),linear-gradient(155deg,rgba(5,12,30,.98),rgba(3,5,13,.99));box-shadow:var(--shadow),inset 0 0 70px rgba(214,168,79,.06);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:26px}
+.boot-card{width:min(86vw,430px);min-height:min(82vh,570px);border-radius:32px;border:1px solid rgba(214,168,79,.46);background:radial-gradient(circle at 50% 18%,rgba(34,211,238,.13),transparent 34%),linear-gradient(155deg,rgba(5,12,30,.98),rgba(3,5,13,.99));box-shadow:var(--shadow),inset 0 0 70px rgba(214,168,79,.06);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:26px}.boot-card.boot-loading{opacity:0;transform:scale(.985)}.boot-card.boot-ready{opacity:1;transform:scale(1);transition:opacity .42s ease,transform .42s ease}.boot-card.stage-fade{opacity:.72;transform:scale(.992);transition:opacity .18s ease,transform .18s ease}
 .boot-card:before{content:"";position:absolute;inset:18px;border-radius:24px;border:1px solid rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(214,168,79,.09);pointer-events:none}.boot-card:after{content:"♠";position:absolute;right:22px;top:10px;font-size:108px;color:rgba(253,230,138,.055);text-shadow:0 0 34px rgba(214,168,79,.18)}
 .boot-logo{width:min(68vw,292px);height:auto;display:block;object-fit:contain;border-radius:22px;filter:drop-shadow(0 0 18px rgba(0,198,198,.24)) drop-shadow(0 0 28px rgba(214,168,79,.18));animation:logoFloat 5s ease-in-out infinite}.boot-logo.missing{display:none}.boot-title{margin-top:14px;color:var(--gold2);font-size:15px;letter-spacing:3px;text-transform:uppercase}.boot-sub{margin-top:7px;color:#a5f3fc;font-size:9px;letter-spacing:2.2px;text-transform:uppercase}.boot-line{width:58%;height:1px;margin-top:18px;background:linear-gradient(90deg,transparent,rgba(253,230,138,.8),transparent);opacity:.75}.boot-enter{margin-top:18px;border:1px solid rgba(214,168,79,.48);background:linear-gradient(145deg,rgba(214,168,79,.12),rgba(34,211,238,.06));color:var(--gold2);border-radius:999px;padding:10px 22px;font-size:11px;letter-spacing:3.5px;text-transform:uppercase;box-shadow:0 0 22px rgba(214,168,79,.12);animation:blink 1.55s ease-in-out infinite}.boot-enter:active{transform:scale(.97)}.boot-placeholder{width:min(62vw,260px);aspect-ratio:1/1;border-radius:26px;border:1px solid rgba(214,168,79,.35);background:radial-gradient(circle at 50% 28%,rgba(34,211,238,.10),transparent 36%),linear-gradient(145deg,rgba(4,14,36,.7),rgba(2,8,24,.95));box-shadow:inset 0 0 50px rgba(214,168,79,.035),0 0 30px rgba(34,211,238,.05);display:flex;align-items:center;justify-content:center}.boot-placeholder svg{width:92px;height:92px;opacity:.75;filter:drop-shadow(0 0 14px rgba(214,168,79,.18))}
 @keyframes blink{0%,100%{opacity:.42;box-shadow:0 0 12px rgba(214,168,79,.08)}50%{opacity:1;box-shadow:0 0 30px rgba(214,168,79,.28)}}@keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
@@ -40,7 +42,7 @@ button,textarea,input,select{font-family:inherit}button{cursor:pointer}.hidden{d
 </head>
 <body>
 <div id="boot" class="boot" aria-label="Jester Engine boot screen">
-  <div class="boot-card" id="bootCard">
+  <div class="boot-card boot-loading" id="bootCard">
     <div id="bootVisual"></div>
     <div class="boot-title" id="bootTitle">Jester Intelligence</div>
     <div class="boot-sub" id="bootSub">Powered by Jester Engine</div>
@@ -163,15 +165,15 @@ button,textarea,input,select{font-family:inherit}button{cursor:pointer}.hidden{d
 <div id="toast" class="toast"></div>
 
 <script>
-const SHELL_VERSION = '1.1.0';
-const STORAGE_KEY = 'jester_engine_master_shell_v1_1_state';
+const SHELL_VERSION = '1.2.0';
+const STORAGE_KEY = 'jester_engine_master_shell_v1_2_state';
 const DEFAULT_CONFIG = {
   appId:'jester-engine-master-shell',
   appName:'',
   suiteName:'ACED',
   brandName:'Jester Intelligence',
   engineName:'Jester Engine',
-  statusSeal:'Jester Engine v1.1',
+  statusSeal:'Jester Engine v1.2',
   brandLogoPath:'../shared/assets/logos/jester-intelligence.png',
   suiteLogoPath:'./shared/assets/logos/aced.png',
   appLogoPath:'',
@@ -231,9 +233,32 @@ function logoImg(path, alt, cls){
 function jesterSigilSVG(){return `<svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="jg" x1="0" x2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset=".5" stop-color="#fde68a"/><stop offset="1" stop-color="#ef4444"/></linearGradient></defs><path d="M60 10 L75 42 C90 27 107 36 98 58 C92 74 75 76 66 64 L60 110 L54 64 C45 76 28 74 22 58 C13 36 30 27 45 42 Z" fill="rgba(2,8,24,.72)" stroke="url(#jg)" stroke-width="4"/><path d="M60 22 L67 45 L60 54 L53 45 Z" fill="none" stroke="#fde68a" stroke-width="3"/><circle cx="28" cy="55" r="4" fill="#22d3ee"/><circle cx="92" cy="55" r="4" fill="#ef4444"/><circle cx="60" cy="95" r="4" fill="#fde68a"/></svg>`}
 function homeSVG(){return `<svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"></path><path d="M5.5 10.5V20h13v-9.5"></path><path d="M9.5 20v-6h5v6"></path></svg>`}
 
-function startBoot(){
+function delay(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
+function preloadImage(path, timeout=5200){
+  if(!path) return Promise.resolve(false);
+  return new Promise(resolve=>{
+    const img=new Image();
+    let done=false;
+    const finish=(ok)=>{if(done) return; done=true; resolve(ok)};
+    img.onload=()=>{
+      if(img.decode) img.decode().then(()=>finish(true)).catch(()=>finish(true));
+      else finish(true);
+    };
+    img.onerror=()=>finish(false);
+    setTimeout(()=>finish(false), timeout);
+    img.src=path;
+  });
+}
+async function startBoot(){
+  const bootCard=document.getElementById('bootCard');
+  document.getElementById('enterBtn').classList.add('hidden');
+  await preloadImage(config.brandLogoPath);
   renderBootBrand();
+  bootCard.classList.remove('boot-loading');
+  bootCard.classList.add('boot-ready');
   document.getElementById('enterBtn').addEventListener('click', beginBootSequence);
+  preloadImage(config.suiteLogoPath);
+  if(config.appLogoPath) preloadImage(config.appLogoPath);
 }
 function renderBootBrand(){
   document.getElementById('bootVisual').innerHTML = logoImg(config.brandLogoPath, config.brandName, 'boot-logo') || `<div class="boot-placeholder">${jesterSigilSVG()}</div>`;
@@ -241,17 +266,21 @@ function renderBootBrand(){
   document.getElementById('bootSub').textContent = 'Powered by ' + config.engineName;
   document.getElementById('enterBtn').classList.remove('hidden');
 }
-function beginBootSequence(){
+async function beginBootSequence(){
   document.getElementById('enterBtn').classList.add('hidden');
-  showBootStage(config.suiteLogoPath, config.suiteName || 'Suite', 'Suite Identity', 850, ()=>{
-    showBootStage(config.appLogoPath, config.appName || '', config.appName ? 'App Identity' : 'App Shell', 850, finishBoot);
-  });
+  await showBootStage(config.suiteLogoPath, config.suiteName || 'Suite', 'Suite Identity', 850);
+  await showBootStage(config.appLogoPath, config.appName || '', config.appName ? 'App Identity' : 'App Shell', 850);
+  finishBoot();
 }
-function showBootStage(path,title,sub,delay,next){
+async function showBootStage(path,title,sub,delayMs){
+  const bootCard=document.getElementById('bootCard');
+  bootCard.classList.add('stage-fade');
+  if(path) await preloadImage(path);
   document.getElementById('bootVisual').innerHTML = path ? logoImg(path,title,'boot-logo') : `<div class="boot-placeholder">${jesterSigilSVG()}</div>`;
   document.getElementById('bootTitle').textContent = title || '';
   document.getElementById('bootSub').textContent = sub || '';
-  setTimeout(next, delay);
+  requestAnimationFrame(()=>bootCard.classList.remove('stage-fade'));
+  await delay(delayMs);
 }
 function finishBoot(){
   document.getElementById('boot').classList.add('out');
