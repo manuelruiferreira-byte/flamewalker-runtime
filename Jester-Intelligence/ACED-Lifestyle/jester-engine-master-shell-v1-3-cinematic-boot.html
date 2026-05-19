@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
+  <meta name="theme-color" content="#030712" />
+  <title>Jester Engine Master Shell</title>
+  <style>
+    :root{
+      --bg:#030712;
+      --bg2:#07111f;
+      --panel:rgba(8,16,31,.82);
+      --panel2:rgba(12,22,41,.72);
+      --gold:#d7b56d;
+      --gold2:#f3dda1;
+      --cyan:#37d5ff;
+      --violet:#a78bfa;
+      --red:#ff5b6e;
+      --emerald:#42e6a4;
+      --text:#f7f2df;
+      --muted:#b8ad94;
+      --line:rgba(215,181,109,.28);
+      --shadow:0 24px 80px rgba(0,0,0,.58);
+      --radius:26px;
+      --ease:cubic-bezier(.22,1,.36,1);
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;touch-action:pan-x pan-y pinch-zoom;}
+    body{overflow-x:hidden;background:
+      radial-gradient(circle at 12% 8%,rgba(55,213,255,.12),transparent 26%),
+      radial-gradient(circle at 88% 12%,rgba(167,139,250,.13),transparent 28%),
+      radial-gradient(circle at 50% 110%,rgba(215,181,109,.12),transparent 32%),
+      linear-gradient(180deg,#02040a 0%,#06101e 55%,#02040a 100%);
+    }
+    button,input,textarea,select{font:inherit;color:inherit}
+    button{border:0;cursor:pointer}
+    a{color:inherit}
+
+    body.booting .app-shell{opacity:0;transform:translateY(10px);pointer-events:none;visibility:hidden;}
+    body.ready .app-shell{opacity:1;transform:translateY(0);visibility:visible;transition:opacity 900ms var(--ease),transform 900ms var(--ease);}
+
+    .boot-overlay{position:fixed;inset:0;z-index:9999;background:#000;display:grid;place-items:center;overflow:hidden;}
+    .boot-overlay.boot-exit{opacity:0;visibility:hidden;transition:opacity 900ms var(--ease),visibility 0s linear 900ms;}
+    /* v1.4.1: absolute black boot field. No ambient/demo/star/fallback art behind logos. */
+    .boot-ambient,.boot-stars{display:none!important;visibility:hidden!important;opacity:0!important;background:none!important;}
+    .boot-stage{position:relative;display:grid;place-items:center;width:min(74vw,420px);height:min(74vw,420px);opacity:0;transform:translateY(8px) scale(.96);filter:blur(16px);transition:opacity var(--boot-opacity,900ms) var(--ease),transform var(--boot-motion,1100ms) var(--ease),filter var(--boot-motion,1100ms) var(--ease);}
+    .boot-stage.show{opacity:1;transform:translateY(0) scale(1);filter:blur(0);}
+    .boot-stage.hide{opacity:0;transform:translateY(-8px) scale(1.015);filter:blur(12px);}
+    /* v1.4.1: one visual slot on absolute black. If no real logo loads, the screen stays black. */
+    .boot-stage>*{grid-area:1/1;}
+    .boot-orb{display:none!important;}
+    .boot-logo{display:block;max-width:76%;max-height:76%;object-fit:contain;filter:drop-shadow(0 0 24px rgba(215,181,109,.32)) drop-shadow(0 0 44px rgba(55,213,255,.13));}
+    .boot-identity-box{display:none!important;visibility:hidden!important;opacity:0!important;}
+    .boot-identity-box strong{display:block;font-size:clamp(1.15rem,4vw,1.75rem);letter-spacing:.18em;margin-bottom:8px;}
+    .boot-identity-box span{font-size:.72rem;color:var(--muted);letter-spacing:.26em;}
+    @keyframes ambientDrift{from{transform:scale(1) rotate(0)}to{transform:scale(1.08) rotate(3deg)}}
+    @keyframes starFloat{from{transform:translate3d(0,0,0)}to{transform:translate3d(-40px,28px,0)}}
+
+    .app-shell{min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);}
+    .topbar{position:sticky;top:0;z-index:40;padding:14px 14px 10px;background:linear-gradient(180deg,rgba(3,7,18,.92),rgba(3,7,18,.68) 72%,transparent);backdrop-filter:blur(18px);}
+    .brand-card{max-width:1180px;margin:0 auto;border:1px solid var(--line);border-radius:24px;background:linear-gradient(140deg,rgba(12,22,41,.86),rgba(3,7,18,.62));box-shadow:var(--shadow);padding:12px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;}
+    .brand-mark{width:46px;height:46px;border-radius:16px;border:1px solid rgba(215,181,109,.34);background:rgba(0,0,0,.25);display:grid;place-items:center;overflow:hidden;}
+    .brand-mark img{width:82%;height:82%;object-fit:contain;filter:drop-shadow(0 0 12px rgba(215,181,109,.24));}
+    .brand-copy{min-width:0}.eyebrow{font-size:.68rem;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.title{font-size:1.04rem;font-weight:760;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.status{font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}.top-actions{display:flex;gap:8px;align-items:center}.icon-btn,.small-btn{border:1px solid rgba(215,181,109,.26);background:rgba(8,16,31,.82);border-radius:14px;color:var(--gold2);min-height:38px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.24)}.icon-btn{width:40px;padding:0}.small-btn:hover,.icon-btn:hover{border-color:rgba(215,181,109,.48);background:rgba(18,29,50,.92)}
+
+    .main{max-width:1180px;margin:0 auto;padding:14px 14px 90px;}
+    .carousel-wrap{position:relative;border:1px solid var(--line);border-radius:30px;background:linear-gradient(180deg,rgba(8,16,31,.74),rgba(2,6,14,.72));box-shadow:var(--shadow);overflow:hidden;}
+    .carousel-wrap:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(215,181,109,.12),transparent 34%),radial-gradient(circle at 16% 18%,rgba(55,213,255,.08),transparent 30%),radial-gradient(circle at 90% 18%,rgba(167,139,250,.09),transparent 30%);pointer-events:none;}
+    .carousel-track{position:relative;display:flex;width:100%;transition:transform 560ms var(--ease);will-change:transform;touch-action:pan-x pan-y pinch-zoom;}
+    .chamber{min-width:100%;padding:18px;min-height:calc(100vh - 180px);display:flex;align-items:stretch;}
+    .chamber-inner{position:relative;width:100%;border:1px solid rgba(215,181,109,.18);border-radius:28px;background:linear-gradient(145deg,rgba(3,7,18,.58),rgba(9,20,39,.72));overflow:hidden;padding:18px;display:grid;grid-template-rows:auto 1fr;gap:16px;}
+    .chamber-inner:after{content:"";position:absolute;inset:auto 0 0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.38;}
+    .chamber-head{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:2}.chamber-id{display:flex;align-items:center;gap:12px;min-width:0}.suit{width:42px;height:42px;border-radius:16px;border:1px solid rgba(215,181,109,.3);display:grid;place-items:center;background:rgba(0,0,0,.25);box-shadow:inset 0 0 22px rgba(215,181,109,.06)}.suit svg{width:26px;height:26px;display:block}.suit .spades{fill:var(--cyan)}.suit .clubs{fill:var(--emerald)}.suit .diamonds{fill:var(--red)}.suit .hearts{fill:var(--violet)}.suit .jester-stroke{stroke:var(--gold2);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}.chamber h2{margin:0;font-size:clamp(1.35rem,7vw,3.2rem);letter-spacing:.01em}.chamber-kicker{font-size:.7rem;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin-top:3px}.chamber-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;align-content:start}.placeholder{min-height:112px;border:1px solid rgba(215,181,109,.18);border-radius:22px;background:rgba(2,6,14,.42);padding:14px;display:grid;align-content:start;gap:10px}.placeholder-label{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}.placeholder-line{height:1px;background:linear-gradient(90deg,rgba(215,181,109,.36),transparent)}.placeholder-dot{width:8px;height:8px;border-radius:50%;background:rgba(55,213,255,.4);box-shadow:0 0 18px rgba(55,213,255,.18)}
+    /* HARD KILL: this master shell is swipe + dots only. No side arrows anywhere. */
+    .carousel-arrow,.carousel-prev,.carousel-next,.nav-arrow,.arrow-btn,.prev-arrow,.next-arrow,
+    [data-prev],[data-next],[aria-label="Previous"],[aria-label="Next"],
+    button[aria-label*="Previous"],button[aria-label*="Next"]{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;width:0!important;height:0!important;min-width:0!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;overflow:hidden!important;}
+.dots{position:absolute;left:50%;bottom:12px;z-index:6;transform:translateX(-50%);display:flex;gap:8px;padding:8px 10px;border:1px solid rgba(215,181,109,.14);border-radius:999px;background:rgba(3,7,18,.52);backdrop-filter:blur(12px)}.dot{width:9px;height:9px;border-radius:999px;background:rgba(215,181,109,.28);transition:width 260ms var(--ease),background 260ms}.dot.active{width:24px;background:var(--gold)}
+
+    .utility-dock{position:fixed;left:50%;bottom:14px;z-index:60;transform:translateX(-50%);width:min(94vw,760px);border:1px solid rgba(215,181,109,.26);border-radius:24px;background:rgba(3,7,18,.8);backdrop-filter:blur(18px);box-shadow:var(--shadow);padding:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.dock-btn{border:1px solid rgba(215,181,109,.24);border-radius:16px;background:rgba(12,22,41,.78);padding:10px 12px;color:var(--gold2);font-size:.82rem}.dock-btn:hover{border-color:rgba(215,181,109,.52)}
+
+    .modal{position:fixed;inset:0;z-index:120;display:none;place-items:end center;background:rgba(0,0,0,.56);backdrop-filter:blur(10px);padding:14px}.modal.open{display:grid}.modal-panel{width:min(940px,100%);max-height:88vh;overflow:auto;border:1px solid rgba(215,181,109,.28);border-radius:28px;background:linear-gradient(180deg,rgba(8,16,31,.96),rgba(3,7,18,.96));box-shadow:var(--shadow);padding:16px}.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.modal-title{font-size:1rem;font-weight:760;color:var(--gold2)}.x{width:38px;height:38px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(215,181,109,.2)}.grid-buttons{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.model-btn,.payload-btn{border:1px solid rgba(215,181,109,.2);background:rgba(9,20,39,.72);border-radius:18px;padding:14px 12px;text-align:left;color:var(--text);min-height:62px}.model-btn strong,.payload-btn strong{display:block;color:var(--gold2);font-size:.9rem}.model-btn span,.payload-btn span{display:block;color:var(--muted);font-size:.72rem;margin-top:4px}.model-btn.active,.payload-btn.active{border-color:rgba(55,213,255,.56);box-shadow:0 0 24px rgba(55,213,255,.12)}.field-row{display:grid;gap:8px;margin:12px 0}.field-row label{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}textarea,input{width:100%;border:1px solid rgba(215,181,109,.2);background:rgba(0,0,0,.28);border-radius:18px;padding:12px;color:var(--text);outline:none}textarea{min-height:210px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:.78rem;line-height:1.5}.action-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}.primary{border:1px solid rgba(215,181,109,.4);background:linear-gradient(135deg,rgba(215,181,109,.22),rgba(55,213,255,.08));border-radius:16px;padding:11px 14px;color:var(--gold2)}.secondary{border:1px solid rgba(215,181,109,.2);background:rgba(255,255,255,.05);border-radius:16px;padding:11px 14px;color:var(--text)}.danger{border:1px solid rgba(255,91,110,.35);background:rgba(255,91,110,.1);border-radius:16px;padding:11px 14px;color:#ffd7dc}.split{display:grid;grid-template-columns:1fr 1fr;gap:12px}.lens-box{border:1px solid rgba(215,181,109,.18);border-radius:20px;background:rgba(0,0,0,.24);padding:12px;overflow:auto}.lens-box pre{white-space:pre-wrap;word-break:break-word;margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:.76rem;line-height:1.5;color:#e8dcc0}.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-20px);opacity:0;z-index:200;background:rgba(3,7,18,.92);border:1px solid rgba(215,181,109,.36);border-radius:18px;padding:12px 14px;box-shadow:var(--shadow);transition:opacity 250ms,transform 250ms;color:var(--gold2);pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .handoff-gate{position:fixed;inset:0;z-index:260;display:none;place-items:center;background:#000;overflow:hidden}.handoff-gate.open{display:grid}.handoff-gate:before{content:"";position:absolute;inset:-22%;background:radial-gradient(circle at 50% 42%,rgba(215,181,109,.14),transparent 20%),radial-gradient(circle at 30% 60%,rgba(55,213,255,.10),transparent 26%),radial-gradient(circle at 72% 34%,rgba(167,139,250,.11),transparent 28%);filter:blur(18px);animation:ambientDrift 7s ease-in-out infinite alternate}.handoff-card{position:relative;width:min(82vw,420px);min-height:300px;border:1px solid rgba(215,181,109,.34);border-radius:34px;background:linear-gradient(145deg,rgba(8,16,31,.92),rgba(2,6,14,.94));box-shadow:0 0 80px rgba(215,181,109,.12),0 24px 80px rgba(0,0,0,.65);display:grid;place-items:center;text-align:center;padding:34px;transform:scale(.96);opacity:0;filter:blur(12px);animation:handoffEnter 760ms var(--ease) forwards}.handoff-model-mark{width:96px;height:96px;border-radius:30px;border:1px solid rgba(215,181,109,.42);display:grid;place-items:center;margin:0 auto 18px;background:radial-gradient(circle at 50% 35%,rgba(215,181,109,.20),rgba(55,213,255,.06) 56%,rgba(0,0,0,.28));font-weight:850;font-size:2.2rem;color:var(--gold2);box-shadow:0 0 42px rgba(215,181,109,.16),inset 0 0 34px rgba(55,213,255,.05);letter-spacing:.04em}.handoff-card strong{display:block;font-size:clamp(1.35rem,6vw,2.1rem);letter-spacing:.04em;color:var(--text)}.handoff-card span{display:block;margin-top:10px;color:var(--muted);font-size:.86rem;letter-spacing:.08em}.handoff-card small{display:block;margin-top:18px;color:rgba(215,181,109,.72);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase}@keyframes handoffEnter{to{opacity:1;transform:scale(1);filter:blur(0)}}
+    input[type="file"]{display:none}
+
+    @media(max-width:820px){.brand-card{grid-template-columns:auto 1fr}.top-actions{grid-column:1 / -1;justify-content:space-between}.chamber{padding:12px;min-height:calc(100vh - 210px)}.chamber-grid{grid-template-columns:1fr 1fr}.placeholder{min-height:92px}.grid-buttons{grid-template-columns:1fr 1fr}.split{grid-template-columns:1fr}.utility-dock{bottom:10px}.dock-btn{font-size:.76rem;padding:9px 10px}.boot-stage{width:min(82vw,380px);height:min(82vw,380px)}}
+    @media(max-width:460px){.chamber-grid{grid-template-columns:1fr}.brand-mark{width:42px;height:42px}.title{font-size:.95rem}.status{font-size:.7rem}.grid-buttons{grid-template-columns:1fr}.utility-dock{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}.dock-btn{white-space:nowrap}.modal{padding:8px}.modal-panel{border-radius:22px;padding:12px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.boot-stage{filter:none!important;transform:none!important}}
+  </style>
+</head>
+<body class="booting">
+  <div class="boot-overlay" id="bootOverlay" aria-hidden="true">
+    <div class="boot-stage" id="bootStage"></div>
+  </div>
+
+  <div class="app-shell" id="appShell">
+    <header class="topbar">
+      <div class="brand-card">
+        <div class="brand-mark"><img id="topBrandLogo" src="../shared/assets/logos/jester-intelligence.png" alt="Jester Intelligence" /></div>
+        <div class="brand-copy">
+          <div class="eyebrow" id="brandEyebrow">Jester Intelligence</div>
+          <div class="title" id="brandTitle">Jester Engine Master Shell</div>
+          <div class="status" id="brandStatus">Portal → Chambers → Engines</div>
+        </div>
+        <div class="top-actions">
+          <button class="small-btn" id="saveStateTop">Save State</button>
+          <button class="icon-btn" id="openAiTop" title="Super Ask AI">AI</button>
+          <button class="icon-btn" id="openLensTop" title="AI Lens">◈</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="carousel-wrap" aria-label="Jester Engine chambers">
+        <div class="carousel-track" id="carouselTrack"></div>
+        <div class="dots" id="dots" aria-label="Chamber navigation"></div>
+      </section>
+    </main>
+
+    <nav class="utility-dock" aria-label="Utility layer">
+      <button class="dock-btn" id="openAiDock">Ask Gemini</button>
+      <button class="dock-btn" id="openLensDock">AI Lens</button>
+      <button class="dock-btn" id="openPatchDock">Patch Console</button>
+      <button class="dock-btn" id="saveStateDock">Save</button>
+      <button class="dock-btn" id="exportStateDock">Export</button>
+      <button class="dock-btn" id="importStateDock">Import</button>
+    </nav>
+  </div>
+
+  <input id="importFile" type="file" accept="application/json,.json" />
+  <div class="toast" id="toast"></div>
+
+  <section class="modal" id="aiModal" role="dialog" aria-modal="true" aria-label="Super Ask AI">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <div class="modal-title">Super Ask AI</div>
+        <button class="x" data-close="aiModal">×</button>
+      </div>
+      <div class="field-row">
+        <label>1. Handoff kind</label>
+        <div class="grid-buttons" id="payloadGrid"></div>
+      </div>
+      <div class="field-row">
+        <label>2. Launch model</label>
+        <div class="grid-buttons" id="modelGrid"></div>
+      </div>
+      <div class="field-row">
+        <label>User intent</label>
+        <input id="aiIntent" placeholder="Add the question or instruction for the selected model" />
+      </div>
+      <div class="field-row">
+        <label id="handoffLabel">Handoff packet</label>
+        <textarea id="handoffText" spellcheck="false"></textarea>
+      </div>
+      <div class="action-row">
+        <button class="secondary" id="refreshHandoff">Refresh Packet</button>
+        <button class="secondary" id="copyHandoff">Copy Packet</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="modal" id="lensModal" role="dialog" aria-modal="true" aria-label="AI Lens">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <div class="modal-title">AI Lens / Assistant Visibility Mirror</div>
+        <button class="x" data-close="lensModal">×</button>
+      </div>
+      <div class="lens-box">
+        <pre id="lensContent"></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="modal" id="patchModal" role="dialog" aria-modal="true" aria-label="Patch Console">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <div class="modal-title">JSON Patch Console</div>
+        <button class="x" data-close="patchModal">×</button>
+      </div>
+      <div class="split">
+        <div class="field-row">
+          <label>Patch JSON only</label>
+          <textarea id="patchInput" spellcheck="false" placeholder='{"patch_type":"jester_engine_shell_patch","version":"1.0","ops":[{"op":"set_active_chamber","value":"jester"}]}'></textarea>
+        </div>
+        <div class="field-row">
+          <label>Validation / result</label>
+          <textarea id="patchResult" spellcheck="false" readonly></textarea>
+        </div>
+      </div>
+      <div class="action-row">
+        <button class="secondary" id="loadPatchExample">Load Example</button>
+        <button class="danger" id="clearPatch">Clear</button>
+        <button class="primary" id="applyPatch">Apply JSON Patch</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="handoff-gate" id="handoffGate" aria-live="polite" aria-label="AI handoff gate">
+    <div class="handoff-card">
+      <div>
+        <div class="handoff-model-mark" id="handoffModelMark">G</div>
+        <strong id="handoffModelName">Gemini</strong>
+        <span id="handoffGateStatus">Preparing fresh handoff packet…</span>
+        <small id="handoffGatePayload">Current State Packet</small>
+      </div>
+    </div>
+  </section>
+
+  <script id="agent-state-json" type="application/json">{}</script>
+  <script>
+  (()=>{
+    'use strict';
+
+    const APP_CONFIG = {
+      appName:'Jester Engine Master Shell',
+      brandTitle:'Jester Intelligence',
+      suiteTitle:'ACED Lifestyle',
+      appSub:'Reusable Cinematic Runtime',
+      statusSeal:'Portal → Chambers → Engines',
+      version:'1.4.1-black-only-boot-no-fallback',
+      mode:'empty_master_shell',
+      storageKey:'jester_engine_master_shell_state_v1',
+      paths:{
+        jesterLogo:'../shared/assets/logos/jester-intelligence.png',
+        acedLogo:'./shared/assets/logos/aced.png',
+        appLogo:''
+      },
+      dataSources:{
+        appConfigs:'./shared/data/app-configs/',
+        libraries:'./shared/data/libraries/',
+        ephemeris:'./shared/data/ephemeris/',
+        profiles:'./shared/data/profiles/',
+        schemas:'./shared/data/schemas/',
+        prompts:'./shared/data/prompts/'
+      }
+    };
+
+    const CHAMBERS = [
+      {id:'spades',label:'Spades',accent:'cyan'},
+      {id:'clubs',label:'Clubs',accent:'emerald'},
+      {id:'diamonds',label:'Diamonds',accent:'red'},
+      {id:'hearts',label:'Hearts',accent:'violet'},
+      {id:'jester',label:'Jester',accent:'gold'}
+    ];
+
+    const ALLOWED_OPS = ['set_active_chamber','set_note','update_config','add_log_entry','replace_app_config'];
+
+    const PATCH_SCHEMA = {
+      patch_type:'jester_engine_shell_patch',
+      version:'1.0',
+      ops:[
+        {op:'set_active_chamber',value:'spades|clubs|diamonds|hearts|jester'},
+        {op:'set_note',key:'string',value:'string'},
+        {op:'update_config',key:'string',value:'any'},
+        {op:'add_log_entry',value:{type:'string',message:'string'}},
+        {op:'replace_app_config',value:{}}
+      ],
+      rule:'Return only valid JSON. No raw JavaScript. Unknown operations fail closed.'
+    };
+
+    const MODEL_ROUTES = {
+      'AI Mode / Google AI':'https://www.google.com/search?udm=50',
+      'Gemini':'https://gemini.google.com/',
+      'ChatGPT':'https://chatgpt.com/',
+      'Claude':'https://claude.ai/',
+      'DeepSeek':'https://chat.deepseek.com/',
+      'Perplexity':'https://www.perplexity.ai/',
+      'Grok':'https://grok.com/',
+      'Copilot':'https://copilot.microsoft.com/'
+    };
+
+    const PAYLOAD_TYPES = [
+      {id:'state',title:'Current State Packet',hint:'Machine-readable app state'},
+      {id:'section',title:'Current Section / Chamber Context',hint:'Active chamber and visible route'},
+      {id:'bug',title:'Bug + Constraint Scan',hint:'Ask for failures and constraints'},
+      {id:'patch',title:'Patch Request',hint:'Ask for valid JSON patch only'},
+      {id:'snapshot',title:'Full App Snapshot / Sanitized HTML',hint:'Source snapshot when practical'}
+    ];
+
+    const state = {
+      packet_type:'jester_engine_master_shell_state',
+      app_name:APP_CONFIG.appName,
+      version:APP_CONFIG.version,
+      mode:APP_CONFIG.mode,
+      active_chamber:'jester',
+      active_route:'jester',
+      available_chambers:CHAMBERS.map(c=>c.id),
+      asset_paths:{...APP_CONFIG.paths},
+      loaded_data_sources:{...APP_CONFIG.dataSources},
+      allowed_patch_operations:[...ALLOWED_OPS],
+      patch_schema:PATCH_SCHEMA,
+      notes:{},
+      app_config:{},
+      logs:[],
+      user_intent:'',
+      last_saved_state:null,
+      updated_at:new Date().toISOString()
+    };
+
+    let activeIndex = CHAMBERS.findIndex(c=>c.id===state.active_chamber);
+    if(activeIndex<0) activeIndex = 0;
+    let selectedModel = 'Gemini';
+    let selectedPayload = 'state';
+    let appInitialized = false;
+    let suppressBootOnReturn = false;
+
+    const $ = (id)=>document.getElementById(id);
+    const sleep = (ms)=>new Promise(resolve=>setTimeout(resolve,ms));
+
+    function iconSvg(id){
+      if(id==='spades') return '<svg viewBox="0 0 64 64" aria-hidden="true"><path class="spades" d="M32 6C21 18 11 25 11 38c0 8 6 14 14 14 4 0 7-2 9-5-1 6-4 9-8 13h12c-4-4-7-7-8-13 2 3 5 5 9 5 8 0 14-6 14-14C53 25 43 18 32 6z"/></svg>';
+      if(id==='clubs') return '<svg viewBox="0 0 64 64" aria-hidden="true"><path class="clubs" d="M26 58c5-5 6-9 6-14-3 5-8 8-14 8C10 52 5 47 5 39c0-7 5-13 12-14-2-2-3-5-3-8 0-8 6-13 14-13s14 5 14 13c0 3-1 6-3 8 7 1 12 7 12 14 0 8-5 13-13 13-6 0-11-3-14-8 0 5 1 9 6 14H26z"/></svg>';
+      if(id==='diamonds') return '<svg viewBox="0 0 64 64" aria-hidden="true"><path class="diamonds" d="M32 4l22 28-22 28L10 32 32 4z"/></svg>';
+      if(id==='hearts') return '<svg viewBox="0 0 64 64" aria-hidden="true"><path class="hearts" d="M32 56S9 42 9 24c0-9 6-16 15-16 5 0 9 3 12 7 3-4 7-7 12-7 9 0 15 7 15 16 0 18-23 32-23 32z"/></svg>';
+      return '<svg viewBox="0 0 64 64" aria-hidden="true"><path class="jester-stroke" d="M14 45c7-11 9-21 8-32 6 6 10 11 10 21 0-10 4-15 10-21-1 11 1 21 8 32"/><path class="jester-stroke" d="M14 45c10 6 26 6 36 0"/><path class="jester-stroke" d="M22 13l-7-5M42 13l7-5M32 34v12"/><circle cx="15" cy="8" r="3" fill="#f3dda1"/><circle cx="49" cy="8" r="3" fill="#f3dda1"/><circle cx="32" cy="48" r="3" fill="#f3dda1"/><path class="jester-stroke" d="M24 28h16M28 22h8"/></svg>';
+    }
+
+    function renderChambers(){
+      const track = $('carouselTrack');
+      track.innerHTML = CHAMBERS.map(ch=>`
+        <article class="chamber" data-chamber="${ch.id}" aria-label="${ch.label} chamber">
+          <div class="chamber-inner">
+            <div class="chamber-head">
+              <div class="chamber-id">
+                <div class="suit">${iconSvg(ch.id)}</div>
+                <div>
+                  <h2>${ch.label}</h2>
+                  <div class="chamber-kicker">${ch.id === 'jester' ? 'Engine' : 'Chamber'}</div>
+                </div>
+              </div>
+            </div>
+            <div class="chamber-grid">
+              ${['Sections','Engines','Data','Agent','Apps'].map(label=>`
+                <div class="placeholder">
+                  <div class="placeholder-label">${label}</div>
+                  <div class="placeholder-line"></div>
+                  <div class="placeholder-dot"></div>
+                </div>`).join('')}
+            </div>
+          </div>
+        </article>`).join('');
+
+      const dots = $('dots');
+      dots.innerHTML = CHAMBERS.map((ch,i)=>`<button class="dot" aria-label="Go to ${ch.label}" data-dot="${i}"></button>`).join('');
+      dots.querySelectorAll('[data-dot]').forEach(btn=>btn.addEventListener('click',()=>goTo(Number(btn.dataset.dot))));
+      updateCarousel(false);
+      purgeCarouselArrows();
+    }
+
+    function updateCarousel(animate=true){
+      const track = $('carouselTrack');
+      if(!animate) track.style.transition='none';
+      track.style.transform = `translateX(${-activeIndex*100}%)`;
+      requestAnimationFrame(()=>{track.style.transition='';});
+      document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===activeIndex));
+      state.active_chamber = CHAMBERS[activeIndex].id;
+      state.active_route = state.active_chamber;
+      state.updated_at = new Date().toISOString();
+      syncAgentState();
+    }
+
+    function goTo(i){
+      activeIndex = (i + CHAMBERS.length) % CHAMBERS.length;
+      updateCarousel(true);
+    }
+
+    function setupSwipe(){
+      const track = $('carouselTrack');
+      let startX=0,startY=0,dragging=false;
+      track.addEventListener('touchstart',(e)=>{
+        if(e.touches.length!==1) return;
+        startX=e.touches[0].clientX; startY=e.touches[0].clientY; dragging=true;
+      },{passive:true});
+      track.addEventListener('touchend',(e)=>{
+        if(!dragging || e.changedTouches.length!==1) return;
+        const dx=e.changedTouches[0].clientX-startX;
+        const dy=e.changedTouches[0].clientY-startY;
+        dragging=false;
+        if(Math.abs(dx)>54 && Math.abs(dx)>Math.abs(dy)*1.3){
+          goTo(activeIndex + (dx<0 ? 1 : -1));
+        }
+      },{passive:true});
+    }
+
+    function purgeCarouselArrows(){
+      const wrap = document.querySelector('.carousel-wrap');
+      if(!wrap) return;
+      const selectors = ['.carousel-arrow','.carousel-prev','.carousel-next','.nav-arrow','.arrow-btn','.prev-arrow','.next-arrow','[data-prev]','[data-next]'];
+      wrap.querySelectorAll(selectors.join(',')).forEach(el=>el.remove());
+      wrap.querySelectorAll('button').forEach(btn=>{
+        const t = (btn.textContent || '').trim();
+        const aria = (btn.getAttribute('aria-label') || '').toLowerCase();
+        if(['‹','›','❮','❯','←','→','<','>'].includes(t) || aria.includes('previous') || aria.includes('next')) btn.remove();
+      });
+    }
+
+    function preloadImage(src){
+      return new Promise(resolve=>{
+        if(!src) return resolve({src,ok:false,skipped:true});
+        const img = new Image();
+        img.onload=()=>resolve({src,ok:true});
+        img.onerror=()=>resolve({src,ok:false});
+        img.src=src;
+      });
+    }
+
+    function setStageVisual(stage,item){
+      // v1.4.1: absolute black fallback. The boot has ONE possible visual: the real logo image.
+      // If a logo is unavailable, the stage remains empty black. No generated identity plates, no rings, no demo art.
+      stage.replaceChildren();
+      if(!item.src) return;
+      const img = document.createElement('img');
+      img.className = 'boot-logo';
+      img.src = item.src;
+      img.alt = item.alt || '';
+      stage.appendChild(img);
+    }
+
+    async function bootSequence(){
+      if(bootSequence.running || bootSequence.done || suppressBootOnReturn) return;
+      bootSequence.running = true;
+      const overlay = $('bootOverlay');
+      const stage = $('bootStage');
+      if(!overlay || !stage){ bootSequence.running = false; return; }
+
+      overlay.style.display = 'grid';
+      overlay.classList.remove('boot-exit');
+      stage.className = 'boot-stage';
+      stage.replaceChildren();
+      document.body.classList.add('booting');
+      document.body.classList.remove('ready');
+
+      const setStageTiming = (opacityMs, motionMs)=>{
+        stage.style.setProperty('--boot-opacity', opacityMs + 'ms');
+        stage.style.setProperty('--boot-motion', motionMs + 'ms');
+      };
+
+      const minBlack = sleep(820);
+      const preloadPromise = Promise.race([
+        Promise.all([preloadImage(APP_CONFIG.paths.jesterLogo),preloadImage(APP_CONFIG.paths.acedLogo),preloadImage(APP_CONFIG.paths.appLogo)]),
+        sleep(2200).then(()=>[])
+      ]);
+      const [, preloadResults] = await Promise.all([minBlack, preloadPromise]);
+      const okMap = new Map((preloadResults || []).map(item=>[item.src,item.ok]));
+      const usable = (src)=>Boolean(src && okMap.get(src));
+
+      const stages = [
+        usable(APP_CONFIG.paths.jesterLogo) ? {src:APP_CONFIG.paths.jesterLogo,alt:'Jester Intelligence',hold:3600,first:true} : {hold:1200,first:true},
+        usable(APP_CONFIG.paths.acedLogo) ? {src:APP_CONFIG.paths.acedLogo,alt:'ACED Lifestyle',hold:3400} : {hold:1000},
+        usable(APP_CONFIG.paths.appLogo) ? {src:APP_CONFIG.paths.appLogo,alt:APP_CONFIG.appName,hold:3200} : {hold:900}
+      ];
+
+      for(const item of stages){
+        stage.className='boot-stage';
+        setStageVisual(stage,item);
+        setStageTiming(item.first ? 900 : 1650, item.first ? 1100 : 1850);
+        stage.offsetWidth;
+        await sleep(80);
+        stage.classList.add('show');
+        await sleep(item.hold);
+        setStageTiming(item.first ? 1320 : 1650, item.first ? 1480 : 1850);
+        stage.classList.remove('show');
+        stage.classList.add('hide');
+        await sleep(item.first ? 1220 : 1580);
+      }
+      document.body.classList.remove('booting');
+      document.body.classList.add('ready');
+      overlay.classList.add('boot-exit');
+      await sleep(950);
+      overlay.style.display = 'none';
+      bootSequence.running = false;
+      bootSequence.done = true;
+    }
+
+    function syncAgentState(){
+      const packet = getStatePacket();
+      const node = $('agent-state-json');
+      if(node) node.textContent = JSON.stringify(packet,null,2);
+      const lens = $('lensContent');
+      if(lens) lens.textContent = buildLensText();
+    }
+
+    function getStatePacket(){
+      return {
+        ...state,
+        current_chamber_label:CHAMBERS[activeIndex]?.label || state.active_chamber,
+        selected_ai_model:selectedModel,
+        selected_payload:selectedPayload,
+        test_url_format:'https://manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/ACED-Lifestyle/jester-engine-master-shell-current.html?v=15',
+        assistant_instruction:'Use this panel as the machine-readable source of truth. If asked to modify the app, return only valid JSON patch.'
+      };
+    }
+
+    function buildLensText(){
+      const packet = getStatePacket();
+      return [
+        'AI LENS / ASSISTANT VISIBILITY MIRROR',
+        '',
+        'Instruction to assistant:',
+        'Use this panel as the machine-readable source of truth. If asked to modify the app, return only valid JSON patch.',
+        '',
+        JSON.stringify(packet,null,2)
+      ].join('\n');
+    }
+
+    function saveState(){
+      state.last_saved_state = new Date().toISOString();
+      state.updated_at = new Date().toISOString();
+      localStorage.setItem(APP_CONFIG.storageKey,JSON.stringify(getStatePacket(),null,2));
+      syncAgentState();
+      toast('State saved locally');
+    }
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(APP_CONFIG.storageKey);
+        if(!raw) return;
+        const incoming = JSON.parse(raw);
+        mergeImportedState(incoming,false);
+      }catch(err){console.warn('State load failed',err);}
+    }
+
+    function mergeImportedState(incoming,notify=true){
+      if(!incoming || typeof incoming !== 'object') throw new Error('Imported state must be an object');
+      if(incoming.notes && typeof incoming.notes==='object') state.notes = incoming.notes;
+      if(incoming.app_config && typeof incoming.app_config==='object') state.app_config = incoming.app_config;
+      if(Array.isArray(incoming.logs)) state.logs = incoming.logs;
+      if(typeof incoming.user_intent === 'string') state.user_intent = incoming.user_intent;
+      if(typeof incoming.active_chamber === 'string'){
+        const idx = CHAMBERS.findIndex(c=>c.id===incoming.active_chamber);
+        if(idx>=0) activeIndex=idx;
+      }
+      state.updated_at = new Date().toISOString();
+      updateCarousel(false);
+      syncAgentState();
+      if(notify) toast('State imported');
+    }
+
+    function exportState(){
+      const blob = new Blob([JSON.stringify(getStatePacket(),null,2)],{type:'application/json'});
+      const a = document.createElement('a');
+      const stamp = new Date().toISOString().replace(/[:.]/g,'-');
+      a.href = URL.createObjectURL(blob);
+      a.download = `jester-engine-master-shell-state-${stamp}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(a.href);
+      toast('State export prepared');
+    }
+
+    function importState(){ $('importFile').click(); }
+
+    function routeHref(name){
+      return MODEL_ROUTES[name] || MODEL_ROUTES.Gemini;
+    }
+
+    function fallbackCopy(text){
+      try{
+        const area = document.createElement('textarea');
+        area.value=text;
+        area.setAttribute('readonly','');
+        area.style.position='fixed';
+        area.style.left='-9999px';
+        area.style.top='0';
+        document.body.appendChild(area);
+        area.focus();
+        area.select();
+        const ok = document.execCommand('copy');
+        area.remove();
+        return Boolean(ok);
+      }catch(err){
+        console.warn('Clipboard fallback failed',err);
+        return false;
+      }
+    }
+
+    async function writeClipboardFresh(text){
+      // Do a synchronous copy immediately inside the user tap, then reinforce with the modern async clipboard.
+      // This prevents Android Chrome from navigating before the newest handoff replaces the previous clipboard value.
+      let copied = fallbackCopy(text);
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        try{
+          await navigator.clipboard.writeText(text);
+          copied = true;
+        }catch(err){
+          console.warn('Async clipboard write failed, fallback result:', copied, err);
+        }
+      }
+      return copied;
+    }
+
+    function payloadTitle(id){
+      return PAYLOAD_TYPES.find(p=>p.id===id)?.title || 'Current State Packet';
+    }
+
+    function modelMark(name){
+      const marks = {
+        'AI Mode / Google AI':'AI',
+        Gemini:'G',
+        ChatGPT:'C',
+        Claude:'Cl',
+        DeepSeek:'D',
+        Perplexity:'P',
+        Grok:'X',
+        Copilot:'Co'
+      };
+      return marks[name] || (name || 'AI').slice(0,2);
+    }
+
+    function showHandoffGate(modelName, payloadId, status='Preparing fresh handoff packet…'){
+      const gate = $('handoffGate');
+      if(!gate) return;
+      $('handoffModelMark').textContent = modelMark(modelName);
+      $('handoffModelName').textContent = modelName;
+      $('handoffGateStatus').textContent = status;
+      $('handoffGatePayload').textContent = payloadTitle(payloadId);
+      gate.classList.add('open');
+    }
+
+    function setHandoffGateStatus(text){
+      const node = $('handoffGateStatus');
+      if(node) node.textContent = text;
+    }
+
+    function hideHandoffGate(){
+      const gate = $('handoffGate');
+      if(gate) gate.classList.remove('open');
+    }
+
+    function buildHandoffFor(modelName, payloadId){
+      selectedModel = modelName || selectedModel || 'Gemini';
+      selectedPayload = payloadId || selectedPayload || 'state';
+      const packet = buildHandoffPacket();
+      $('handoffLabel').textContent = `${selectedModel} handoff packet`;
+      $('handoffText').value = JSON.stringify(packet,null,2);
+      syncAgentState();
+      return packet;
+    }
+
+    function markAiReturn(modelName,payloadId){
+      try{
+        const cleanUrl = window.location.href.replace(/#.*$/,'');
+        sessionStorage.setItem('jester_return_to_ai_menu','1');
+        sessionStorage.setItem('jester_return_model',modelName || 'Gemini');
+        sessionStorage.setItem('jester_return_payload',payloadId || 'state');
+        sessionStorage.setItem('jester_return_stamp',String(Date.now()));
+        if(window.history && window.history.replaceState){
+          window.history.replaceState({jester_panel:'ai-menu'},'',cleanUrl + '#ai-menu');
+        }
+      }catch(err){console.warn('AI return marker failed',err);}
+    }
+
+    function hasAiReturnSignal(){
+      try{
+        const flag = sessionStorage.getItem('jester_return_to_ai_menu') === '1';
+        const hash = window.location.hash === '#ai-menu';
+        return flag || hash;
+      }catch(err){
+        return window.location.hash === '#ai-menu';
+      }
+    }
+
+    function revealAppWithoutBoot(){
+      suppressBootOnReturn = true;
+      const overlay = $('bootOverlay');
+      if(overlay){
+        overlay.classList.add('boot-exit');
+        overlay.style.display = 'none';
+      }
+      document.body.classList.remove('booting');
+      document.body.classList.add('ready');
+      hideHandoffGate();
+      bootSequence.running = false;
+      bootSequence.done = true;
+    }
+
+    function restoreAiMenuAfterReturn(){
+      hideHandoffGate();
+      if(!hasAiReturnSignal()) return false;
+      try{
+        selectedModel = sessionStorage.getItem('jester_return_model') || selectedModel || 'Gemini';
+        selectedPayload = sessionStorage.getItem('jester_return_payload') || selectedPayload || 'state';
+        sessionStorage.removeItem('jester_return_to_ai_menu');
+        sessionStorage.removeItem('jester_return_stamp');
+      }catch(err){console.warn('AI return restore cleanup failed',err);}
+      revealAppWithoutBoot();
+      renderAiMenu();
+      updateHandoff();
+      openModal('aiModal');
+      setTimeout(()=>{ suppressBootOnReturn = false; },500);
+      return true;
+    }
+
+    function clearAiMenuHash(){
+      try{
+        if(window.location.hash === '#ai-menu' && window.history && window.history.replaceState){
+          const cleanUrl = window.location.href.replace(/#.*$/,'');
+          window.history.replaceState({jester_panel:null},'',cleanUrl);
+        }
+      }catch(err){console.warn('AI hash cleanup failed',err);}
+    }
+
+    async function launchAi(modelName, payloadId){
+      const nextModel = modelName || selectedModel || 'Gemini';
+      const nextPayload = payloadId || selectedPayload || 'state';
+      const packet = buildHandoffFor(nextModel,nextPayload);
+      const text = JSON.stringify(packet,null,2);
+      const url = routeHref(nextModel);
+
+      showHandoffGate(nextModel,nextPayload,'Copying fresh handoff to clipboard…');
+      const copied = await writeClipboardFresh(text);
+      setHandoffGateStatus(copied ? 'Copied. Opening selected AI…' : 'Opening selected AI. If clipboard failed, return and use Copy Packet.');
+      toast(`${nextModel} handoff prepared`);
+
+      markAiReturn(nextModel,nextPayload);
+      await sleep(650);
+
+      // The gate is only a temporary copy buffer. Hide it before navigation so Android/Chrome bfcache cannot restore it.
+      hideHandoffGate();
+      renderAiMenu();
+      openModal('aiModal');
+      await sleep(80);
+      window.location.href = url;
+    }
+
+    function renderAiMenu(){
+      const payloadGrid = $('payloadGrid');
+      payloadGrid.innerHTML = PAYLOAD_TYPES.map(p=>`<button type="button" class="payload-btn ${p.id===selectedPayload?'active':''}" data-payload="${p.id}"><strong>${p.title}</strong><span>${p.id===selectedPayload?'Selected':'Tap to select handoff kind'}</span></button>`).join('');
+      payloadGrid.querySelectorAll('[data-payload]').forEach(btn=>btn.addEventListener('click',()=>{
+        selectedPayload = btn.dataset.payload || 'state';
+        renderAiMenu();
+        updateHandoff();
+      }));
+
+      const modelGrid = $('modelGrid');
+      modelGrid.innerHTML = Object.keys(MODEL_ROUTES).map(name=>`<button type="button" class="model-btn ${name===selectedModel?'active':''}" data-model="${name}"><strong>${name}</strong><span>Copy ${payloadTitle(selectedPayload)} and open</span></button>`).join('');
+      modelGrid.querySelectorAll('[data-model]').forEach(btn=>btn.addEventListener('click',(event)=>{
+        event.preventDefault();
+        launchAi(btn.dataset.model, selectedPayload);
+      }));
+    }
+
+    function sanitizedHtmlSource(){
+      const clone = document.documentElement.cloneNode(true);
+      clone.querySelectorAll('#handoffText,#patchInput,#patchResult').forEach(el=>{el.textContent=''; el.value='';});
+      clone.querySelectorAll('.modal.open').forEach(el=>el.classList.remove('open'));
+      return '<!doctype html>\n' + clone.outerHTML;
+    }
+
+    function payloadBody(type){
+      const packet = getStatePacket();
+      const active = CHAMBERS[activeIndex];
+      const intent = $('aiIntent')?.value?.trim() || state.user_intent || '';
+      state.user_intent = intent;
+
+      if(type==='section'){
+        return {
+          payload_type:'current_section_chamber_context',
+          app:APP_CONFIG.appName,
+          version:APP_CONFIG.version,
+          active_chamber:active,
+          visible_route:state.active_route,
+          placeholder_slots:['Sections','Engines','Data','Agent','Apps'],
+          asset_paths:state.asset_paths,
+          user_intent:intent
+        };
+      }
+      if(type==='bug'){
+        return {
+          payload_type:'bug_constraint_scan',
+          instruction:'Inspect this app state and constraints. Identify bugs, architecture risks, path problems, missing agent-readability, and patch-safe improvements. Do not invent folder changes.',
+          constraints:[
+            'Do not embed large base64 images',
+            'Use external logo paths only',
+            'Keep JSON patching fail-closed',
+            'Preserve cinematic boot, carousel, Super Ask AI, AI Lens, import/export, local-first behavior',
+            'Return recommendations or valid JSON patch, depending on user request'
+          ],
+          state_packet:packet,
+          user_intent:intent
+        };
+      }
+      if(type==='patch'){
+        return {
+          payload_type:'json_patch_request',
+          instruction:'Return only valid JSON patch. No markdown. No raw JavaScript. Use only allowed ops unless you explicitly state that the requested change requires a rebuild outside the patch console.',
+          patch_schema:PATCH_SCHEMA,
+          allowed_patch_operations:ALLOWED_OPS,
+          current_state:packet,
+          user_intent:intent
+        };
+      }
+      if(type==='snapshot'){
+        return {
+          payload_type:'full_app_snapshot_sanitized_html_source',
+          instruction:'Review this lightweight HTML runtime shell. Preserve folder architecture and external asset paths. When suggesting app-console changes, return valid JSON patch only.',
+          state_packet:packet,
+          sanitized_html_source:sanitizedHtmlSource(),
+          user_intent:intent
+        };
+      }
+      return packet;
+    }
+
+    function buildHandoffPacket(){
+      return {
+        handoff_target:selectedModel,
+        target_url:MODEL_ROUTES[selectedModel],
+        payload_choice:selectedPayload,
+        generated_at:new Date().toISOString(),
+        doctrine:'HTML is a light runtime shell. Assets/data/schemas are external. State is JSON. Agent layer is structured and patch-governed.',
+        payload:payloadBody(selectedPayload)
+      };
+    }
+
+    function updateHandoff(){
+      const packet = buildHandoffPacket();
+      $('handoffLabel').textContent = `${selectedModel} handoff packet`;
+      $('handoffText').value = JSON.stringify(packet,null,2);
+      syncAgentState();
+      return packet;
+    }
+
+    async function copyText(text, silent=false){
+      try{
+        await navigator.clipboard.writeText(text);
+        if(!silent) toast('Copied to clipboard');
+      }catch(err){
+        const area = document.createElement('textarea');
+        area.value=text; document.body.appendChild(area); area.select(); document.execCommand('copy'); area.remove();
+        if(!silent) toast('Copied with fallback');
+      }
+    }
+
+    function askGeminiDefault(){
+      launchAi('Gemini','state');
+    }
+
+    function openAiModal(){
+      renderAiMenu();
+      updateHandoff();
+      openModal('aiModal');
+    }
+    function openLensModal(){syncAgentState(); openModal('lensModal');}
+    function openPatchModal(){openModal('patchModal');}
+    function openModal(id){$(id).classList.add('open');}
+    function closeModal(id){
+      $(id).classList.remove('open');
+      if(id === 'aiModal') clearAiMenuHash();
+    }
+
+    function validatePatch(patch){
+      if(!patch || typeof patch !== 'object') throw new Error('Patch must be a JSON object');
+      if(patch.patch_type !== PATCH_SCHEMA.patch_type) throw new Error(`Invalid patch_type. Expected ${PATCH_SCHEMA.patch_type}`);
+      if(typeof patch.version !== 'string') throw new Error('Patch version must be a string');
+      if(!Array.isArray(patch.ops)) throw new Error('Patch ops must be an array');
+      patch.ops.forEach((op,i)=>{
+        if(!op || typeof op !== 'object') throw new Error(`Operation ${i} must be an object`);
+        if(!ALLOWED_OPS.includes(op.op)) throw new Error(`Operation ${i} uses disallowed op: ${op.op}`);
+      });
+      return true;
+    }
+
+    function applyPatchObject(patch){
+      validatePatch(patch);
+      const results=[];
+      for(const item of patch.ops){
+        if(item.op==='set_active_chamber'){
+          const idx = CHAMBERS.findIndex(c=>c.id===item.value);
+          if(idx<0) throw new Error(`Unknown chamber: ${item.value}`);
+          activeIndex=idx; updateCarousel(true); results.push(`set_active_chamber → ${item.value}`);
+        }
+        if(item.op==='set_note'){
+          if(typeof item.key !== 'string') throw new Error('set_note requires string key');
+          state.notes[item.key] = String(item.value ?? ''); results.push(`set_note → ${item.key}`);
+        }
+        if(item.op==='update_config'){
+          if(typeof item.key !== 'string') throw new Error('update_config requires string key');
+          state.app_config[item.key] = item.value; results.push(`update_config → ${item.key}`);
+        }
+        if(item.op==='add_log_entry'){
+          const value = item.value && typeof item.value==='object' ? item.value : {type:'note',message:String(item.value ?? '')};
+          state.logs.push({id:crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),at:new Date().toISOString(),...value});
+          results.push('add_log_entry');
+        }
+        if(item.op==='replace_app_config'){
+          if(!item.value || typeof item.value !== 'object' || Array.isArray(item.value)) throw new Error('replace_app_config requires object value');
+          state.app_config = item.value; results.push('replace_app_config');
+        }
+      }
+      state.updated_at = new Date().toISOString();
+      syncAgentState();
+      return {ok:true,applied:results,state:getStatePacket()};
+    }
+
+    function applyPatchFromInput(){
+      try{
+        const patch = JSON.parse($('patchInput').value);
+        const result = applyPatchObject(patch);
+        $('patchResult').value = JSON.stringify(result,null,2);
+        toast('Patch applied');
+      }catch(err){
+        $('patchResult').value = JSON.stringify({ok:false,error:err.message},null,2);
+        toast('Patch failed closed');
+      }
+    }
+
+    function toast(msg){
+      const node = $('toast');
+      node.textContent = msg;
+      node.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t=setTimeout(()=>node.classList.remove('show'),2200);
+    }
+
+    function bindEvents(){
+      $('saveStateTop').addEventListener('click',saveState);
+      $('saveStateDock').addEventListener('click',saveState);
+      $('exportStateDock').addEventListener('click',exportState);
+      $('importStateDock').addEventListener('click',importState);
+      $('openAiTop').addEventListener('click',openAiModal);
+      $('openAiDock').addEventListener('click',askGeminiDefault);
+      $('openLensTop').addEventListener('click',openLensModal);
+      $('openLensDock').addEventListener('click',openLensModal);
+      $('openPatchDock').addEventListener('click',openPatchModal);
+      document.querySelectorAll('[data-close]').forEach(btn=>btn.addEventListener('click',()=>closeModal(btn.dataset.close)));
+      document.querySelectorAll('.modal').forEach(modal=>modal.addEventListener('click',(e)=>{if(e.target===modal) closeModal(modal.id);}));
+      $('refreshHandoff').addEventListener('click',updateHandoff);
+      $('copyHandoff').addEventListener('click',()=>copyText($('handoffText').value));
+      $('aiIntent').addEventListener('input',()=>{state.user_intent=$('aiIntent').value; updateHandoff();});
+      $('applyPatch').addEventListener('click',applyPatchFromInput);
+      $('clearPatch').addEventListener('click',()=>{$('patchInput').value='';$('patchResult').value='';});
+      $('loadPatchExample').addEventListener('click',()=>{
+        $('patchInput').value = JSON.stringify({patch_type:'jester_engine_shell_patch',version:'1.0',ops:[{op:'set_active_chamber',value:'jester'},{op:'add_log_entry',value:{type:'test',message:'Patch console operational'}}]},null,2);
+      });
+      $('importFile').addEventListener('change',async(e)=>{
+        const file=e.target.files?.[0]; if(!file) return;
+        try{ mergeImportedState(JSON.parse(await file.text()),true); }
+        catch(err){ toast('Import failed'); console.error(err); }
+        e.target.value='';
+      });
+      window.addEventListener('keydown',(e)=>{
+        if(e.key==='Escape') document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));
+      });
+      window.addEventListener('pagehide',()=>{
+        // The transition gate must never become the restored Back-button snapshot.
+        hideHandoffGate();
+      });
+      window.addEventListener('pageshow',(event)=>{
+        hideHandoffGate();
+        if(restoreAiMenuAfterReturn()) return;
+        const nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+        const isBackForward = event.persisted || (nav && nav.type === 'back_forward');
+        if(isBackForward){
+          revealAppWithoutBoot();
+          setTimeout(()=>{ suppressBootOnReturn = false; },500);
+        }
+      });
+      window.addEventListener('popstate',()=>{
+        if(window.location.hash === '#ai-menu') restoreAiMenuAfterReturn();
+      });
+    }
+
+    function init(){
+      $('brandTitle').textContent = APP_CONFIG.appName;
+      $('brandEyebrow').textContent = APP_CONFIG.brandTitle;
+      $('brandStatus').textContent = APP_CONFIG.statusSeal;
+      $('topBrandLogo').src = APP_CONFIG.paths.jesterLogo;
+      renderChambers();
+      setupSwipe();
+      bindEvents();
+      purgeCarouselArrows();
+      setTimeout(purgeCarouselArrows,250);
+      loadState();
+      syncAgentState();
+      appInitialized = true;
+      if(!restoreAiMenuAfterReturn()) bootSequence();
+    }
+
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+    else init();
+  })();
+  </script>
+</body>
+</html>
