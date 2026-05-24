@@ -2,7 +2,7 @@
   "name": "ACE Mind",
   "short_name": "ACE Mind",
   "description": "ACE Mind local-first personal timing and coherence dashboard.",
-  "start_url": "./ace-mind-v24-9-pwa-nudge-lab.html",
+  "start_url": "./ace-mind.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
