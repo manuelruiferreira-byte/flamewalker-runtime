@@ -11,13 +11,13 @@
   "categories": ["health", "lifestyle", "productivity"],
   "icons": [
     {
-      "src": "./shared/assets/logos/ace-mind-192.png",
+      "src": "./shared/assets/logos/ace-mind-black-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./shared/assets/logos/ace-mind-512.png",
+      "src": "./shared/assets/logos/ace-mind-black-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
