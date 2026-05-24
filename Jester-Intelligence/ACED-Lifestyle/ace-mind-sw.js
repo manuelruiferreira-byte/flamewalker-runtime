@@ -1,53 +1,24 @@
-/* ACE Mind Service Worker v25.0.4
-   Canonical live file: ace-mind.html
-   Scope: same folder as ace-mind.html
-   Purpose: PWA install support, offline fallback, notification click routing.
+/* ACE Mind Service Worker v25.0.5
+   Safe cache purge version.
+   Canonical app file: ./ace-mind.html
+   Purpose: stop old boot/cache ghosts and route notifications to ACE Mind.
 */
 
-const ACE_MIND_SW_VERSION = "25.0.4-single-logo-boot";
-const CACHE_NAME = "ace-mind-cache-v25-0-4-single-logo-boot";
-
-const APP_SHELL = [
-  "./ace-mind.html",
-  "./manifest.json",
-  "./shared/assets/logos/ace-mind.png",
-  "./shared/assets/logos/aced.png",
-  "./shared/assets/logos/jester-intelligence.png",
-  "../shared/assets/logos/jester-intelligence.png"
-];
+const ACE_MIND_SW_VERSION = "25.0.5-system-splash-only";
+const CACHE_PREFIX = "ace-mind-cache-";
 
 self.addEventListener("install", event => {
-  event.waitUntil(
-    (async () => {
-      const cache = await caches.open(CACHE_NAME);
-
-      for (const url of APP_SHELL) {
-        try {
-          const request = new Request(url, { cache: "reload" });
-          const response = await fetch(request);
-
-          if (response && response.ok) {
-            await cache.put(url, response);
-          }
-        } catch (error) {
-          // Optional assets may fail depending on GitHub folder structure.
-          // Do not fail install because one logo path is missing.
-        }
-      }
-
-      await self.skipWaiting();
-    })()
-  );
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
   event.waitUntil(
     (async () => {
-      const cacheNames = await caches.keys();
+      const names = await caches.keys();
 
       await Promise.all(
-        cacheNames
-          .filter(name => name.startsWith("ace-mind-cache-") && name !== CACHE_NAME)
+        names
+          .filter(name => name.startsWith(CACHE_PREFIX))
           .map(name => caches.delete(name))
       );
 
@@ -57,65 +28,15 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-  const request = event.request;
-
-  if (request.method !== "GET") return;
-
-  const url = new URL(request.url);
-
-  // HTML navigation: network first, cache fallback.
-  // This helps GitHub Pages show the newest ace-mind.html after replacement.
-  if (request.mode === "navigate") {
-    event.respondWith(
-      (async () => {
-        try {
-          const fresh = await fetch(request);
-          const cache = await caches.open(CACHE_NAME);
-          await cache.put("./ace-mind.html", fresh.clone());
-          return fresh;
-        } catch (error) {
-          const cached = await caches.match("./ace-mind.html");
-          if (cached) return cached;
-
-          return new Response("ACE Mind is offline and no cached shell is available.", {
-            status: 503,
-            headers: { "Content-Type": "text/plain" }
-          });
-        }
-      })()
-    );
-    return;
-  }
-
-  // Same-origin assets: cache first, then network.
-  if (url.origin === self.location.origin) {
-    event.respondWith(
-      (async () => {
-        const cached = await caches.match(request);
-        if (cached) return cached;
-
-        try {
-          const fresh = await fetch(request);
-
-          if (fresh && fresh.ok) {
-            const cache = await caches.open(CACHE_NAME);
-            await cache.put(request, fresh.clone());
-          }
-
-          return fresh;
-        } catch (error) {
-          return cached || Response.error();
-        }
-      })()
-    );
-  }
+  // Network-only service worker.
+  // This prevents old cached boot versions from being served.
+  return;
 });
 
 self.addEventListener("notificationclick", event => {
   event.notification.close();
 
-  const data = event.notification.data || {};
-  const targetUrl = data.url || "./ace-mind.html";
+  const targetUrl = "./ace-mind.html";
 
   event.waitUntil(
     (async () => {
@@ -126,13 +47,7 @@ self.addEventListener("notificationclick", event => {
 
       for (const client of allClients) {
         try {
-          const clientUrl = new URL(client.url);
-          const target = new URL(targetUrl, self.location.href);
-
-          if (
-            clientUrl.origin === target.origin &&
-            clientUrl.pathname.endsWith("/ace-mind.html")
-          ) {
+          if (client.url.includes("ace-mind.html")) {
             await client.focus();
             return;
           }
@@ -147,7 +62,7 @@ self.addEventListener("notificationclick", event => {
 });
 
 self.addEventListener("notificationclose", event => {
-  // Reserved for future ACE Halo / Attention Garden logic.
+  // Reserved for future ACE Halo / Attention Garden.
   // No tracking. No network call.
 });
 
@@ -162,8 +77,8 @@ self.addEventListener("message", event => {
     event.source?.postMessage({
       type: "ACE_MIND_SW_VERSION",
       version: ACE_MIND_SW_VERSION,
-      cache: CACHE_NAME,
-      canonical: "./ace-mind.html"
+      canonical: "./ace-mind.html",
+      cache_mode: "network-only-cache-purge"
     });
   }
 });
