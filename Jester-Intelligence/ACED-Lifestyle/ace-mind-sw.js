@@ -1,17 +1,18 @@
-/* ACE Mind Service Worker v25.0
+/* ACE Mind Service Worker v25.0.4
    Canonical live file: ace-mind.html
    Scope: same folder as ace-mind.html
    Purpose: PWA install support, offline fallback, notification click routing.
 */
 
-const ACE_MIND_SW_VERSION = "25.0-canonical-ace-mind";
-const CACHE_NAME = "ace-mind-cache-v25-0-canonical";
+const ACE_MIND_SW_VERSION = "25.0.4-single-logo-boot";
+const CACHE_NAME = "ace-mind-cache-v25-0-4-single-logo-boot";
 
 const APP_SHELL = [
   "./ace-mind.html",
   "./manifest.json",
   "./shared/assets/logos/ace-mind.png",
   "./shared/assets/logos/aced.png",
+  "./shared/assets/logos/jester-intelligence.png",
   "../shared/assets/logos/jester-intelligence.png"
 ];
 
@@ -62,8 +63,8 @@ self.addEventListener("fetch", event => {
 
   const url = new URL(request.url);
 
-  // Navigation requests: network first, cache fallback.
-  // This helps GitHub Pages show the newest ace-mind.html after you replace it.
+  // HTML navigation: network first, cache fallback.
+  // This helps GitHub Pages show the newest ace-mind.html after replacement.
   if (request.mode === "navigate") {
     event.respondWith(
       (async () => {
@@ -75,6 +76,7 @@ self.addEventListener("fetch", event => {
         } catch (error) {
           const cached = await caches.match("./ace-mind.html");
           if (cached) return cached;
+
           return new Response("ACE Mind is offline and no cached shell is available.", {
             status: 503,
             headers: { "Content-Type": "text/plain" }
@@ -85,7 +87,7 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  // For same-origin assets: stale cache fallback.
+  // Same-origin assets: cache first, then network.
   if (url.origin === self.location.origin) {
     event.respondWith(
       (async () => {
@@ -94,10 +96,12 @@ self.addEventListener("fetch", event => {
 
         try {
           const fresh = await fetch(request);
+
           if (fresh && fresh.ok) {
             const cache = await caches.open(CACHE_NAME);
             await cache.put(request, fresh.clone());
           }
+
           return fresh;
         } catch (error) {
           return cached || Response.error();
@@ -143,8 +147,8 @@ self.addEventListener("notificationclick", event => {
 });
 
 self.addEventListener("notificationclose", event => {
-  // Reserved for future Scholar / Attention Garden calibration.
-  // No network call. No tracking.
+  // Reserved for future ACE Halo / Attention Garden logic.
+  // No tracking. No network call.
 });
 
 self.addEventListener("message", event => {
