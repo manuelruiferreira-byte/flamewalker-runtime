@@ -1,0 +1,2280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
+<meta name="theme-color" content="#02040a" />
+<title>ACE Gravitic</title>
+<link rel="manifest" href="./ace-gravitic-manifest.json" />
+<meta name="mobile-web-app-capable" content="yes" />
+<style>
+:root{
+  --bg:#02040a;
+  --panel:rgba(5,12,26,.88);
+  --panel2:rgba(8,18,36,.78);
+  --gold:#d9a64a;
+  --gold2:#fff0ad;
+  --cyan:#20e7ff;
+  --teal:#20d6c7;
+  --violet:#8b5cf6;
+  --red:#ff4f6d;
+  --emerald:#39e6a7;
+  --orange:#ff9b4a;
+  --yellow:#ffe169;
+  --blue:#82caff;
+  --text:#fff5d6;
+  --muted:#9fb4ce;
+  --line:rgba(217,166,74,.34);
+  --shadow:0 26px 90px rgba(0,0,0,.68),0 0 42px rgba(32,231,255,.045);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;touch-action:pan-x pan-y pinch-zoom;overscroll-behavior-y:none}
+body{
+  overflow-x:hidden;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(32,231,255,.20),transparent 30%),
+    radial-gradient(circle at 82% 8%,rgba(139,92,246,.18),transparent 31%),
+    radial-gradient(circle at 18% 10%,rgba(217,166,74,.13),transparent 28%),
+    radial-gradient(circle at 50% 62%,rgba(217,166,74,.08),transparent 42%),
+    linear-gradient(180deg,#01030a 0%,#061224 48%,#02050d 100%);
+}
+button,input,textarea,select{font:inherit;color:inherit}
+button{border:0;cursor:pointer}
+input[type=file]{display:none}
+.hidden{display:none!important}
+.app-shell{min-height:100svh;width:100vw;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);opacity:1;visibility:visible}
+.topbar{position:sticky;top:0;z-index:40;padding:14px 14px 8px;background:linear-gradient(180deg,rgba(1,3,10,.96),rgba(1,3,10,.74) 74%,transparent);backdrop-filter:blur(18px)}
+.brand-card{
+  max-width:1120px;margin:0 auto;border:1px solid var(--line);border-radius:28px;
+  background:radial-gradient(circle at 50% 0%,rgba(32,231,255,.08),transparent 35%),linear-gradient(145deg,rgba(5,16,36,.88),rgba(1,4,12,.72));
+  box-shadow:0 22px 80px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,240,173,.08);
+  padding:12px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
+}
+.brand-mark{width:48px;height:48px;border-radius:17px;border:1px solid rgba(217,166,74,.36);background:rgba(0,0,0,.22);display:grid;place-items:center;overflow:hidden;box-shadow:inset 0 0 28px rgba(217,166,74,.08),0 0 22px rgba(32,231,255,.06)}
+.brand-mark img{width:84%;height:84%;object-fit:contain;filter:drop-shadow(0 0 18px rgba(32,231,255,.26)) drop-shadow(0 0 16px rgba(217,166,74,.24))}
+.title{font-size:1.1rem;font-weight:850;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--gold2);text-shadow:0 0 22px rgba(217,166,74,.20)}
+.subtitle{font-size:.72rem;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-actions{display:flex;gap:8px;align-items:center}
+.icon-btn,.small-btn{border:1px solid rgba(217,166,74,.30);background:radial-gradient(circle at 50% 0%,rgba(32,231,255,.08),transparent 42%),rgba(4,12,26,.82);border-radius:15px;color:var(--gold2);min-height:40px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.24)}
+.icon-btn{width:42px;padding:0}
+.main{max-width:1120px;margin:0 auto;padding:10px 14px 96px;min-height:calc(100svh - 112px)}
+.carousel-wrap{position:relative;border:1px solid var(--line);border-radius:34px;background:radial-gradient(circle at 50% 0%,rgba(32,231,255,.08),transparent 35%),linear-gradient(145deg,rgba(5,16,36,.88),rgba(1,4,12,.72));box-shadow:0 22px 80px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,240,173,.08);overflow:hidden;min-height:calc(100svh - 196px)}
+.carousel-wrap:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(217,166,74,.16),transparent 32%),radial-gradient(circle at 22% 18%,rgba(32,231,255,.14),transparent 32%),radial-gradient(circle at 88% 18%,rgba(139,92,246,.14),transparent 32%);pointer-events:none}
+.carousel-track{position:relative;display:flex;width:100%;transition:transform 560ms var(--ease);will-change:transform;touch-action:pan-x pan-y pinch-zoom}
+.chamber{min-width:100%;padding:18px;min-height:calc(100svh - 216px);display:flex;align-items:stretch}
+.chamber-inner{position:relative;width:100%;border:1px solid rgba(217,166,74,.26);border-radius:28px;background:radial-gradient(circle at 50% -4%,rgba(32,231,255,.06),transparent 30%),linear-gradient(145deg,rgba(3,12,28,.72),rgba(6,17,36,.82));box-shadow:inset 0 1px 0 rgba(255,240,173,.055);overflow:hidden;padding:18px;display:grid;grid-template-rows:auto 1fr;gap:14px}
+.chamber-inner:after{content:"";position:absolute;inset:auto 0 0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.38}
+.chamber-head{display:flex;align-items:center;gap:12px;position:relative;z-index:2;min-height:52px}
+.suit{width:50px;height:50px;border-radius:18px;border:1px solid rgba(217,166,74,.46);display:grid;place-items:center;background:radial-gradient(circle at 50% 28%,rgba(32,231,255,.14),transparent 46%),rgba(0,0,0,.28);box-shadow:inset 0 0 26px rgba(217,166,74,.10),0 0 26px rgba(32,231,255,.08);font-size:1.55rem}
+.chamber-title{font-size:1.05rem;font-weight:900;color:#fff7dc}
+.chamber-desc{font-size:.78rem;color:#aebdd1;line-height:1.35;margin-top:2px}
+.chamber-grid{position:relative;z-index:2;display:grid;gap:12px;align-content:start}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card,.practice-card,.advanced-tile{
+  border:1px solid rgba(217,166,74,.25);border-radius:24px;
+  background:radial-gradient(circle at 50% 0%,rgba(32,231,255,.055),transparent 34%),linear-gradient(145deg,rgba(3,11,27,.78),rgba(1,5,14,.66));
+  box-shadow:0 14px 42px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,240,173,.045);
+  padding:14px;overflow:hidden;
+}
+.card-title{font-size:.92rem;font-weight:900;color:#fff7dc;line-height:1.25;margin-bottom:5px}
+.card-kicker{font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+.small{font-size:.82rem;color:#b7c8dc;line-height:1.45}
+.tiny{font-size:.72rem;color:#7f93ac;line-height:1.35}
+.row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border-top:1px solid rgba(255,255,255,.06);padding:9px 0}
+.row:first-child{border-top:0}
+.row-title{font-weight:850;color:#fff8df;line-height:1.2}
+.row-note{font-size:.78rem;color:#9fb0c6;line-height:1.35;margin-top:3px}
+.pill{display:inline-grid;place-items:center;border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:5px 8px;font-size:.72rem;font-weight:850}
+.pill-cyan{color:#a5f3fc;background:rgba(32,231,255,.10)}
+.pill-gold{color:var(--gold2);background:rgba(217,166,74,.10)}
+.pill-green{color:#bbf7d0;background:rgba(52,211,153,.10)}
+.pill-violet{color:#ddd6fe;background:rgba(139,92,246,.10)}
+.link-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.link-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;border:1px solid rgba(217,166,74,.24);background:rgba(255,255,255,.045);border-radius:14px;padding:8px 10px;color:var(--gold2);font-size:.78rem;font-weight:800}
+.link-btn.youtube{border-color:rgba(255,79,109,.35);color:#fecaca;background:rgba(255,79,109,.08)}
+.link-btn.spotify{border-color:rgba(57,230,167,.35);color:#bbf7d0;background:rgba(57,230,167,.08)}
+.link-btn.search{border-color:rgba(32,231,255,.35);color:#a5f3fc;background:rgba(32,231,255,.08)}
+.practice-card{position:relative}
+.practice-card.active{border-color:rgba(32,231,255,.65);box-shadow:0 0 22px rgba(32,231,255,.09),0 14px 42px rgba(0,0,0,.30)}
+.utility-dock{position:fixed;left:50%;bottom:14px;z-index:60;transform:translateX(-50%);width:min(94vw,760px);border:1px solid rgba(217,166,74,.26);border-radius:24px;background:rgba(2,4,10,.80);backdrop-filter:blur(18px);box-shadow:var(--shadow);padding:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.dock-btn{border:1px solid rgba(217,166,74,.24);border-radius:16px;background:radial-gradient(circle at 50% 0%,rgba(32,231,255,.08),transparent 42%),rgba(6,17,36,.78);padding:10px 12px;color:var(--gold2);font-size:.86rem}
+.dots{position:absolute;left:50%;bottom:12px;z-index:6;transform:translateX(-50%);display:flex;gap:8px;padding:8px 10px;border:1px solid rgba(217,166,74,.14);border-radius:999px;background:rgba(2,4,10,.52);backdrop-filter:blur(12px)}
+.dot{width:9px;height:9px;border-radius:999px;background:rgba(217,166,74,.28);transition:width 260ms var(--ease),background 260ms}
+.dot.active{width:24px;background:linear-gradient(90deg,var(--gold2),var(--cyan));box-shadow:0 0 18px rgba(32,231,255,.25),0 0 14px rgba(217,166,74,.26)}
+.car-arrow{position:absolute;top:50%;z-index:8;transform:translateY(-50%);width:42px;height:42px;border-radius:999px;border:1px solid rgba(217,166,74,.34);background:rgba(1,4,12,.62);backdrop-filter:blur(12px);color:var(--gold2);box-shadow:0 0 22px rgba(32,231,255,.06)}
+.car-arrow.left{left:10px}.car-arrow.right{right:10px}
+.modal{position:fixed;inset:0;z-index:120;display:none;place-items:end center;background:rgba(0,0,0,.58);backdrop-filter:blur(10px);padding:14px}
+.modal.open{display:grid}
+.modal-panel{width:min(940px,100%);max-height:88vh;overflow:auto;border:1px solid rgba(217,166,74,.30);border-radius:28px;background:linear-gradient(180deg,rgba(7,18,36,.97),rgba(2,4,10,.97));box-shadow:var(--shadow);padding:16px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.modal-title{font-size:1rem;font-weight:850;color:var(--gold2)}
+.x{width:38px;height:38px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(217,166,74,.20)}
+textarea,input,select{width:100%;border:1px solid rgba(217,166,74,.20);background:rgba(0,0,0,.28);border-radius:18px;padding:12px;color:var(--text);outline:none}
+textarea{min-height:210px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:.78rem;line-height:1.5}
+.payload-grid,.model-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.payload-btn,.model-btn{border:1px solid rgba(215,181,109,.28);background:rgba(4,12,26,.72);border-radius:14px;padding:10px 8px;text-align:center;color:var(--muted);font-size:.78rem;letter-spacing:.06em;min-height:42px;text-decoration:none;display:grid;place-items:center}
+.payload-btn.active,.model-btn.model-active{border-color:rgba(32,231,255,.78);background:linear-gradient(135deg,rgba(32,231,255,.13),rgba(139,92,246,.12));color:#dffbff;font-weight:700}
+.ai-section-label{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);padding:10px 2px 4px;opacity:.8}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}
+.primary,.secondary,.danger{border-radius:16px;padding:11px 14px}
+.primary{border:1px solid rgba(217,166,74,.52);background:linear-gradient(135deg,rgba(217,166,74,.24),rgba(32,231,255,.10),rgba(139,92,246,.08));color:var(--gold2);box-shadow:0 0 22px rgba(217,166,74,.08)}
+.secondary{border:1px solid rgba(217,166,74,.25);background:rgba(255,255,255,.045);color:var(--text)}
+.danger{border:1px solid rgba(255,91,110,.35);background:rgba(255,91,110,.10);color:#ffd7dc}
+.lens-box{border:1px solid rgba(217,166,74,.18);border-radius:20px;background:rgba(0,0,0,.24);padding:12px;overflow:auto}
+.lens-box pre{white-space:pre-wrap;word-break:break-word;margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:.76rem;line-height:1.5;color:#e8dcc0}
+.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-20px);opacity:0;z-index:200;background:rgba(2,4,10,.94);border:1px solid rgba(217,166,74,.36);border-radius:18px;padding:12px 14px;box-shadow:var(--shadow);transition:opacity 250ms,transform 250ms;color:var(--gold2);pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.handoff-gate{position:fixed;inset:0;z-index:260;display:none;place-items:center;background:#000;overflow:hidden}
+.handoff-gate.open{display:grid}
+.handoff-card{width:min(82vw,420px);min-height:260px;border:1px solid rgba(217,166,74,.44);border-radius:34px;background:radial-gradient(circle at 50% 20%,rgba(32,231,255,.12),transparent 42%),linear-gradient(145deg,rgba(7,18,36,.96),rgba(1,3,10,.98));box-shadow:0 0 80px rgba(217,166,74,.12),0 24px 80px rgba(0,0,0,.65);display:grid;place-items:center;text-align:center;padding:34px;transform:scale(.96);opacity:0;filter:blur(12px);animation:handoffEnter 760ms var(--ease) forwards}
+.handoff-model-mark{width:92px;height:92px;border-radius:30px;border:1px solid rgba(255,240,173,.52);display:grid;place-items:center;margin:0 auto 18px;background:radial-gradient(circle at 50% 35%,rgba(217,166,74,.24),rgba(32,231,255,.11));color:var(--gold2);font-size:1.25rem;font-weight:900;letter-spacing:.06em;box-shadow:0 0 34px rgba(32,231,255,.12)}
+.handoff-name{font-size:1.1rem;font-weight:850;color:#fff8df}
+@keyframes handoffEnter{to{transform:scale(1);opacity:1;filter:blur(0)}}
+@media(max-width:900px){.grid-3{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
+@media(max-width:620px){
+  .brand-card{grid-template-columns:auto 1fr auto;padding:10px}
+  .top-actions .small-btn{display:none}
+  .main{padding:8px 8px 92px}
+  .chamber{padding:10px;min-height:calc(100svh - 204px)}
+  .carousel-wrap{min-height:calc(100svh - 184px)}
+  .chamber-inner{border-radius:24px;padding:12px}
+  .payload-grid,.model-grid{grid-template-columns:1fr}
+  .card,.practice-card,.advanced-tile{border-radius:20px}
+  .utility-dock{bottom:10px}
+  .dock-btn{font-size:.78rem;padding:9px 10px}
+  .dots{bottom:9px}
+  .car-arrow{display:none}
+  .subtitle{display:none}
+}
+
+/* v1.0.4 ACE Mind parity resolver */
+.practice-card.mind{
+  border-color:rgba(32,231,255,.72);
+  box-shadow:0 0 26px rgba(32,231,255,.12),0 14px 42px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,240,173,.06);
+}
+.practice-card.mind:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(circle at 50% 0%,rgba(32,231,255,.10),transparent 42%);
+}
+.pill-mind{color:#dffbff;background:rgba(32,231,255,.14);border-color:rgba(32,231,255,.50)}
+.pill-open{color:#cbd5e1;background:rgba(148,163,184,.08)}
+.prescription-card{
+  border-color:rgba(32,231,255,.35)!important;
+  background:linear-gradient(145deg,rgba(32,231,255,.08),rgba(139,92,246,.06),rgba(3,11,27,.78))!important;
+}
+.rx-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.rx-cell{border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(0,0,0,.18);padding:8px}
+.rx-cell b{display:block;color:#a5f3fc;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+.rx-cell span{font-size:.78rem;color:#dbeafe;line-height:1.35}
+.unresolved-note{border-left:3px solid rgba(255,155,74,.65);background:rgba(255,155,74,.08);border-radius:0 12px 12px 0;padding:8px;margin-top:8px;color:#fdba74;font-size:.74rem;line-height:1.4}
+@media(max-width:620px){.rx-grid{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div class="app-shell" id="appShell">
+<header class="topbar">
+  <div class="brand-card">
+    <div class="brand-mark"><img id="brandLogo" alt="" /></div>
+    <div class="brand-copy"><div class="title">ACE Gravitic</div><div class="subtitle">Acupressure · Tai Chi · meditation · breath · sound</div></div>
+    <div class="top-actions"><button class="small-btn" type="button" onclick="openModal('lensModal')">Lens</button><button class="icon-btn" type="button" onclick="openModal('aiModal')" aria-label="AI">AI</button></div>
+  </div>
+</header>
+<main class="main">
+  <section class="carousel-wrap" id="carouselWrap">
+    <button class="car-arrow left" onclick="moveChamber(-1)">‹</button>
+    <div class="carousel-track" id="carouselTrack"></div>
+    <button class="car-arrow right" onclick="moveChamber(1)">›</button>
+    <div class="dots" id="dots"></div>
+  </section>
+</main>
+<nav class="utility-dock" aria-label="Utilities">
+  <button class="dock-btn" onclick="openModal('aiModal')">AI</button>
+  <button class="dock-btn" onclick="openModal('lensModal')">Lens</button>
+  <button class="dock-btn" onclick="openModal('patchModal')">Patch</button>
+  <button class="dock-btn" onclick="exportState()">Export</button>
+  <button class="dock-btn" onclick="document.getElementById('importFile').click()">Import</button>
+  <input id="importFile" type="file" accept="application/json,.json" onchange="importStateFile(event)">
+</nav>
+</div>
+
+<div class="modal" id="aiModal">
+  <div class="modal-panel">
+    <div class="modal-head"><div class="modal-title">AI Handoff</div><button class="x" onclick="closeModal('aiModal')">×</button></div>
+    <div class="ai-section-label">What to send</div><div class="payload-grid" id="payloadGrid"></div>
+    <div class="ai-section-label">Where to send it</div><div class="model-grid" id="modelGrid"></div>
+    <div class="action-row"><button class="secondary" onclick="openJesterBridge()">Bridge</button><button class="secondary" onclick="copyCurrentPayload()">Copy</button></div>
+    <div class="tiny" id="copyStatus" style="min-height:18px;margin-top:8px;text-align:right;color:#a5f3fc"></div>
+    <textarea id="handoffBox" spellcheck="false"></textarea>
+  </div>
+</div>
+
+<div class="modal" id="lensModal">
+  <div class="modal-panel">
+    <div class="modal-head"><div class="modal-title">AI Lens</div><button class="x" onclick="closeModal('lensModal')">×</button></div>
+    <div class="lens-box"><pre id="lensPre"></pre></div>
+  </div>
+</div>
+
+<div class="modal" id="patchModal">
+  <div class="modal-panel">
+    <div class="modal-head"><div class="modal-title">Patch Console v2 · ACE Gravitic</div><button class="x" onclick="closeModal('patchModal')">×</button></div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-kicker">Governance</div>
+      <div class="small">Agents propose. Patch Console validates. For now this app keeps the link system. Video playback comes later as an asset layer.</div>
+    </div>
+    <textarea id="patchInput" spellcheck="false" placeholder='{"patch_type":"ace_gravitic_patch","ops":[]}'></textarea>
+    <div class="action-row"><button class="secondary" onclick="loadPatchTemplate()">Template</button><button class="secondary" onclick="previewPatch()">Preview</button><button class="primary" onclick="applyPatch()">Apply</button><button class="danger" onclick="resetState()">Reset State</button></div>
+    <div class="lens-box" style="margin-top:10px"><pre id="patchOutput"></pre></div>
+  </div>
+</div>
+
+<div class="handoff-gate" id="handoffGate"><div class="handoff-card"><div><div class="handoff-model-mark" id="handoffMark">AI</div><div class="handoff-name" id="handoffName">Opening</div></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script type="application/json" id="agent-manifest">{"app": "ACE Gravitic", "version": "1.0.4.3-clean-cards-agent-ready", "doctrine": "ACE Gravitic is the ACE practice dojo. ACE Mind decides the daily prescription; Gravitic resolves the ACE Mind packet into visible cards through canonical practice IDs and aliases. Five chambers only: Acupressure, Exercise/Tai Chi, Meditation/Chakras/Mantras, Breathwork/Sound Frequencies, AI/Advanced. No day selector. Swipe is a continuous three-panel loop. Media remains link-based for YouTube and Spotify until the local video/image layer is added.", "parity_rule": "Every acupressure point, frequency, breathwork, movement, chakra, and mantra lane that ACE Mind can prescribe must exist as a card or a resolver alias in ACE Gravitic.", "source_alignment": ["ace-mind-v25-0-7.html", "ace-gravitic-v1-0-3-true-continuous-swipe.html"]}</script>
+<script>
+
+'use strict';
+
+const APP_VERSION='1.0.4-ace-mind-parity-resolver';
+const STORAGE_KEY='ace_gravitic_state_v1';
+const ASSETS={
+  jesterLogo:'../shared/assets/logos/jester-intelligence.png',
+  acedLogo:'./shared/assets/logos/aced.png',
+  appLogo:'./shared/assets/logos/ace-gravitic.png'
+};
+
+const CHAMBERS=["spades", "clubs", "diamonds", "hearts", "jester"];
+const CHAMBER_META={
+  "spades": {
+    "icon": "♠",
+    "title": "Acupressure",
+    "desc": "All ACE Mind-advised points, plus links for pressure guidance."
+  },
+  "clubs": {
+    "icon": "♣",
+    "title": "Exercise + Tai Chi",
+    "desc": "Tai Chi, qigong, walks, mobility, yin yoga, posture, and gentle strength."
+  },
+  "diamonds": {
+    "icon": "♦",
+    "title": "Meditation + Chakras + Mantras",
+    "desc": "Chakra lanes, witness practice, mantras, prayer-field, and symbolic alignment."
+  },
+  "hearts": {
+    "icon": "♥",
+    "title": "Breathwork + Sound Frequencies",
+    "desc": "Breath protocols and every ACE Mind frequency lane, link-based for now."
+  },
+  "jester": {
+    "icon": "🃏",
+    "title": "AI + Advanced",
+    "desc": "Lens, handoff, Patch Console, export/import, and agent-ready packets."
+  }
+};
+
+const MODELS=[
+  ['Gemini','https://gemini.google.com/app','GM'],
+  ['ChatGPT','https://chatgpt.com/','CG'],
+  ['Claude','https://claude.ai/','CL'],
+  ['DeepSeek','https://chat.deepseek.com/','DS'],
+  ['Perplexity','https://www.perplexity.ai/','PX'],
+  ['Grok','https://grok.com/','GK'],
+  ['Copilot','https://copilot.microsoft.com/','CP'],
+  ['AI Mode','https://www.google.com/search?udm=50&q=AI%20Mode','AI']
+];
+
+const PAYLOADS=[
+  ['state','State'],
+  ['acupressure','Acu'],
+  ['movement','Move'],
+  ['meditation','Meditation'],
+  ['breath_sound','Breath + Sound'],
+  ['patch','Patch'],
+  ['snapshot','Snapshot']
+];
+
+const LIBRARY={
+  "acupressure": [
+    {
+      "id": "st36",
+      "name": "ST36 · Zusanli",
+      "use": "Energy, digestion, resilience, grounding, and general recovery support.",
+      "query": "ST36 Zusanli acupressure tutorial",
+      "axis": "stomach · vitality · legs",
+      "avoid": "Do not overwork if the area is inflamed or sore."
+    },
+    {
+      "id": "sp6",
+      "name": "SP6 · Sanyinjiao",
+      "use": "Lower-body grounding, yin repair, recovery, sleep support, and nervous downshift.",
+      "query": "SP6 Sanyinjiao acupressure tutorial",
+      "axis": "spleen · liver · kidney",
+      "avoid": "Avoid strong stimulation in pregnancy. Use gentle pressure only."
+    },
+    {
+      "id": "cv12",
+      "name": "CV12 / REN12 · Zhongwan",
+      "use": "Digestive settling, stomach harmony, belly-center grounding.",
+      "query": "CV12 REN12 Zhongwan acupressure",
+      "axis": "digestion · center",
+      "avoid": "Very gentle pressure only, especially after meals."
+    },
+    {
+      "id": "cv6",
+      "name": "CV6 / REN6 · Qihai",
+      "use": "Lower-belly grounding, energy consolidation, root/sacral stability.",
+      "query": "CV6 REN6 Qihai acupressure",
+      "axis": "lower dantian · qi sea",
+      "avoid": "Gentle touch only. Avoid heavy pressure over abdomen."
+    },
+    {
+      "id": "cv4",
+      "name": "CV4 / REN4 · Guanyuan",
+      "use": "Deep reserve, kidney-root symbolism, lower-body recovery.",
+      "query": "CV4 REN4 Guanyuan acupressure",
+      "axis": "root · sacral · essence",
+      "avoid": "Gentle touch only. Avoid strong abdominal pressure."
+    },
+    {
+      "id": "cv17",
+      "name": "CV17 / REN17 · Shanzhong",
+      "use": "Chest softening, breath opening, emotional decompression, heart bridge.",
+      "query": "CV17 REN17 Shanzhong acupressure",
+      "axis": "heart · breath gate",
+      "avoid": "Very gentle pressure only on sternum."
+    },
+    {
+      "id": "lv3",
+      "name": "LV3 · Taichong",
+      "use": "Liver meridian clearing, frustration release, directional reset.",
+      "query": "LV3 Taichong acupressure",
+      "axis": "liver · flow · release",
+      "avoid": "Use moderate pressure, avoid if painful or inflamed."
+    },
+    {
+      "id": "gb34",
+      "name": "GB34 · Yanglingquan",
+      "use": "Tendon/lateral body support, movement flow, decision energy.",
+      "query": "GB34 Yanglingquan acupressure",
+      "axis": "gallbladder · tendons · lateral line",
+      "avoid": "Gentle if knee/lateral leg is sensitive."
+    },
+    {
+      "id": "gb20",
+      "name": "GB20 · Fengchi",
+      "use": "Neck tension, head pressure, eye strain, upper-body release.",
+      "query": "GB20 Fengchi acupressure",
+      "axis": "neck · wind pool · eyes",
+      "avoid": "Avoid hard pressure near the skull base. Gentle angled pressure only."
+    },
+    {
+      "id": "lu7",
+      "name": "LU7 · Lieque",
+      "use": "Breath opening, throat-lung bridge, release and emotional clearing.",
+      "query": "LU7 Lieque acupressure",
+      "axis": "lung · release · grief",
+      "avoid": "Gentle wrist pressure only."
+    },
+    {
+      "id": "lu9",
+      "name": "LU9 · Taiyuan",
+      "use": "Breath anchoring, grief regulation, wrist-lung connection.",
+      "query": "LU9 Taiyuan acupressure",
+      "axis": "lung · pulse · wrist",
+      "avoid": "Gentle pressure if wrist/artery area is sensitive."
+    },
+    {
+      "id": "li4",
+      "name": "LI4 · Hegu",
+      "use": "Tension release, headaches, jaw/face pressure, general clearing.",
+      "query": "LI4 Hegu acupressure",
+      "axis": "large intestine · clearing",
+      "avoid": "Avoid strong stimulation in pregnancy."
+    },
+    {
+      "id": "ht7",
+      "name": "HT7 · Shenmen",
+      "use": "Heart calming, emotional settling, sleep support, anxiety reduction.",
+      "query": "HT7 Shenmen acupressure",
+      "axis": "heart · spirit gate",
+      "avoid": "Gentle wrist pressure only."
+    },
+    {
+      "id": "pc6",
+      "name": "PC6 · Neiguan",
+      "use": "Nausea, anxiety, chest tension, emotional regulation.",
+      "query": "PC6 Neiguan acupressure",
+      "axis": "pericardium · inner gate",
+      "avoid": "Gentle pressure if wrist is irritated."
+    },
+    {
+      "id": "pc8",
+      "name": "PC8 · Laogong",
+      "use": "Hand-heart grounding, emotional heat discharge, prayer-hand focus.",
+      "query": "PC8 Laogong acupressure",
+      "axis": "palm · heart fire",
+      "avoid": "Gentle palm pressure only."
+    },
+    {
+      "id": "gv20",
+      "name": "GV20 · Baihui",
+      "use": "Centering, mental clarity, upright posture, overthinking reset.",
+      "query": "GV20 Baihui acupressure",
+      "axis": "crown · governing vessel",
+      "avoid": "Avoid hard pressure if dizzy or overstimulated."
+    },
+    {
+      "id": "yintang",
+      "name": "Yintang · Third Eye Hall",
+      "use": "Mental chatter calming, eye strain, forehead tension, symbolic third-eye focus.",
+      "query": "Yintang acupressure",
+      "axis": "mind · brow · eyes",
+      "avoid": "Light touch only."
+    },
+    {
+      "id": "bl2",
+      "name": "BL2 · Zanzhu",
+      "use": "Eye strain, brow tension, screen recovery.",
+      "query": "BL2 Zanzhu acupressure",
+      "axis": "eyes · brow · bladder channel",
+      "avoid": "Very gentle pressure around the eyes."
+    },
+    {
+      "id": "bl60",
+      "name": "BL60 · Kunlun",
+      "use": "Posterior chain release, back-line mobility, grounding through ankles.",
+      "query": "BL60 Kunlun acupressure",
+      "axis": "bladder · ankle · back line",
+      "avoid": "Avoid strong stimulation in pregnancy. Gentle ankle pressure only."
+    },
+    {
+      "id": "bl62",
+      "name": "BL62 · Shenmai",
+      "use": "Sleep rhythm, lateral ankle release, yin-yang mobility support.",
+      "query": "BL62 Shenmai acupressure",
+      "axis": "bladder · sleep · mobility",
+      "avoid": "Gentle if ankle is sensitive."
+    },
+    {
+      "id": "ki1",
+      "name": "KI1 / KD1 · Yongquan",
+      "use": "Pulls excess head energy down. Strong grounding point.",
+      "query": "KI1 KD1 Yongquan acupressure",
+      "axis": "kidney · root · feet",
+      "avoid": "Gentle only if feet are sensitive."
+    },
+    {
+      "id": "ki3",
+      "name": "KI3 · Taixi",
+      "use": "Kidney support symbolism, deep reserve, lower-body anchoring.",
+      "query": "KI3 Taixi acupressure",
+      "axis": "kidney · reserve · ankle",
+      "avoid": "Gentle ankle pressure only."
+    },
+    {
+      "id": "ki6",
+      "name": "KI6 · Zhaohai",
+      "use": "Yin support, sleep, throat/kidney axis, evening downshift.",
+      "query": "KI6 Zhaohai acupressure",
+      "axis": "kidney · yin · sleep",
+      "avoid": "Gentle pressure only."
+    },
+    {
+      "id": "sp9",
+      "name": "SP9 · Yinlingquan",
+      "use": "Fluid regulation symbolism, digestion, lower-body heaviness.",
+      "query": "SP9 Yinlingquan acupressure",
+      "axis": "spleen · water · dampness",
+      "avoid": "Gentle around knee/leg sensitivity."
+    },
+    {
+      "id": "anmian",
+      "name": "Anmian · Peaceful Sleep",
+      "use": "Sleep support, jaw/neck relaxation, evening wind-down.",
+      "query": "Anmian acupressure sleep",
+      "axis": "sleep · neck · calm",
+      "avoid": "Gentle circles only. Avoid hard neck pressure."
+    }
+  ],
+  "movement": [
+    {
+      "id": "tai24",
+      "name": "Tai Chi · 24 Form",
+      "use": "Full-body slow coordination, balance, grounding, breath-body rhythm.",
+      "query": "Tai Chi 24 form beginner follow along"
+    },
+    {
+      "id": "cloudhands",
+      "name": "Tai Chi · Cloud Hands",
+      "use": "Soft spiral movement, shoulder release, side-to-side grounding.",
+      "query": "Tai Chi cloud hands tutorial"
+    },
+    {
+      "id": "silkreeling",
+      "name": "Tai Chi / Qigong · Silk Reeling",
+      "use": "Spiral joint opening, fascia glide, gentle power circulation.",
+      "query": "silk reeling qigong beginner"
+    },
+    {
+      "id": "zhan",
+      "name": "Zhan Zhuang · Standing Tree",
+      "use": "Postural stillness, energetic rooting, field coherence.",
+      "query": "Zhan Zhuang standing meditation beginner"
+    },
+    {
+      "id": "eightbrocades",
+      "name": "Qigong · Eight Brocades",
+      "use": "Classic gentle whole-body qigong set for daily reset.",
+      "query": "Eight Brocades qigong follow along"
+    },
+    {
+      "id": "openclose",
+      "name": "Qigong · Open / Close Hands",
+      "use": "Simple regulation pattern for nervous system and breath rhythm.",
+      "query": "qigong open close hands exercise"
+    },
+    {
+      "id": "groundwalk",
+      "name": "Grounding Walk",
+      "use": "Slow walking, phone away, attention through feet and horizon.",
+      "query": "mindful walking grounding practice"
+    },
+    {
+      "id": "openview",
+      "name": "Open-View Walking Meditation",
+      "use": "Walking with wide visual field, reducing tunnel focus and mental compression.",
+      "query": "open awareness walking meditation"
+    },
+    {
+      "id": "yinyoga",
+      "name": "Yin Yoga · Floor Reset",
+      "use": "Restorative floor holds for lower back, hips, nervous system and sleep.",
+      "query": "yin yoga gentle lower back hips"
+    },
+    {
+      "id": "lateralflow",
+      "name": "Lateral Yoga Flow",
+      "use": "Wood/liver-lateral line stretch, ribs, hips, side body.",
+      "query": "lateral yoga flow side body stretch"
+    },
+    {
+      "id": "spinalwaves",
+      "name": "Spinal Waves",
+      "use": "Gentle wave through spine, unlock back and breath.",
+      "query": "gentle spinal wave mobility"
+    },
+    {
+      "id": "hipcircles",
+      "name": "Hip Circles",
+      "use": "Sacral/root mobility, hip decompression, lower-body grounding.",
+      "query": "gentle hip circles mobility"
+    },
+    {
+      "id": "neckshoulder",
+      "name": "Neck + Shoulder Silk Reeling",
+      "use": "Neck, jaw, shoulder release for screen fatigue and upper-body tension.",
+      "query": "gentle neck shoulder qigong mobility"
+    },
+    {
+      "id": "shoulderopen",
+      "name": "Shoulder Opening Qigong",
+      "use": "Chest, lungs, upper back and heart gate opening.",
+      "query": "qigong shoulder opening exercise"
+    },
+    {
+      "id": "posture",
+      "name": "Posture Refinement",
+      "use": "Standing alignment, crown-root axis, breath through spine.",
+      "query": "posture alignment standing meditation"
+    },
+    {
+      "id": "eyerest",
+      "name": "Eye Rest + Horizon Gaze",
+      "use": "Screen recovery, optic rest, parasympathetic soft gaze.",
+      "query": "eye relaxation exercises palming horizon gaze"
+    },
+    {
+      "id": "floorstretch",
+      "name": "Floor Stretch · Gentle Spine",
+      "use": "Low-load spine decompression, recovery mode, body-veto compatible.",
+      "query": "gentle floor stretch spine lower back"
+    },
+    {
+      "id": "mobilitywarmup",
+      "name": "Warm-Up Mobility",
+      "use": "Controlled joint circles, ankles, hips, shoulders before movement.",
+      "query": "gentle full body mobility warm up"
+    },
+    {
+      "id": "stancework",
+      "name": "Controlled Strength / Stance Work",
+      "use": "Warrior posture, slow controlled holds, grounded strength without ego load.",
+      "query": "qigong horse stance beginner controlled strength"
+    },
+    {
+      "id": "psoas",
+      "name": "Hip Flexor / Psoas Release",
+      "use": "Lower-back insurance, hip front opening, walking recovery.",
+      "query": "gentle psoas release hip flexor stretch"
+    },
+    {
+      "id": "dynamicqigong",
+      "name": "Dynamic Movement / Qigong Flow",
+      "use": "Flexible qigong flow for Fire/Storm days when the body gate is green.",
+      "query": "dynamic qigong flow beginner",
+      "aliases": [
+        "Dynamic movement / qigong flow",
+        "dynamic movement",
+        "fire qigong",
+        "qigong flow"
+      ]
+    },
+    {
+      "id": "primalfloor",
+      "name": "Primal Floor Wave / Child-Pose Crawl",
+      "use": "Dragon-style floor pattern, child-pose wave, low-load nervous reset.",
+      "query": "primal movement child pose wave beginner",
+      "aliases": [
+        "slow floor crawl pattern",
+        "primal child-pose wave",
+        "child pose wave",
+        "Dragon move"
+      ]
+    },
+    {
+      "id": "plantingstance",
+      "name": "Planting Stance + Slow Squats",
+      "use": "Seed-style rooted stance, calf activation, and slow clean squats.",
+      "query": "planting stance slow squat mobility",
+      "aliases": [
+        "planting stance",
+        "calf stretch",
+        "slow squats",
+        "Seed move"
+      ]
+    },
+    {
+      "id": "hamstring",
+      "name": "Hamstring Release + Declutter Walk",
+      "use": "Worldbridger-style release, posterior-line stretch, and simple walking reset.",
+      "query": "gentle hamstring stretch walking reset",
+      "aliases": [
+        "hamstring stretch",
+        "declutter walk",
+        "Worldbridger move"
+      ]
+    },
+    {
+      "id": "handrelease",
+      "name": "Wrist / Hand / Forearm Release",
+      "use": "Hand-style repair mobility for wrists, hands, forearms, typing load, and touch-to-action practice.",
+      "query": "wrist hand forearm release mobility",
+      "aliases": [
+        "wrist, hands, forearm release",
+        "hands-on repair mobility",
+        "Hand move",
+        "forearm release"
+      ]
+    },
+    {
+      "id": "gracewalk",
+      "name": "Graceful Mobility / Creative Walk",
+      "use": "Star-style posture, grace, creative walking, and beauty-through-structure movement.",
+      "query": "graceful mobility walking meditation",
+      "aliases": [
+        "graceful mobility",
+        "light creative walk",
+        "Star move"
+      ]
+    },
+    {
+      "id": "lymphwalk",
+      "name": "Fluid Hips + Lymph Walk",
+      "use": "Moon-style fluid hip mobility, gentle lymph walk, and water-ritual movement.",
+      "query": "lymphatic drainage walk hip mobility",
+      "aliases": [
+        "fluid hips",
+        "gentle lymph walk",
+        "water ritual",
+        "Moon move"
+      ]
+    },
+    {
+      "id": "chestopen",
+      "name": "Chest Opening + Shoulder Release",
+      "use": "Dog/Sun-style heart gate, chest opening, and soft shoulder release.",
+      "query": "chest opening qigong shoulder release",
+      "aliases": [
+        "soft walk, chest opening, shoulder release",
+        "chest opening",
+        "shoulder release",
+        "Sun walk chest opening"
+      ]
+    },
+    {
+      "id": "coordinationdance",
+      "name": "Coordination Drill / Light Dance",
+      "use": "Monkey-style mobility game, playful reset, coordination, and light dance.",
+      "query": "coordination mobility drill light dance",
+      "aliases": [
+        "coordination drill",
+        "light dance",
+        "mobility game",
+        "Monkey move"
+      ]
+    },
+    {
+      "id": "standingbalance",
+      "name": "Standing Balance Walk",
+      "use": "Human-style slow balance, walking while choosing one clean decision.",
+      "query": "standing balance exercise mindful walking",
+      "aliases": [
+        "standing balance",
+        "slow walk while deciding",
+        "Human move"
+      ]
+    },
+    {
+      "id": "slowhands",
+      "name": "Static Qigong / Slow Hands",
+      "use": "Wizard-style minimal movement, slow hands, presence and static qigong.",
+      "query": "static qigong slow hands practice",
+      "aliases": [
+        "static qigong",
+        "slow hands",
+        "minimal movement",
+        "Wizard move"
+      ]
+    },
+    {
+      "id": "upperback",
+      "name": "Upper Back Opening / Sky Walk",
+      "use": "Eagle-style upper-back opening, horizon/sky walk, and eye-softening movement.",
+      "query": "upper back opening qigong sky walk",
+      "aliases": [
+        "upper back opening",
+        "sky walk",
+        "Eagle move"
+      ]
+    },
+    {
+      "id": "barefoot",
+      "name": "Barefoot Grounding + Ankle Work",
+      "use": "Earth-style grounding through feet, slow Tai Chi and ankle mobility.",
+      "query": "barefoot grounding ankle mobility",
+      "aliases": [
+        "barefoot grounding",
+        "ankle work",
+        "Earth move"
+      ]
+    },
+    {
+      "id": "shakeout",
+      "name": "Shake-Out Reset",
+      "use": "Storm-style shake-out, discharge, short sweat if green, then stillness.",
+      "query": "qigong shaking exercise nervous system reset",
+      "aliases": [
+        "shake-out",
+        "shake out",
+        "short sweat if green",
+        "Storm move"
+      ]
+    },
+    {
+      "id": "sunwalk",
+      "name": "Sun Walk + Light Mobility",
+      "use": "Sun-style radiance walk, chest opening and gentle light mobility.",
+      "query": "sun walking meditation light mobility",
+      "aliases": [
+        "sun walk",
+        "light mobility",
+        "Sun move"
+      ]
+    },
+    {
+      "id": "jawrib",
+      "name": "Neck / Jaw / Rib Mobility",
+      "use": "Wind-style release for neck, jaw, ribs, throat, and breath pathway.",
+      "query": "neck jaw rib mobility qigong",
+      "aliases": [
+        "neck, jaw, and rib mobility",
+        "jaw mobility",
+        "rib mobility",
+        "Wind move"
+      ]
+    },
+    {
+      "id": "precisestretch",
+      "name": "Precise Stretching / Spine Alignment",
+      "use": "Mirror-style posture check, spine alignment, and clean stretching.",
+      "query": "spine alignment precise stretching posture",
+      "aliases": [
+        "spine alignment",
+        "posture check",
+        "precise stretching",
+        "Mirror move"
+      ]
+    },
+    {
+      "id": "softwalk",
+      "name": "Soft Walk",
+      "use": "Dog-style gentle walk without performance pressure, heart coherence through feet.",
+      "query": "soft mindful walk heart coherence",
+      "aliases": [
+        "soft walk",
+        "gentle walk",
+        "Dog move"
+      ]
+    }
+  ],
+  "meditation": [
+    {
+      "id": "root",
+      "name": "Root Chakra · Grounding",
+      "use": "Safety, survival, body proof, lower-body anchoring.",
+      "query": "root chakra grounding meditation",
+      "mantra": "My body is the proof and the gate."
+    },
+    {
+      "id": "sacral",
+      "name": "Sacral Chakra · Flow",
+      "use": "Creative fluidity, hips, desire without chaos, emotional flow.",
+      "query": "sacral chakra meditation",
+      "mantra": "I allow life to move without losing my center."
+    },
+    {
+      "id": "solar",
+      "name": "Solar Plexus · Will",
+      "use": "Clean will, decision power, digestive fire, confidence without force.",
+      "query": "solar plexus chakra meditation",
+      "mantra": "My will is focused, clean, and governed."
+    },
+    {
+      "id": "heart",
+      "name": "Heart Chakra · Bridge",
+      "use": "Emotional softening, compassion, connection without leakage.",
+      "query": "heart chakra meditation",
+      "mantra": "I stay open without leaking power."
+    },
+    {
+      "id": "throat",
+      "name": "Throat Chakra · Voice",
+      "use": "Precise speech, prayer, humming, expression, signal clarity.",
+      "query": "throat chakra meditation",
+      "mantra": "My words are precise, kind, and sovereign."
+    },
+    {
+      "id": "third",
+      "name": "Third Eye · Vision",
+      "use": "Vision without dissociation, symbolic coherence, clear inner image.",
+      "query": "third eye meditation",
+      "mantra": "I see the field and return to the body."
+    },
+    {
+      "id": "crown",
+      "name": "Crown Chakra · Descent",
+      "use": "Meaning without overwhelm, signal descending into action.",
+      "query": "crown chakra meditation",
+      "mantra": "The signal descends into useful action."
+    },
+    {
+      "id": "bhraman",
+      "name": "Bhramari-Brahman Humming Seal",
+      "use": "Seven gentle hum rounds, then witness-awareness silence.",
+      "query": "Bhramari humming meditation",
+      "mantra": "So Ham. Aham Brahmasmi."
+    },
+    {
+      "id": "bodyscan",
+      "name": "Body Scan Meditation",
+      "use": "Return from thought into body, release unnecessary guarding.",
+      "query": "guided body scan meditation",
+      "mantra": "I return attention to the body."
+    },
+    {
+      "id": "witness",
+      "name": "Witness Awareness",
+      "use": "Observe without becoming the signal, thought, body sensation, or emotion.",
+      "query": "witness awareness meditation",
+      "mantra": "I witness, I choose, I return."
+    },
+    {
+      "id": "gratitude",
+      "name": "Candle / Gratitude Practice",
+      "use": "Heart-fire warmth, simple prayer, emotional coherence.",
+      "query": "gratitude candle meditation",
+      "mantra": "Gratitude turns attention into light."
+    },
+    {
+      "id": "tree",
+      "name": "Tree Meditation",
+      "use": "Wood element, rooted growth, vertical alignment, calm expansion.",
+      "query": "tree meditation grounding",
+      "mantra": "Growth without force. One clean extension."
+    },
+    {
+      "id": "silence",
+      "name": "Silence Practice",
+      "use": "No music, no stimulation, no agenda, pure nervous-system rest.",
+      "query": "silent meditation practice",
+      "mantra": "Stillness is also action."
+    },
+    {
+      "id": "fullalignment",
+      "name": "Full Chakra Alignment",
+      "use": "Whole-column alignment from root to crown for complete practice routing.",
+      "query": "full chakra alignment meditation",
+      "mantra": "I align the full column and return to useful action.",
+      "aliases": [
+        "full alignment",
+        "chakra alignment",
+        "all chakras"
+      ]
+    },
+    {
+      "id": "hands",
+      "name": "Heart · Hands / Laogong Focus",
+      "use": "Healing-through-action lane for Hand, PC8, prayer hands, and embodied repair.",
+      "query": "hand chakra laogong meditation",
+      "mantra": "Healing becomes real through one gesture.",
+      "aliases": [
+        "Heart · Hands",
+        "hands",
+        "Laogong",
+        "PC8 meditation"
+      ]
+    },
+    {
+      "id": "rootcrown",
+      "name": "Root · Crown Axis",
+      "use": "Skywalker/Earth route: grounded exploration, vertical channel, horizon and body together.",
+      "query": "root crown chakra meditation",
+      "mantra": "Explore without scattering.",
+      "aliases": [
+        "Root · Crown"
+      ]
+    },
+    {
+      "id": "solarthroat",
+      "name": "Solar Plexus · Throat Axis",
+      "use": "Warrior route: clean question, clean voice, clean will.",
+      "query": "solar plexus throat chakra meditation",
+      "mantra": "Question before conquest.",
+      "aliases": [
+        "Solar Plexus · Throat"
+      ]
+    },
+    {
+      "id": "solarheart",
+      "name": "Solar Plexus · Heart Axis",
+      "use": "Wood/Seed route: will and love aligned without force.",
+      "query": "solar plexus heart chakra meditation",
+      "mantra": "Growth without force.",
+      "aliases": [
+        "Solar Plexus · Heart"
+      ]
+    },
+    {
+      "id": "thirdheart",
+      "name": "Third Eye · Heart Axis",
+      "use": "Wizard route: vision tempered by heart presence.",
+      "query": "third eye heart chakra meditation",
+      "mantra": "Presence bends the field.",
+      "aliases": [
+        "Third Eye · Heart"
+      ]
+    },
+    {
+      "id": "throatheart",
+      "name": "Throat · Heart Axis",
+      "use": "Wind route: speech from the heart, less noise, cleaner transmission.",
+      "query": "throat heart chakra meditation",
+      "mantra": "Speak less, transmit cleaner.",
+      "aliases": [
+        "Throat · Heart"
+      ]
+    },
+    {
+      "id": "seal_dragon",
+      "name": "Dragon Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Dragon.",
+      "query": "Dragon archetype meditation mantra",
+      "mantra": "Return to origin before output",
+      "aliases": [
+        "Dragon",
+        "Dragon mantra",
+        "Return to origin before output"
+      ]
+    },
+    {
+      "id": "seal_wind",
+      "name": "Wind Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Wind.",
+      "query": "Wind archetype meditation mantra",
+      "mantra": "Speak less, transmit cleaner",
+      "aliases": [
+        "Wind",
+        "Wind mantra",
+        "Speak less, transmit cleaner"
+      ]
+    },
+    {
+      "id": "seal_night",
+      "name": "Night Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Night.",
+      "query": "Night archetype meditation mantra",
+      "mantra": "The hidden chamber restores power",
+      "aliases": [
+        "Night",
+        "Night mantra",
+        "The hidden chamber restores power"
+      ]
+    },
+    {
+      "id": "seal_seed",
+      "name": "Seed Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Seed.",
+      "query": "Seed archetype meditation mantra",
+      "mantra": "One seed, one direction",
+      "aliases": [
+        "Seed",
+        "Seed mantra",
+        "One seed, one direction"
+      ]
+    },
+    {
+      "id": "seal_serpent",
+      "name": "Serpent Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Serpent.",
+      "query": "Serpent archetype meditation mantra",
+      "mantra": "Life force rises under governance",
+      "aliases": [
+        "Serpent",
+        "Serpent mantra",
+        "Life force rises under governance"
+      ]
+    },
+    {
+      "id": "seal_worldbridger",
+      "name": "Worldbridger Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Worldbridger.",
+      "query": "Worldbridger archetype meditation mantra",
+      "mantra": "Close one door cleanly",
+      "aliases": [
+        "Worldbridger",
+        "Worldbridger mantra",
+        "Close one door cleanly"
+      ]
+    },
+    {
+      "id": "seal_hand",
+      "name": "Hand Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Hand.",
+      "query": "Hand archetype meditation mantra",
+      "mantra": "Healing becomes real through one gesture",
+      "aliases": [
+        "Hand",
+        "Hand mantra",
+        "Healing becomes real through one gesture"
+      ]
+    },
+    {
+      "id": "seal_star",
+      "name": "Star Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Star.",
+      "query": "Star archetype meditation mantra",
+      "mantra": "Beauty is structure made visible",
+      "aliases": [
+        "Star",
+        "Star mantra",
+        "Beauty is structure made visible"
+      ]
+    },
+    {
+      "id": "seal_moon",
+      "name": "Moon Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Moon.",
+      "query": "Moon archetype meditation mantra",
+      "mantra": "Purify without punishment",
+      "aliases": [
+        "Moon",
+        "Moon mantra",
+        "Purify without punishment"
+      ]
+    },
+    {
+      "id": "seal_dog",
+      "name": "Dog Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Dog.",
+      "query": "Dog archetype meditation mantra",
+      "mantra": "Loyalty begins inside the body",
+      "aliases": [
+        "Dog",
+        "Dog mantra",
+        "Loyalty begins inside the body"
+      ]
+    },
+    {
+      "id": "seal_monkey",
+      "name": "Monkey Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Monkey.",
+      "query": "Monkey archetype meditation mantra",
+      "mantra": "Play reveals the hidden solution",
+      "aliases": [
+        "Monkey",
+        "Monkey mantra",
+        "Play reveals the hidden solution"
+      ]
+    },
+    {
+      "id": "seal_human",
+      "name": "Human Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Human.",
+      "query": "Human archetype meditation mantra",
+      "mantra": "Wisdom is the clean choice",
+      "aliases": [
+        "Human",
+        "Human mantra",
+        "Wisdom is the clean choice"
+      ]
+    },
+    {
+      "id": "seal_skywalker",
+      "name": "Skywalker Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Skywalker.",
+      "query": "Skywalker archetype meditation mantra",
+      "mantra": "Explore without scattering",
+      "aliases": [
+        "Skywalker",
+        "Skywalker mantra",
+        "Explore without scattering"
+      ]
+    },
+    {
+      "id": "seal_wizard",
+      "name": "Wizard Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Wizard.",
+      "query": "Wizard archetype meditation mantra",
+      "mantra": "Presence bends the field",
+      "aliases": [
+        "Wizard",
+        "Wizard mantra",
+        "Presence bends the field"
+      ]
+    },
+    {
+      "id": "seal_eagle",
+      "name": "Eagle Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Eagle.",
+      "query": "Eagle archetype meditation mantra",
+      "mantra": "Vision returns when the eyes soften",
+      "aliases": [
+        "Eagle",
+        "Eagle mantra",
+        "Vision returns when the eyes soften"
+      ]
+    },
+    {
+      "id": "seal_warrior",
+      "name": "Warrior Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Warrior.",
+      "query": "Warrior archetype meditation mantra",
+      "mantra": "Question before conquest",
+      "aliases": [
+        "Warrior",
+        "Warrior mantra",
+        "Question before conquest"
+      ]
+    },
+    {
+      "id": "seal_earth",
+      "name": "Earth Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Earth.",
+      "query": "Earth archetype meditation mantra",
+      "mantra": "Synchronize with the living ground",
+      "aliases": [
+        "Earth",
+        "Earth mantra",
+        "Synchronize with the living ground"
+      ]
+    },
+    {
+      "id": "seal_mirror",
+      "name": "Mirror Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Mirror.",
+      "query": "Mirror archetype meditation mantra",
+      "mantra": "Cut only what is false",
+      "aliases": [
+        "Mirror",
+        "Mirror mantra",
+        "Cut only what is false"
+      ]
+    },
+    {
+      "id": "seal_storm",
+      "name": "Storm Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Storm.",
+      "query": "Storm archetype meditation mantra",
+      "mantra": "Chaos becomes renewal under rhythm",
+      "aliases": [
+        "Storm",
+        "Storm mantra",
+        "Chaos becomes renewal under rhythm"
+      ]
+    },
+    {
+      "id": "seal_sun",
+      "name": "Sun Seal Mantra",
+      "use": "ACE Mind seal mantra lane for Sun.",
+      "query": "Sun archetype meditation mantra",
+      "mantra": "Radiance without burnout",
+      "aliases": [
+        "Sun",
+        "Sun mantra",
+        "Radiance without burnout"
+      ]
+    }
+  ],
+  "sound": [
+    {
+      "id": "hz174",
+      "name": "174 Hz · Deep Rest",
+      "use": "Low-frequency rest ambience for body-veto days and pain-softening ritual.",
+      "spotify": "174 hz healing frequency",
+      "youtube": "174 Hz deep healing frequency"
+    },
+    {
+      "id": "hz396",
+      "name": "396 Hz · Root / Release",
+      "use": "Fear-pressure release, root grounding, return to base.",
+      "spotify": "396 hz grounding",
+      "youtube": "396 Hz grounding meditation"
+    },
+    {
+      "id": "hz417",
+      "name": "417 Hz · Change / Clearing",
+      "use": "Transition, cleansing, breaking stale loops, emotional release.",
+      "spotify": "417 hz healing frequency",
+      "youtube": "417 Hz cleansing frequency"
+    },
+    {
+      "id": "hz432",
+      "name": "432 Hz · Coherence",
+      "use": "Soft reset, study background, nervous balance, grounded calm.",
+      "spotify": "432 hz healing frequency",
+      "youtube": "432 Hz healing frequency"
+    },
+    {
+      "id": "hz528",
+      "name": "528 Hz · Repair",
+      "use": "Repair, heart coherence, cellular-symbolic renewal.",
+      "spotify": "528 hz repair",
+      "youtube": "528 Hz healing music"
+    },
+    {
+      "id": "hz639",
+      "name": "639 Hz · Heart / Relational",
+      "use": "Heart bridge, connection, compassion, relational softening.",
+      "spotify": "639 hz heart chakra",
+      "youtube": "639 Hz heart chakra healing"
+    },
+    {
+      "id": "hz741",
+      "name": "741 Hz · Clearing / Throat",
+      "use": "Mental clearing, detox symbolism, throat/voice signal clarity.",
+      "spotify": "741 hz cleanse",
+      "youtube": "741 Hz cleanse"
+    },
+    {
+      "id": "hz852",
+      "name": "852 Hz · Vision",
+      "use": "Third-eye focus, symbolic coherence, inner vision without dissociation.",
+      "spotify": "852 hz third eye",
+      "youtube": "852 Hz third eye meditation"
+    },
+    {
+      "id": "hz963",
+      "name": "963 Hz · Crown / Radiance",
+      "use": "Crown, sun/crown radiance, meaning field, prayerful orientation.",
+      "spotify": "963 hz crown chakra",
+      "youtube": "963 Hz crown chakra meditation"
+    },
+    {
+      "id": "alpha",
+      "name": "Alpha 8-12 Hz · Calm Focus",
+      "use": "Low-friction focus, reading, Patch Console work.",
+      "spotify": "alpha waves focus",
+      "youtube": "alpha waves focus music"
+    },
+    {
+      "id": "theta",
+      "name": "Theta 4-7 Hz · Vision",
+      "use": "Creative trance, dreamlike imagination, poetry and imagery.",
+      "spotify": "theta waves meditation",
+      "youtube": "theta waves meditation"
+    },
+    {
+      "id": "hz285",
+      "name": "285 Hz · Tissue / Repair",
+      "use": "Repair-oriented sound lane used by ACE Mind frequency cards for skin, gut, liver, and tissue recovery symbolism.",
+      "spotify": "285 hz healing frequency tissue repair",
+      "youtube": "285 Hz healing frequency tissue repair",
+      "aliases": [
+        "285 Hz",
+        "285hz",
+        "tissue repair frequency",
+        "skin repair frequency"
+      ]
+    }
+  ],
+  "breath": [
+    {
+      "id": "box",
+      "name": "Box Breath 4-4-4-4",
+      "use": "Stabilize, regain control, reduce noise.",
+      "query": "box breathing 4 4 4 4 guided"
+    },
+    {
+      "id": "coherent",
+      "name": "Coherent Breath 5-5 / 5.5-5.5",
+      "use": "Heart-nervous coherence and calm sustained attention.",
+      "query": "coherent breathing 5.5 seconds guided"
+    },
+    {
+      "id": "478",
+      "name": "4-7-8 Breath",
+      "use": "Grounding, evening downshift, transition toward sleep.",
+      "query": "4 7 8 breathing guided"
+    },
+    {
+      "id": "extended",
+      "name": "Extended Exhale 4-8",
+      "use": "Parasympathetic reserve, body-veto compatible calming.",
+      "query": "extended exhale breathing 4 8 guided"
+    },
+    {
+      "id": "nadi",
+      "name": "Alternate Nostril / Nadi Shodhana",
+      "use": "Balance hemispheres and restore decision clarity.",
+      "query": "nadi shodhana alternate nostril breathing guided"
+    },
+    {
+      "id": "physio",
+      "name": "Physiological Sigh",
+      "use": "Fast nervous discharge and anxiety downshift.",
+      "query": "physiological sigh breathing guided"
+    },
+    {
+      "id": "bhramari",
+      "name": "Bhramari Hum",
+      "use": "Vagal resonance, throat/heart bridge, inner vibration.",
+      "query": "bhramari pranayama guided"
+    },
+    {
+      "id": "belly",
+      "name": "Belly Breath 4-6",
+      "use": "Lower dantian, root/sacral grounding, digestion-friendly regulation.",
+      "query": "belly breathing 4 6 guided"
+    },
+    {
+      "id": "whisper",
+      "name": "Whisper Exhale 4-8",
+      "use": "Throat softening, Wind days, voice reset, subtle parasympathetic cue.",
+      "query": "whisper exhale breathing exercise"
+    },
+    {
+      "id": "wave",
+      "name": "Wave Breath",
+      "use": "Belly to ribs expansion, fluid Moon/Sacral regulation.",
+      "query": "wave breathing exercise"
+    },
+    {
+      "id": "reset",
+      "name": "Reset Breath · Double Inhale Long Exhale",
+      "use": "Storm reset, emotional discharge, quick nervous-system shift.",
+      "query": "double inhale long exhale breathing"
+    },
+    {
+      "id": "panoramic",
+      "name": "Panoramic Breathing",
+      "use": "Open-view breathing, soften eyes, Eagle/vision reset.",
+      "query": "panoramic vision breathing exercise"
+    },
+    {
+      "id": "solar",
+      "name": "Solar Breath 4-4",
+      "use": "Bright, simple radiance without forcing intensity.",
+      "query": "solar breathing meditation"
+    },
+    {
+      "id": "stillness",
+      "name": "Stillness Breath · 6 Slow Breaths",
+      "use": "Wizard-style pause: six slow breaths before action, no rush, no performance.",
+      "query": "six slow breaths stillness meditation",
+      "aliases": [
+        "Stillness breath, 6 slow breaths before action",
+        "stillness breath",
+        "6 slow breaths"
+      ]
+    },
+    {
+      "id": "choice",
+      "name": "Choice Breath · 4 / Pause / 6",
+      "use": "Human-style decision breath: inhale 4, pause, choose, exhale 6.",
+      "query": "choice breathing inhale 4 exhale 6",
+      "aliases": [
+        "Choice breath: inhale 4, pause, choose, exhale 6",
+        "choice breath"
+      ]
+    },
+    {
+      "id": "mirrorbreath",
+      "name": "Mirror Breath · Truth / Excess",
+      "use": "Mirror-style breath: inhale truth, exhale excess, clean signal.",
+      "query": "mirror breath meditation inhale truth exhale excess",
+      "aliases": [
+        "Mirror breath: inhale truth, exhale excess",
+        "mirror breath"
+      ]
+    },
+    {
+      "id": "heartcoherence",
+      "name": "Heart Coherence · Hand on Chest",
+      "use": "Dog/Fire-style coherent breathing with hand on chest.",
+      "query": "heart coherence breathing hand on chest",
+      "aliases": [
+        "Heart coherence 5-5 with hand on chest",
+        "heart coherence 5-5",
+        "heart coherence"
+      ]
+    },
+    {
+      "id": "playfulreset",
+      "name": "Playful Reset · 3 Sighs + 4-4",
+      "use": "Monkey-style reset: three sighs, then simple four-four rhythm.",
+      "query": "three physiological sighs breathing 4 4 rhythm",
+      "aliases": [
+        "Playful reset: 3 sighs, then 4-4 rhythm",
+        "3 sighs",
+        "three sighs"
+      ]
+    },
+    {
+      "id": "grounding46",
+      "name": "Grounding Breath 4-6",
+      "use": "Earth-style grounding breath with feet pressing the floor.",
+      "query": "grounding breathing 4 6 feet on floor",
+      "aliases": [
+        "Grounding breath 4-6 while feet press floor",
+        "grounding breath 4-6"
+      ]
+    },
+    {
+      "id": "handsbelly",
+      "name": "Hands-on Belly Breathing",
+      "use": "Hand-style belly breathing with hands as feedback for repair and embodiment.",
+      "query": "hands on belly breathing guided",
+      "aliases": [
+        "Hands-on belly breathing 5 minutes",
+        "hands-on belly breathing"
+      ]
+    },
+    {
+      "id": "balancednostril",
+      "name": "Balanced Nostril Breathing · 6 Rounds",
+      "use": "Star-style balanced nostril breathing, softer than full technical pranayama.",
+      "query": "balanced nostril breathing six rounds",
+      "aliases": [
+        "Balanced nostril breathing, 6 rounds",
+        "balanced nostril breathing"
+      ]
+    },
+    {
+      "id": "longexhale",
+      "name": "Long Exhale 4-8",
+      "use": "Worldbridger/Water-style release breath, explicitly keyed to closure and parasympathetic reserve.",
+      "query": "long exhale 4 8 breathing guided",
+      "aliases": [
+        "Long exhale 4-8 for release",
+        "long exhale 4-8"
+      ]
+    }
+  ]
+};
+
+let state=loadState();
+let activeChamber=CHAMBERS.includes(state.activeChamber)?state.activeChamber:'spades';
+let payloadMode='state';
+let selectedModel='Gemini';
+let touchStartX=0,touchStartY=0;
+let carouselViewIndex=1;
+let carouselAnimating=false;
+
+function initialState(){
+  return {
+    app:'ACE Gravitic',
+    version:APP_VERSION,
+    activeChamber:'spades',
+    focus:'practice-dojo',
+    notes:{},
+    status:{},
+    customPractices:[],
+    linkOverrides:{},
+    aceMindPacket:null,
+    aceMindResolution:null,
+    unresolved:[],
+    logs:[],
+    savedAt:new Date().toISOString()
+  };
+}
+function loadState(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    const parsed=raw?JSON.parse(raw):{};
+    return Object.assign(initialState(), parsed && typeof parsed==='object'?parsed:{});
+  }catch(e){return initialState()}
+}
+function saveState(){
+  state.version=APP_VERSION;
+  state.savedAt=new Date().toISOString();
+  try{localStorage.setItem(STORAGE_KEY, JSON.stringify(state));}catch(e){toast('Save failed: '+(e.message||e))}
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  if(!t)return;
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function enc(s){return encodeURIComponent(String(s??''))}
+function yt(q){return `https://www.youtube.com/results?search_query=${enc(q)}`}
+function sp(q){return `https://open.spotify.com/search/${enc(q)}`}
+function safeLogo(){
+  const img=document.getElementById('brandLogo');
+  if(!img)return;
+  img.src=ASSETS.appLogo;
+  img.onerror=()=>{
+    img.onerror=()=>{
+      const mark=img.closest('.brand-mark');
+      if(mark){ mark.innerHTML='<span style="font-size:1.45rem;color:var(--gold2);filter:drop-shadow(0 0 14px rgba(32,231,255,.26))">♠</span>'; }
+    };
+    img.src=ASSETS.acedLogo;
+  };
+}
+function openModal(id){
+  const el=document.getElementById(id);
+  if(el)el.classList.add('open');
+  if(id==='aiModal')refreshAI();
+  if(id==='lensModal')refreshLens();
+  if(id==='patchModal')refreshPatch();
+}
+function closeModal(id){const el=document.getElementById(id);if(el)el.classList.remove('open')}
+
+function chamberShell(id, content){
+  const m=CHAMBER_META[id];
+  return `<section class="chamber" data-chamber="${id}"><div class="chamber-inner"><div class="chamber-head"><div class="suit">${m.icon}</div><div><div class="chamber-title">${m.title}</div><div class="chamber-desc">${m.desc}</div></div></div><div class="chamber-grid">${content}</div></div></section>`;
+}
+function card(title, body, kicker=''){
+  return `<div class="card">${kicker?`<div class="card-kicker">${esc(kicker)}</div>`:''}<div class="card-title">${esc(title)}</div>${body}</div>`;
+}
+function cardSubline(item,type){
+  if(item.axis)return item.axis;
+  const labels={
+    acupressure:'acupressure point',
+    movement:'movement practice',
+    meditation:'meditation lane',
+    breath:'breath protocol',
+    sound:'sound frequency'
+  };
+  return labels[type]||'practice card';
+}
+function practiceCard(item,type){
+  const status=cardStatus(item.id);
+  const links=linkButtons(item,type);
+  const label=status==='mind'?'ACE Mind':(status==='active'?'Active':'');
+  const pill=status==='mind'?'pill-mind':(status==='active'?'pill-cyan':'');
+  const statusHtml=label?`<span class="pill ${pill}">${esc(label)}</span>`:'';
+  const img=item.image?`<img src="${esc(item.image)}" alt="" loading="lazy" onerror="this.remove()" style="width:100%;border-radius:18px;border:1px solid rgba(217,166,74,.18);margin-bottom:10px;object-fit:cover;max-height:220px">`:'';
+  return `<div class="practice-card ${status==='mind'?'mind':''} ${status==='active'?'active':''}" data-practice-id="${esc(item.id)}" data-category="${esc(type)}">
+    ${img}
+    <div class="row">
+      <div><div class="row-title">${esc(item.name)}</div><div class="row-note">${esc(cardSubline(item,type))}</div></div>
+      ${statusHtml}
+    </div>
+    <div class="small">${esc(item.use||'')}</div>
+    ${item.avoid?`<div class="tiny" style="margin-top:8px;color:#fdba74">Caution: ${esc(item.avoid)}</div>`:''}
+    ${item.mantra?`<div class="tiny" style="margin-top:8px;color:#fff0ad">Mantra: ${esc(item.mantra)}</div>`:''}
+    ${links}
+  </div>`;
+}
+
+
+function aiMode(q){return `https://www.google.com/search?udm=50&q=${enc(q)}`}
+function linkButtons(item,type){
+  const over=state.linkOverrides[item.id]||{};
+  const youtube=over.youtube || item.youtube || item.query || item.name;
+  const spotify=over.spotify || item.spotify || item.query || item.name;
+  const aiQuery=(item.query||item.name)+' guide';
+  return `<div class="link-row">
+    <a class="link-btn youtube" href="${yt(youtube)}" target="_blank" rel="noopener">YouTube</a>
+    <a class="link-btn spotify" href="${sp(spotify)}" target="_blank" rel="noopener">Spotify</a>
+    <a class="link-btn search" href="${aiMode(aiQuery)}" target="_blank" rel="noopener">AI Mode</a>
+  </div>`;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ACE Mind → Gravitic resolver v1.0.4
+// The card library is canonical. Aliases translate ACE Mind wording into cards.
+// ─────────────────────────────────────────────────────────────────────────────
+let currentResolution={ids:[],unresolved:[],packet:null,fields:{},source:'none'};
+let ALIAS_INDEX=null;
+
+const RAW_ALIASES={
+  // Acupressure aliases and vessel naming
+  'ST36':['st36'],'Zusanli':['st36'],'Leg Three Miles':['st36'],
+  'SP6':['sp6'],'Sanyinjiao':['sp6'],
+  'CV12':['cv12'],'REN12':['cv12'],'Ren 12':['cv12'],'Zhongwan':['cv12'],
+  'CV6':['cv6'],'REN6':['cv6'],'Ren 6':['cv6'],'Qihai':['cv6'],
+  'CV4':['cv4'],'REN4':['cv4'],'Ren 4':['cv4'],'Guanyuan':['cv4'],
+  'CV17':['cv17'],'REN17':['cv17'],'Ren 17':['cv17'],'Shanzhong':['cv17'],
+  'LV3':['lv3'],'LIV3':['lv3'],'Taichong':['lv3'],
+  'GB34':['gb34'],'Yanglingquan':['gb34'],
+  'GB20':['gb20'],'Fengchi':['gb20'],
+  'LU7':['lu7'],'Lieque':['lu7'],
+  'LU9':['lu9'],'Taiyuan':['lu9'],
+  'LI4':['li4'],'Hegu':['li4'],
+  'HT7':['ht7'],'Shenmen':['ht7'],
+  'PC6':['pc6'],'Neiguan':['pc6'],
+  'PC8':['pc8'],'Laogong':['pc8'],
+  'GV20':['gv20'],'DU20':['gv20'],'Baihui':['gv20'],
+  'Yintang':['yintang'],
+  'BL2':['bl2'],'Zanzhu':['bl2'],
+  'BL60':['bl60'],'Kunlun':['bl60'],
+  'BL62':['bl62'],'Shenmai':['bl62'],
+  'KI1':['ki1'],'KD1':['ki1'],'KID1':['ki1'],'Yongquan':['ki1'],
+  'KI3':['ki3'],'KD3':['ki3'],'Taixi':['ki3'],
+  'KI6':['ki6'],'KD6':['ki6'],'Zhaohai':['ki6'],
+  'SP9':['sp9'],'Yinlingquan':['sp9'],
+  'Anmian':['anmian'],
+
+  // ACE Mind frequency cards
+  '174 Hz':['hz174'],'174hz':['hz174'],
+  '285 Hz':['hz285'],'285hz':['hz285'],
+  '396 Hz':['hz396'],'396hz':['hz396'],
+  '417 Hz':['hz417'],'417hz':['hz417'],
+  '432 Hz':['hz432'],'432hz':['hz432'],
+  '528 Hz':['hz528'],'528hz':['hz528'],
+  '639 Hz':['hz639'],'639hz':['hz639'],
+  '741 Hz':['hz741'],'741hz':['hz741'],
+  '852 Hz':['hz852'],'852hz':['hz852'],
+  '963 Hz':['hz963'],'963hz':['hz963'],
+
+  // ACE Mind breath language
+  'Coherent breath 5-5':['coherent','heartcoherence'],
+  'Coherent breath 5–5':['coherent','heartcoherence'],
+  'Coherent breath 5-5 before action':['coherent'],
+  'Heart coherence 5-5 with hand on chest':['heartcoherence'],
+  'Alternate nostril 4-4-4':['nadi'],
+  'Balanced nostril breathing, 6 rounds':['balancednostril','nadi'],
+  'Box breath 4-4-4-4':['box'],
+  'Box breath 4-4-4-4 (structured expansion)':['box'],
+  'Warrior box 4-4-4-4, then one question':['box'],
+  'Extended exhale 4-8':['extended','longexhale'],
+  'Long exhale 4-8 for release':['longexhale','extended'],
+  '4-7-8 grounding':['478'],
+  '4-7-8 (grounding and settling)':['478'],
+  '4-7-8 with eyes closed, darkness friendly':['478'],
+  'Belly breath 4-6, hands low on abdomen':['belly','handsbelly'],
+  'Hands-on belly breathing 5 minutes':['handsbelly','belly'],
+  'Whisper exhale 4-8, then 3 silent breaths':['whisper'],
+  'Slow nasal breathing + 7 Bhramari hums':['bhramari'],
+  'Bhramari':['bhramari'],
+  'Wave breath, inhale belly then ribs, exhale slowly':['wave'],
+  'Playful reset: 3 sighs, then 4-4 rhythm':['playfulreset','physio','box'],
+  'Choice breath: inhale 4, pause, choose, exhale 6':['choice'],
+  'Walking breath, 4 steps inhale, 6 steps exhale':['extended'],
+  'Stillness breath, 6 slow breaths before action':['stillness'],
+  'Panoramic breathing, soften eyes on each exhale':['panoramic'],
+  'Grounding breath 4-6 while feet press floor':['grounding46','belly'],
+  'Mirror breath: inhale truth, exhale excess':['mirrorbreath'],
+  'Reset breath: double inhale, long exhale, 7 rounds':['reset','physio'],
+  'Solar breath, inhale 4, exhale 4, gentle smile':['solar'],
+
+  // ACE Mind movement language
+  'Dynamic movement / qigong flow':['dynamicqigong','eightbrocades'],
+  'Lateral yoga / liver stretch':['lateralflow'],
+  'Yin yoga / floor':['yinyoga','floorstretch'],
+  'Standing meditation / stillness':['zhan','slowhands','silence'],
+  'Walking / grounding':['groundwalk','barefoot'],
+  'floor stretch, gentle spine':['floorstretch'],
+  'lying floor, gentle rotation':['floorstretch'],
+  'lateral yoga flows, liver meridian stretch':['lateralflow'],
+  'dynamic movement, fire qigong, cardio burst':['dynamicqigong','eightbrocades'],
+  'slow qigong, floor only':['slowhands','floorstretch'],
+  'slow tai chi, grounding walk, floor qigong':['tai24','groundwalk','floorstretch'],
+  'standing meditation, precise posture, lung work':['zhan','posture'],
+  'slow yin yoga, kidney meridian walk, swimming':['yinyoga','groundwalk'],
+  'slow floor crawl pattern or primal child-pose wave':['primalfloor'],
+  'neck, jaw, and rib mobility with soft walking':['jawrib','softwalk'],
+  'yin forward fold, hips, lower back release':['yinyoga','floorstretch','hipcircles'],
+  'planting stance, calf stretch, slow squats':['plantingstance'],
+  'spinal waves, hip circles, gentle sweat if green':['spinalwaves','hipcircles','shakeout'],
+  'hamstring stretch, open-close qigong, declutter walk':['hamstring','openclose','groundwalk'],
+  'wrist, hands, forearm release, repair mobility':['handrelease'],
+  'posture refinement, graceful mobility, light creative walk':['posture','gracewalk'],
+  'fluid hips, gentle lymph walk, water ritual':['hipcircles','lymphwalk'],
+  'soft walk, chest opening, shoulder release':['softwalk','chestopen'],
+  'coordination drill, light dance, mobility game':['coordinationdance'],
+  'standing balance, slow walk while deciding one thing':['standingbalance','groundwalk'],
+  'long walk, hip flexor opening, horizon gaze':['groundwalk','psoas','openview'],
+  'static qigong, slow hands, minimal movement':['slowhands','zhan'],
+  'upper back opening, eye rest, sky walk':['upperback','eyerest'],
+  'stance work, controlled strength, no ego load':['stancework'],
+  'barefoot grounding, slow tai chi, ankle work':['barefoot','tai24'],
+  'spine alignment, posture check, precise stretching':['precisestretch','posture'],
+  'shake-out, short sweat if green, then stillness':['shakeout','silence'],
+  'sun walk, chest opening, light mobility':['sunwalk','chestopen'],
+
+  // Chakra and mantra lanes
+  'Root':['root'],'Root Chakra':['root'],'Muladhara':['root'],
+  'Sacral':['sacral'],'Sacral Chakra':['sacral'],'Svadhisthana':['sacral'],
+  'Solar Plexus':['solar'],'Manipura':['solar'],
+  'Heart':['heart'],'Heart Chakra':['heart'],'Anahata':['heart'],
+  'Throat':['throat'],'Throat Chakra':['throat'],'Vishuddha':['throat'],
+  'Third Eye':['third'],'Third Eye Chakra':['third'],'Ajna':['third'],
+  'Crown':['crown'],'Crown Chakra':['crown'],'Sahasrara':['crown'],
+  'Hands':['hands'],'Heart · Hands':['hands'],
+  'Root · Sacral':['root','sacral'],
+  'Solar Plexus · Heart':['solar','heart','solarheart'],
+  'Heart · Crown':['heart','crown'],
+  'Throat · Heart':['throat','heart','throatheart'],
+  'Root · Third Eye':['root','third'],
+  'Sacral · Root':['sacral','root'],
+  'Third Eye · Heart':['third','heart','thirdheart'],
+  'Solar Plexus · Third Eye':['solar','third'],
+  'Solar Plexus · Throat':['solar','throat','solarthroat'],
+  'Root · Crown':['root','crown','rootcrown'],
+  'Solar Plexus · Crown':['solar','crown'],
+  'Full Chakra Alignment':['fullalignment'],
+
+  // Seal mantra lanes
+  'Dragon':['seal_dragon'],'Wind':['seal_wind'],'Night':['seal_night'],'Seed':['seal_seed'],
+  'Serpent':['seal_serpent'],'Worldbridger':['seal_worldbridger'],'Hand':['seal_hand'],'Star':['seal_star'],
+  'Moon':['seal_moon'],'Dog':['seal_dog'],'Monkey':['seal_monkey'],'Human':['seal_human'],
+  'Skywalker':['seal_skywalker'],'Wizard':['seal_wizard'],'Eagle':['seal_eagle'],'Warrior':['seal_warrior'],
+  'Earth':['seal_earth'],'Mirror':['seal_mirror'],'Storm':['seal_storm'],'Sun':['seal_sun']
+};
+
+function normKey(s){
+  return String(s||'')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase()
+    .replace(/[–—]/g,'-')
+    .replace(/\bhz\b/g,'hz')
+    .replace(/[^a-z0-9]+/g,' ')
+    .trim();
+}
+function addAlias(idx,alias,ids){
+  const k=normKey(alias);
+  if(!k)return;
+  idx[k]=idx[k]||[];
+  [].concat(ids||[]).forEach(id=>{if(id && !idx[k].includes(id))idx[k].push(id)});
+}
+function buildAliasIndex(){
+  const idx={};
+  Object.values(LIBRARY).flat().forEach(item=>{
+    addAlias(idx,item.id,item.id);
+    addAlias(idx,item.name,item.id);
+    if(item.aliases) item.aliases.forEach(a=>addAlias(idx,a,item.id));
+  });
+  Object.entries(RAW_ALIASES).forEach(([alias,ids])=>addAlias(idx,alias,ids));
+  ALIAS_INDEX=idx;
+  return idx;
+}
+function resolveToken(raw){
+  const idx=ALIAS_INDEX||buildAliasIndex();
+  const k=normKey(raw);
+  if(!k)return [];
+  if(idx[k])return idx[k].slice();
+  const out=[];
+  // Conservative contains pass, used for ACE Mind phrases with extra punctuation.
+  Object.entries(idx).forEach(([alias,ids])=>{
+    if(alias.length>=4 && (k.includes(alias) || alias.includes(k))){
+      ids.forEach(id=>{if(!out.includes(id))out.push(id)});
+    }
+  });
+  return out;
+}
+function splitPracticeText(raw){
+  return String(raw||'')
+    .split(/\s*(?:\+|,|;|\/|\band\b|\|)\s*/i)
+    .map(x=>x.trim())
+    .filter(Boolean);
+}
+function resolvePracticeValue(value){
+  const ids=[];
+  const unresolved=[];
+  const values=Array.isArray(value)?value:[value];
+  values.forEach(v=>{
+    if(v===null || v===undefined || String(v).trim()==='')return;
+    let found=resolveToken(v);
+    if(!found.length){
+      splitPracticeText(v).forEach(part=>{
+        resolveToken(part).forEach(id=>{if(!found.includes(id))found.push(id)});
+      });
+    }
+    if(found.length)found.forEach(id=>{if(!ids.includes(id))ids.push(id)});
+    else unresolved.push(String(v));
+  });
+  return {ids,unresolved};
+}
+function resolveAceMindPacket(packet){
+  const p=packet||null;
+  if(!p)return {ids:[],unresolved:[],packet:null,fields:{},source:'none'};
+  const fields={
+    frequency:resolvePracticeValue(p.frequency),
+    breath:resolvePracticeValue(p.breath),
+    movement:resolvePracticeValue(p.movement),
+    acupressure:resolvePracticeValue(p.acupressure),
+    chakra:resolvePracticeValue(p.chakra),
+    mantra:resolvePracticeValue(p.mantra || p.focus || '')
+  };
+  const ids=[];
+  const unresolved=[];
+  Object.entries(fields).forEach(([field,res])=>{
+    res.ids.forEach(id=>{if(!ids.includes(id))ids.push(id)});
+    res.unresolved.forEach(v=>unresolved.push({field,value:v}));
+  });
+  return {ids,unresolved,packet:p,fields,source:p.source||'ACE Mind'};
+}
+function hydrateAceMindPacket(){
+  let packet=null;
+  try{
+    const raw=sessionStorage.getItem('ace_mind_to_gravitic');
+    if(raw)packet=JSON.parse(raw);
+  }catch(e){}
+  if(packet && packet.packet_type==='ace_mind_to_gravitic'){
+    state.aceMindPacket=packet;
+    const res=resolveAceMindPacket(packet);
+    state.aceMindResolution={ids:res.ids,unresolved:res.unresolved,updated_at:new Date().toISOString()};
+    state.unresolved=res.unresolved;
+    saveState();
+    return packet;
+  }
+  return state.aceMindPacket||null;
+}
+function cardStatus(id){
+  if(currentResolution && currentResolution.ids && currentResolution.ids.includes(id))return 'mind';
+  return state.status && state.status[id]==='active'?'active':'open';
+}
+function prescriptionCard(scope){
+  const res=currentResolution||resolveAceMindPacket(state.aceMindPacket);
+  if(!res.packet)return card('No ACE Mind packet loaded',`<div class="small">Open Gravitic from ACE Mind to highlight the exact advised practices. The full library remains available manually.</div>`,'ACE Mind prescription');
+  const p=res.packet;
+  const unresolved=(res.unresolved||[]).map(x=>`${x.field}: ${x.value}`);
+  const cell=(k,v)=>`<div class="rx-cell"><b>${esc(k)}</b><span>${esc(Array.isArray(v)?v.join(' + '):(v||'—'))}</span></div>`;
+  return `<div class="card prescription-card">
+    <div class="card-kicker">ACE Mind prescription</div>
+    <div class="card-title">${esc(p.day||'Current route')} · ${esc(p.body_governor||'body')} · ${esc(p.supplement_mode||'mode')}</div>
+    <div class="rx-grid">
+      ${cell('Frequency',p.frequency)}
+      ${cell('Breath',p.breath)}
+      ${cell('Movement',p.movement)}
+      ${cell('Acupressure',p.acupressure)}
+      ${cell('Chakra',p.chakra)}
+      ${cell('Food',p.food)}
+    </div>
+    <div class="link-row"><span class="pill pill-mind">${res.ids.length} resolved</span><span class="pill pill-gold">${esc(scope||'library')}</span></div>
+    ${unresolved.length?`<div class="unresolved-note">Unresolved aliases: ${esc(unresolved.join(' · '))}</div>`:''}
+  </div>`;
+}
+
+
+function renderAcupressure(){
+  const cards=LIBRARY.acupressure.map(x=>practiceCard(x,'acupressure')).join('');
+  return chamberShell('spades', `<div class="grid-2">${prescriptionCard('acupressure')}${card('ACE Mind Parity Rule',`<div class="small">This chamber contains every acupressure point ACE Mind can recommend. Extra points may be added later, but Mind-advised points must never be missing.</div><div class="link-row"><span class="pill pill-cyan">${LIBRARY.acupressure.length} points</span><span class="pill pill-gold">link-based</span></div>`,'Acupressure library')}${cards}</div>`);
+}
+
+function renderExerciseTaiChi(){
+  const cards=LIBRARY.movement.map(x=>practiceCard(x,'movement')).join('');
+  return chamberShell('clubs', `<div class="grid-2">${prescriptionCard('movement')}${card('Exercise / Tai Chi / Qigong',`<div class="small">This chamber covers every ACE Mind movement wording through cards or aliases: Tai Chi, qigong, grounding walks, mobility, yin yoga, posture, eye rest, controlled stance work, and seal-specific movement variants.</div><div class="link-row"><span class="pill pill-green">${LIBRARY.movement.length} practices</span><span class="pill pill-cyan">dojo mode</span></div>`,'Movement library')}${cards}</div>`);
+}
+
+function renderMeditationChakras(){
+  const cards=LIBRARY.meditation.map(x=>practiceCard(x,'meditation')).join('');
+  return chamberShell('diamonds', `<div class="grid-2">${prescriptionCard('chakra + mantra')}${card('Meditation / Chakras / Mantras',`<div class="small">This chamber holds the symbolic-attention layer: chakra focus, chakra-pair routing, seal mantras, Bhramari-Brahman humming, witness awareness, gratitude, tree meditation, and silence practice.</div><div class="link-row"><span class="pill pill-violet">${LIBRARY.meditation.length} lanes</span><span class="pill pill-gold">symbolic + practical</span></div>`,'Meditation library')}${cards}</div>`);
+}
+
+function renderBreathSound(){
+  const breath=LIBRARY.breath.map(x=>practiceCard(x,'breath')).join('');
+  const sound=LIBRARY.sound.map(x=>practiceCard(x,'sound')).join('');
+  return chamberShell('hearts', `<div class="grid-2">${prescriptionCard('breath + sound')}${card('Breathwork + Sound Frequencies',`<div class="small">This chamber contains every ACE Mind frequency card, including 285 Hz, plus breath protocols and ACE Mind phrasing aliases. Frequencies are attention/sound orientation labels, not medical claims.</div><div class="link-row"><span class="pill pill-cyan">${LIBRARY.breath.length} breaths</span><span class="pill pill-gold">${LIBRARY.sound.length} sounds</span></div>`,'Breath + sound')}${breath}${sound}</div>`);
+}
+
+function renderAdvanced(){
+  const packet=buildPacket('state');
+  return chamberShell('jester', `<div class="grid-2">
+    ${card('AI Handoff',`<div class="small">Send the current library, active practices, or a patch mission to any model. This is the ACE Mind-style handoff pattern.</div><div class="link-row"><button class="link-btn search" onclick="openModal('aiModal')">Open AI</button><button class="link-btn search" onclick="copyCurrentPayload()">Copy State</button></div>`,'Models')}
+    ${card('Patch Console',`<div class="small">Use JSON patches to add practice cards, override YouTube/Spotify searches, change focus, or store notes. Gravitic remains link-based until the video layer is built.</div><div class="link-row"><button class="link-btn search" onclick="openModal('patchModal')">Open Patch</button><button class="link-btn search" onclick="loadPatchTemplate();openModal('patchModal')">Template</button></div>`,'Governed')}
+    ${card('Export / Import',`<div class="small">Local-first state. Export before major changes. Import restores notes, active statuses, and link overrides.</div><div class="link-row"><button class="link-btn search" onclick="exportState()">Export</button><button class="link-btn search" onclick="document.getElementById('importFile').click()">Import</button></div>`,'State')}
+    ${card('Agent Packet',`<div class="lens-box"><pre>${esc(JSON.stringify(packet,null,2)).slice(0,2400)}</pre></div>`,'Preview')}
+  </div>`);
+}
+
+function renderChamber(id){
+  if(id==='spades')return renderAcupressure();
+  if(id==='clubs')return renderExerciseTaiChi();
+  if(id==='diamonds')return renderMeditationChakras();
+  if(id==='hearts')return renderBreathSound();
+  return renderAdvanced();
+}
+function loopIndex(offset){
+  const n=CHAMBERS.length;
+  const cur=activeIndex();
+  return (cur + offset + n) % n;
+}
+function visibleLoopSlides(){
+  return [
+    renderChamber(CHAMBERS[loopIndex(-1)]),
+    renderChamber(CHAMBERS[loopIndex(0)]),
+    renderChamber(CHAMBERS[loopIndex(1)])
+  ];
+}
+function activeIndex(){
+  const idx=CHAMBERS.indexOf(activeChamber);
+  return idx>=0 ? idx : 0;
+}
+function updateCarouselPosition(animate=true){
+  const track=document.getElementById('carouselTrack');
+  if(!track)return;
+  if(animate){
+    track.style.transition='transform 420ms var(--ease)';
+    track.style.transform=`translateX(-${carouselViewIndex*100}%)`;
+    return;
+  }
+  track.style.transition='none';
+  track.style.transform=`translateX(-${carouselViewIndex*100}%)`;
+  // Force the browser to commit the no-transition transform before re-enabling animation.
+  // This prevents the visible backward jump when looping from last to first or first to last.
+  void track.offsetWidth;
+  setTimeout(()=>{ track.style.transition='transform 420ms var(--ease)'; },32);
+}
+function rebuildLoopTrack(animate=false){
+  const track=document.getElementById('carouselTrack');
+  if(!track)return;
+  track.innerHTML=visibleLoopSlides().join('');
+  carouselViewIndex=1;
+  updateCarouselPosition(animate);
+}
+function render(){
+  buildAliasIndex();
+  currentResolution=resolveAceMindPacket(state.aceMindPacket);
+  state.aceMindResolution={ids:currentResolution.ids,unresolved:currentResolution.unresolved,updated_at:new Date().toISOString()};
+  rebuildLoopTrack(false);
+  renderDots();
+  refreshLens();
+  wireTransitionLoop();
+}
+
+function renderDots(){
+  const dots=document.getElementById('dots');
+  if(!dots)return;
+  dots.innerHTML=CHAMBERS.map(id=>`<button class="dot ${id===activeChamber?'active':''}" aria-label="${esc(CHAMBER_META[id].title)}" onclick="setChamber('${id}')"></button>`).join('');
+}
+function setChamber(id){
+  if(!CHAMBERS.includes(id))return;
+  activeChamber=id;
+  state.activeChamber=id;
+  saveState();
+  rebuildLoopTrack(false);
+  renderDots();
+  refreshLens();
+}
+function moveChamber(delta){
+  if(carouselAnimating)return;
+  carouselAnimating=true;
+  carouselViewIndex = delta>0 ? 2 : 0;
+  updateCarouselPosition(true);
+  clearTimeout(moveChamber._fallback);
+  moveChamber._fallback=setTimeout(normalizeCarouselLoop,520);
+}
+function wireTransitionLoop(){
+  const track=document.getElementById('carouselTrack');
+  if(!track || track.dataset.loopWired==='1')return;
+  track.dataset.loopWired='1';
+  track.addEventListener('transitionend',e=>{
+    if(e.target===track) normalizeCarouselLoop();
+  });
+}
+function normalizeCarouselLoop(){
+  if(!carouselAnimating)return;
+  clearTimeout(moveChamber._fallback);
+  const n=CHAMBERS.length;
+  const cur=activeIndex();
+  if(carouselViewIndex===2){
+    activeChamber=CHAMBERS[(cur+1)%n];
+  }else if(carouselViewIndex===0){
+    activeChamber=CHAMBERS[(cur-1+n)%n];
+  }
+  state.activeChamber=activeChamber;
+  saveState();
+  carouselAnimating=false;
+  rebuildLoopTrack(false);
+  renderDots();
+  refreshLens();
+}
+
+function wireSwipe(){
+  const el=document.getElementById('carouselWrap');
+  if(!el || el.dataset.swipeWired==='1')return;
+  el.dataset.swipeWired='1';
+  el.addEventListener('touchstart',e=>{const t=e.touches[0];touchStartX=t.clientX;touchStartY=t.clientY},{passive:true});
+  el.addEventListener('touchend',e=>{
+    const t=e.changedTouches[0];
+    const dx=t.clientX-touchStartX, dy=t.clientY-touchStartY;
+    if(Math.abs(dx)>48 && Math.abs(dx)>Math.abs(dy)*1.25) moveChamber(dx<0?1:-1);
+  },{passive:true});
+}
+
+function setPracticeStatus(id,status){
+  state.status[id]=status;
+  saveState();
+  toast(status==='active'?'Marked active':'Marked open');
+  render();
+}
+function buildPacket(mode=payloadMode){
+  const active=Object.keys(state.status||{}).filter(k=>state.status[k]==='active');
+  const res=currentResolution||resolveAceMindPacket(state.aceMindPacket);
+  const base={
+    packet_type:'ace_gravitic_packet',
+    app:'ACE Gravitic',
+    version:APP_VERSION,
+    mode,
+    active_chamber:activeChamber,
+    active_chamber_label:CHAMBER_META[activeChamber]?.title,
+    focus:state.focus,
+    ace_mind_packet:state.aceMindPacket||null,
+    ace_mind_resolved_ids:res.ids||[],
+    ace_mind_unresolved:res.unresolved||[],
+    active_practices:active,
+    chamber_order:CHAMBERS.map(id=>CHAMBER_META[id].title),
+    parity_rule:'ACE Gravitic must include every acupressure point, frequency, breathwork, movement, meditation, chakra, and mantra lane ACE Mind can recommend.',
+    resolver_rule:'ACE Mind values are normalized through RAW_ALIASES into canonical card IDs; recommended cards glow automatically.',
+    link_policy:'external links only for now; YouTube and Spotify search links; no embedded video playback yet',
+    updated_at:new Date().toISOString()
+  };
+  if(mode==='acupressure')base.library={acupressure:LIBRARY.acupressure};
+  else if(mode==='movement')base.library={movement:LIBRARY.movement};
+  else if(mode==='meditation')base.library={meditation:LIBRARY.meditation};
+  else if(mode==='breath_sound')base.library={breath:LIBRARY.breath,sound:LIBRARY.sound};
+  else if(mode==='patch')base.patch_template=patchTemplateObject();
+  else if(mode==='snapshot')base.snapshot={state,library:LIBRARY,aliases:RAW_ALIASES};
+  else base.state=state;
+  return base;
+}
+
+function buildAIText(){
+  const packet=buildPacket(payloadMode);
+  return `ACE Gravitic handoff.
+
+Context:
+ACE Gravitic is the ACE practice dojo in the ACED suite. It now has five chambers only: Acupressure, Exercise/Tai Chi, Meditation/Chakras/Mantras, Breathwork/Sound Frequencies, and AI/Advanced. It must contain every practice item ACE Mind can recommend. It has no day selector. Swipe is a continuous loop. For now, all media remains link-based through YouTube and Spotify search links. Future work may add local video/image playback.
+
+Task:
+Analyze the packet and propose only useful, low-risk improvements. If proposing app changes, return an ace_gravitic_patch JSON object.
+
+PACKET:
+${JSON.stringify(packet,null,2)}`;
+}
+function refreshAI(){
+  const pg=document.getElementById('payloadGrid');
+  const mg=document.getElementById('modelGrid');
+  const box=document.getElementById('handoffBox');
+  if(pg)pg.innerHTML=PAYLOADS.map(([id,label])=>`<button class="payload-btn ${payloadMode===id?'active':''}" onclick="payloadMode='${id}';refreshAI()">${label}</button>`).join('');
+  if(mg)mg.innerHTML=MODELS.map(([name,url,short])=>`<button class="model-btn ${selectedModel===name?'model-active':''}" onclick="selectModel('${name}')">${name}</button>`).join('');
+  if(box)box.value=buildAIText();
+}
+function selectModel(name){selectedModel=name;refreshAI();handoffToModel(name)}
+async function copyText(text){
+  try{await navigator.clipboard.writeText(text);return true}catch(e){
+    const box=document.getElementById('handoffBox');
+    if(box){box.value=text;box.focus();box.select()}
+    return false;
+  }
+}
+async function copyCurrentPayload(){
+  refreshAI();
+  const text=document.getElementById('handoffBox')?.value || buildAIText();
+  const ok=await copyText(text);
+  document.getElementById('copyStatus').textContent=ok?'Copied.':'Clipboard blocked. Text selected.';
+  toast(ok?'Copied':'Clipboard blocked');
+}
+async function handoffToModel(name){
+  const model=MODELS.find(x=>x[0]===name)||MODELS[0];
+  const text=buildAIText();
+  await copyText(text);
+  const gate=document.getElementById('handoffGate');
+  document.getElementById('handoffMark').textContent=model[2];
+  document.getElementById('handoffName').textContent='Opening '+model[0];
+  if(gate)gate.classList.add('open');
+  setTimeout(()=>{try{window.open(model[1],'_blank')}catch(e){location.href=model[1]}},180);
+  setTimeout(()=>{if(gate)gate.classList.remove('open')},1700);
+}
+function openJesterBridge(){
+  const packet=buildPacket('state');
+  try{localStorage.setItem('jester_bridge_payload', JSON.stringify(packet));}catch(e){}
+  const url='jester-bridge.html';
+  try{window.open(url,'_blank')}catch(e){location.href=url}
+}
+function refreshLens(){
+  const pre=document.getElementById('lensPre');
+  if(!pre)return;
+  const res=currentResolution||resolveAceMindPacket(state.aceMindPacket);
+  pre.textContent=JSON.stringify({
+    app:'ACE Gravitic',
+    version:APP_VERSION,
+    active_chamber:activeChamber,
+    active_chamber_label:CHAMBER_META[activeChamber]?.title,
+    ace_mind_packet:state.aceMindPacket||null,
+    ace_mind_resolved_ids:res.ids||[],
+    ace_mind_unresolved:res.unresolved||[],
+    state,
+    library_counts:{
+      acupressure:LIBRARY.acupressure.length,
+      movement:LIBRARY.movement.length,
+      meditation:LIBRARY.meditation.length,
+      breath:LIBRARY.breath.length,
+      sound:LIBRARY.sound.length
+    },
+    doctrine:'No day selector. Five chambers only. Continuous loop swipe. ACE Mind packet resolver active. Link-based media for YouTube and Spotify. Future video layer is separate.'
+  },null,2);
+}
+
+function refreshPatch(){
+  const out=document.getElementById('patchOutput');
+  if(out)out.textContent='Ready. Load template, preview, then apply.';
+}
+function patchTemplateObject(){
+  return {
+    patch_type:'ace_gravitic_patch',
+    version:'1.0',
+    source:'manual_or_agent',
+    reason:'one clear mission',
+    ops:[
+      {op:'set_focus',value:'grounding'},
+      {op:'set_note',key:'today',value:'Keep practice light and link-based.'},
+      {op:'update_practice_link',id:'st36',youtube:'ST36 Zusanli tutorial',spotify:'432 hz grounding'},
+      {op:'set_practice_status',id:'st36',status:'active'}
+    ]
+  };
+}
+function loadPatchTemplate(){
+  const input=document.getElementById('patchInput');
+  if(input)input.value=JSON.stringify(patchTemplateObject(),null,2);
+}
+function readPatch(){
+  const raw=document.getElementById('patchInput')?.value||'';
+  const patch=JSON.parse(raw);
+  if(!patch || patch.patch_type!=='ace_gravitic_patch')throw new Error('patch_type must be ace_gravitic_patch');
+  if(!Array.isArray(patch.ops))throw new Error('ops must be an array');
+  return patch;
+}
+function previewPatch(){
+  try{
+    const patch=readPatch();
+    const lines=patch.ops.map((op,i)=>`${i+1}. ${op.op} ${op.id||op.key||''}`).join('\n');
+    document.getElementById('patchOutput').textContent=`Preview OK\nOps:\n${lines}`;
+  }catch(e){document.getElementById('patchOutput').textContent='Preview failed: '+(e.message||e)}
+}
+function applyPatch(){
+  try{
+    const patch=readPatch();
+    patch.ops.forEach(op=>{
+      if(op.op==='set_focus')state.focus=String(op.value||'grounding').slice(0,80);
+      else if(op.op==='set_note')state.notes[String(op.key||'note').slice(0,80)]=String(op.value||'').slice(0,2000);
+      else if(op.op==='set_active_chamber' && CHAMBERS.includes(op.value))state.activeChamber=activeChamber=op.value;
+      else if(op.op==='set_practice_status' && op.id)state.status[String(op.id)]=String(op.status||'open');
+      else if(op.op==='update_practice_link' && op.id){
+        const id=String(op.id);
+        state.linkOverrides[id]=state.linkOverrides[id]||{};
+        if(op.youtube)state.linkOverrides[id].youtube=String(op.youtube).slice(0,200);
+        if(op.spotify)state.linkOverrides[id].spotify=String(op.spotify).slice(0,200);
+      }
+      else if(op.op==='add_practice'){
+        state.customPractices.push({
+          id:String(op.id||('custom_'+Date.now())).slice(0,80),
+          name:String(op.name||'Custom Practice').slice(0,120),
+          use:String(op.use||'').slice(0,500),
+          query:String(op.query||op.name||'grounding practice').slice(0,200)
+        });
+      }
+      else throw new Error('Unsupported op: '+op.op);
+    });
+    saveState();
+    document.getElementById('patchOutput').textContent='Patch applied.\n'+JSON.stringify({state},null,2);
+    toast('Patch applied');
+    render();
+  }catch(e){document.getElementById('patchOutput').textContent='Apply failed: '+(e.message||e)}
+}
+function resetState(){
+  if(!confirm('Reset ACE Gravitic local state?'))return;
+  state=initialState();
+  saveState();
+  toast('State reset');
+  render();
+}
+function exportState(){
+  const blob=new Blob([JSON.stringify({packet_type:'ace_gravitic_export',version:APP_VERSION,state,exported_at:new Date().toISOString()},null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='ace-gravitic-state.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function importStateFile(ev){
+  const f=ev.target.files&&ev.target.files[0];
+  if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const data=JSON.parse(r.result);
+      const incoming=data.state||data;
+      state=Object.assign(initialState(), incoming);
+      activeChamber=CHAMBERS.includes(state.activeChamber)?state.activeChamber:'spades';
+      saveState();
+      toast('Imported');
+      render();
+    }catch(e){toast('Import failed: '+(e.message||e))}
+  };
+  r.readAsText(f);
+  ev.target.value='';
+}
+function initApp(){
+  const g=document.getElementById('handoffGate');
+  if(g)g.classList.remove('open');
+  safeLogo();
+  buildAliasIndex();
+  hydrateAceMindPacket();
+  activeChamber=CHAMBERS.includes(state.activeChamber)?state.activeChamber:'spades';
+  render();
+  wireSwipe();
+  refreshAI();
+  refreshLens();
+}
+window.addEventListener('DOMContentLoaded', initApp);
+window.addEventListener('focus',()=>{const g=document.getElementById('handoffGate');if(g)g.classList.remove('open')});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){const g=document.getElementById('handoffGate');if(g)g.classList.remove('open')}});
+
+</script>
+</body>
+</html>
