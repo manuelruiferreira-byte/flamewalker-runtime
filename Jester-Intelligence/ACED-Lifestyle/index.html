@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
+<meta name="theme-color" content="#02040a" />
+<title>ACED Lifestyle</title>
+<link rel="manifest" href="./manifest.json" />
+<meta name="mobile-web-app-capable" content="yes" />
+<style>
+:root{--bg:#02040a;--panel:rgba(5,12,26,.86);--panel2:rgba(8,18,36,.76);--gold:#d6a84f;--gold2:#fde68a;--cyan:#22d3ee;--teal:#00c6c6;--violet:#7b2fbe;--red:#ef4444;--emerald:#34d399;--orange:#f97316;--yellow:#facc15;--blue:#93c5fd;--text:#f8f2dc;--muted:#91a3b9;--line:rgba(214,168,79,.28);--shadow:0 24px 80px rgba(0,0,0,.58);--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;touch-action:pan-x pan-y pinch-zoom}body{overflow-x:hidden;background:radial-gradient(circle at 50% -8%,rgba(34,211,238,.16),transparent 32%),radial-gradient(circle at 86% 12%,rgba(123,47,190,.14),transparent 28%),radial-gradient(circle at 14% 14%,rgba(214,168,79,.11),transparent 26%),linear-gradient(180deg,#02040a 0%,#06111f 54%,#02040a 100%)}button,input,textarea{font:inherit;color:inherit}button{border:0;cursor:pointer}input[type=file]{display:none}.hidden{display:none!important}
+.app-shell{opacity:1;transform:none;visibility:visible;pointer-events:auto}
+/* v0.27.3: no in-app boot overlay. Android/PWA manifest splash only. */
+.app-shell{min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}.topbar{position:sticky;top:0;z-index:40;padding:14px 14px 8px;background:linear-gradient(180deg,rgba(2,4,10,.94),rgba(2,4,10,.68) 74%,transparent);backdrop-filter:blur(18px)}.brand-card{max-width:1120px;margin:0 auto;border:1px solid var(--line);border-radius:24px;background:linear-gradient(140deg,rgba(6,17,36,.90),rgba(2,4,10,.70));box-shadow:var(--shadow);padding:12px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}.brand-mark{width:48px;height:48px;border-radius:17px;border:1px solid rgba(214,168,79,.36);background:rgba(0,0,0,.22);display:grid;place-items:center;overflow:hidden}.brand-mark img{width:84%;height:84%;object-fit:contain;filter:drop-shadow(0 0 14px rgba(34,211,238,.20)) drop-shadow(0 0 12px rgba(214,168,79,.18))}.title{font-size:1.1rem;font-weight:850;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff7d7}.top-actions{display:flex;gap:8px;align-items:center}.icon-btn,.small-btn{border:1px solid rgba(214,168,79,.28);background:rgba(5,12,26,.84);border-radius:15px;color:var(--gold2);min-height:40px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,.24)}.icon-btn{width:42px;padding:0}.main{max-width:1120px;margin:0 auto;padding:14px 14px 92px}.carousel-wrap{position:relative;border:1px solid var(--line);border-radius:30px;background:linear-gradient(180deg,rgba(6,17,36,.76),rgba(2,6,14,.76));box-shadow:var(--shadow);overflow:hidden}.car-arrow{position:absolute;top:50%;z-index:8;transform:translateY(-50%);width:42px;height:54px;border:1px solid rgba(214,168,79,.22);background:rgba(2,4,10,.42);backdrop-filter:blur(10px);color:var(--gold2);border-radius:18px;font-size:1.45rem;display:grid;place-items:center;box-shadow:0 12px 34px rgba(0,0,0,.26)}.car-arrow:active{transform:translateY(-50%) scale(.96)}.car-prev{left:10px}.car-next{right:10px}.carousel-wrap:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(214,168,79,.13),transparent 34%),radial-gradient(circle at 18% 18%,rgba(34,211,238,.10),transparent 30%),radial-gradient(circle at 90% 18%,rgba(123,47,190,.11),transparent 30%);pointer-events:none}.carousel-track{position:relative;display:flex;width:100%;transition:transform 560ms var(--ease);will-change:transform;touch-action:pan-x pan-y pinch-zoom}.chamber{min-width:100%;padding:18px;min-height:calc(100vh - 178px);display:flex;align-items:stretch}.chamber-inner{position:relative;width:100%;border:1px solid rgba(214,168,79,.18);border-radius:28px;background:linear-gradient(145deg,rgba(2,7,18,.64),rgba(7,18,36,.74));overflow:hidden;padding:18px;display:grid;grid-template-rows:auto 1fr;gap:16px}.chamber-inner:after{content:"";position:absolute;inset:auto 0 0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.38}.chamber-head{display:flex;align-items:center;justify-content:flex-start;gap:12px;position:relative;z-index:2;min-height:52px}.suit{width:50px;height:50px;border-radius:18px;border:1px solid rgba(214,168,79,.34);display:grid;place-items:center;background:rgba(0,0,0,.25);box-shadow:inset 0 0 22px rgba(214,168,79,.06)}.suit svg{width:30px;height:30px;display:block}.suit .spades{fill:var(--cyan)}.suit .clubs{fill:var(--emerald)}.suit .diamonds{fill:var(--red)}.suit .hearts{fill:var(--violet)}.suit .jester-stroke{stroke:var(--gold2);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}.chamber-grid{position:relative;z-index:2;display:grid;gap:12px;align-content:start}.dots{position:absolute;left:50%;bottom:12px;z-index:6;transform:translateX(-50%);display:flex;gap:8px;padding:8px 10px;border:1px solid rgba(214,168,79,.14);border-radius:999px;background:rgba(2,4,10,.52);backdrop-filter:blur(12px)}.dot{width:9px;height:9px;border-radius:999px;background:rgba(214,168,79,.28);transition:width 260ms var(--ease),background 260ms}.dot.active{width:24px;background:var(--gold2);box-shadow:0 0 14px rgba(214,168,79,.34)}.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.portal-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.card,.app-card,.stat-card,.queue-card,.advanced-tile{border:1px solid rgba(214,168,79,.20);border-radius:24px;background:linear-gradient(145deg,rgba(3,10,24,.72),rgba(2,6,14,.60));box-shadow:0 12px 34px rgba(0,0,0,.22);padding:14px;overflow:hidden}.app-card{min-height:114px;display:grid;grid-template-rows:auto 1fr auto;gap:8px;text-decoration:none;color:inherit;position:relative}.app-card:before{content:"";position:absolute;inset:-40% -20% auto auto;width:120px;height:120px;background:radial-gradient(circle,var(--accent-soft),transparent 68%);pointer-events:none}.app-logo{width:44px;height:44px;border-radius:16px;border:1px solid rgba(255,255,255,.08);display:grid;place-items:center;overflow:hidden;background:rgba(0,0,0,.20)}.app-logo img{width:82%;height:82%;object-fit:contain}.app-name{font-size:1rem;font-weight:850;line-height:1.15;color:#fff8df}.status-dot{width:12px;height:12px;border-radius:999px;box-shadow:0 0 18px currentColor}.state-clear{color:var(--emerald)}.state-watch{color:var(--yellow)}.state-action{color:var(--orange)}.state-missing{color:var(--red)}.stat-card{min-height:96px;display:grid;align-content:center;gap:6px}.stat-value{font-size:2rem;font-weight:900;color:#fff8df;line-height:1}.stat-label{font-size:.84rem;color:#b9c6d9;font-weight:700}.row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border-top:1px solid rgba(255,255,255,.06);padding:10px 0}.row:first-child{border-top:0}.row-title{font-weight:850;color:#fff8df;line-height:1.2}.row-note{font-size:.84rem;color:#9fb0c6;line-height:1.35;margin-top:3px}.pill{display:inline-grid;place-items:center;border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:5px 8px;font-size:.78rem;font-weight:850}.pill-clear{color:#bbf7d0;background:rgba(52,211,153,.10)}.pill-watch{color:#fde68a;background:rgba(250,204,21,.10)}.pill-action{color:#fdba74;background:rgba(249,115,22,.12)}.pill-missing{color:#fecaca;background:rgba(239,68,68,.12)}.essence-command{font-size:clamp(1.35rem,6vw,2.7rem);font-weight:900;line-height:1.05;color:#fff8df;letter-spacing:-.03em}.essence-line{margin-top:10px;color:#c9d6e8;font-size:.95rem;line-height:1.38}.tree-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.tree-node{min-height:88px;border:1px solid rgba(214,168,79,.18);border-radius:20px;background:rgba(0,0,0,.22);display:grid;place-items:center;padding:10px;position:relative}.tree-node img{width:42px;height:42px;object-fit:contain}.tree-node span{font-weight:850;color:#fff8df;text-align:center}.utility-dock{position:fixed;left:50%;bottom:14px;z-index:60;transform:translateX(-50%);width:min(94vw,760px);border:1px solid rgba(214,168,79,.26);border-radius:24px;background:rgba(2,4,10,.80);backdrop-filter:blur(18px);box-shadow:var(--shadow);padding:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.dock-btn{border:1px solid rgba(214,168,79,.24);border-radius:16px;background:rgba(6,17,36,.78);padding:10px 12px;color:var(--gold2);font-size:.86rem}.modal{position:fixed;inset:0;z-index:120;display:none;place-items:end center;background:rgba(0,0,0,.58);backdrop-filter:blur(10px);padding:14px}.modal.open{display:grid}.modal-panel{width:min(940px,100%);max-height:88vh;overflow:auto;border:1px solid rgba(214,168,79,.30);border-radius:28px;background:linear-gradient(180deg,rgba(7,18,36,.97),rgba(2,4,10,.97));box-shadow:var(--shadow);padding:16px}.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.modal-title{font-size:1rem;font-weight:850;color:var(--gold2)}.x{width:38px;height:38px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(214,168,79,.20)}.payload-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.model-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.payload-btn{border:1px solid rgba(215,181,109,.28);background:rgba(4,12,26,.72);border-radius:14px;padding:10px 8px;text-align:center;color:var(--muted);font-size:.78rem;letter-spacing:.06em;min-height:42px;transition:border-color 180ms,background 180ms,color 180ms}.payload-btn.active{border-color:rgba(55,213,255,.7);background:rgba(55,213,255,.1);color:#7ef6ff;font-weight:700}.payload-btn:hover:not(.active){border-color:rgba(215,181,109,.5);color:var(--text)}.model-btn{border:1px solid rgba(167,139,250,.3);background:rgba(12,6,30,.72);border-radius:14px;padding:10px 8px;text-align:center;color:#c4b5fd;font-size:.78rem;letter-spacing:.06em;min-height:42px;transition:border-color 180ms,background 180ms}.model-btn:hover{border-color:rgba(167,139,250,.7);background:rgba(167,139,250,.12);color:#e0d7ff}.model-btn.model-active{border-color:rgba(167,139,250,.85);background:rgba(167,139,250,.18);color:#e9e3ff;font-weight:700}.ai-section-label{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);padding:10px 2px 4px;opacity:.8}textarea{width:100%;border:1px solid rgba(214,168,79,.20);background:rgba(0,0,0,.28);border-radius:18px;padding:12px;color:var(--text);outline:none;min-height:210px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:.78rem;line-height:1.5}.action-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}.primary,.secondary,.danger{border-radius:16px;padding:11px 14px}.primary{border:1px solid rgba(214,168,79,.40);background:linear-gradient(135deg,rgba(214,168,79,.22),rgba(34,211,238,.08));color:var(--gold2)}.secondary{border:1px solid rgba(214,168,79,.20);background:rgba(255,255,255,.05);color:var(--text)}.danger{border:1px solid rgba(255,91,110,.35);background:rgba(255,91,110,.10);color:#ffd7dc}.lens-box{border:1px solid rgba(214,168,79,.18);border-radius:20px;background:rgba(0,0,0,.24);padding:12px;overflow:auto}.lens-box pre{white-space:pre-wrap;word-break:break-word;margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:.76rem;line-height:1.5;color:#e8dcc0}.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-20px);opacity:0;z-index:200;background:rgba(2,4,10,.94);border:1px solid rgba(214,168,79,.36);border-radius:18px;padding:12px 14px;box-shadow:var(--shadow);transition:opacity 250ms,transform 250ms;color:var(--gold2);pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.handoff-gate{position:fixed;inset:0;z-index:260;display:none;place-items:center;background:#000;overflow:hidden}.handoff-gate.open{display:grid}.handoff-card{width:min(82vw,420px);min-height:260px;border:1px solid rgba(214,168,79,.34);border-radius:34px;background:linear-gradient(145deg,rgba(7,18,36,.94),rgba(2,4,10,.96));box-shadow:0 0 80px rgba(214,168,79,.12),0 24px 80px rgba(0,0,0,.65);display:grid;place-items:center;text-align:center;padding:34px;transform:scale(.96);opacity:0;filter:blur(12px);animation:handoffEnter 760ms var(--ease) forwards}.handoff-model-mark{width:92px;height:92px;border-radius:30px;border:1px solid rgba(214,168,79,.42);display:grid;place-items:center;margin:0 auto 18px;background:radial-gradient(circle at 50% 35%,rgba(214,168,79,.20),rgba(34,211,238,.08));color:var(--gold2);font-size:1.25rem;font-weight:900;letter-spacing:.06em}.handoff-name{font-size:1.1rem;font-weight:850;color:#fff8df}@keyframes handoffEnter{to{transform:scale(1);opacity:1;filter:blur(0)}}@media(max-width:900px){.portal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:1fr}.tree-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:620px){.brand-card{grid-template-columns:auto 1fr auto;padding:10px}.top-actions .small-btn{display:none}.chamber{padding:10px;min-height:calc(100vh - 160px)}.chamber-inner{border-radius:24px;padding:12px}.portal-grid,.grid-2,.model-grid,.payload-grid{grid-template-columns:1fr}.card,.app-card,.stat-card,.queue-card,.advanced-tile{border-radius:20px}.utility-dock{bottom:10px}.dock-btn{font-size:.78rem;padding:9px 10px}.dots{bottom:9px}}
+
+/* v0.26 Jester Doctrine Logo Skin, CSS-only visual layer */
+:root{
+  --bg:#02040a;
+  --panel:rgba(3,10,24,.88);
+  --panel2:rgba(7,26,51,.72);
+  --gold:#d6a84f;
+  --gold2:#fde68a;
+  --cyan:#22d3ee;
+  --violet:#8b5cf6;
+  --magenta:#d946ef;
+  --text:#f8f2dc;
+  --muted:#9fb0c6;
+  --line:rgba(214,168,79,.34);
+  --shadow:0 26px 90px rgba(0,0,0,.66);
+}
+body{
+  background:
+    radial-gradient(circle at 50% -12%,rgba(34,211,238,.20),transparent 34%),
+    radial-gradient(circle at 78% 8%,rgba(139,92,246,.16),transparent 30%),
+    radial-gradient(circle at 18% 12%,rgba(214,168,79,.14),transparent 28%),
+    radial-gradient(circle at 50% 92%,rgba(217,70,239,.10),transparent 34%),
+    linear-gradient(180deg,#02040a 0%,#06111f 48%,#02040a 100%);
+}
+.brand-card,.carousel-wrap,.modal-panel,.utility-dock{
+  border-color:rgba(214,168,79,.36);
+  box-shadow:0 24px 80px rgba(0,0,0,.62),0 0 42px rgba(34,211,238,.045),inset 0 1px 0 rgba(253,230,138,.08);
+}
+.brand-card{
+  background:
+    radial-gradient(circle at 9% 50%,rgba(34,211,238,.10),transparent 30%),
+    linear-gradient(140deg,rgba(7,26,51,.90),rgba(2,4,10,.78));
+}
+.brand-mark,.suit,.app-logo{
+  border-color:rgba(214,168,79,.44);
+  background:linear-gradient(145deg,rgba(2,4,10,.58),rgba(7,26,51,.42));
+  box-shadow:inset 0 0 24px rgba(214,168,79,.08),0 0 22px rgba(34,211,238,.055);
+}
+.title,.app-name,.essence-command,.row-title,.stat-value{
+  color:#fff7d7;
+  text-shadow:0 0 18px rgba(214,168,79,.11);
+}
+.card,.app-card,.stat-card,.queue-card,.advanced-tile,.tree-node{
+  border-color:rgba(214,168,79,.25);
+  background:
+    linear-gradient(145deg,rgba(7,26,51,.62),rgba(2,6,14,.68));
+  box-shadow:0 14px 38px rgba(0,0,0,.30),inset 0 1px 0 rgba(253,230,138,.05);
+}
+.app-card:hover,.advanced-tile:hover,.dock-btn:hover,.icon-btn:hover,.small-btn:hover{
+  border-color:rgba(34,211,238,.42);
+  box-shadow:0 0 28px rgba(34,211,238,.08),0 14px 38px rgba(0,0,0,.34);
+}
+.dot.active{
+  background:linear-gradient(90deg,var(--gold2),var(--cyan));
+  box-shadow:0 0 18px rgba(34,211,238,.28),0 0 14px rgba(214,168,79,.32);
+}
+.model-btn.model-active,.payload-btn.active,.primary{
+  border-color:rgba(34,211,238,.58);
+  background:linear-gradient(135deg,rgba(34,211,238,.16),rgba(214,168,79,.13),rgba(139,92,246,.10));
+  color:#e9fbff;
+  box-shadow:0 0 26px rgba(34,211,238,.08);
+}
+.handoff-gate{
+  background:
+    radial-gradient(circle at 50% 38%,rgba(34,211,238,.10),transparent 36%),
+    radial-gradient(circle at 50% 64%,rgba(214,168,79,.08),transparent 34%),
+    #000;
+}
+
+
+/* v0.27 ACE Mind hierarchy shell alignment */
+html,body{width:100%;min-height:100svh;overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent}
+.app-shell{min-height:100svh;width:100vw;position:relative;z-index:1}
+body.ready{min-height:100svh}
+.main{min-height:calc(100svh - 116px);padding:10px 14px 96px}
+.carousel-wrap{min-height:calc(100svh - 156px);border-radius:34px}
+.chamber{min-height:calc(100svh - 184px)}
+.car-arrow{width:42px;height:42px;border-radius:999px;background:rgba(2,4,10,.54)}
+@supports(height:100dvh){.app-shell{min-height:100dvh}.main{min-height:calc(100dvh - 116px)}.carousel-wrap{min-height:calc(100dvh - 156px)}.chamber{min-height:calc(100dvh - 184px)}}
+.layer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.layer-card{border:1px solid rgba(214,168,79,.22);border-radius:20px;background:linear-gradient(145deg,rgba(3,10,24,.72),rgba(2,6,14,.58));padding:12px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;min-height:82px}
+.layer-orb{width:42px;height:42px;border-radius:16px;border:1px solid rgba(255,255,255,.10);display:grid;place-items:center;background:rgba(0,0,0,.24);box-shadow:inset 0 0 24px rgba(214,168,79,.06)}
+.layer-name{font-weight:900;color:#fff8df;line-height:1.1}.layer-note{font-size:.78rem;color:#9fb0c6;line-height:1.35;margin-top:3px}.layer-axis{font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);opacity:.88}
+.suite-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.suite-mini{border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(0,0,0,.18);padding:9px;min-height:64px}.suite-mini b{display:block;color:#fff7d7;font-size:.78rem}.suite-mini span{display:block;color:#8fa3ba;font-size:.68rem;margin-top:4px;line-height:1.25}
+.portal-command{border:1px solid rgba(214,168,79,.22);border-radius:24px;background:linear-gradient(145deg,rgba(7,26,51,.62),rgba(2,6,14,.68));padding:16px;box-shadow:0 14px 38px rgba(0,0,0,.28)}
+.portal-command .essence-command{font-size:clamp(1.15rem,4vw,2rem)}
+.attention-ring{position:absolute;right:12px;top:12px;width:12px;height:12px;border-radius:999px;background:currentColor;box-shadow:0 0 18px currentColor}.app-layer{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);opacity:.88}.app-role{font-size:.74rem;color:#8fa3ba;line-height:1.32}.payload-size{font-size:.72rem;color:#8fa3ba;text-align:right;margin-top:7px;min-height:16px}
+a.model-btn{display:grid;place-items:center;text-decoration:none;line-height:1.2}a.model-btn:visited{color:#c4b5fd}a.model-btn.model-active:visited{color:#e9e3ff}
+@media(max-width:900px){.layer-grid{grid-template-columns:1fr}.suite-strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.main{padding:8px 8px 92px}.carousel-wrap{min-height:calc(100svh - 148px)}.chamber{min-height:calc(100svh - 172px)}.car-arrow{display:none}.suite-strip{grid-template-columns:1fr 1fr}.portal-command{border-radius:20px}}
+
+/* v0.27.1 canonical suite names: ACE Mind, ACE Gravitic, ACE Scholar, ACE Cluster, ACE Quantum, ACE Matrix, ACE Prism. Removed Search/Pulse/Shield/Gravity from canonical launcher and hierarchy. */
+/* v0.27.2 canonical suite restore: ACE Enchanted added as the eighth suite app and aura/enchantment layer. */
+</style>
+</head>
+<body class="ready">
+<div class="app-shell" id="appShell">
+<header class="topbar"><div class="brand-card"><div class="brand-mark"><img id="brandLogo" alt="" /></div><div class="brand-copy"><div class="title">ACED Lifestyle</div></div><div class="top-actions"><button class="small-btn" type="button" onclick="openModal('lensModal')">Lens</button><button class="icon-btn" type="button" onclick="openModal('aiModal')" aria-label="AI">AI</button></div></div></header>
+<main class="main"><section class="carousel-wrap" id="carouselWrap"><div class="carousel-track" id="carouselTrack"></div><button class="car-arrow car-prev" type="button" aria-label="Previous chamber" onclick="shiftChamber(-1)">‹</button><button class="car-arrow car-next" type="button" aria-label="Next chamber" onclick="shiftChamber(1)">›</button><div class="dots" id="dots"></div></section></main>
+<nav class="utility-dock" aria-label="Utilities"><button class="dock-btn" onclick="openModal('aiModal')">AI</button><button class="dock-btn" onclick="openModal('patchModal')">Patch</button><button class="dock-btn" onclick="manualSave()">Save</button><button class="dock-btn" onclick="exportState()">Export</button><button class="dock-btn" onclick="document.getElementById('importFile').click()">Import</button><input id="importFile" type="file" accept="application/json,.json" onchange="importStateFile(event)"></nav>
+</div>
+<div class="modal" id="aiModal"><div class="modal-panel"><div class="modal-head"><div class="modal-title">AI</div><button class="x" onclick="closeModal('aiModal')">×</button></div><div class="ai-section-label">↑ What to send</div><div class="payload-grid" id="payloadGrid"></div><div class="ai-section-label">↗ Where to send it</div><div class="model-grid" id="modelGrid"></div><div class="action-row"><button class="secondary" onclick="copyCurrentPayload()">Copy</button></div><textarea id="handoffBox" spellcheck="false"></textarea><div class="payload-size" id="payloadSize"></div></div></div>
+<div class="modal" id="lensModal"><div class="modal-panel"><div class="modal-head"><div class="modal-title">Lens</div><button class="x" onclick="closeModal('lensModal')">×</button></div><div class="lens-box"><pre id="lensPre"></pre></div></div></div>
+<div class="modal" id="patchModal"><div class="modal-panel"><div class="modal-head"><div class="modal-title">Patch</div><button class="x" onclick="closeModal('patchModal')">×</button></div><textarea id="patchInput" spellcheck="false" placeholder='{"patch_type":"aced_lifestyle_patch","version":"1.0","ops":[]}'></textarea><div class="action-row"><button class="secondary" onclick="loadPatchTemplate()">Template</button><button class="secondary" onclick="previewPatch()">Preview</button><button class="primary" onclick="applyPatch()">Apply</button></div><div class="lens-box" style="margin-top:10px"><pre id="patchOutput"></pre></div></div></div>
+<div class="handoff-gate" id="handoffGate"><div class="handoff-card"><div><div class="handoff-model-mark" id="handoffMark">AI</div><div class="handoff-name" id="handoffName">Opening</div></div></div></div>
+<div class="toast" id="toast"></div>
+<script type="application/json" id="agent-manifest">{"app":"ACED Lifestyle","version":"0.27.3-no-in-app-splash","doctrine":"Shell owns mechanics. ACED owns the canonical eight-app suite, portal, attention, packets, approvals, routes, essence, and compact AI bridge. Visible UI stays minimal; agent instructions live here and in Lens.","canonical_suite":["ACE Mind","ACE Gravitic","ACE Scholar","ACE Cluster","ACE Quantum","ACE Matrix","ACE Prism","ACE Enchanted"],"chambers":{"spades":"Portal and app launch","clubs":"Canonical suite hierarchy map","diamonds":"Packets, routes, approvals","hearts":"Essence and coherence","jester":"AI, Patch, Lens, Export, Import"},"apps":[{"id":"mind","name":"ACE Mind","layer":"Solar","role":"daily guidance, THEON governor, supplements, practices, day-state intelligence","status":"active"},{"id":"gravitic","name":"ACE Gravitic","layer":"Root","role":"practice dojo, grounding, acupressure, movement, breathwork, frequencies","status":"active"},{"id":"scholar","name":"ACE Scholar","layer":"Throat","role":"learning, THEON, study, research, teaching, communication","status":"future"},{"id":"cluster","name":"ACE Cluster","layer":"Crown","role":"orchestration, agents, council, suite command, savings and clustering","status":"future"},{"id":"quantum","name":"ACE Quantum","layer":"Third Eye","role":"probability, signal fields, timelines, market/decision uncertainty","status":"future"},{"id":"matrix","name":"ACE Matrix","layer":"Heart","role":"life-domain matrix, cross-app relational web, coherence between modules","status":"future"},{"id":"prism","name":"ACE Prism","layer":"Sacral","role":"creative synthesis, images, plans, possibility refraction","status":"future"},{"id":"enchanted","name":"ACE Enchanted","layer":"Aura","role":"mythic atmosphere, ritual tone, symbolic ambience, wonder, enchantment, and aesthetic field coherence","status":"future"}],"hierarchy":[{"key":"crown","label":"Crown","app":"cluster","axis":"orchestrate","note":"suite command, agents, council, clustering"},{"key":"third_eye","label":"Third Eye","app":"quantum","axis":"sense","note":"probability, timelines, uncertainty, hidden signal"},{"key":"throat","label":"Throat","app":"scholar","axis":"teach","note":"knowledge, THEON, study, language"},{"key":"heart","label":"Heart","app":"matrix","axis":"connect","note":"cross-app relational web and life-domain coherence"},{"key":"solar","label":"Solar","app":"mind","axis":"govern","note":"daily guidance, choice, THEON action"},{"key":"sacral","label":"Sacral","app":"prism","axis":"create","note":"creative refraction and possibility"},{"key":"root","label":"Root","app":"gravitic","axis":"ground","note":"body, practice, rhythm, infrastructure"},{"key":"aura","label":"Aura","app":"enchanted","axis":"enchant","note":"mythic atmosphere, ritual tone, symbolic ambience, wonder field"}],"allowed_patch_ops":["set_active_chamber","upsert_app","add_packet","add_approval","update_approval_status","add_route","add_log_entry","replace_app_config"]}</script>
+<script type="application/json" id="agent-state">{}</script>
+<script>
+'use strict';
+const APP_VERSION='0.27.3-no-in-app-splash';
+const STORAGE_KEY='aced_lifestyle_state_v0273';
+const LEGACY_STORAGE_KEYS=['aced_lifestyle_state_v0272','aced_lifestyle_state_v0271','aced_lifestyle_state_v027','aced_lifestyle_state_v025','aced_lifestyle_state_v024'];
+const ASSETS={jesterLogo:'../shared/assets/logos/jester-intelligence.png',acedLogo:'./shared/assets/logos/aced.png',appLogo:'./shared/assets/logos/aced-lifestyle.png'};
+const APPS=[
+{id:"mind",name:"ACE Mind",url:"./ace-mind.html",logo:"./shared/assets/logos/ace-mind.png",accent:"#20e7ff",layer:"Solar",role:"daily guidance, THEON governor, supplements, practices, day-state intelligence",status:"active"},
+{id:"gravitic",name:"ACE Gravitic",url:"./ace-gravitic.html",logo:"./shared/assets/logos/ace-gravitic.png",accent:"#34d399",layer:"Root",role:"practice dojo, grounding, acupressure, movement, breathwork, frequencies",status:"active"},
+{id:"scholar",name:"ACE Scholar",url:"./ace-scholar.html",logo:"./shared/assets/logos/ace-scholar.png",accent:"#93c5fd",layer:"Throat",role:"learning, THEON, study, research, teaching, communication",status:"future"},
+{id:"cluster",name:"ACE Cluster",url:"./ace-cluster.html",logo:"./shared/assets/logos/ace-cluster.png",accent:"#d6a84f",layer:"Crown",role:"orchestration, agents, council, suite command, savings and clustering",status:"future"},
+{id:"quantum",name:"ACE Quantum",url:"./ace-quantum.html",logo:"./shared/assets/logos/ace-quantum.png",accent:"#00c6c6",layer:"Third Eye",role:"probability, signal fields, timelines, market/decision uncertainty",status:"future"},
+{id:"matrix",name:"ACE Matrix",url:"./ace-matrix.html",logo:"./shared/assets/logos/ace-matrix.png",accent:"#ef4444",layer:"Heart",role:"life-domain matrix, cross-app relational web, coherence between modules",status:"future"},
+{id:"prism",name:"ACE Prism",url:"./ace-prism.html",logo:"./shared/assets/logos/ace-prism.png",accent:"#8b5cf6",layer:"Sacral",role:"creative synthesis, images, plans, possibility refraction",status:"future"},
+{id:"enchanted",name:"ACE Enchanted",url:"./ace-enchanted.html",logo:"./shared/assets/logos/ace-enchanted.png",accent:"#a78bfa",layer:"Aura",role:"mythic atmosphere, ritual tone, symbolic ambience, wonder, enchantment, and aesthetic field coherence",status:"future"}
+];
+const SUITE_LAYERS=[
+{key:"crown",label:"Crown",app:"cluster",axis:"orchestrate",note:"suite command, agents, council, clustering"},
+{key:"third_eye",label:"Third Eye",app:"quantum",axis:"sense",note:"probability, timelines, uncertainty, hidden signal"},
+{key:"throat",label:"Throat",app:"scholar",axis:"teach",note:"knowledge, THEON, study, language"},
+{key:"heart",label:"Heart",app:"matrix",axis:"connect",note:"cross-app relational web and life-domain coherence"},
+{key:"solar",label:"Solar",app:"mind",axis:"govern",note:"daily guidance, choice, THEON action"},
+{key:"sacral",label:"Sacral",app:"prism",axis:"create",note:"creative refraction and possibility"},
+{key:"root",label:"Root",app:"gravitic",axis:"ground",note:"body, practice, rhythm, infrastructure"},
+{key:"aura",label:"Aura",app:"enchanted",axis:"enchant",note:"mythic atmosphere, ritual tone, symbolic ambience, wonder field"}
+];
+const CHAMBER_LABEL={spades:'Portal',clubs:'Hierarchy',diamonds:'Flow',hearts:'Essence',jester:'AI'};
+const CHAMBERS=['spades','clubs','diamonds','hearts','jester'];
+const MODELS=[['Gemini','https://gemini.google.com/app','GM'],['ChatGPT','https://chatgpt.com/','CG'],['Claude','https://claude.ai/','CL'],['DeepSeek','https://chat.deepseek.com/','DS'],['Perplexity','https://www.perplexity.ai/','PX'],['Grok','https://grok.com/','GK'],['Copilot','https://copilot.microsoft.com/','CP'],['AI Mode','https://www.google.com/search?udm=50&q=AI%20Mode','AI']];
+const PAYLOADS=[['state','State'],['chamber','Chamber'],['bug','Bug'],['patch','Patch'],['snapshot','Snapshot']];
+let state=loadState();
+let activeChamber=state.activeChamber||'spades';
+let payloadMode='state';
+let touchStartX=0,touchStartY=0;
+let carouselViewIndex=1;
+let carouselAnimating=false;
+function initialState(){return{app:'ACED Lifestyle',version:APP_VERSION,activeChamber:'spades',savedAt:new Date().toISOString(),apps:APPS.map((a,i)=>({id:a.id,name:a.name,url:a.url,logo:a.logo,layer:a.layer,role:a.role,status:a.status,attention:a.status==='active'?'watch':'missing',lastPacket:null})),packets:[],agentTasks:[],approvals:[],routes:[],logs:[],essence:{command:'Align the suite. Move one signal at a time.',layers:{body:'No body packet imported.',scholar:'No Scholar packet pending.',creative:'No Prism packet imported.',matrix:'No Matrix packet imported.',enchanted:'No Enchanted ambience packet imported.'}}}}
+function loadState(){try{let raw=localStorage.getItem(STORAGE_KEY);if(!raw){for(const key of LEGACY_STORAGE_KEYS){raw=localStorage.getItem(key);if(raw)break}}return raw?mergeState(initialState(),JSON.parse(raw)):initialState()}catch(e){return initialState()}}
+function mergeState(base,incoming){incoming=incoming||{};const out=Object.assign({},base,incoming);out.activeChamber=CHAMBERS.includes(out.activeChamber)?out.activeChamber:base.activeChamber;out.apps=mergeApps(base.apps,Array.isArray(incoming.apps)?incoming.apps:[]);['packets','agentTasks','approvals','routes','logs'].forEach(k=>out[k]=Array.isArray(out[k])?out[k].slice(-120):[]);out.essence=Object.assign({},base.essence,incoming.essence||{});out.essence.layers=Object.assign({},base.essence.layers,incoming.essence?.layers||{});return out}
+function mergeApps(defaults,incoming){const defaultIds=new Set(defaults.map(a=>a.id));const byId=new Map(defaults.map(a=>[a.id,Object.assign({},a,{attention:a.status==='active'?'watch':'missing',lastPacket:null})]));incoming.forEach(app=>{const clean=sanitizeApp(app);if(!clean.id)return;if(defaultIds.has(clean.id)){byId.set(clean.id,Object.assign({},byId.get(clean.id)||{},clean))}});return Array.from(byId.values())}
+function sanitizeApp(app){const id=String(app?.id||'').trim().toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,40);const def=APPS.find(a=>a.id===id)||{};return{id,name:String(app?.name||def.name||id||'App').slice(0,80),url:safeUrl(app?.url||def.url,'#'),logo:safeAssetUrl(app?.logo||def.logo,''),layer:String(app?.layer||def.layer||'Suite').slice(0,40),role:String(app?.role||def.role||'').slice(0,160),status:['active','future','external'].includes(app?.status)?app.status:(def.status||'future'),attention:['clear','watch','action','missing'].includes(app?.attention)?app.attention:(def.status==='active'?'watch':'missing'),lastPacket:app?.lastPacket||null}}
+function safeUrl(value,fallback='#'){const s=String(value||'').trim();if(!s)return fallback;const l=s.toLowerCase();if(l.startsWith('javascript:')||l.startsWith('vbscript:')||l.startsWith('data:'))return fallback;if(s.startsWith('./')||s.startsWith('../')||s.startsWith('/')||l.startsWith('https://')||l.startsWith('http://'))return s;return fallback}
+function safeAssetUrl(value,fallback=''){const s=String(value||'').trim();if(!s)return fallback;const l=s.toLowerCase();if(l.startsWith('javascript:')||l.startsWith('vbscript:'))return fallback;if(s.startsWith('./')||s.startsWith('../')||s.startsWith('/')||l.startsWith('https://')||l.startsWith('http://'))return s;return fallback}
+function saveState(){state.version=APP_VERSION;state.activeChamber=activeChamber;state.savedAt=new Date().toISOString();localStorage.setItem(STORAGE_KEY,JSON.stringify(state));updateLens()}
+function manualSave(){saveState();toast('Saved')}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function safeArr(v){return Array.isArray(v)?v:[]}
+function levelClass(l){return l==='action'?'state-action':l==='missing'?'state-missing':l==='watch'?'state-watch':'state-clear'}
+function pillClass(l){return l==='action'?'pill-action':l==='missing'?'pill-missing':l==='watch'?'pill-watch':'pill-clear'}
+function chamberIcon(id){const icons={spades:'<path class="spades" d="M12 2C7 7 3 10 3 14a5 5 0 0 0 8 4c-.3 2-1 3.2-2.4 4H15.4C14 21.2 13.3 20 13 18a5 5 0 0 0 8-4c0-4-4-7-9-12z"/>',clubs:'<path class="clubs" d="M12 3a4 4 0 0 0-2 7.5A4.5 4.5 0 1 0 10 17c-.2 2-1 3.5-2.3 5h8.6C15 20.5 14.2 19 14 17a4.5 4.5 0 1 0 0-6.5A4 4 0 0 0 12 3z"/>',diamonds:'<path class="diamonds" d="M12 2 21 12 12 22 3 12 12 2z"/>',hearts:'<path class="hearts" d="M12 21S3 15.7 3 9.2A4.8 4.8 0 0 1 11.5 6 4.8 4.8 0 0 1 21 9.2C21 15.7 12 21 12 21z"/>',jester:'<path class="jester-stroke" d="M5 17c3-7 5-10 7-10s4 3 7 10M7 17h10M8 17l-2 4h12l-2-4M8 7l-2-4M16 7l2-4M12 7V3"/><circle class="jester-stroke" cx="6" cy="3" r="1.2"/><circle class="jester-stroke" cx="18" cy="3" r="1.2"/><circle class="jester-stroke" cx="12" cy="3" r="1.2"/>'};return '<svg viewBox="0 0 24 24" aria-hidden="true">'+icons[id]+'</svg>'}
+function render(){const track=document.getElementById('carouselTrack');track.innerHTML=CHAMBERS.map(id=>`<section class="chamber" data-chamber="${id}"><div class="chamber-inner"><div class="chamber-head"><div class="suit">${chamberIcon(id)}</div></div><div class="chamber-grid" id="grid-${id}"></div></div></section>`).join('');renderSpades();renderClubs();renderDiamonds();renderHearts();renderJester();renderDots();setChamber(activeChamber,false);loadImages(document)}
+function renderSpades(){document.getElementById('grid-spades').innerHTML=`<div class="portal-command"><div class="essence-command">${escapeHtml(state.essence?.command||'Align the suite. Move one signal at a time.')}</div><div class="essence-line">ACED is the control tower. Launch ACE apps, import packets, route signals, then let AI read the compact state.</div></div><div class="portal-grid">${state.apps.map(app=>{const accent=APPS.find(a=>a.id===app.id)?.accent||'#d6a84f';return `<a class="app-card" href="${escapeHtml(safeUrl(app.url,'#'))}" style="--accent-soft:${hexToRgba(accent,.22)}" data-agent-role="app-launch" data-app-id="${escapeHtml(app.id)}" data-layer="${escapeHtml(app.layer||'Suite')}" data-attention="${escapeHtml(app.attention||'clear')}" aria-label="${escapeHtml(app.name)}"><span class="attention-ring ${levelClass(app.attention)}"></span><div class="app-logo"><img data-src="${escapeHtml(safeAssetUrl(app.logo,''))}" alt=""></div><div><div class="app-layer">${escapeHtml(app.layer||'Suite')}</div><div class="app-name">${escapeHtml(app.name)}</div></div><div class="app-role">${escapeHtml(app.role||'')}</div></a>`}).join('')}</div>`}
+function renderClubs(){const appById=Object.fromEntries(state.apps.map(a=>[a.id,a]));document.getElementById('grid-clubs').innerHTML=`<div class="card"><div class="row"><div><div class="row-title">ACED hierarchy</div><div class="row-note">Canonical eight-app suite. Crown to root plus Aura, using ACE Mind, ACE Gravitic, ACE Scholar, ACE Cluster, ACE Quantum, ACE Matrix, ACE Prism, and ACE Enchanted.</div></div><span class="pill pill-watch">v0.27.3</span></div></div><div class="layer-grid">${SUITE_LAYERS.map(layer=>{const app=appById[layer.app]||{};const accent=APPS.find(a=>a.id===layer.app)?.accent||'#d6a84f';return `<div class="layer-card" style="--accent-soft:${hexToRgba(accent,.22)}" data-layer="${escapeHtml(layer.key)}" data-app-id="${escapeHtml(layer.app)}"><div class="layer-orb"><div class="status-dot ${levelClass(app.attention||'missing')}"></div></div><div><div class="layer-axis">${escapeHtml(layer.axis)}</div><div class="layer-name">${escapeHtml(layer.label)} · ${escapeHtml(app.name||layer.app)}</div><div class="layer-note">${escapeHtml(layer.note)}</div></div><button class="secondary" onclick="launchApp('${escapeHtml(layer.app)}')">Open</button></div>`}).join('')}</div>`}
+function renderPacketRows(){const items=safeArr(state.packets).slice(-8).reverse();if(!items.length)return '<div class="row"><div><div class="row-title">No packets</div><div class="row-note">Import app exports here.</div></div></div>';return items.map(p=>`<div class="row"><div><div class="row-title">${escapeHtml(p.title||p.source||'Packet')}</div><div class="row-note">${escapeHtml(p.kind||p.app||'state')} · ${escapeHtml((p.savedAt||p.importedAt||'').slice(0,16))}</div></div><span class="pill ${pillClass(p.status||'clear')}">${escapeHtml(p.status||'stored')}</span></div>`).join('')}
+function renderDiamonds(){const approvals=safeArr(state.approvals);const fresh=state.apps.filter(a=>a.attention==='clear'||a.attention==='watch').length;document.getElementById('grid-diamonds').innerHTML=`<div class="grid-3"><div class="stat-card"><div class="stat-value">${state.packets.length}</div><div class="stat-label">Packets</div></div><div class="stat-card"><div class="stat-value">${fresh}/${state.apps.length}</div><div class="stat-label">Mapped apps</div></div><div class="stat-card"><div class="stat-value">${approvals.filter(a=>a.status==='pending').length}</div><div class="stat-label">Approvals</div></div></div><div class="card"><div class="row"><div><div class="row-title">Import packet</div><div class="row-note">JSON from ACE Mind, ACE Gravitic, future apps, or Morning Agent.</div></div><button class="primary" onclick="document.getElementById('importFile').click()">Import</button></div></div><div class="queue-card">${renderPacketRows()}</div><div class="queue-card">${approvals.length?approvals.map((a,i)=>`<div class="row"><div><div class="row-title">${escapeHtml(a.title||'Decision')}</div><div class="row-note">${escapeHtml(a.note||a.target||'')}</div></div><div><button class="primary" onclick="setApproval(${i},'approved')">✓</button> <button class="danger" onclick="setApproval(${i},'rejected')">×</button></div></div>`).join(''):'<div class="row"><div><div class="row-title">No pending decisions</div><div class="row-note">Approval queue clear.</div></div><span class="pill pill-clear">0</span></div>'}</div><div class="queue-card">${renderRoutes()}</div>`}
+function renderRoutes(){const routes=safeArr(state.routes);if(!routes.length)return '<div class="row"><div><div class="row-title">No routes</div><div class="row-note">Agent routing queue empty.</div></div></div>';return routes.slice(-6).reverse().map(r=>`<div class="row"><div><div class="row-title">${escapeHtml(r.from||'Source')} → ${escapeHtml(r.to||r.target||'Target')}</div><div class="row-note">${escapeHtml(r.reason||r.status||'')}</div></div></div>`).join('')}
+function renderHearts(){const e=state.essence||{};document.getElementById('grid-hearts').innerHTML=`<div class="card"><div class="essence-command">${escapeHtml(e.command||'Align the suite.')}</div><div class="essence-line">${escapeHtml(e.note||'One primary signal. One clean next action.')}</div></div><div class="suite-strip">${SUITE_LAYERS.map(l=>{const app=state.apps.find(a=>a.id===l.app)||{};return `<div class="suite-mini"><b>${escapeHtml(l.label)}</b><span>${escapeHtml(app.name||l.app)} · ${escapeHtml(l.axis)}</span></div>`}).join('')}</div><div class="grid-2">${Object.entries(e.layers||{}).map(([k,v])=>`<div class="card"><div class="row-title">${escapeHtml(label(k))}</div><div class="row-note">${escapeHtml(v)}</div></div>`).join('')}</div>`}
+function renderJester(){document.getElementById('grid-jester').innerHTML=`<div class="grid-2"><button class="advanced-tile" onclick="openModal('aiModal')"><div class="row-title">AI</div></button><button class="advanced-tile" onclick="openModal('patchModal')"><div class="row-title">Patch</div></button><button class="advanced-tile" onclick="openModal('lensModal')"><div class="row-title">Lens</div></button><button class="advanced-tile" onclick="exportState()"><div class="row-title">Export</div></button></div>`}
+function label(k){return String(k).replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}
+function hexToRgba(hex,a){const c=String(hex).replace('#','');const n=parseInt(c,16);return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`}
+function launchApp(id){const app=state.apps.find(a=>a.id===id);if(!app){toast('App not found');return}state.logs.push({type:'launch',app:id,at:new Date().toISOString()});saveState();window.location.href=safeUrl(app.url,'#')}
+function renderDots(){document.getElementById('dots').innerHTML=CHAMBERS.map(id=>`<button class="dot" aria-label="${CHAMBER_LABEL[id]||id}" onclick="setChamber('${id}')"></button>`).join('')}
+function installInfiniteCarouselClones(){
+  const track=document.getElementById('carouselTrack');
+  if(!track)return;
+  Array.from(track.querySelectorAll('[data-clone]')).forEach(node=>node.remove());
+  const originals=Array.from(track.children).filter(node=>!node.dataset.clone);
+  if(originals.length!==CHAMBERS.length){track.dataset.loopReady='0';return}
+  const first=originals[0].cloneNode(true);
+  const last=originals[originals.length-1].cloneNode(true);
+  first.dataset.clone='first';last.dataset.clone='last';
+  first.setAttribute('aria-hidden','true');last.setAttribute('aria-hidden','true');
+  first.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
+  last.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
+  track.insertBefore(last,originals[0]);
+  track.appendChild(first);
+  track.dataset.loopReady='1';
+  carouselViewIndex=CHAMBERS.indexOf(activeChamber)+1;
+}
+function setCarouselTransform(viewIndex,animate=true){
+  const track=document.getElementById('carouselTrack');if(!track)return;
+  const expected=CHAMBERS.length+2;
+  if(track.children.length!==expected)installInfiniteCarouselClones();
+  const maxIndex=Math.max(0,(track.children.length||expected)-1);
+  const safeIndex=Math.min(Math.max(0,viewIndex),maxIndex);
+  track.style.transition=animate?'transform 560ms var(--ease)':'none';
+  track.style.transform=`translateX(-${safeIndex*100}%)`;
+  if(!animate){track.offsetHeight;track.style.transition='transform 560ms var(--ease)'}
+}
+function updateDots(){document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',CHAMBERS[i]===activeChamber))}
+function setChamber(id,save=true){
+  activeChamber=CHAMBERS.includes(id)?id:'spades';
+  carouselViewIndex=CHAMBERS.indexOf(activeChamber)+1;
+  carouselAnimating=false;
+  setCarouselTransform(carouselViewIndex,false);
+  updateDots();
+  document.body.dataset.chamber=activeChamber;
+  if(save)saveState();else updateLens();
+}
+function shiftChamber(delta){moveChamber(delta)}
+function moveChamber(dir){
+  if(carouselAnimating)return;
+  installInfiniteCarouselClones();
+  const current=CHAMBERS.indexOf(activeChamber);
+  const next=(current+dir+CHAMBERS.length)%CHAMBERS.length;
+  activeChamber=CHAMBERS[next];
+  carouselViewIndex+=dir;
+  carouselAnimating=true;
+  updateDots();
+  document.body.dataset.chamber=activeChamber;
+  setCarouselTransform(carouselViewIndex,true);
+  clearTimeout(moveChamber._safety);
+  moveChamber._safety=setTimeout(()=>{
+    if(carouselAnimating){
+      if(carouselViewIndex===0){carouselViewIndex=CHAMBERS.length;setCarouselTransform(carouselViewIndex,false)}
+      else if(carouselViewIndex===CHAMBERS.length+1){carouselViewIndex=1;setCarouselTransform(carouselViewIndex,false)}
+      carouselAnimating=false;
+    }
+  },720);
+  saveState();
+}
+function initSwipe(){
+  const el=document.getElementById('carouselWrap');
+  const track=document.getElementById('carouselTrack');
+  if(track&&!track.dataset.loopBound){
+    track.dataset.loopBound='1';
+    track.addEventListener('transitionend',(ev)=>{
+      if(ev.target!==track || ev.propertyName!=='transform')return;
+      if(carouselViewIndex===0){carouselViewIndex=CHAMBERS.length;setCarouselTransform(carouselViewIndex,false)}
+      else if(carouselViewIndex===CHAMBERS.length+1){carouselViewIndex=1;setCarouselTransform(carouselViewIndex,false)}
+      carouselAnimating=false;
+    });
+  }
+  if(el&&!el.dataset.swipeBound){
+    el.dataset.swipeBound='1';
+    el.addEventListener('touchstart',e=>{const t=e.changedTouches[0];touchStartX=t.clientX;touchStartY=t.clientY},{passive:true});
+    el.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-touchStartX,dy=t.clientY-touchStartY;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.25)moveChamber(dx<0?1:-1)},{passive:true});
+  }
+}
+
+function openModal(id){if(id==='lensModal')updateLens();if(id==='aiModal')renderAI();document.getElementById(id)?.classList.add('open')}
+function closeModal(id){document.getElementById(id)?.classList.remove('open')}
+let selectedModel='Gemini';
+let aiHandoffActive=false;
+function renderAI(){
+  const payloadGrid=document.getElementById('payloadGrid');
+  const modelGrid=document.getElementById('modelGrid');
+  if(payloadGrid){
+    payloadGrid.innerHTML=PAYLOADS.map(([id,name])=>`<button class="payload-btn ${payloadMode===id?'active':''}" onclick="payloadMode='${id}';renderAI()">${name}</button>`).join('');
+  }
+  if(modelGrid){
+    modelGrid.innerHTML=MODELS.map(([name,url,mark])=>`<button class="model-btn ${selectedModel===name?'model-active':''}" type="button" data-model="${escapeHtml(name)}" data-url="${escapeHtml(url)}" data-mark="${escapeHtml(mark)}">${escapeHtml(name)}</button>`).join('');
+    modelGrid.querySelectorAll('.model-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        JesterAI.openModel(btn.dataset.model,btn.dataset.url,btn.dataset.mark);
+      });
+    });
+  }
+  const box=document.getElementById('handoffBox');
+  if(box){box.value=buildPayload(selectedModel);const ps=document.getElementById('payloadSize');if(ps)ps.textContent='Payload: '+Math.round(new Blob([box.value]).size/1024)+' KB';}
+}
+const JesterAI={
+  openModel(name,url,mark){
+    const opened=window.open('about:blank','_blank');
+    selectedModel=name||selectedModel||'Gemini';
+    payloadMode=payloadMode||'state';
+    const payload=buildPayload(selectedModel);
+    const box=document.getElementById('handoffBox');
+    if(box)box.value=payload;
+    try{copyText(payload).then(()=>{}).catch(()=>{})}catch(e){}
+    const gate=document.getElementById('handoffGate');
+    const m=document.getElementById('handoffMark');
+    const n=document.getElementById('handoffName');
+    if(m)m.textContent=mark||'AI';
+    if(n)n.textContent=selectedModel;
+    if(gate)gate.classList.add('open');
+    aiHandoffActive=true;
+    try{sessionStorage.setItem('aced_lifestyle_ai_handoff','1')}catch(e){}
+    setTimeout(()=>{
+      try{
+        if(opened){opened.location.href=url}
+        else{window.location.href=url}
+      }catch(e){
+        window.location.href=url;
+      }
+    },420);
+  }
+};
+function handleAIReturnCleanup(){
+  let pending=aiHandoffActive;
+  try{pending=pending||sessionStorage.getItem('aced_lifestyle_ai_handoff')==='1'}catch(e){}
+  if(!pending)return;
+  aiHandoffActive=false;
+  try{sessionStorage.removeItem('aced_lifestyle_ai_handoff')}catch(e){}
+  const gate=document.getElementById('handoffGate');
+  if(gate)gate.classList.remove('open');
+  returnToSpades('Spades',false);
+}
+function compactStatePacket(){return{app:'ACED Lifestyle',version:APP_VERSION,active_chamber:activeChamber,essence:state.essence,apps:state.apps.map(a=>({id:a.id,name:a.name,layer:a.layer,role:a.role,attention:a.attention,status:a.status,url:safeUrl(a.url,'#')})),counts:{packets:state.packets.length,agentTasks:state.agentTasks.length,approvals:state.approvals.filter(a=>a.status==='pending').length,routes:state.routes.length},recent_packets:state.packets.slice(-5).map(p=>({title:p.title||p.source||'Packet',kind:p.kind||p.app||'json',status:p.status||'stored',at:p.savedAt||p.importedAt||''})),routes:state.routes.slice(-5),approvals:state.approvals.slice(-5),logs:state.logs.slice(-8)}}
+function buildPayload(model){
+  const manifest=JSON.parse(document.getElementById('agent-manifest').textContent);
+  const packet={target_model:model,payload_type:payloadMode,app:'ACED Lifestyle',version:APP_VERSION,active_chamber:activeChamber,agent_manifest:manifest,state:compactStatePacket()};
+  if(payloadMode==='chamber')packet.current_chamber_text=(document.querySelector(`[data-chamber="${activeChamber}"]`)?.innerText||'').slice(0,8000);
+  if(payloadMode==='bug')packet.intent='Debug constraints, broken state, mobile issues, hierarchy problems, routing, AI handoff, canonical suite names, and patch risks. Return observations first.';
+  if(payloadMode==='patch')packet.intent='Return only valid JSON patch if a change is needed. Use allowed ops only.';
+  if(payloadMode==='snapshot')packet.snapshot=buildCompactSnapshot();
+  return JSON.stringify(packet,null,2)
+}
+function buildCompactSnapshot(){return{title:document.title,active_chamber:activeChamber,visible_text:(document.querySelector(`[data-chamber="${activeChamber}"]`)?.innerText||'').slice(0,12000),dom:{chambers:CHAMBERS,modals:[...document.querySelectorAll('.modal')].map(m=>m.id),apps:state.apps.map(a=>a.id)},instruction:'Compact snapshot only. Full HTML is not included to protect AI context windows.'}}
+function getSanitizedSnapshot(){return JSON.stringify(buildCompactSnapshot(),null,2)}
+function copyCurrentPayload(){copyText(document.getElementById('handoffBox').value).then(()=>toast('Copied'))}
+async function copyText(text){try{await navigator.clipboard.writeText(text);return true}catch(e){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.focus();ta.select();let ok=false;try{ok=document.execCommand('copy')}catch(_){}ta.remove();return ok}}
+function buildAgentState(){return{app:'ACED Lifestyle',version:APP_VERSION,active_chamber:activeChamber,available_chambers:CHAMBERS,chamber_labels:CHAMBER_LABEL,hierarchy:SUITE_LAYERS,asset_paths:ASSETS,data_paths:{app_config:'./shared/data/app-configs/aced-lifestyle.config.json',schemas:'./shared/data/schemas/',logs:'./shared/logs/exports/'},loaded_apps:state.apps.map(a=>({id:a.id,name:a.name,layer:a.layer,role:a.role,status:a.status,attention:a.attention,url:safeUrl(a.url,'#'),logo:safeAssetUrl(a.logo,'')})),counts:{packets:state.packets.length,agentTasks:state.agentTasks.length,approvals:state.approvals.filter(a=>a.status==='pending').length,routes:state.routes.length},allowed_patch_ops:['set_active_chamber','upsert_app','add_packet','add_approval','update_approval_status','add_route','add_log_entry','replace_app_config'],patch_schema:{patch_type:'aced_lifestyle_patch',version:'1.0',ops:[{op:'add_log_entry',data:{note:'string'}}]},instruction:'Use this as source of truth. For modifications, return only valid JSON patch unless a full rebuild is requested.'}}
+function updateLens(){const lens=buildAgentState();const pre=document.getElementById('lensPre');if(pre)pre.textContent=JSON.stringify(lens,null,2);const live=document.getElementById('agent-state');if(live)live.textContent=JSON.stringify(lens,null,2)}
+function setApproval(i,status){if(state.approvals[i]){state.approvals[i].status=status;state.logs.push({type:'approval',index:i,status,at:new Date().toISOString()});saveState();render();toast(status)}}
+function exportState(){downloadJson(state,'aced-lifestyle-'+APP_VERSION+'-'+today()+'.json')}
+function downloadJson(obj,name){const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),500)}
+function importStateFile(ev){const f=ev.target.files&&ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);ingest(data);saveState();render();toast('Imported')}catch(e){toast('Import failed')}};r.readAsText(f);ev.target.value=''}
+function ingest(data){if(data.app==='ACED Lifestyle'||data.packet_type==='aced_lifestyle_state'){state=mergeState(initialState(),data);activeChamber=CHAMBERS.includes(state.activeChamber)?state.activeChamber:'spades';return}const title=data.app_name||data.app||data.packet_type||data.payload?.app||'Imported packet';state.packets.push({title,kind:data.packet_type||data.payload_type||'json',status:'stored',importedAt:new Date().toISOString(),data});const text=JSON.stringify(data).toLowerCase();state.apps=state.apps.map(a=>text.includes(a.id)||text.includes(a.name.toLowerCase())?Object.assign({},a,{attention:'watch',lastPacket:new Date().toISOString()}):a);if(data.essence||data.daily_essence||data.morning_agent_unified_packet){state.essence.command=data.essence?.command||data.daily_essence?.command||state.essence.command;state.essence.note=data.essence?.note||data.daily_essence?.note||state.essence.note}}
+function validatePatch(p){if(!p||p.patch_type!=='aced_lifestyle_patch'||!Array.isArray(p.ops))throw new Error('Invalid patch');const allowed=['set_active_chamber','upsert_app','add_packet','add_approval','update_approval_status','add_route','add_log_entry','replace_app_config'];p.ops.forEach(op=>{if(!allowed.includes(op.op))throw new Error('Blocked op: '+op.op)})}
+function loadPatchTemplate(){document.getElementById('patchInput').value=JSON.stringify({patch_type:'aced_lifestyle_patch',version:'1.0',ops:[{op:'add_log_entry',data:{note:'Example'}}]},null,2)}
+function previewPatch(){try{const p=JSON.parse(document.getElementById('patchInput').value);validatePatch(p);document.getElementById('patchOutput').textContent='VALID\n'+JSON.stringify(p,null,2)}catch(e){document.getElementById('patchOutput').textContent='ERROR: '+e.message}}
+function applyPatch(){try{const p=JSON.parse(document.getElementById('patchInput').value);validatePatch(p);p.ops.forEach(applyOp);saveState();render();document.getElementById('patchOutput').textContent='APPLIED';toast('Patch applied')}catch(e){document.getElementById('patchOutput').textContent='ERROR: '+e.message}}
+function applyOp(op){const d=op.data||{};if(op.op==='set_active_chamber')setChamber(d.chamber||d.id||'spades',false);if(op.op==='upsert_app'){const clean=sanitizeApp(d);const i=state.apps.findIndex(a=>a.id===clean.id);if(i>=0)state.apps[i]=Object.assign({},state.apps[i],clean);else if(clean.id)state.apps.push(clean)}if(op.op==='add_packet')state.packets.push(Object.assign({importedAt:new Date().toISOString()},d));if(op.op==='add_approval')state.approvals.push(Object.assign({status:'pending'},d));if(op.op==='update_approval_status'&&state.approvals[d.index])state.approvals[d.index].status=d.status||'pending';if(op.op==='add_route')state.routes.push(d);if(op.op==='add_log_entry')state.logs.push(Object.assign({at:new Date().toISOString()},d));if(op.op==='replace_app_config'){state=mergeState(initialState(),d);activeChamber=CHAMBERS.includes(state.activeChamber)?state.activeChamber:'spades'}}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}function today(){return new Date().toISOString().slice(0,10)}
+function loadImages(root){root.querySelectorAll('img[data-src]').forEach(img=>{const src=img.getAttribute('data-src');if(!src)return;img.onerror=()=>{img.removeAttribute('src');img.style.display='none'};img.src=safeAssetUrl(src,'')})}
+function safeHeaderLogo(){const img=document.getElementById('brandLogo');img.onerror=()=>{img.removeAttribute('src');img.style.display='none'};img.src=safeAssetUrl(ASSETS.appLogo,'')}
+let appInitialized=false;
+let backRouterInstalled=false;
+function initApp(){
+  if(appInitialized)return;
+  activeChamber='spades';
+  state.activeChamber='spades';
+  safeHeaderLogo();
+  render();
+  installInfiniteCarouselClones();
+  initSwipe();
+  renderAI();
+  updateLens();
+  installBackRouter();
+  appInitialized=true;
+}
+function clearLegacyAIReturnNoise(){
+  try{
+    ['aced_lifestyle_return_ai','aced_lifestyle_last_model','aced_lifestyle_pending_ai_payload_meta','ace_mind_return_ai','ace_mind_last_model','ace_mind_pending_ai_payload_meta'].forEach(k=>{
+      sessionStorage.removeItem(k);
+      localStorage.removeItem(k);
+    });
+  }catch(e){}
+}
+function startDirectApp(){
+  clearLegacyAIReturnNoise();
+  initApp();
+  returnToSpades('Spades',false);
+  document.body.classList.remove('booting');
+  document.body.classList.add('ready');
+}
+function returnToSpades(label='Spades',save=true){
+  document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));
+  document.getElementById('handoffGate')?.classList.remove('open');
+  setChamber('spades',save);
+}
+function installBackRouter(){
+  if(backRouterInstalled)return;
+  backRouterInstalled=true;
+  try{
+    history.replaceState({app:'aced-lifestyle',screen:'spades'},'',location.href);
+    history.pushState({app:'aced-lifestyle',screen:'app'},'',location.href);
+  }catch(e){}
+  window.addEventListener('popstate',()=>{
+    if(!appInitialized)return;
+    const anyModal=!!document.querySelector('.modal.open')||document.getElementById('handoffGate')?.classList.contains('open');
+    if(activeChamber!=='spades'||anyModal){
+      returnToSpades('Spades',true);
+      try{history.pushState({app:'aced-lifestyle',screen:'app'},'',location.href)}catch(e){}
+    }
+  });
+  window.addEventListener('focus',handleAIReturnCleanup);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)handleAIReturnCleanup()});
+}
+window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')moveChamber(-1);if(e.key==='ArrowRight')moveChamber(1)});
+window.addEventListener('DOMContentLoaded',()=>{startDirectApp()});
+</script>
+</body>
+</html>
