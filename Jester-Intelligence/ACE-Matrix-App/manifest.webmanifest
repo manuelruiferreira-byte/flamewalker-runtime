@@ -1,0 +1,17 @@
+{
+  "id": "/flamewalker-runtime/Jester-Intelligence/ACE-Matrix-App/",
+  "name": "ACE Matrix",
+  "short_name": "Matrix",
+  "description": "ACE Matrix chamber for life-domain matrix, cross-app relational web, and coherence between modules.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#02040a",
+  "theme_color": "#02040a",
+  "categories": ["productivity", "lifestyle", "utilities"],
+  "icons": [
+    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-matrix.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-matrix.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}
