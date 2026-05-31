@@ -1,0 +1,17 @@
+{
+  "id": "/flamewalker-runtime/Jester-Intelligence/ACED-Lifestyle/apps/ace-mind/",
+  "name": "ACE Mind",
+  "short_name": "ACE Mind",
+  "description": "ACE Mind personal kernel for daily convergence, body gates, supplements, practices, AI handoff, and IndexedDB trace memory.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#02040a",
+  "theme_color": "#02040a",
+  "categories": ["productivity", "health", "lifestyle"],
+  "icons": [
+    {"src":"../../shared/assets/logos/ace-mind.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"../../shared/assets/logos/ace-mind.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}
