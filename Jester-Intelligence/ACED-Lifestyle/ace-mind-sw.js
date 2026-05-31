@@ -1,10 +1,11 @@
-/* ACE Mind Service Worker v25.0.5
+/* ACE Mind Service Worker v25.0.6
    Safe cache purge version.
-   Canonical app file: ./ace-mind.html
-   Purpose: stop old boot/cache ghosts and route notifications to ACE Mind.
+   Canonical launch file: ./ace-mind-trace.html
+   Runtime app file remains: ./ace-mind.html
+   Purpose: stop old boot/cache ghosts and route notifications to ACE Mind with IndexedDB trace memory.
 */
 
-const ACE_MIND_SW_VERSION = "25.0.5-system-splash-only";
+const ACE_MIND_SW_VERSION = "25.0.6-trace-launcher";
 const CACHE_PREFIX = "ace-mind-cache-";
 
 self.addEventListener("install", event => {
@@ -36,7 +37,7 @@ self.addEventListener("fetch", event => {
 self.addEventListener("notificationclick", event => {
   event.notification.close();
 
-  const targetUrl = "./ace-mind.html";
+  const targetUrl = "./ace-mind-trace.html";
 
   event.waitUntil(
     (async () => {
@@ -47,7 +48,7 @@ self.addEventListener("notificationclick", event => {
 
       for (const client of allClients) {
         try {
-          if (client.url.includes("ace-mind.html")) {
+          if (client.url.includes("ace-mind-trace.html") || client.url.includes("ace-mind.html")) {
             await client.focus();
             return;
           }
@@ -77,7 +78,9 @@ self.addEventListener("message", event => {
     event.source?.postMessage({
       type: "ACE_MIND_SW_VERSION",
       version: ACE_MIND_SW_VERSION,
-      canonical: "./ace-mind.html",
+      canonical: "./ace-mind-trace.html",
+      runtime: "./ace-mind.html",
+      trace_store: "./shared/js/ace-mind-trace-store-v0-1.js",
       cache_mode: "network-only-cache-purge"
     });
   }
