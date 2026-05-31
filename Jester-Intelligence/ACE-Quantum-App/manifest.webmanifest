@@ -1,0 +1,17 @@
+{
+  "id": "/flamewalker-runtime/Jester-Intelligence/ACE-Quantum-App/",
+  "name": "ACE Quantum",
+  "short_name": "Quantum",
+  "description": "ACE Quantum chamber for probability, signal fields, timelines, market uncertainty, and decision uncertainty.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#02040a",
+  "theme_color": "#02040a",
+  "categories": ["productivity", "finance", "utilities"],
+  "icons": [
+    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-quantum.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-quantum.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}
