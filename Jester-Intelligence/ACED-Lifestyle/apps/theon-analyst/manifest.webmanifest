@@ -1,0 +1,17 @@
+{
+  "id": "/flamewalker-runtime/Jester-Intelligence/ACED-Lifestyle/apps/theon-analyst/",
+  "name": "THEON Analyst",
+  "short_name": "THEON",
+  "description": "THEON Analyst diagnostic and governance chamber for patch review, failure modes, module routing, and upgrade analysis.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#02040a",
+  "theme_color": "#02040a",
+  "categories": ["productivity", "developer", "utilities"],
+  "icons": [
+    {"src":"../../shared/assets/logos/aced.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"../../shared/assets/logos/aced.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}
