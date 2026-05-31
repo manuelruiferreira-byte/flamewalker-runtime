@@ -1,0 +1,17 @@
+{
+  "id": "/flamewalker-runtime/Jester-Intelligence/ACE-Scholar-App/",
+  "name": "ACE Scholar",
+  "short_name": "Scholar",
+  "description": "ACE Scholar learning, study, research, THEON knowledge routing, and communication chamber.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#02040a",
+  "theme_color": "#02040a",
+  "categories": ["education", "productivity", "utilities"],
+  "icons": [
+    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-scholar.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-scholar.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}
