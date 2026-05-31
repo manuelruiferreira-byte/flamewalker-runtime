@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
+<meta name="theme-color" content="#02040a" />
+<title>ACE Mind</title>
+<link rel="manifest" href="./manifest-ace-mind.webmanifest" />
+<meta name="mobile-web-app-capable" content="yes" />
+<style>html,body{margin:0;width:100%;height:100%;background:#02040a;overflow:hidden}iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a}</style>
+</head>
+<body>
+<iframe id="appFrame" src="./ace-mind-trace.html" title="ACE Mind"></iframe>
+<script>
+(function(){
+  'use strict';
+  const frame=document.getElementById('appFrame');
+  function expose(){
+    try{
+      const inner=frame.contentWindow;
+      if(inner&&inner.ACETraceStore){window.ACETraceStore=inner.ACETraceStore;window.ACE_MIND_TRACE_FRAME=frame;}
+    }catch(e){}
+  }
+  frame.addEventListener('load',()=>{setTimeout(expose,700);setTimeout(expose,1600);});
+})();
+</script>
+</body>
+</html>
