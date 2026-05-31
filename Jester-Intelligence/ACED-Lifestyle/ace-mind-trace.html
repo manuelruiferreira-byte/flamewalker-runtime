@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
+<meta name="theme-color" content="#02040a" />
+<title>ACE Mind</title>
+<link rel="manifest" href="./manifest.json" />
+<meta name="mobile-web-app-capable" content="yes" />
+<style>
+  html,body{margin:0;width:100%;height:100%;background:#02040a;overflow:hidden}
+  #aceMindFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a}
+</style>
+</head>
+<body>
+<iframe id="aceMindFrame" src="./ace-mind.html" title="ACE Mind"></iframe>
+<script>
+(function(){
+  'use strict';
+  const frame=document.getElementById('aceMindFrame');
+  const traceSrc='./shared/js/ace-mind-trace-store-v0-1.js';
+  function expose(){
+    try{
+      if(frame.contentWindow&&frame.contentWindow.ACETraceStore){
+        window.ACETraceStore=frame.contentWindow.ACETraceStore;
+        window.ACE_MIND_TRACE_FRAME=frame;
+        return true;
+      }
+    }catch(e){}
+    return false;
+  }
+  function inject(){
+    try{
+      const doc=frame.contentDocument||frame.contentWindow.document;
+      if(!doc||!doc.body)return;
+      if(doc.getElementById('ace-mind-trace-store-v0-1-loader')){expose();return;}
+      const s=doc.createElement('script');
+      s.id='ace-mind-trace-store-v0-1-loader';
+      s.src=traceSrc;
+      s.onload=function(){setTimeout(expose,250);};
+      doc.body.appendChild(s);
+      let tries=0;
+      const t=setInterval(function(){tries++;if(expose()||tries>20)clearInterval(t);},250);
+    }catch(e){console.warn('ACE Mind trace launcher injection failed',e);}
+  }
+  frame.addEventListener('load',function(){setTimeout(inject,250);});
+})();
+</script>
+</body>
+</html>
