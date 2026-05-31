@@ -1,18 +1,24 @@
-/* ACED Install Router v0.1
-   Separates app launch URLs so apps in the same folder can still install as distinct PWAs.
-   No app logic mutation. Router only rewrites launcher links to install-shell pages.
+/* ACED Install Router v0.2
+   Routes launcher/tree cards to isolated sibling PWA scopes outside ACED-Lifestyle.
+   No app logic mutation. Router only rewrites launch links.
 */
-(function acedInstallRouterV01(){
+(function acedInstallRouterV02(){
   'use strict';
-  if(window.__ACED_INSTALL_ROUTER_V01__)return;
-  window.__ACED_INSTALL_ROUTER_V01__=true;
-  const VERSION='aced-install-router-v0.1';
+  if(window.__ACED_INSTALL_ROUTER_V02__)return;
+  window.__ACED_INSTALL_ROUTER_V02__=true;
+  const VERSION='aced-install-router-v0.2-isolated-scopes';
   const ROUTES={
-    mind:'./app-ace-mind.html',
-    gravitic:'./app-ace-gravitic.html',
-    theon:'./app-theon-analyst.html',
-    analyst:'./app-theon-analyst.html',
-    lifestyle:'./app-aced-lifestyle.html'
+    lifestyle:'../ACED-Lifestyle-App/',
+    mind:'../ACE-Mind-App/',
+    gravitic:'../ACE-Gravitic-App/',
+    scholar:'../ACE-Scholar-App/',
+    cluster:'../ACE-Cluster-App/',
+    quantum:'../ACE-Quantum-App/',
+    matrix:'../ACE-Matrix-App/',
+    prism:'../ACE-Prism-App/',
+    enchanted:'../ACE-Enchanted-App/',
+    theon:'../THEON-Analyst-App/',
+    analyst:'../THEON-Analyst-App/'
   };
   function routeFor(id, fallback){return ROUTES[String(id||'').toLowerCase()]||fallback||'#';}
   function rewriteLinks(root){
@@ -30,9 +36,9 @@
   }
   function installLaunchPatch(){
     try{
-      if(typeof window.launchApp==='function'&&!window.launchApp.__acedInstallRouterWrapped){
+      if(typeof window.launchApp==='function'&&!window.launchApp.__acedInstallRouterV02Wrapped){
         const base=window.launchApp;
-        window.launchApp=function patchedLaunchApp(id){
+        window.launchApp=function patchedLaunchAppV02(id){
           const url=routeFor(id,null);
           if(url){
             try{
@@ -44,7 +50,7 @@
           }
           return base.apply(this,arguments);
         };
-        window.launchApp.__acedInstallRouterWrapped=true;
+        window.launchApp.__acedInstallRouterV02Wrapped=true;
       }
     }catch(e){}
   }
