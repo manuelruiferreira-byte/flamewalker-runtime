@@ -1,13 +1,13 @@
-/* ACE Cluster Bridge UI v0.1
+/* ACE Cluster Bridge UI v0.2
    External stabilization patch for ACE Cluster runtime.
-   Scope: UI readability, mobile table labels, pinch/text zoom, ACE Mind style AI bridge behavior.
+   Scope: UI readability, mobile compact display, pinch/text zoom, ACE Mind style AI bridge behavior.
    No trading logic changes. No portfolio mutation.
 */
-(function aceClusterBridgeUIV01(){
+(function aceClusterBridgeUIV02(){
   'use strict';
-  if(window.__ACE_CLUSTER_BRIDGE_UI_V01__)return;
-  window.__ACE_CLUSTER_BRIDGE_UI_V01__=true;
-  const VERSION='ace-cluster-bridge-ui-v0.1';
+  if(window.__ACE_CLUSTER_BRIDGE_UI_V02__)return;
+  window.__ACE_CLUSTER_BRIDGE_UI_V02__=true;
+  const VERSION='ace-cluster-bridge-ui-v0.2-compact-resonance';
   const MODELS=[
     ['Gemini','https://gemini.google.com/app','GM'],
     ['AI Mode','https://www.google.com/search?udm=50','AI'],
@@ -21,6 +21,7 @@
   let clusterZoom=Number(localStorage.getItem('ace_cluster_ui_zoom_v01')||'1')||1;
   function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
   function css(){
+    const old=document.getElementById('ace-cluster-bridge-ui-css');if(old)old.remove();
     const s=document.createElement('style');s.id='ace-cluster-bridge-ui-css';
     s.textContent=`
       :root{--ace-cluster-ui-zoom:${clusterZoom}}
@@ -34,6 +35,17 @@
       .patch-console{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace!important;font-size:.78rem!important;line-height:1.46!important}
       .ace-cluster-zoom-dock{position:fixed;right:10px;bottom:74px;z-index:150;display:flex;gap:6px;padding:6px;border:1px solid rgba(214,168,79,.24);border-radius:999px;background:rgba(1,3,10,.76);backdrop-filter:blur(14px);box-shadow:0 16px 42px rgba(0,0,0,.35)}
       .ace-cluster-zoom-dock button{width:34px;height:34px;border-radius:999px;border:1px solid rgba(214,168,79,.28);background:rgba(5,12,26,.92);color:#fff0ad;font-weight:900}
+
+      /* v0.2 compact resonance display: keep diagnostic data in DOM/payload, hide it from the main visual field */
+      .fw-to-resonance-row{grid-template-columns:96px minmax(0,1fr)!important;gap:12px!important;padding:12px 0!important;align-items:center!important}
+      .fw-to-resonance-row .fw-to-coin-sym{font-size:1.02rem!important;letter-spacing:.04em!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+      .fw-to-resonance-row .fw-to-coin-nums,.fw-to-resonance-row .tiny{display:none!important}
+      .fw-to-resonance-row>div:nth-child(2){display:flex!important;align-items:center!important;gap:8px!important;flex-wrap:wrap!important;min-width:0!important}
+      .fw-to-resonance-row .eso-badge{font-size:.68rem!important;line-height:1!important;padding:7px 10px!important;border-radius:12px!important;white-space:nowrap!important;max-width:100%!important}
+      .fw-to-resonance-row .eso-badge+span{margin-left:0!important}
+      .info b:nth-of-type(1),.info b:nth-of-type(2){color:#fff0ad!important}
+      .info{font-size:.74rem!important;color:#93a8c4!important;max-height:72px!important;overflow:auto!important}
+
       @media(max-width:760px){
         .table-wrap{overflow:visible!important}#watchTable{border-collapse:separate!important;border-spacing:0 10px!important}#watchTable thead{display:none!important}
         #watchTable,#watchTable tbody,#watchTable tr,#watchTable td{display:block!important;width:100%!important}
@@ -41,8 +53,10 @@
         #watchTable td{border-bottom:1px solid rgba(255,255,255,.05)!important;padding:7px 4px!important;display:grid!important;grid-template-columns:88px 1fr!important;gap:8px!important;align-items:center!important;font-size:.86rem!important}
         #watchTable td:last-child{border-bottom:0!important}#watchTable td:before{content:attr(data-label);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#d9a64a;font-weight:900}
         .entry-meta{max-width:none!important}.qty-input{width:100%!important;min-height:38px}.badge,.eso-badge{white-space:normal!important;line-height:1.25!important}
+        .fw-to-resonance-row{grid-template-columns:88px minmax(0,1fr)!important;padding:11px 0!important}
+        .fw-to-resonance-row .eso-badge{font-size:.64rem!important;padding:7px 9px!important}
       }
-      @media(max-width:480px){.day-panel{top:calc(env(safe-area-inset-top) + 78px)!important}.brand-card{grid-template-columns:auto 1fr!important}.top-actions{gap:6px}.icon-btn{width:38px;height:38px}.fw-to-clock-wrap{align-items:flex-start}.fw-to-svg-wrap{width:68px;height:68px;flex-basis:68px}.fw-to-time-big{font-size:1.28rem}.ai-model-grid{grid-template-columns:repeat(2,1fr)!important}}
+      @media(max-width:480px){.day-panel{top:calc(env(safe-area-inset-top) + 78px)!important}.brand-card{grid-template-columns:auto 1fr!important}.top-actions{gap:6px}.icon-btn{width:38px;height:38px}.fw-to-clock-wrap{align-items:flex-start}.fw-to-svg-wrap{width:68px;height:68px;flex-basis:68px}.fw-to-time-big{font-size:1.28rem}.ai-model-grid{grid-template-columns:repeat(2,1fr)!important}.fw-to-resonance-row{grid-template-columns:82px minmax(0,1fr)!important}.fw-to-resonance-row .fw-to-coin-sym{font-size:.98rem!important}.ace-cluster-zoom-dock{right:10px;bottom:82px}}
     `;
     document.head.appendChild(s);
     applyZoom();
