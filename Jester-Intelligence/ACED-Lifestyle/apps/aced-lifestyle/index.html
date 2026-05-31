@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
+<meta name="theme-color" content="#02040a" />
+<title>ACED Lifestyle</title>
+<link rel="manifest" href="./manifest.webmanifest" />
+<meta name="mobile-web-app-capable" content="yes" />
+<style>html,body{margin:0;width:100%;height:100%;background:#02040a;overflow:hidden}iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a}</style>
+</head>
+<body>
+<iframe id="appFrame" src="../../index.html" title="ACED Lifestyle"></iframe>
+<script>
+(function(){
+  'use strict';
+  const frame=document.getElementById('appFrame');
+  function inject(){
+    try{
+      const doc=frame.contentDocument||frame.contentWindow.document;
+      if(!doc||!doc.body)return;
+      if(doc.getElementById('aced-install-router-v0-1-loader'))return;
+      const s=doc.createElement('script');
+      s.id='aced-install-router-v0-1-loader';
+      s.src='../../shared/js/aced-install-router-v0-1.js';
+      doc.body.appendChild(s);
+    }catch(e){console.warn('ACED scoped install-shell injection failed',e);}
+  }
+  frame.addEventListener('load',()=>setTimeout(inject,250));
+})();
+</script>
+</body>
+</html>
