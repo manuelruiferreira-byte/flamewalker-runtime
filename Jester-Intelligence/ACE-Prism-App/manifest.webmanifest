@@ -1,0 +1,17 @@
+{
+  "id": "/flamewalker-runtime/Jester-Intelligence/ACE-Prism-App/",
+  "name": "ACE Prism",
+  "short_name": "Prism",
+  "description": "ACE Prism chamber for creative synthesis, images, plans, possibility refraction, and imagination routing.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#02040a",
+  "theme_color": "#02040a",
+  "categories": ["productivity", "entertainment", "lifestyle"],
+  "icons": [
+    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-prism.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-prism.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}
