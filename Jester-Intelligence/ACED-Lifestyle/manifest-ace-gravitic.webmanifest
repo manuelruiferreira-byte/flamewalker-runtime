@@ -1,0 +1,17 @@
+{
+  "id": "./app-ace-gravitic.html",
+  "name": "ACE Gravitic",
+  "short_name": "Gravitic",
+  "description": "ACE Gravitic practice dojo for grounding, acupressure, movement, breathwork, frequencies, and body-safe practice routing.",
+  "start_url": "./app-ace-gravitic.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#02040a",
+  "theme_color": "#02040a",
+  "categories": ["health", "lifestyle", "productivity"],
+  "icons": [
+    {"src":"./shared/assets/logos/ace-gravitic.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"./shared/assets/logos/ace-gravitic.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}
