@@ -1,0 +1,15 @@
+{
+  "schema": "ace_cluster_sentinel_state_v0_1",
+  "updated_at": null,
+  "source": "ACE Cluster",
+  "currency": "USDC",
+  "status": "empty_seed_waiting_for_cluster_export",
+  "watchlist": [],
+  "portfolio": [],
+  "cluster_flags": {
+    "prime": [],
+    "caution": [],
+    "attention_required": []
+  },
+  "notes": "Seed file. Export from ACE Cluster and replace this JSON when ready. Daily Sentinel reads this path as the current operational packet."
+}
