@@ -1,0 +1,17 @@
+{
+  "id": "./app-aced-lifestyle.html",
+  "name": "ACED Lifestyle",
+  "short_name": "ACED",
+  "description": "ACED Lifestyle control tower for the ACE app suite, routing, packets, approvals, and AI bridge.",
+  "start_url": "./app-aced-lifestyle.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#02040a",
+  "theme_color": "#02040a",
+  "categories": ["productivity", "lifestyle", "utilities"],
+  "icons": [
+    {"src":"./shared/assets/logos/aced-lifestyle.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"./shared/assets/logos/aced-lifestyle.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}
