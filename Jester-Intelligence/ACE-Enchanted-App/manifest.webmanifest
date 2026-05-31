@@ -1,0 +1,17 @@
+{
+  "id": "/flamewalker-runtime/Jester-Intelligence/ACE-Enchanted-App/",
+  "name": "ACE Enchanted",
+  "short_name": "Enchanted",
+  "description": "ACE Enchanted chamber for mythic atmosphere, ritual tone, symbolic ambience, wonder, enchantment, and aesthetic field coherence.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#02040a",
+  "theme_color": "#02040a",
+  "categories": ["lifestyle", "entertainment", "productivity"],
+  "icons": [
+    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-enchanted.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-enchanted.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}
