@@ -1,9 +1,9 @@
 {
-  "id": "./ace-mind.html",
+  "id": "./ace-mind-trace.html",
   "name": "ACE Mind",
   "short_name": "ACE Mind",
-  "description": "ACE Mind personal kernel for daily convergence, body gates, supplements, practices, AI handoff, and governed patches.",
-  "start_url": "./ace-mind.html",
+  "description": "ACE Mind personal kernel for daily convergence, body gates, supplements, practices, AI handoff, governed patches, and IndexedDB trace memory.",
+  "start_url": "./ace-mind-trace.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
