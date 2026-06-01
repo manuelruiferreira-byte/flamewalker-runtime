@@ -1,4 +1,4 @@
-const THEON_ANALYST_CACHE = "theon-analyst-cache-v0-1";
+const THEON_ANALYST_CACHE = "theon-analyst-cache-v0-9-5";
 const THEON_ANALYST_CACHE_PREFIX = "theon-analyst-cache-";
 
 const THEON_ANALYST_ASSETS = [
@@ -10,43 +10,34 @@ const THEON_ANALYST_ASSETS = [
 ];
 
 self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(THEON_ANALYST_CACHE).then(cache => cache.addAll(THEON_ANALYST_ASSETS))
-  );
   self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
-        keys
-          .filter(key => key.startsWith(THEON_ANALYST_CACHE_PREFIX))
-          .filter(key => key !== THEON_ANALYST_CACHE)
-          .map(key => caches.delete(key))
-      );
-    })
+    caches.keys().then(keys => Promise.all(
+      keys
+        .filter(key => key.startsWith(THEON_ANALYST_CACHE_PREFIX))
+        .filter(key => key !== THEON_ANALYST_CACHE)
+        .map(key => caches.delete(key))
+    )).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
 
   const url = new URL(event.request.url);
-  const isTheonAsset = THEON_ANALYST_ASSETS.some(asset => {
-    return url.pathname.endsWith(asset.replace("./", ""));
-  });
+  const isTheonAsset = THEON_ANALYST_ASSETS.some(asset => url.pathname.endsWith(asset.replace("./", "")));
+  const isHtml = event.request.mode === "navigate" || url.pathname.endsWith("/theon-analyst.html");
 
-  if (!isTheonAsset && event.request.mode !== "navigate") return;
+  if (!isTheonAsset && !isHtml) return;
 
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request).catch(() => {
-        if (event.request.mode === "navigate") {
-          return caches.match("./theon-analyst.html");
-        }
-      });
-    })
+    fetch(event.request, { cache: "no-store" }).then(response => {
+      const copy = response.clone();
+      caches.open(THEON_ANALYST_CACHE).then(cache => cache.put(event.request, copy)).catch(() => {});
+      return response;
+    }).catch(() => caches.match(event.request).then(cached => cached || caches.match("./theon-analyst.html")))
   );
 });
