@@ -11,5 +11,23 @@
 </head>
 <body>
 <iframe id="appFrame" src="../ACED-Lifestyle/ace-cluster.html" title="ACE Cluster"></iframe>
+<script>
+(function(){
+  'use strict';
+  const frame=document.getElementById('appFrame');
+  function syncToday(){
+    try{
+      const w=frame.contentWindow;
+      if(!w)return;
+      const today=typeof w.todayIso==='function'?w.todayIso():new Date().toISOString().slice(0,10);
+      if(w.state&&w.state.activeDate!==today){
+        if(typeof w.setActiveDate==='function')w.setActiveDate(today);
+        else {w.state.activeDate=today;if(typeof w.saveState==='function')w.saveState();}
+      }
+    }catch(e){}
+  }
+  frame.addEventListener('load',()=>{setTimeout(syncToday,250);setTimeout(syncToday,1200);});
+})();
+</script>
 </body>
 </html>
