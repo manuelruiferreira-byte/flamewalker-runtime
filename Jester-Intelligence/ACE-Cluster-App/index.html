@@ -9,31 +9,40 @@
 <meta name="mobile-web-app-capable" content="yes" />
 <style>
 html,body{margin:0;width:100%;height:100%;background:#02040a;overflow:hidden}
-iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a;opacity:0;transition:opacity .18s ease}
-iframe.ready{opacity:1}
+iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a;opacity:0;visibility:hidden;transition:opacity .12s ease}
+iframe.ready{opacity:1;visibility:visible}
 </style>
 </head>
 <body>
-<iframe id="appFrame" src="../ACED-Lifestyle/ace-cluster.html?v=cluster-no-enter-20260601" title="ACE Cluster"></iframe>
+<iframe id="appFrame" src="../ACED-Lifestyle/ace-cluster.html?v=cluster-no-enter-20260601b" title="ACE Cluster"></iframe>
 <script>
 (function(){
   'use strict';
   var frame=document.getElementById('appFrame');
   var logo='../ACED-Lifestyle/shared/assets/logos/ace-cluster.png';
+  var tries=0;
 
-  function patchCluster(){
+  function forceReady(){
+    tries++;
     try{
       var w=frame.contentWindow;
       var doc=frame.contentDocument;
-      if(!w || !doc)return false;
+      if(!w || !doc || !doc.body)return false;
+
+      if(typeof w.bootEnter==='function'){
+        try{w.bootEnter();}catch(e){}
+      }
 
       var overlay=doc.getElementById('bootOverlay');
-      if(overlay) overlay.remove();
+      var gate=doc.getElementById('enterGate');
+      if(overlay){overlay.classList.add('boot-exit');overlay.style.display='none';overlay.style.opacity='0';overlay.style.visibility='hidden';overlay.style.pointerEvents='none';}
+      if(gate){gate.style.display='none';gate.style.opacity='0';gate.style.visibility='hidden';gate.style.pointerEvents='none';}
 
-      if(doc.body){
-        doc.body.classList.remove('booting');
-        doc.body.classList.add('ready');
-      }
+      doc.body.classList.remove('booting');
+      doc.body.classList.add('ready');
+
+      var shell=doc.getElementById('appShell') || doc.querySelector('.app-shell');
+      if(shell){shell.style.opacity='1';shell.style.visibility='visible';shell.style.pointerEvents='auto';}
 
       var mark=doc.querySelector('.brand-mark');
       if(mark && !mark.dataset.clusterLogoPatched){
@@ -63,19 +72,21 @@ iframe.ready{opacity:1}
       frame.classList.add('ready');
       return true;
     }catch(e){
-      frame.classList.add('ready');
+      if(tries>12)frame.classList.add('ready');
       return false;
     }
   }
 
-  frame.addEventListener('load',function(){
-    patchCluster();
-    setTimeout(patchCluster,100);
-    setTimeout(patchCluster,350);
-    setTimeout(patchCluster,900);
-  });
+  function startPatchLoop(){
+    forceReady();
+    var timer=setInterval(function(){
+      var ok=forceReady();
+      if(ok || tries>24)clearInterval(timer);
+    },120);
+  }
 
-  setTimeout(function(){frame.classList.add('ready');},2500);
+  frame.addEventListener('load',startPatchLoop);
+  setTimeout(startPatchLoop,700);
 })();
 </script>
 </body>
