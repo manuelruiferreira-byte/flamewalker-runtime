@@ -7,19 +7,45 @@
 <title>ACE Cluster</title>
 <link rel="manifest" href="./manifest.webmanifest" />
 <meta name="mobile-web-app-capable" content="yes" />
-<style>html,body{margin:0;width:100%;height:100%;background:#02040a;overflow:hidden}iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a}.fallback{position:fixed;inset:0;display:grid;place-items:center;padding:24px;color:#fff5d6;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 50% 0%,rgba(214,168,79,.18),transparent 34%),linear-gradient(180deg,#02040a,#06111f)}.card{width:min(92vw,560px);border:1px solid rgba(214,168,79,.28);border-radius:28px;background:rgba(5,12,26,.84);padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.58);text-align:center}.k{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#fde68a}.t{font-size:2rem;font-weight:900;margin-top:6px}.p{color:#b7c8dc;line-height:1.45;margin-top:10px}</style>
+<style>
+html,body{margin:0;width:100%;height:100%;background:#02040a;overflow:hidden}
+iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a}
+.recovery{position:fixed;inset:0;display:none;place-items:center;padding:24px;color:#fff5d6;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 50% 0%,rgba(214,168,79,.18),transparent 34%),linear-gradient(180deg,#02040a,#06111f);z-index:20}.card{width:min(92vw,560px);border:1px solid rgba(214,168,79,.28);border-radius:28px;background:rgba(5,12,26,.88);padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.58);text-align:center}.k{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#fde68a}.t{font-size:2rem;font-weight:900;margin-top:6px}.p{color:#b7c8dc;line-height:1.45;margin-top:10px}.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}.btn{padding:12px 14px;border-radius:16px;border:1px solid rgba(214,168,79,.32);background:rgba(255,255,255,.06);color:#fff0ad;text-decoration:none;font-weight:800}.btn2{border-color:rgba(32,231,255,.38);color:#a5f3fc}
+</style>
 </head>
 <body>
-<iframe id="appFrame" src="../ACED-Lifestyle/ace-cluster.html" title="ACE Cluster"></iframe>
-<div id="fallback" class="fallback" style="display:none"><div class="card"><div class="k">ACE Cluster</div><div class="t">Runtime not found yet</div><div class="p">Upload or create <b>Jester-Intelligence/ACED-Lifestyle/ace-cluster.html</b>. The isolated PWA shell is ready and will load it automatically.</div></div></div>
+<iframe id="appFrame" title="ACE Cluster"></iframe>
+<div id="recovery" class="recovery"><div class="card"><div class="k">ACE Cluster</div><div class="t">Recovery Gate</div><div class="p" id="recoveryText">The installed shell is trying to load the Cluster runtime. If the app is stuck, use direct runtime or reload with cache reset.</div><div class="row"><a class="btn btn2" id="directLink" href="../ACED-Lifestyle/ace-cluster.html" target="_top">Open Runtime</a><button class="btn" id="reloadBtn" type="button">Reload Shell</button><button class="btn" id="hardBtn" type="button">Hard Reset URL</button></div></div></div>
 <script>
 (function(){
   'use strict';
+  const VERSION='cluster-shell-v0.3-recovery';
+  const runtime='../ACED-Lifestyle/ace-cluster.html';
   const frame=document.getElementById('appFrame');
-  const fallback=document.getElementById('fallback');
+  const recovery=document.getElementById('recovery');
+  const text=document.getElementById('recoveryText');
+  const direct=document.getElementById('directLink');
+  const stamp=Date.now();
   let loaded=false;
-  frame.addEventListener('load',()=>{loaded=true;setTimeout(()=>{try{const doc=frame.contentDocument||frame.contentWindow.document;if(doc&&doc.body&&doc.body.textContent.match(/404|Not Found/i)){fallback.style.display='grid';frame.style.display='none';}}catch(e){}},500);});
-  setTimeout(()=>{if(!loaded&&fallback){fallback.style.display='grid';frame.style.display='none';}},3500);
+  function url(){return runtime+'?shell='+encodeURIComponent(VERSION)+'&t='+stamp;}
+  direct.href=url();
+  function showRecovery(msg){if(text)text.textContent=msg||'Cluster runtime did not fully confirm load.';if(recovery)recovery.style.display='grid';}
+  function hideRecovery(){if(recovery)recovery.style.display='none';}
+  document.getElementById('reloadBtn').onclick=function(){location.reload();};
+  document.getElementById('hardBtn').onclick=function(){location.href='./?reset='+Date.now();};
+  frame.addEventListener('load',()=>{
+    loaded=true;
+    setTimeout(()=>{
+      try{
+        const doc=frame.contentDocument||frame.contentWindow.document;
+        const bodyText=(doc&&doc.body&&doc.body.textContent)||'';
+        if(/404|Not Found/i.test(bodyText)){showRecovery('Runtime file was not found at ACED-Lifestyle/ace-cluster.html.');frame.style.display='none';return;}
+        hideRecovery();
+      }catch(e){hideRecovery();}
+    },700);
+  });
+  frame.src=url();
+  setTimeout(()=>{if(!loaded)showRecovery('Cluster runtime is taking too long to load. Use Open Runtime or Reload Shell.');},4500);
 })();
 </script>
 </body>
