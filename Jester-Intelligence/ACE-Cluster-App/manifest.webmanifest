@@ -3,7 +3,7 @@
   "name": "ACE Cluster",
   "short_name": "Cluster",
   "description": "ACE Cluster orchestration chamber for agents, council, suite command, savings, clustering, and cross-app routing.",
-  "start_url": "./",
+  "start_url": "./?v=cluster-logo-20260601",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -11,7 +11,7 @@
   "theme_color": "#02040a",
   "categories": ["productivity", "finance", "utilities"],
   "icons": [
-    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-cluster.png","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-cluster.png","sizes":"512x512","type":"image/png","purpose":"any"}
+    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-cluster.png?v=cluster-logo-20260601","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"../ACED-Lifestyle/shared/assets/logos/ace-cluster.png?v=cluster-logo-20260601","sizes":"512x512","type":"image/png","purpose":"any maskable"}
   ]
 }
