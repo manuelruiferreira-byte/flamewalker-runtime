@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
 <meta name="theme-color" content="#02040a" />
 <title>THEON Analyst</title>
-<link rel="manifest" href="data:application/manifest+json,%7B%22id%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/THEON-Analyst-App/%22%2C%22name%22%3A%22THEON%20Analyst%22%2C%22short_name%22%3A%22THEON%22%2C%22description%22%3A%22THEON%20Analyst%20diagnostic%20and%20governance%20chamber%20for%20patch%20review%2C%20failure%20modes%2C%20module%20routing%2C%20and%20upgrade%20analysis.%22%2C%22start_url%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/THEON-Analyst-App/%3Fv%3Dtheon-inline-manifest-any%22%2C%22scope%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/THEON-Analyst-App/%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%2302040a%22%2C%22theme_color%22%3A%22%2302040a%22%2C%22categories%22%3A%5B%22productivity%22%2C%22developer%22%2C%22utilities%22%5D%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/ACED-Lifestyle/shared/assets/logos/theon-analyst-512.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image/png%22%2C%22purpose%22%3A%22%5Cu0061ny%22%7D%2C%7B%22src%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/ACED-Lifestyle/shared/assets/logos/theon-analyst-192.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image/png%22%2C%22purpose%22%3A%22%5Cu0061ny%22%7D%5D%7D" />
+<link rel="manifest" href="data:application/manifest+json,%7B%22id%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/THEON-Analyst-App/%22%2C%22name%22%3A%22THEON%20Analyst%22%2C%22short_name%22%3A%22THEON%22%2C%22description%22%3A%22THEON%20Analyst%20diagnostic%20and%20governance%20chamber.%22%2C%22start_url%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/THEON-Analyst-App/%3Fv%3Dtheon-no-second-splash-modules%22%2C%22scope%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/THEON-Analyst-App/%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%2302040a%22%2C%22theme_color%22%3A%22%2302040a%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/ACED-Lifestyle/shared/assets/logos/theon-analyst-512.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image/png%22%2C%22purpose%22%3A%22%5Cu0061ny%22%7D%2C%7B%22src%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/ACED-Lifestyle/shared/assets/logos/theon-analyst-192.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image/png%22%2C%22purpose%22%3A%22%5Cu0061ny%22%7D%5D%7D" />
 <meta name="mobile-web-app-capable" content="yes" />
 <style>
 html,body{margin:0;width:100%;height:100%;background:#02040a;overflow:hidden}
@@ -13,17 +13,20 @@ iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a
 </style>
 </head>
 <body>
-<iframe id="appFrame" src="../ACED-Lifestyle/theon-analyst.html?v=theon-no-second-splash-20260601" title="THEON Analyst"></iframe>
+<iframe id="appFrame" src="../ACED-Lifestyle/theon-analyst.html?v=theon-no-second-splash-modules-20260601" title="THEON Analyst"></iframe>
 <script>
 (function(){
   'use strict';
   var frame=document.getElementById('appFrame');
   var logo='../ACED-Lifestyle/shared/assets/logos/theon-analyst-512.png';
+  var modules=['PFP','DTC','OCF','TEL_AEV','SIPR','PNH','CRIT','AARD','MCG'];
+  var labels={PFP:'Projection / object form',DTC:'truth coherence gate',OCF:'component floor scoring',TEL_AEV:'admissibility verdict',SIPR:'recovery / recoherence',PNH:'persistence / lock',CRIT:'order / sequence',AARD:'attention / loss-first',MCG:'governor decision'};
 
-  function patchFrameLogo(){
+  function patchFrame(){
     try{
       var doc=frame.contentDocument;
       if(!doc)return;
+
       var mark=doc.querySelector('.mark');
       if(mark && !mark.dataset.theonLogoPatched){
         mark.dataset.theonLogoPatched='1';
@@ -42,15 +45,58 @@ iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a
         img.style.display='block';
         mark.appendChild(img);
       }
+
       var title=doc.querySelector('h1');
       if(title && /THEON/i.test(title.textContent||'')) title.textContent='THEON Analyst';
+
+      if(!doc.getElementById('fwTheonModuleStyle')){
+        var style=doc.createElement('style');
+        style.id='fwTheonModuleStyle';
+        style.textContent='.fw-module-bar{max-width:1180px;margin:10px auto 0;display:flex;gap:7px;overflow-x:auto;padding:2px 2px 4px;scrollbar-width:none}.fw-module-bar::-webkit-scrollbar{display:none}.fw-module-btn{flex:0 0 auto;min-height:36px;border:1px solid rgba(139,92,246,.42);background:linear-gradient(135deg,rgba(139,92,246,.16),rgba(34,211,238,.08));color:#ddd6fe;border-radius:13px;padding:0 10px;font-size:.72rem;font-weight:900;letter-spacing:.08em}.fw-module-btn:active{border-color:rgba(253,230,138,.76);color:#fde68a}.fw-module-note{max-width:1180px;margin:4px auto 0;color:#9fb0c6;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase}';
+        doc.head.appendChild(style);
+      }
+
+      if(!doc.getElementById('fwTheonModuleBar')){
+        var top=doc.querySelector('.top');
+        var bar=doc.createElement('div');
+        bar.id='fwTheonModuleBar';
+        bar.className='fw-module-bar';
+        modules.forEach(function(m){
+          var b=doc.createElement('button');
+          b.className='fw-module-btn';
+          b.type='button';
+          b.textContent=m;
+          b.title=labels[m]||m;
+          b.addEventListener('click',function(){selectModule(doc,m);});
+          bar.appendChild(b);
+        });
+        var note=doc.createElement('div');
+        note.className='fw-module-note';
+        note.textContent='Module focus buttons';
+        if(top){top.appendChild(bar);top.appendChild(note);}else{doc.body.insertBefore(bar,doc.body.firstChild);}
+      }
+    }catch(e){}
+  }
+
+  function selectModule(doc,m){
+    try{
+      var tab=doc.querySelector('[data-pane="textPane"]');
+      if(tab)tab.click();
+      var ta=doc.getElementById('textInput');
+      if(!ta)return;
+      var current=ta.value||'';
+      var prefix='THEON MODULE FOCUS: '+m+'\nLens: '+(labels[m]||m)+'\nTask: Analyze the object through this module first, then route only necessary secondary modules. Keep execution blocked unless MCG approves.\n\nOBJECT:\n';
+      if(!current.trim() || /^THEON MODULE FOCUS:/i.test(current.trim()))ta.value=prefix;
+      else ta.value=prefix+current;
+      ta.focus();
+      if(typeof doc.defaultView.toast==='function')doc.defaultView.toast(m+' focus loaded');
     }catch(e){}
   }
 
   frame.addEventListener('load',function(){
-    patchFrameLogo();
-    setTimeout(patchFrameLogo,250);
-    setTimeout(patchFrameLogo,900);
+    patchFrame();
+    setTimeout(patchFrame,250);
+    setTimeout(patchFrame,900);
   });
 })();
 </script>
