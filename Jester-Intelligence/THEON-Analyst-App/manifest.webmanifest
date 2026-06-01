@@ -3,7 +3,7 @@
   "name": "THEON Analyst",
   "short_name": "THEON",
   "description": "THEON Analyst diagnostic and governance chamber for patch review, failure modes, module routing, and upgrade analysis.",
-  "start_url": "./",
+  "start_url": "./?v=theon-no-second-splash-modules",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -11,7 +11,7 @@
   "theme_color": "#02040a",
   "categories": ["productivity", "developer", "utilities"],
   "icons": [
-    {"src":"../ACED-Lifestyle/shared/assets/logos/theon-analyst-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
-    {"src":"../ACED-Lifestyle/shared/assets/logos/theon-analyst-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+    {"src":"../ACED-Lifestyle/shared/assets/logos/theon-analyst-192.png","sizes":"192x192","type":"image/png"},
+    {"src":"../ACED-Lifestyle/shared/assets/logos/theon-analyst-512.png","sizes":"512x512","type":"image/png"}
   ]
 }
