@@ -5,43 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
 <meta name="theme-color" content="#02040a" />
 <title>THEON Analyst</title>
-<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="manifest" href="data:application/manifest+json,%7B%22id%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/THEON-Analyst-App/%22%2C%22name%22%3A%22THEON%20Analyst%22%2C%22short_name%22%3A%22THEON%22%2C%22description%22%3A%22THEON%20Analyst%20diagnostic%20and%20governance%20chamber%20for%20patch%20review%2C%20failure%20modes%2C%20module%20routing%2C%20and%20upgrade%20analysis.%22%2C%22start_url%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/THEON-Analyst-App/%3Fv%3Dtheon-inline-manifest-any%22%2C%22scope%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/THEON-Analyst-App/%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%2302040a%22%2C%22theme_color%22%3A%22%2302040a%22%2C%22categories%22%3A%5B%22productivity%22%2C%22developer%22%2C%22utilities%22%5D%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/ACED-Lifestyle/shared/assets/logos/theon-analyst-512.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image/png%22%2C%22purpose%22%3A%22%5Cu0061ny%22%7D%2C%7B%22src%22%3A%22https%3A//manuelruiferreira-byte.github.io/flamewalker-runtime/Jester-Intelligence/ACED-Lifestyle/shared/assets/logos/theon-analyst-192.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image/png%22%2C%22purpose%22%3A%22%5Cu0061ny%22%7D%5D%7D" />
 <meta name="mobile-web-app-capable" content="yes" />
 <style>
-html,body{margin:0;width:100%;height:100%;background:#02040a;overflow:hidden;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#f8f2dc}
-iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a;opacity:0;transition:opacity .45s ease}
-iframe.ready{opacity:1}
-.splash{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:radial-gradient(circle at 50% 20%,rgba(139,92,246,.20),transparent 34%),radial-gradient(circle at 50% 72%,rgba(34,211,238,.08),transparent 35%),#02040a;transition:opacity .5s ease,visibility .5s ease}
-.splash.hide{opacity:0;visibility:hidden;pointer-events:none}
-.splashCard{display:grid;place-items:center;gap:18px;text-align:center;transform:translateY(-10px)}
-.splashLogo{width:min(42vw,210px);height:min(42vw,210px);border-radius:34px;object-fit:cover;box-shadow:0 0 70px rgba(139,92,246,.20),0 0 120px rgba(0,0,0,.62)}
-.splashTitle{font-weight:900;letter-spacing:.34em;font-size:.92rem;color:#efe7ff;text-indent:.34em}
-.splashSub{font-size:.72rem;letter-spacing:.18em;color:#9fb0c6;text-transform:uppercase}
+html,body{margin:0;width:100%;height:100%;background:#02040a;overflow:hidden}
+iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a}
 </style>
 </head>
 <body>
-<div class="splash" id="splash" aria-label="Opening THEON Analyst">
-  <div class="splashCard">
-    <img class="splashLogo" src="../ACED-Lifestyle/shared/assets/logos/theon-analyst-512.png" alt="THEON Analyst" />
-    <div>
-      <div class="splashTitle">THEON</div>
-      <div class="splashSub">Analyst</div>
-    </div>
-  </div>
-</div>
-<iframe id="appFrame" src="../ACED-Lifestyle/theon-analyst.html?v=theon-standalone-20260601" title="THEON Analyst"></iframe>
+<iframe id="appFrame" src="../ACED-Lifestyle/theon-analyst.html?v=theon-no-second-splash-20260601" title="THEON Analyst"></iframe>
 <script>
 (function(){
   'use strict';
   var frame=document.getElementById('appFrame');
-  var splash=document.getElementById('splash');
   var logo='../ACED-Lifestyle/shared/assets/logos/theon-analyst-512.png';
+
   function patchFrameLogo(){
     try{
       var doc=frame.contentDocument;
       if(!doc)return;
       var mark=doc.querySelector('.mark');
-      if(mark){
+      if(mark && !mark.dataset.theonLogoPatched){
+        mark.dataset.theonLogoPatched='1';
         mark.textContent='';
         mark.setAttribute('aria-label','THEON Analyst');
         mark.style.padding='0';
@@ -61,15 +46,12 @@ iframe.ready{opacity:1}
       if(title && /THEON/i.test(title.textContent||'')) title.textContent='THEON Analyst';
     }catch(e){}
   }
-  function ready(){
+
+  frame.addEventListener('load',function(){
     patchFrameLogo();
-    setTimeout(patchFrameLogo,500);
-    setTimeout(patchFrameLogo,1500);
-    frame.classList.add('ready');
-    setTimeout(function(){splash.classList.add('hide');},450);
-  }
-  frame.addEventListener('load',ready);
-  setTimeout(function(){frame.classList.add('ready');splash.classList.add('hide');},5000);
+    setTimeout(patchFrameLogo,250);
+    setTimeout(patchFrameLogo,900);
+  });
 })();
 </script>
 </body>
