@@ -7,56 +7,9 @@
 <title>ACE Cluster</title>
 <link rel="manifest" href="./manifest.webmanifest" />
 <meta name="mobile-web-app-capable" content="yes" />
-<style>
-html,body{margin:0;width:100%;height:100%;background:#02040a;overflow:hidden}
-iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a}
-.recovery{position:fixed;inset:0;display:none;place-items:center;padding:24px;color:#fff5d6;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 50% 0%,rgba(214,168,79,.18),transparent 34%),linear-gradient(180deg,#02040a,#06111f);z-index:20}.card{width:min(92vw,560px);border:1px solid rgba(214,168,79,.28);border-radius:28px;background:rgba(5,12,26,.88);padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.58);text-align:center}.k{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#fde68a}.t{font-size:2rem;font-weight:900;margin-top:6px}.p{color:#b7c8dc;line-height:1.45;margin-top:10px}.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}.btn{padding:12px 14px;border-radius:16px;border:1px solid rgba(214,168,79,.32);background:rgba(255,255,255,.06);color:#fff0ad;text-decoration:none;font-weight:800}.btn2{border-color:rgba(32,231,255,.38);color:#a5f3fc}
-</style>
+<style>html,body{margin:0;width:100%;height:100%;background:#02040a;overflow:hidden}iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a}</style>
 </head>
 <body>
 <iframe id="appFrame" src="../ACED-Lifestyle/ace-cluster.html" title="ACE Cluster"></iframe>
-<div id="recovery" class="recovery"><div class="card"><div class="k">ACE Cluster</div><div class="t">Recovery Gate</div><div class="p" id="recoveryText">Cluster is taking longer than expected. Open the runtime directly if needed.</div><div class="row"><a class="btn btn2" id="directLink" href="../ACED-Lifestyle/ace-cluster.html" target="_top">Open Runtime</a><button class="btn" id="reloadBtn" type="button">Reload</button></div></div></div>
-<script>
-(function(){
-  'use strict';
-  const VERSION='cluster-shell-v0.4-auto-enter-no-false-fallback';
-  const frame=document.getElementById('appFrame');
-  const recovery=document.getElementById('recovery');
-  const direct=document.getElementById('directLink');
-  const runtime='../ACED-Lifestyle/ace-cluster.html';
-  let loaded=false;
-  function hideRecovery(){if(recovery)recovery.style.display='none';}
-  function showRecovery(){if(recovery)recovery.style.display='grid';}
-  function autoEnter(){
-    try{
-      const w=frame.contentWindow;
-      const doc=frame.contentDocument||w.document;
-      if(!doc||!doc.body)return;
-      const overlay=doc.getElementById('bootOverlay');
-      const gate=doc.getElementById('enterGate');
-      if(gate)gate.style.display='none';
-      if(overlay){overlay.classList.add('boot-exit');overlay.style.display='none';}
-      doc.body.classList.remove('booting');
-      doc.body.classList.add('ready');
-      if(typeof w.bootEnter==='function'){
-        try{w.bootEnter();}catch(e){}
-      }
-      hideRecovery();
-      try{console.log('ACE Cluster shell auto-enter active:',VERSION);}catch(e){}
-    }catch(e){hideRecovery();}
-  }
-  document.getElementById('reloadBtn').onclick=function(){location.reload();};
-  frame.addEventListener('load',()=>{
-    loaded=true;
-    hideRecovery();
-    setTimeout(autoEnter,120);
-    setTimeout(autoEnter,700);
-    setTimeout(autoEnter,1500);
-  });
-  direct.href=runtime+'?direct=1&t='+Date.now();
-  // Do not inspect body text for "Not Found" anymore. Runtime UI text caused false fallback.
-  setTimeout(()=>{if(!loaded)showRecovery();},7000);
-})();
-</script>
 </body>
 </html>
