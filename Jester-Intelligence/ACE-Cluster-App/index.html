@@ -14,38 +14,48 @@ iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a
 </style>
 </head>
 <body>
-<iframe id="appFrame" title="ACE Cluster"></iframe>
-<div id="recovery" class="recovery"><div class="card"><div class="k">ACE Cluster</div><div class="t">Recovery Gate</div><div class="p" id="recoveryText">The installed shell is trying to load the Cluster runtime. If the app is stuck, use direct runtime or reload with cache reset.</div><div class="row"><a class="btn btn2" id="directLink" href="../ACED-Lifestyle/ace-cluster.html" target="_top">Open Runtime</a><button class="btn" id="reloadBtn" type="button">Reload Shell</button><button class="btn" id="hardBtn" type="button">Hard Reset URL</button></div></div></div>
+<iframe id="appFrame" src="../ACED-Lifestyle/ace-cluster.html" title="ACE Cluster"></iframe>
+<div id="recovery" class="recovery"><div class="card"><div class="k">ACE Cluster</div><div class="t">Recovery Gate</div><div class="p" id="recoveryText">Cluster is taking longer than expected. Open the runtime directly if needed.</div><div class="row"><a class="btn btn2" id="directLink" href="../ACED-Lifestyle/ace-cluster.html" target="_top">Open Runtime</a><button class="btn" id="reloadBtn" type="button">Reload</button></div></div></div>
 <script>
 (function(){
   'use strict';
-  const VERSION='cluster-shell-v0.3-recovery';
-  const runtime='../ACED-Lifestyle/ace-cluster.html';
+  const VERSION='cluster-shell-v0.4-auto-enter-no-false-fallback';
   const frame=document.getElementById('appFrame');
   const recovery=document.getElementById('recovery');
-  const text=document.getElementById('recoveryText');
   const direct=document.getElementById('directLink');
-  const stamp=Date.now();
+  const runtime='../ACED-Lifestyle/ace-cluster.html';
   let loaded=false;
-  function url(){return runtime+'?shell='+encodeURIComponent(VERSION)+'&t='+stamp;}
-  direct.href=url();
-  function showRecovery(msg){if(text)text.textContent=msg||'Cluster runtime did not fully confirm load.';if(recovery)recovery.style.display='grid';}
   function hideRecovery(){if(recovery)recovery.style.display='none';}
+  function showRecovery(){if(recovery)recovery.style.display='grid';}
+  function autoEnter(){
+    try{
+      const w=frame.contentWindow;
+      const doc=frame.contentDocument||w.document;
+      if(!doc||!doc.body)return;
+      const overlay=doc.getElementById('bootOverlay');
+      const gate=doc.getElementById('enterGate');
+      if(gate)gate.style.display='none';
+      if(overlay){overlay.classList.add('boot-exit');overlay.style.display='none';}
+      doc.body.classList.remove('booting');
+      doc.body.classList.add('ready');
+      if(typeof w.bootEnter==='function'){
+        try{w.bootEnter();}catch(e){}
+      }
+      hideRecovery();
+      try{console.log('ACE Cluster shell auto-enter active:',VERSION);}catch(e){}
+    }catch(e){hideRecovery();}
+  }
   document.getElementById('reloadBtn').onclick=function(){location.reload();};
-  document.getElementById('hardBtn').onclick=function(){location.href='./?reset='+Date.now();};
   frame.addEventListener('load',()=>{
     loaded=true;
-    setTimeout(()=>{
-      try{
-        const doc=frame.contentDocument||frame.contentWindow.document;
-        const bodyText=(doc&&doc.body&&doc.body.textContent)||'';
-        if(/404|Not Found/i.test(bodyText)){showRecovery('Runtime file was not found at ACED-Lifestyle/ace-cluster.html.');frame.style.display='none';return;}
-        hideRecovery();
-      }catch(e){hideRecovery();}
-    },700);
+    hideRecovery();
+    setTimeout(autoEnter,120);
+    setTimeout(autoEnter,700);
+    setTimeout(autoEnter,1500);
   });
-  frame.src=url();
-  setTimeout(()=>{if(!loaded)showRecovery('Cluster runtime is taking too long to load. Use Open Runtime or Reload Shell.');},4500);
+  direct.href=runtime+'?direct=1&t='+Date.now();
+  // Do not inspect body text for "Not Found" anymore. Runtime UI text caused false fallback.
+  setTimeout(()=>{if(!loaded)showRecovery();},7000);
 })();
 </script>
 </body>
