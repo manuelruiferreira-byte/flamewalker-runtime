@@ -1,0 +1,1 @@
+ACE Mind priority contract: primary action domain is the final ranked life-domain score. Activated fields are awareness signals. Field focus is orientation, not command.
