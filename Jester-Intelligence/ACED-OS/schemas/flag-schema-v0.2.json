@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ACED-OS/aced-os/schemas/flag-schema-v0.2.json",
+  "title": "ACED OS Flag",
+  "description": "The atomic signal primitive of ACED OS. v0.2 reconciles the domain enum to the canonical EIGHT-app suite defined in ACED Lifestyle (mind, gravitic, scholar, cluster, quantum, matrix, prism, enchanted) plus two cross-cutting values (governance, system). This supersedes the v0.1 thirteen-domain list, which over-fragmented relative to the running architecture. Producers emit Flags; ACE Scholar ingests and routes; THEON stamps governance; ACED Lifestyle consumes admitted Flags, ranks them, and computes per-app attention. Single source of truth. No improvised fields.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version","flag_id","created_at","source","source_type","domain","headline","urgency","importance","confidence","status","expires_at"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "0.2", "description": "Hard-coded. Unrecognized version must be rejected, not guessed." },
+    "flag_id": { "type": "string", "minLength": 6, "description": "Unique id. Convention: flag_{source}_{YYYYMMDDTHHMMSS}_{short_random}." },
+    "created_at": { "type": "string", "format": "date-time", "description": "ISO 8601 emission timestamp." },
+    "source": { "type": "string", "minLength": 1, "description": "Producing instance: grok.tech_scout, ace_mind, ace_scholar, ace_wisdom, ace_cluster, theon_analyst, aced_lifestyle, manuel. ace_wisdom emits with domain 'scholar' since Wisdom sits beneath Scholar." },
+    "source_type": { "type": "string", "enum": ["agent","app","system","manual"], "description": "agent=LLM scout/synth. app=ACE organ PWA. system=OS infra (Scholar intake, THEON, Lifestyle). manual=Manuel." },
+    "domain": {
+      "type": "string",
+      "enum": ["mind","gravitic","scholar","cluster","quantum","matrix","prism","enchanted","governance","system"],
+      "description": "Governing organ (one of 8 apps) OR cross-cutting concern. mind=daily guidance/body/day-state/nervous-system/THEON-action (Solar). gravitic=practice/grounding/breathwork/movement (Root). scholar=learning/study/research/teaching; ABSORBS wisdom (Throat). cluster=markets/savings/crypto AND orchestration/agents/council/suite-command (Crown). quantum=probability/signal-fields/timelines/decision-uncertainty (Third Eye). matrix=cross-app relational web, life-domain coherence (Heart). prism=creative synthesis/images/plans (Sacral). enchanted=mythic atmosphere/ritual/wonder (Aura). governance=THEON admissibility, cross-cutting. system=OS-internal meta (build/admin/security). The domain lights up that app's attention pill in Lifestyle; governance routes to the THEON gate; system is OS-internal."
+    },
+    "headline": { "type": "string", "minLength": 1, "maxLength": 200, "description": "One sentence. What Manuel sees if it surfaces. Stands alone without detail." },
+    "detail": { "type": ["string","null"], "description": "Optional longer body, one paragraph max." },
+    "payload": { "type": ["object","null"], "description": "Optional domain-specific structured data; validated by the consuming organ. e.g. cluster {entry,stop,tp1}; mind {nervous_system:0.8,sleep:0.4}." },
+    "urgency": { "type": "string", "enum": ["critical","high","normal","low"], "description": "Time-sensitivity. Independent of importance." },
+    "importance": { "type": "string", "enum": ["critical","high","normal","low"], "description": "Consequence weight. Independent of urgency." },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "Producer confidence 0-1. Feeds rank score." },
+    "epistemic_status": { "type": "string", "enum": ["unclassified","fact","trend","opinion","speculation","candidate_doctrine","noise"], "default": "unclassified", "description": "THEON-owned. Producers leave 'unclassified'. The junk-drawer guard." },
+    "admissibility": { "type": "string", "enum": ["pending","admitted","downgraded","rejected"], "default": "pending", "description": "THEON verdict. pending=held in REVIEW, not shown. admitted=may enter queue. downgraded=admitted, rank halved. rejected=never shown. Gate between Scholar and Lifestyle." },
+    "falsifier": { "type": ["string","null"], "description": "What observable would disprove this. Expected for trend/speculation/candidate_doctrine." },
+    "veto": { "type": "boolean", "default": false, "description": "Body-veto doctrine. True surfaces above all scored flags unconditionally. Only domains mind/gravitic/system may set true. mind+gravitic=body veto; system=security hard-stop. Replaces v0.1 body/security pair." },
+    "requires_decision": { "type": "boolean", "default": false, "description": "True routes to DECISIONS lane; in Lifestyle maps to an add_approval op. Producers suggest; Lifestyle confirms." },
+    "route_to": { "type": ["string","null"], "description": "Lifestyle-owned. Organ or product that should handle this flag." },
+    "rank_score": { "type": ["number","null"], "description": "Lifestyle-computed. Null until ranked. Producers must not set." },
+    "action": { "type": ["string","null"], "description": "Single next action, one sentence. Null if informational." },
+    "status": { "type": "string", "enum": ["active","archived","actioned","expired","rejected"], "default": "active", "description": "Lifecycle state. See companion spec." },
+    "expires_at": { "type": "string", "format": "date-time", "description": "ISO 8601. When the flag goes stale and auto-archives. No flag is immortal." },
+    "outcome": { "type": ["string","null"], "description": "What happened after action/decision. Feeds the War College." },
+    "resolved_at": { "type": ["string","null"], "format": "date-time", "description": "ISO 8601 timestamp of terminal state." },
+    "parent_flag_id": { "type": ["string","null"], "description": "Parent flag id if derived. Enables lineage." },
+    "tags": { "type": "array", "items": { "type": "string" }, "default": [], "description": "Free-form labels; not ranked. Project-type values that are NOT organs (build, admin) live here with domain 'system'." },
+    "governance_notes": { "type": ["string","null"], "description": "THEON-owned. Brief reason for the admissibility verdict." }
+  },
+  "if": { "properties": { "veto": { "const": true } }, "required": ["veto"] },
+  "then": {
+    "properties": { "domain": { "enum": ["mind","gravitic","system"] } },
+    "description": "Doctrine enforcement: veto=true only if domain is mind, gravitic, or system. mind/gravitic=body veto; system=security hard-stop. Any other vetoing flag is invalid and rejected at intake."
+  }
+}
