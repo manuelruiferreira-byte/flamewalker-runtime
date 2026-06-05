@@ -1,8 +1,9 @@
-const CACHE_NAME='ace-prism-v1-1-0';
+const CACHE_NAME='ace-prism-v1-1-1';
 const APP_SHELL=[
   './',
   './index.html',
   './manifest.webmanifest',
+  './ace-prism-icon.svg',
   '../ACED-Lifestyle/ace-prism.html',
   '../ACED-Lifestyle/shared/assets/logos/ace-prism.png'
 ];
