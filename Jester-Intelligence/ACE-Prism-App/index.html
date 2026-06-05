@@ -17,8 +17,8 @@ iframe.ready{opacity:1}
 </style>
 </head>
 <body>
-<div class="boot" id="boot"><img src="./ace-prism-512.png" alt="ACE Prism" /></div>
-<iframe id="appFrame" src="../ACED-Lifestyle/ace-prism.html?v=1.1.0" title="ACE Prism"></iframe>
+<div class="boot" id="boot"><img src="../ACED-Lifestyle/shared/assets/logos/ace-prism.png" alt="ACE Prism" /></div>
+<iframe id="appFrame" src="../ACED-Lifestyle/ace-prism.html?v=1.1.1" title="ACE Prism"></iframe>
 <script>
 (function(){
   const frame=document.getElementById('appFrame'),boot=document.getElementById('boot');
@@ -27,7 +27,7 @@ iframe.ready{opacity:1}
   window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data&&e.data.type==='ace_prism_ready')ready()});
   setTimeout(ready,2200);
   if('serviceWorker' in navigator){
-    window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=1.1.0',{scope:'./'}).catch(console.warn));
+    window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=1.1.1',{scope:'./'}).catch(console.warn));
   }
 })();
 </script>
