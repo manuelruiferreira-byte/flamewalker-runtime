@@ -1,37 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ACE Prism">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#02040a"/>
-      <stop offset="1" stop-color="#071425"/>
-    </linearGradient>
-    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#fff0ad"/>
-      <stop offset=".45" stop-color="#d9a64a"/>
-      <stop offset="1" stop-color="#7d5311"/>
-    </linearGradient>
-    <linearGradient id="left" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#20e7ff"/>
-      <stop offset="1" stop-color="#0f6f9f"/>
-    </linearGradient>
-    <linearGradient id="right" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ff4fd8"/>
-      <stop offset="1" stop-color="#7b2fbe"/>
-    </linearGradient>
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="10" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-  </defs>
-  <rect width="512" height="512" rx="92" fill="url(#bg)"/>
-  <circle cx="256" cy="256" r="178" fill="none" stroke="url(#gold)" stroke-width="12" opacity=".9" filter="url(#glow)"/>
-  <path d="M256 98 382 160v126c0 88-55 142-126 170-71-28-126-82-126-170V160z" fill="#050811" stroke="url(#gold)" stroke-width="10"/>
-  <path d="M256 136c-58 0-94 38-94 92 0 37 18 67 46 86-12 28-9 57 8 84 13 21 27 34 40 42V136z" fill="url(#left)" opacity=".95"/>
-  <path d="M256 136c58 0 94 38 94 92 0 37-18 67-46 86 12 28 9 57-8 84-13 21-27 34-40 42V136z" fill="url(#right)" opacity=".95"/>
-  <path d="M190 214c18-18 34-28 51-31M322 214c-18-18-34-28-51-31" fill="none" stroke="#fff8df" stroke-width="10" stroke-linecap="round"/>
-  <path d="M198 276c14 21 30 31 48 34M314 276c-14 21-30 31-48 34" fill="none" stroke="#fff8df" stroke-width="9" stroke-linecap="round"/>
-  <path d="M215 346c25 15 57 15 82 0" fill="none" stroke="#fff8df" stroke-width="10" stroke-linecap="round"/>
-  <path d="M256 166 282 214 256 262 230 214z" fill="url(#gold)" stroke="#fff0ad" stroke-width="4"/>
-  <circle cx="190" cy="128" r="15" fill="#20e7ff"/>
-  <circle cx="322" cy="128" r="15" fill="#ff4fd8"/>
-  <circle cx="256" cy="104" r="15" fill="#d9a64a"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1536" role="img" aria-label="ACE Prism">
+  <title>ACE Prism</title>
+  <rect width="1536" height="1536" fill="#000"/>
+  <image href="./ace-prism-user-logo.svg?v=1.1.3" width="1536" height="1536" preserveAspectRatio="xMidYMid meet"/>
 </svg>
