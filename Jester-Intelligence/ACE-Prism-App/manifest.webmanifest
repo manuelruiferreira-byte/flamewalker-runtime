@@ -3,7 +3,7 @@
   "name": "ACE Prism",
   "short_name": "Prism",
   "description": "ACE Prism local-first creative studio for sources, books, continuity, poetry, wordcraft, images, video prompts, versions, and symbolic alignment.",
-  "start_url": "./?v=1.1.2",
+  "start_url": "./?v=1.1.3",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -11,7 +11,7 @@
   "theme_color": "#02040a",
   "categories": ["productivity", "lifestyle", "entertainment"],
   "icons": [
-    {"src":"./ace-prism-user-logo.svg?v=1.1.2","sizes":"any","type":"image/svg+xml","purpose":"any"},
-    {"src":"./ace-prism-user-logo.svg?v=1.1.2","sizes":"any","type":"image/svg+xml","purpose":"maskable"}
+    {"src":"./ace-prism-user-logo.svg?v=1.1.3","sizes":"any","type":"image/svg+xml","purpose":"any"},
+    {"src":"./ace-prism-user-logo.svg?v=1.1.3","sizes":"any","type":"image/svg+xml","purpose":"maskable"}
   ]
 }
