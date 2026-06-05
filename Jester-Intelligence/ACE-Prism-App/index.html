@@ -5,15 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes,viewport-fit=cover" />
 <meta name="theme-color" content="#02040a" />
 <title>ACE Prism</title>
-<link rel="manifest" href="./manifest.webmanifest?v=1.1.2" />
+<link rel="manifest" href="./manifest.webmanifest?v=1.1.3" />
+<link rel="icon" href="./ace-prism-user-logo.svg?v=1.1.3" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="./ace-prism-user-logo.svg?v=1.1.3" />
+<meta property="og:title" content="ACE Prism" />
+<meta property="og:image" content="./ace-prism-user-logo.svg?v=1.1.3" />
 <meta name="mobile-web-app-capable" content="yes" />
 <style>
 html,body{margin:0;width:100%;height:100%;background:#000;overflow:hidden}iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a;opacity:0;visibility:hidden;transition:opacity .35s ease}iframe.ready{opacity:1;visibility:visible}.boot{position:fixed;inset:0;z-index:5;display:grid;place-items:center;background:#000;transition:opacity .45s ease,visibility .45s}.boot.off{opacity:0;visibility:hidden;pointer-events:none}.boot img{width:min(78vw,430px);border-radius:34px;box-shadow:0 0 80px rgba(32,231,255,.18),0 0 80px rgba(255,79,216,.14)}
 </style>
 </head>
 <body>
-<div class="boot" id="boot"><img src="./ace-prism-user-logo.svg?v=1.1.2" alt="ACE Prism" /></div>
-<iframe id="appFrame" src="../ACED-Lifestyle/ace-prism.html?v=1.1.2" title="ACE Prism"></iframe>
+<div class="boot" id="boot"><img src="./ace-prism-user-logo.svg?v=1.1.3" alt="ACE Prism" /></div>
+<iframe id="appFrame" src="../ACED-Lifestyle/ace-prism.html?v=1.1.3" title="ACE Prism"></iframe>
 <script>
 (function(){
   const frame=document.getElementById('appFrame'),boot=document.getElementById('boot');
@@ -22,7 +26,7 @@ html,body{margin:0;width:100%;height:100%;background:#000;overflow:hidden}iframe
   frame.addEventListener('load',ready);
   window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data&&e.data.type==='ace_prism_ready')ready()});
   setTimeout(ready,3200);
-  if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=1.1.2',{scope:'./'}).catch(console.warn));}
+  if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=1.1.3',{scope:'./'}).catch(console.warn));}
 })();
 </script>
 </body>
