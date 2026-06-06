@@ -3,7 +3,7 @@
   "name": "ACE Prism",
   "short_name": "Prism",
   "description": "ACE Prism local-first creative studio for sources, books, continuity, poetry, wordcraft, images, video prompts, versions, and symbolic alignment.",
-  "start_url": "./?v=1.1.4",
+  "start_url": "./?v=1.1.5",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",

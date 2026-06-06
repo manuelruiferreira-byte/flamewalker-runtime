@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes,viewport-fit=cover" />
 <meta name="theme-color" content="#02040a" />
 <title>ACE Prism</title>
-<link rel="manifest" href="./manifest.webmanifest?v=1.1.4" />
+<link rel="manifest" href="./manifest.webmanifest?v=1.1.5" />
 <link rel="icon" href="ace-prism-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="ace-prism-512.png">
 <meta property="og:title" content="ACE Prism" />
@@ -16,8 +16,8 @@ html,body{margin:0;width:100%;height:100%;background:#000;overflow:hidden}iframe
 </style>
 </head>
 <body>
-<div class="boot" id="boot"><img src="./ace-prism-user-logo.svg?v=1.1.4" alt="ACE Prism" /></div>
-<iframe id="appFrame" src="../ACED-Lifestyle/ace-prism.html?v=1.1.4" title="ACE Prism"></iframe>
+<div class="boot" id="boot"><img src="./ace-prism-user-logo.svg?v=1.1.5" alt="ACE Prism" /></div>
+<iframe id="appFrame" src="../ACED-Lifestyle/ace-prism.html?v=1.1.5" title="ACE Prism"></iframe>
 <script>
 (function(){
   const frame=document.getElementById('appFrame'),boot=document.getElementById('boot');
@@ -26,7 +26,7 @@ html,body{margin:0;width:100%;height:100%;background:#000;overflow:hidden}iframe
   frame.addEventListener('load',ready);
   window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data&&e.data.type==='ace_prism_ready')ready()});
   setTimeout(ready,3200);
-  if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=1.1.4',{scope:'./'}).catch(console.warn));}
+  if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=1.1.5',{scope:'./'}).catch(console.warn));}
 })();
 </script>
 </body>
