@@ -1,0 +1,59 @@
+name: Fix ACE Prism icons
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-ace-prism-icons.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render-icons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install SVG renderer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+
+      - name: Render exact ACE Prism PNG icons
+        run: |
+          APP='Jester-Intelligence/ACE-Prism-App'
+          rsvg-convert -w 192 -h 192 "$APP/ace-prism-user-logo.svg" -o "$APP/ace-prism-192.png"
+          rsvg-convert -w 512 -h 512 "$APP/ace-prism-user-logo.svg" -o "$APP/ace-prism-512.png"
+          file "$APP/ace-prism-192.png" "$APP/ace-prism-512.png"
+
+      - name: Force PWA cache refresh
+        run: |
+          APP='Jester-Intelligence/ACE-Prism-App'
+          sed -i "s/ace-prism-v1-1-4/ace-prism-v1-1-5/g" "$APP/sw.js"
+          sed -i "s/v=1.1.4/v=1.1.5/g" "$APP/index.html" "$APP/manifest.webmanifest"
+
+      - name: Verify requested manifest and head entries
+        run: |
+          APP='Jester-Intelligence/ACE-Prism-App'
+          grep -F '"src": "ace-prism-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"' "$APP/manifest.webmanifest"
+          grep -F '"src": "ace-prism-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"' "$APP/manifest.webmanifest"
+          grep -F '<link rel="icon" href="ace-prism-192.png" sizes="192x192">' "$APP/index.html"
+          grep -F '<link rel="apple-touch-icon" href="ace-prism-512.png">' "$APP/index.html"
+
+      - name: Commit rendered icons
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Jester-Intelligence/ACE-Prism-App/ace-prism-192.png \
+                  Jester-Intelligence/ACE-Prism-App/ace-prism-512.png \
+                  Jester-Intelligence/ACE-Prism-App/index.html \
+                  Jester-Intelligence/ACE-Prism-App/manifest.webmanifest \
+                  Jester-Intelligence/ACE-Prism-App/sw.js
+          if git diff --cached --quiet; then
+            echo 'No changes needed.'
+          else
+            git commit -m 'Render exact ACE Prism PNG icons'
+            git push
+          fi
