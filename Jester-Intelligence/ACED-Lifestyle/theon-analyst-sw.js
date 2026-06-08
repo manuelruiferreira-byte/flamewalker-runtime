@@ -1,4 +1,4 @@
-const THEON_ANALYST_CACHE = "theon-analyst-cache-v0-9-5";
+const THEON_ANALYST_CACHE = "theon-analyst-cache-v0-9-6";
 const THEON_ANALYST_CACHE_PREFIX = "theon-analyst-cache-";
 
 const THEON_ANALYST_ASSETS = [

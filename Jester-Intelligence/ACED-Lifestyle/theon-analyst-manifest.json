@@ -1,7 +1,7 @@
 {
   "name": "THEON Analyst",
   "short_name": "THEON",
-  "description": "Pre-Scholar governance intake layer for ACED and Jester Intelligence.",
+  "description": "Hybrid THEON local structural triage and canonical deep-audit bridge for ACED and Jester Intelligence.",
   "start_url": "./theon-analyst.html",
   "scope": "./",
   "display": "standalone",
