@@ -1,0 +1,94 @@
+name: Install THEON Analyst v0.9.6 Hybrid
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/install-theon-v096-hybrid.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconstruct hash-locked hybrid build
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat \
+            .theon-upgrade/v096.part00 \
+            .theon-upgrade/v096.part01 \
+            .theon-upgrade/v096.part02-03 \
+            .theon-upgrade/v096.part04 \
+            .theon-upgrade/v096.part05 \
+            .theon-upgrade/v096.part06a \
+            .theon-upgrade/v096.part06b > /tmp/theon-v096.b64
+          printf '%s' 'Nr5befo088D9uK19s9p47qzlaev4/e7JsTUgwH60LhkD6KW1nAvdRU51V6aP3p9WkyUa4IcVKcK5hE+UAPyN+/usdl/cpq/kKqCn1F4ZzQbvHiDteOx+2ovjl0nyxZG86forutVc9XmD/kLaTvx7NR30N/4/thHhnIbrAQA=' >> /tmp/theon-v096.b64
+          base64 --decode /tmp/theon-v096.b64 | gzip --decompress > /tmp/theon-analyst-v0.9.6-hybrid.html
+          echo '7e7479b846435a59db388b9d13e469682917d301803aaec981b0e816a715ad7a  /tmp/theon-analyst-v0.9.6-hybrid.html' | sha256sum --check --strict
+
+      - name: Validate identity, safeguards, and JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          TARGET=/tmp/theon-analyst-v0.9.6-hybrid.html
+          grep -q 'THEON Analyst v0.9.6' "$TARGET"
+          grep -q 'THEON_DEEP_AUDIT_PROTOCOL' "$TARGET"
+          grep -q "verdict_scope:'LOCAL_STRUCTURAL_TRIAGE'" "$TARGET"
+          grep -q "formal_theon_status:'NOT_EXECUTED'" "$TARGET"
+          grep -q 'function buildDeepAuditHandoff' "$TARGET"
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path('/tmp/theon-analyst-v0.9.6-hybrid.html').read_text(encoding='utf-8')
+          scripts = re.findall(r'<script>([\s\S]*?)</script>', html)
+          if not scripts:
+              raise SystemExit('No executable script block found')
+          Path('/tmp/theon-v096-check.js').write_text('\n'.join(scripts), encoding='utf-8')
+          PY
+          node --check /tmp/theon-v096-check.js
+
+      - name: Back up v0.9.5 and install v0.9.6
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP='Jester-Intelligence/ACED-Lifestyle'
+          mkdir -p "$APP/archive"
+          if [ ! -f "$APP/archive/theon-analyst-v0.9.5-pre-hybrid.html" ]; then
+            cp "$APP/theon-analyst.html" "$APP/archive/theon-analyst-v0.9.5-pre-hybrid.html"
+          fi
+          cp /tmp/theon-analyst-v0.9.6-hybrid.html "$APP/theon-analyst.html"
+          if [ -f "$APP/theon-analyst-sw.js" ]; then
+            sed -i -e 's/theon-analyst-cache-v0-9-4/theon-analyst-cache-v0-9-6/g' -e 's/theon-analyst-cache-v0-9-5/theon-analyst-cache-v0-9-6/g' "$APP/theon-analyst-sw.js"
+          fi
+          if [ -f "$APP/theon-analyst-manifest.json" ]; then
+            python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('Jester-Intelligence/ACED-Lifestyle/theon-analyst-manifest.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          data['description'] = 'Hybrid THEON local structural triage and canonical deep-audit bridge for ACED and Jester Intelligence.'
+          path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+          fi
+
+      - name: Remove one-shot transport files and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .theon-upgrade
+          rm -f .github/workflows/install-theon-v096-hybrid.yml
+          git config user.name 'Jester Upgrade Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'Upgrade THEON Analyst to v0.9.6 hybrid deep-audit architecture'
+          git push origin main
