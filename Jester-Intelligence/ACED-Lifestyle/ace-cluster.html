@@ -466,11 +466,11 @@ body.booting .app-shell{opacity:1!important;pointer-events:auto!important;visibi
 
 <script>
 'use strict';
-const APP_VERSION='3.1.4-clean-ui-direct-open';
+const APP_VERSION='3.1.5-canonical-profile-v3-3';
 const STORAGE_KEY='ace_cluster_v300';
 const NUM_CHAMBERS=7;
 
-const FW={name:'Manuel Rui Santos Ferreira',birth:'1972-08-15',birthYear:1972,birthMonth:8,birthDay:15,birthHour:15,dayMaster:'Wu',dayMasterElement:'Earth',lifePathRaw:33,lifePathReduced:6,expressionRaw:111,expressionReduced:3,sunSign:'Leo',ascSign:'Scorpio',keyNums:[3,6,9,11,22,33]};
+const FW={name:'Manuel Rui Santos Ferreira',birth:'1972-08-15',birthYear:1972,birthMonth:8,birthDay:15,birthHour:9,birthTimeLocal:'09:00',birthTimeUtc:'08:00',birthPlace:'Porto, Portugal',dayMaster:'Wu',dayMasterElement:'Earth',baziHour:'Bing Chen',baziHourAnimal:'Dragon',lifePathRaw:33,lifePathReduced:6,expressionRaw:111,expressionReduced:3,sunSign:'Leo',ascSign:'Virgo',ascendant:'Virgo 18°20′09″',midheaven:'Gemini 16°23′57″',siderealAscendant:'Leo 23°58′25″',canonicalProfileVersion:'3.3_UNIVERSAL',interpretationOrder:['geometry','universal human meaning','full-domain scan','personal resonance','current application'],keyNums:[3,6,9,11,22,33]};
 
 const BAZI_REF_UTC=Date.UTC(2026,4,14);
 const BAZI_REF_POS=24;
@@ -1488,5 +1488,19 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <script src="./shared/js/ace-cluster-bridge-ui-v0-1.js"></script>
+
+<script src="./shared/js/flamewalker-canonical-profile-v3-3.js"></script>
+<script>
+(function(){
+  function applyCanonicalCluster(){
+    if(!window.FlamewalkerCanonicalProfileV33)return;
+    window.FlamewalkerCanonicalProfileV33.load(true).then(function(p){
+      return window.FlamewalkerCanonicalProfileV33.applyCluster(p);
+    }).catch(function(e){console.warn('ACE Cluster canonical profile failed',e);});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyCanonicalCluster,{once:true});
+  else setTimeout(applyCanonicalCluster,0);
+})();
+</script>
 </body>
 </html>
