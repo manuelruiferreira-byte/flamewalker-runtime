@@ -521,4 +521,14 @@
     applyInvestment:applyInvestment,installAceMindSupplementsV41:installAceMindSupplementsV41,
     supplementVersion:SUPPLEMENT_VERSION
   };
+
+  try{
+    if(!document.getElementById('ace-mind-v4-1-1-runtime-fix-loader')){
+      var runtimeFix=document.createElement('script');
+      runtimeFix.id='ace-mind-v4-1-1-runtime-fix-loader';
+      runtimeFix.src='./shared/js/ace-mind-v4-1-1-runtime-fix.js?v=4.1.1';
+      runtimeFix.async=false;
+      (document.head||document.documentElement).appendChild(runtimeFix);
+    }
+  }catch(e){console.warn('ACE Mind v4.1.1 runtime fix loader failed',e);}
 })();
