@@ -9754,5 +9754,19 @@ try{APP_VERSION=APP_VERSION;}catch(e){}
 try{if(document.readyState!=='loading')render();}catch(e){}
 
 </script>
+
+<script src="./shared/js/flamewalker-canonical-profile-v3-3.js"></script>
+<script>
+(function(){
+  function applyCanonicalAceMind(){
+    if(!window.FlamewalkerCanonicalProfileV33)return;
+    window.FlamewalkerCanonicalProfileV33.load(true).then(function(p){
+      return window.FlamewalkerCanonicalProfileV33.applyAceMind(p);
+    }).catch(function(e){console.warn('ACE Mind canonical profile failed',e);});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyCanonicalAceMind,{once:true});
+  else setTimeout(applyCanonicalAceMind,0);
+})();
+</script>
 </body>
 </html>
