@@ -5,85 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
 <meta name="theme-color" content="#02040a" />
 <title>ACE Mind</title>
-<link rel="manifest" href="./manifest.json" />
+<link rel="manifest" href="./manifest.json?v=bootfix-20260615" />
 <meta name="mobile-web-app-capable" content="yes" />
+<meta http-equiv="refresh" content="0;url=./ace-mind.html?v=bootfix-20260615" />
 <style>
-  html,body{margin:0;width:100%;height:100%;background:#02040a;overflow:hidden}
-  #aceMindFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#02040a}
+  :root{color-scheme:dark}
+  html,body{margin:0;width:100%;height:100%;background:#02040a;color:#f8f2dc;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  body{display:grid;place-items:center;background:radial-gradient(circle at 50% 18%,rgba(34,211,238,.14),transparent 34%),linear-gradient(180deg,#02040a,#06111f 58%,#02040a)}
+  .boot{display:grid;place-items:center;gap:14px;text-align:center;padding:24px}
+  .mark{width:88px;height:88px;border-radius:28px;border:1px solid rgba(214,168,79,.34);background:rgba(5,12,26,.86);display:grid;place-items:center;box-shadow:0 24px 70px rgba(0,0,0,.52)}
+  .mark img{width:72%;height:72%;object-fit:contain}
+  h1{margin:0;font-size:1.15rem;letter-spacing:.04em;color:#fff7d7}
+  p{margin:0;color:#91a3b9;font-size:.82rem}
+  a{color:#fde68a;text-decoration:none;border:1px solid rgba(214,168,79,.3);border-radius:14px;padding:10px 14px;background:rgba(5,12,26,.72)}
 </style>
 </head>
 <body>
-<iframe id="aceMindFrame" src="./ace-mind.html?v=canonical-profile-v3-3" title="ACE Mind"></iframe>
+<main class="boot" aria-live="polite">
+  <div class="mark"><img src="./shared/assets/logos/ace-mind.png" alt="" /></div>
+  <h1>ACE Mind</h1>
+  <p>Opening the direct runtime…</p>
+  <a href="./ace-mind.html?v=bootfix-20260615">Open ACE Mind</a>
+</main>
 <script>
 (function(){
   'use strict';
-  const frame=document.getElementById('aceMindFrame');
-  const traceSrc='./shared/js/ace-mind-trace-store-v0-1.js';
-  const profileSrc='./shared/js/flamewalker-canonical-profile-v3-3.js';
-
-  function expose(){
-    try{
-      if(frame.contentWindow){
-        if(frame.contentWindow.ACETraceStore)window.ACETraceStore=frame.contentWindow.ACETraceStore;
-        if(frame.contentWindow.FLAMEWALKER_CANONICAL_PROFILE)window.FLAMEWALKER_CANONICAL_PROFILE=frame.contentWindow.FLAMEWALKER_CANONICAL_PROFILE;
-        if(frame.contentWindow.ACE_MIND_CANONICAL_PROFILE_APPLIED)window.ACE_MIND_CANONICAL_PROFILE_APPLIED=frame.contentWindow.ACE_MIND_CANONICAL_PROFILE_APPLIED;
-        window.ACE_MIND_TRACE_FRAME=frame;
-        return !!frame.contentWindow.ACETraceStore;
-      }
-    }catch(e){}
-    return false;
-  }
-
-  function injectTrace(doc){
-    if(doc.getElementById('ace-mind-trace-store-v0-1-loader')){expose();return;}
-    const s=doc.createElement('script');
-    s.id='ace-mind-trace-store-v0-1-loader';
-    s.src=traceSrc;
-    s.onload=function(){setTimeout(expose,250);};
-    doc.body.appendChild(s);
-  }
-
-  function applyCanonicalProfile(doc,w){
-    function run(){
-      if(!w.FlamewalkerCanonicalProfileV33)return Promise.reject(new Error('Canonical profile bridge unavailable'));
-      return w.FlamewalkerCanonicalProfileV33.load(true)
-        .then(function(p){return w.FlamewalkerCanonicalProfileV33.applyAceMind(p);})
-        .then(function(){expose();return true;});
-    }
-
-    const existing=doc.getElementById('flamewalker-canonical-profile-v3-3-loader');
-    if(existing){
-      if(w.FlamewalkerCanonicalProfileV33)return run();
-      return new Promise(function(resolve,reject){
-        existing.addEventListener('load',function(){run().then(resolve,reject);},{once:true});
-        existing.addEventListener('error',reject,{once:true});
-      });
-    }
-
-    return new Promise(function(resolve,reject){
-      const s=doc.createElement('script');
-      s.id='flamewalker-canonical-profile-v3-3-loader';
-      s.src=profileSrc;
-      s.onload=function(){run().then(resolve,reject);};
-      s.onerror=function(){reject(new Error('Canonical profile script failed to load'));};
-      doc.body.appendChild(s);
-    });
-  }
-
-  function inject(){
-    try{
-      const w=frame.contentWindow;
-      const doc=frame.contentDocument||w.document;
-      if(!doc||!doc.body)return;
-      applyCanonicalProfile(doc,w)
-        .catch(function(e){console.warn('ACE Mind canonical profile application failed',e);})
-        .finally(function(){injectTrace(doc);});
-      let tries=0;
-      const t=setInterval(function(){tries++;if(expose()||tries>24)clearInterval(t);},250);
-    }catch(e){console.warn('ACE Mind launcher injection failed',e);}
-  }
-
-  frame.addEventListener('load',function(){setTimeout(inject,250);});
+  var target='./ace-mind.html?v=bootfix-20260615';
+  try{
+    ['aced_lifestyle_ai_handoff','ace_mind_return_ai','ace_mind_last_model','ace_mind_pending_ai_payload_meta'].forEach(function(k){sessionStorage.removeItem(k);});
+  }catch(e){}
+  try{window.location.replace(target);}catch(e){window.location.href=target;}
 })();
 </script>
 </body>
