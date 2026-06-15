@@ -1,0 +1,212 @@
+/* Flamewalker Canonical Esoteric Profile Bridge v3.3 UNIVERSAL
+   Source of truth: shared/data/flamewalker-canonical-esoteric-profile-v3-3.json
+   Purpose: replace obsolete birth-time/profile constants and expose machine-readable
+   interpretation governance without changing unrelated app state or supplement logic.
+*/
+(function(){
+  'use strict';
+  if(window.FlamewalkerCanonicalProfileV33)return;
+
+  var PROFILE_URL='./shared/data/flamewalker-canonical-esoteric-profile-v3-3.json';
+  var cache=null;
+  var pending=null;
+
+  function clone(x){return JSON.parse(JSON.stringify(x));}
+  function load(force){
+    if(cache&&!force)return Promise.resolve(clone(cache));
+    if(pending&&!force)return pending.then(clone);
+    pending=fetch(PROFILE_URL,{cache:'no-store'}).then(function(r){
+      if(!r.ok)throw new Error('Canonical profile fetch failed: '+r.status);
+      return r.json();
+    }).then(function(p){
+      if(!p||p.version!=='3.3_UNIVERSAL')throw new Error('Unexpected canonical profile version');
+      cache=p;
+      window.FLAMEWALKER_CANONICAL_PROFILE=clone(p);
+      return clone(p);
+    }).finally(function(){pending=null;});
+    return pending;
+  }
+
+  function aceMindNatal(p){
+    var t=p.astrology.tropical_placidus;
+    return {
+      profile_id:'flamewalker-canonical-v3.3-universal-09h00-porto',
+      source:{
+        authority:'Flamewalker Canonical Esoteric Profile v3.3 UNIVERSAL',
+        method:'Astrodienst tropical Placidus; corrected 09:00 Porto foundation',
+        status:'source-sealed geometry; operationally canonical birth time',
+        version:p.version,
+        sealed_date:p.sealed_date
+      },
+      birth:{
+        name:p.identity.legal_name,
+        date:p.identity.birth_date,
+        local_time:p.identity.birth_time_local,
+        utc_time:p.identity.birth_time_utc,
+        place:p.identity.birth_place,
+        time_status:p.identity.birth_time_status
+      },
+      planets:clone(t.planets),
+      angles:clone(t.angles),
+      houses:clone(t.houses),
+      engine_policy:{
+        primary_method:'tropical_placidus',
+        true_node_default:true,
+        permanent_timing_separation:true,
+        interpretation_order:clone(p.interpretation_governance.mandatory_order),
+        universal_domains:clone(p.interpretation_governance.universal_domains),
+        forbidden_shortcuts:clone(p.interpretation_governance.forbidden_shortcuts),
+        universal_meaning_first:true,
+        vocation_is_one_domain_not_master_key:true,
+        biography_is_manifestation_not_definition:true,
+        body_veto_first:true
+      }
+    };
+  }
+
+  function profileSummary(p){
+    return {
+      version:p.version,
+      sealed_date:p.sealed_date,
+      birth_date:p.identity.birth_date,
+      birth_time_local:p.identity.birth_time_local,
+      birth_time_utc:p.identity.birth_time_utc,
+      birth_place:p.identity.birth_place,
+      tropical_ascendant:p.app_projection.ascendant,
+      tropical_midheaven:p.app_projection.midheaven,
+      sidereal_ascendant:p.app_projection.siderealAscendant,
+      bazi_hour:p.app_projection.baziHour,
+      day_master:p.bazi.day_master,
+      life_path:p.numerology.life_path,
+      interpretation_rule:'geometry -> universal meaning -> full-domain scan -> personal resonance -> current application'
+    };
+  }
+
+  function installPayloadGovernance(p){
+    try{
+      if(typeof buildBridgePayload==='function'&&!buildBridgePayload.__canonicalV33){
+        var base=buildBridgePayload;
+        buildBridgePayload=function(){
+          var out=base.apply(this,arguments)||{};
+          out.canonical_esoteric_profile=profileSummary(p);
+          out.interpretation_governance=clone(p.interpretation_governance);
+          return out;
+        };
+        buildBridgePayload.__canonicalV33=true;
+      }
+    }catch(e){console.warn('Canonical profile payload bridge unavailable',e);}
+
+    try{
+      if(typeof updateLens==='function'&&!updateLens.__canonicalV33){
+        var baseLens=updateLens;
+        updateLens=function(){
+          var out=baseLens.apply(this,arguments);
+          try{
+            var el=document.getElementById('lensPre');
+            if(el){
+              var obj=JSON.parse(el.textContent||'{}');
+              obj.canonical_esoteric_profile=profileSummary(p);
+              obj.interpretation_governance=clone(p.interpretation_governance);
+              el.textContent=JSON.stringify(obj,null,2);
+            }
+          }catch(_e){}
+          return out;
+        };
+        updateLens.__canonicalV33=true;
+      }
+    }catch(e){console.warn('Canonical profile Lens bridge unavailable',e);}
+  }
+
+  function applyAceMind(p){
+    p=p||cache;
+    if(!p)throw new Error('Canonical profile not loaded');
+    var natal=aceMindNatal(p);
+    try{
+      state.natal=natal;
+      state.canonicalProfile={version:p.version,sealed_date:p.sealed_date,profile_id:natal.profile_id};
+      if(typeof FW_AXIS_CACHE!=='undefined'&&FW_AXIS_CACHE&&FW_AXIS_CACHE.yearScan)FW_AXIS_CACHE.yearScan={};
+      if(typeof fwGuidanceCacheClearV2524==='function')fwGuidanceCacheClearV2524();
+      if(typeof saveState==='function')saveState();
+      installPayloadGovernance(p);
+      if(typeof render==='function')render();
+      window.ACE_MIND_CANONICAL_PROFILE_APPLIED={ok:true,version:p.version,profile_id:natal.profile_id,at:new Date().toISOString()};
+      return clone(window.ACE_MIND_CANONICAL_PROFILE_APPLIED);
+    }catch(e){
+      window.ACE_MIND_CANONICAL_PROFILE_APPLIED={ok:false,version:p.version,error:String(e&&e.message||e),at:new Date().toISOString()};
+      throw e;
+    }
+  }
+
+  function applyCluster(p){
+    p=p||cache;
+    if(!p)throw new Error('Canonical profile not loaded');
+    var a=p.app_projection;
+    try{
+      if(typeof FW!=='undefined'&&FW){
+        FW.birthHour=a.birthHour;
+        FW.birthTimeLocal=a.birthTimeLocal;
+        FW.birthTimeUtc=a.birthTimeUtc;
+        FW.ascSign=a.ascSign;
+        FW.ascendant=a.ascendant;
+        FW.midheaven=a.midheaven;
+        FW.siderealAscendant=a.siderealAscendant;
+        FW.baziHour=a.baziHour;
+        FW.baziHourAnimal=a.baziHourAnimal;
+        FW.canonicalProfileVersion=p.version;
+      }
+      if(typeof state!=='undefined'&&state){
+        state.canonicalProfile=profileSummary(p);
+        if(typeof saveState==='function')saveState();
+      }
+      if(typeof buildPayload==='function'&&!buildPayload.__canonicalV33){
+        var base=buildPayload;
+        buildPayload=function(){
+          var text=String(base.apply(this,arguments)||'');
+          var prefix='CANONICAL_PROFILE='+p.version+' | BIRTH_LOCAL='+a.birthTimeLocal+' | ASC='+a.ascendant+' | MC='+a.midheaven+' | BAZI_HOUR='+a.baziHour+'\nINTERPRETATION_RULE=Universal human meaning before vocational or project application.\n';
+          return prefix+text;
+        };
+        buildPayload.__canonicalV33=true;
+      }
+      if(typeof renderChamber==='function')renderChamber(typeof activeChamber!=='undefined'?activeChamber:0);
+      window.ACE_CLUSTER_CANONICAL_PROFILE_APPLIED={ok:true,version:p.version,at:new Date().toISOString()};
+      return clone(window.ACE_CLUSTER_CANONICAL_PROFILE_APPLIED);
+    }catch(e){
+      window.ACE_CLUSTER_CANONICAL_PROFILE_APPLIED={ok:false,version:p.version,error:String(e&&e.message||e),at:new Date().toISOString()};
+      throw e;
+    }
+  }
+
+  function applyInvestment(p){
+    p=p||cache;
+    if(!p)throw new Error('Canonical profile not loaded');
+    var a=p.app_projection;
+    try{
+      if(typeof FW_PROFILE!=='undefined'&&FW_PROFILE){
+        FW_PROFILE.birthHour=a.birthHour;
+        FW_PROFILE.birthTimeLocal=a.birthTimeLocal;
+        FW_PROFILE.birthTimeUtc=a.birthTimeUtc;
+        FW_PROFILE.ascSign=a.ascSign;
+        FW_PROFILE.ascendant=a.ascendant;
+        FW_PROFILE.midheaven=a.midheaven;
+        FW_PROFILE.baziHour=a.baziHour;
+        FW_PROFILE.canonicalProfileVersion=p.version;
+      }
+      window.INVESTMENT_CANONICAL_PROFILE_APPLIED={ok:true,version:p.version,at:new Date().toISOString()};
+      return clone(window.INVESTMENT_CANONICAL_PROFILE_APPLIED);
+    }catch(e){
+      window.INVESTMENT_CANONICAL_PROFILE_APPLIED={ok:false,version:p.version,error:String(e&&e.message||e),at:new Date().toISOString()};
+      throw e;
+    }
+  }
+
+  window.FlamewalkerCanonicalProfileV33={
+    version:'3.3_UNIVERSAL',
+    url:PROFILE_URL,
+    load:load,
+    aceMindNatal:aceMindNatal,
+    summary:profileSummary,
+    applyAceMind:applyAceMind,
+    applyCluster:applyCluster,
+    applyInvestment:applyInvestment
+  };
+})();
