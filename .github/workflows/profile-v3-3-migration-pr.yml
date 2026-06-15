@@ -1,0 +1,21 @@
+name: Profile v3.3 Migration PR
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/profile-v3-3-migration-pr.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - run: python3 scripts/migrate_flamewalker_profile_v3_3.py
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'fix: migrate dependent apps to canonical profile v3.3'
