@@ -1,0 +1,124 @@
+{
+  "schema": "flamewalker_canonical_esoteric_profile",
+  "version": "3.3_UNIVERSAL",
+  "sealed_date": "2026-06-15",
+  "status": "expanded_working_canon_not_v4_ultimate",
+  "identity": {
+    "legal_name": "Manuel Rui Santos Ferreira",
+    "birth_date": "1972-08-15",
+    "birth_time_local": "09:00",
+    "birth_time_utc": "08:00",
+    "birth_place": "Porto, Portugal",
+    "birth_time_status": "operationally_canonical_not_certificate_confirmed"
+  },
+  "astrology": {
+    "primary_method": "tropical_placidus",
+    "tropical_placidus": {
+      "source": "Astrodienst",
+      "zodiac": "tropical",
+      "house_system": "Placidus",
+      "angles": {
+        "ascendant": {"sign":"Virgo","position":"18°20′09″","display":"Virgo 18°20′09″","lon":168.33583333},
+        "descendant": {"sign":"Pisces","position":"18°20′09″","display":"Pisces 18°20′09″","lon":348.33583333},
+        "mc": {"sign":"Gemini","position":"16°23′57″","display":"Gemini 16°23′57″","lon":76.39916667},
+        "ic": {"sign":"Sagittarius","position":"16°23′57″","display":"Sagittarius 16°23′57″","lon":256.39916667}
+      },
+      "planets": {
+        "sun":{"sign":"Leo","position":"22°34′50″","display":"Leo 22°34′50″","lon":142.58055556,"house":12,"motion":"direct"},
+        "moon":{"sign":"Scorpio","position":"3°49′53″","display":"Scorpio 3°49′53″","lon":213.83138889,"house":2,"motion":"direct"},
+        "mercury":{"sign":"Leo","position":"10°51′39″","display":"Leo 10°51′39″ Rx","lon":130.86083333,"house":11,"motion":"retrograde"},
+        "venus":{"sign":"Cancer","position":"7°23′37″","display":"Cancer 7°23′37″","lon":97.39361111,"house":10,"motion":"direct"},
+        "mars":{"sign":"Virgo","position":"0°11′09″","display":"Virgo 0°11′09″","lon":150.18583333,"house":12,"motion":"direct"},
+        "jupiter":{"sign":"Sagittarius","position":"28°38′39″","display":"Sagittarius 28°38′39″ Rx","lon":268.64416667,"house":4,"motion":"retrograde"},
+        "saturn":{"sign":"Gemini","position":"18°33′50″","display":"Gemini 18°33′50″","lon":78.56388889,"house":10,"motion":"direct"},
+        "uranus":{"sign":"Libra","position":"15°27′03″","display":"Libra 15°27′03″","lon":195.45083333,"house":2,"motion":"direct"},
+        "neptune":{"sign":"Sagittarius","position":"2°29′12″","display":"Sagittarius 2°29′12″","lon":242.48666667,"house":3,"motion":"direct"},
+        "pluto":{"sign":"Libra","position":"0°27′14″","display":"Libra 0°27′14″","lon":180.45388889,"house":1,"motion":"direct"},
+        "meanNode":{"sign":"Capricorn","position":"24°35′45″","display":"Capricorn 24°35′45″ Rx","lon":294.59583333,"house":5,"motion":"retrograde"},
+        "trueNode":{"sign":"Capricorn","position":"25°41′25″","display":"Capricorn 25°41′25″ Rx","lon":295.69027778,"house":5,"motion":"retrograde"},
+        "chiron":{"sign":"Aries","position":"17°04′51″","display":"Aries 17°04′51″ Rx","lon":17.08083333,"house":8,"motion":"retrograde"}
+      },
+      "houses": {
+        "h1":{"sign":"Virgo","position":"18°20′09″","display":"Virgo 18°20′09″","lon":168.33583333},
+        "h2":{"sign":"Libra","position":"13°13′36″","display":"Libra 13°13′36″","lon":193.22666667},
+        "h3":{"sign":"Scorpio","position":"12°55′32″","display":"Scorpio 12°55′32″","lon":222.92555556},
+        "h4":{"sign":"Sagittarius","position":"16°23′57″","display":"Sagittarius 16°23′57″","lon":256.39916667},
+        "h5":{"sign":"Capricorn","position":"20°25′15″","display":"Capricorn 20°25′15″","lon":290.42083333},
+        "h6":{"sign":"Aquarius","position":"21°28′10″","display":"Aquarius 21°28′10″","lon":321.46944444},
+        "h7":{"sign":"Pisces","position":"18°20′09″","display":"Pisces 18°20′09″","lon":348.33583333},
+        "h8":{"sign":"Aries","position":"13°13′36″","display":"Aries 13°13′36″","lon":13.22666667},
+        "h9":{"sign":"Taurus","position":"12°55′32″","display":"Taurus 12°55′32″","lon":42.92555556},
+        "h10":{"sign":"Gemini","position":"16°23′57″","display":"Gemini 16°23′57″","lon":76.39916667},
+        "h11":{"sign":"Cancer","position":"20°25′15″","display":"Cancer 20°25′15″","lon":110.42083333},
+        "h12":{"sign":"Leo","position":"21°28′10″","display":"Leo 21°28′10″","lon":141.46944444}
+      }
+    },
+    "sidereal_fagan_bradley": {
+      "ayanamsa": "24°21′28″",
+      "ascendant": "Leo 23°58′25″",
+      "mc": "Taurus 22°02′13″",
+      "rule": "separate_symbolic_coordinate_system_not_replacement_for_tropical"
+    }
+  },
+  "bazi": {
+    "method": "Ming Li Sun Calendar, Local Solar Time",
+    "civil_time": "09:00",
+    "apparent_solar_time": "approximately 07:21:03",
+    "pillars": {
+      "year": {"stem_branch":"Ren Zi","english":"Yang Water Rat"},
+      "month": {"stem_branch":"Wu Shen","english":"Yang Earth Monkey"},
+      "day": {"stem_branch":"Wu Yin","english":"Yang Earth Tiger"},
+      "hour": {"stem_branch":"Bing Chen","english":"Yang Fire Dragon"}
+    },
+    "day_master": "Wu Earth",
+    "strength_policy": "supported_by_visible_and_hidden_earth_and_fire_under_substantial_water_wealth_and_movement_pressure",
+    "weighted_strength_status": "conditional_no_single_school_selected"
+  },
+  "mayan": {
+    "separation_rule": "four_counts_must_never_be_collapsed",
+    "traditional_tzolkin_chol_qij": {"value":"8 Ik′ / Iq′ / Wind","trecena":"Eagle","role":"primary_operating_field","tone_role":"movement_modifier"},
+    "cosmic_count": {"kin":15,"value":"Blue Lunar Eagle","tone":2,"life_path":"White Wizard"},
+    "dreamspell": {"kin":39,"value":"Blue Cosmic Storm","tone":13,"galactic_activation_portal":true,"life_path":"Blue Hand"},
+    "dna_count": {"kin":251,"value":"Blue Self-Existing Monkey","tone":4,"life_path":"Yellow Star"}
+  },
+  "numerology": {
+    "life_path":"33/6","birthday":"15/6","attitude":"23/5","expression_destiny":"111/3",
+    "soul_urge":"48/12/3","personality":"63/9","maturity":"9","maturity_master_variant":"36/9",
+    "hidden_passion":9,"karmic_lessons":[7,8],"subconscious_self":7,"balance":"20/2",
+    "period_cycles":["8","15/6","19/10/1"],"pinnacles":["14/5","7","12/3","9"],"challenges":[2,5,3,7],
+    "ciphers":{"pythagorean":111,"chaldean":82,"english_ordinal":282,"english_reverse_ordinal":339,"english_reverse_reduction":150,"hebrew_standard":1034,"hebrew_siduri":224,"hebrew_katan":80,"english_letter_jewish":1222}
+  },
+  "interpretation_governance": {
+    "mandatory_order":["exact_geometry_and_source_status","universal_human_meaning","full_domain_scan","personal_biographical_resonance","current_application"],
+    "universal_domains":["identity_and_body","emotion_family_and_home","love_intimacy_and_sexuality","creativity_and_pleasure","spirituality_and_unconscious","money_resources_and_self_worth","vocation_and_public_life","friendship_community_and_future","grief_shadow_and_life_transitions"],
+    "permanent_vs_timing":"permanent_natal_systems_must_remain_separate_from_temporary_timing_overlays",
+    "forbidden_shortcuts":[
+      "Do not define the user primarily as architect, operator, worker, or project-builder from recent context.",
+      "Do not interpret a transit as work-related without independent convergence from houses, rulers, timing techniques, and present circumstances.",
+      "Do not reduce the 8th house to contracts or the 12th house to project incubation.",
+      "Do not allow THEON, ACED, applications, logistics, governance, or systems vocabulary to overwrite ordinary human meaning.",
+      "Do not treat biographical examples as the essence of a placement.",
+      "Do not infer absent values or substitute any prior birth time."
+    ],
+    "body_rule":"body_veto_precedes_action",
+    "confidence_rule":"highest_confidence_belongs_to_exact_values_repeated_structure_and_dated_biography"
+  },
+  "app_projection": {
+    "birthHour":9,
+    "birthTimeLocal":"09:00",
+    "birthTimeUtc":"08:00",
+    "sunSign":"Leo",
+    "ascSign":"Virgo",
+    "ascendant":"Virgo 18°20′09″",
+    "midheaven":"Gemini 16°23′57″",
+    "siderealAscendant":"Leo 23°58′25″",
+    "dayMaster":"Wu",
+    "dayMasterElement":"Earth",
+    "baziHour":"Bing Chen",
+    "baziHourAnimal":"Dragon",
+    "lifePathRaw":33,
+    "lifePathReduced":6,
+    "expressionRaw":111,
+    "expressionReduced":3
+  }
+}
