@@ -1,1 +1,3 @@
-Trigger ACE Mind v25.3.7 calibration branch workflow.
+Trigger ACE Mind v25.3.7 calibration PR workflow.
+Branch: ace-mind-v25-3-7-calibration
+Requested: 2026-06-16 Europe/Brussels
