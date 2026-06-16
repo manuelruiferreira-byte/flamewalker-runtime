@@ -1,0 +1,3040 @@
+{
+  "schemaVersion": "ace_mind_supplement_registry.v1",
+  "registryId": "ace-mind-supplement-registry-v1-commit1",
+  "generatedAt": "2026-06-16",
+  "doctrine": "Canonical supplement registry for Individual Supplement Optimizer v1. It records personal scheduling governance and heuristic benefit/burden vectors. It does not make medical claims.",
+  "bodySystems": [
+    "heart",
+    "brain",
+    "nervous",
+    "sleep",
+    "liver",
+    "gut",
+    "immune",
+    "muscles_back",
+    "skin_connective",
+    "endocrine",
+    "energy_mitochondria",
+    "respiration",
+    "eyes"
+  ],
+  "lifeDomains": [
+    "career",
+    "study",
+    "social",
+    "leisure",
+    "love",
+    "creative",
+    "spirit",
+    "body",
+    "money"
+  ],
+  "defaultConfig": {
+    "slotCaps": {
+      "morning": 4,
+      "afternoon": 4,
+      "night": 3
+    },
+    "classCaps": {
+      "nad_booster": 1,
+      "brain_activation": 2,
+      "endocrine_caution": 1,
+      "immune_mushroom": 2,
+      "stimulant": 1
+    },
+    "labels": {
+      "autoSelection": [
+        "allowed",
+        "caution",
+        "manual_only",
+        "excluded"
+      ],
+      "permission": [
+        "clear",
+        "conditional",
+        "hold",
+        "excluded"
+      ],
+      "frequency": [
+        "due",
+        "optional",
+        "residual",
+        "cooling_down",
+        "complete",
+        "manual_only",
+        "excluded"
+      ]
+    }
+  },
+  "supplements": [
+    {
+      "id": "magnesium_citrate",
+      "name": "Magnesium Citrate",
+      "aliases": [
+        "Mag Citrate ½ dose"
+      ],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "personal_protocol",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 5,
+        "maxUses7d": 7,
+        "minimumGapHours": 12,
+        "persistenceClass": "short",
+        "residualWindowHours": 12
+      },
+      "timeWindows": [
+        "morning",
+        "flex"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "magnesium",
+        "nad_companion"
+      ],
+      "body": {
+        "benefits": {
+          "gut": 2,
+          "nervous": 1,
+          "muscles_back": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Mercury"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "hydration",
+          "buffer",
+          "nad_companion"
+        ]
+      },
+      "notes": "User protocol: required magnesium lane for NAD days; coordinate with other magnesium forms."
+    },
+    {
+      "id": "magnesium_malate",
+      "name": "Magnesium Malate",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "magnesium",
+        "energy_support"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "muscles_back": 2,
+          "brain": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "sleep": 1
+        }
+      },
+      "domains": {
+        "career": 1,
+        "study": 1,
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars",
+          "Mercury"
+        ],
+        "elements": [
+          "Earth",
+          "Fire"
+        ],
+        "qualities": [
+          "ATP",
+          "muscle",
+          "focus"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "magnesium_bisglycinate",
+      "name": "Magnesium Bisglycinate",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 5,
+        "minimumGapHours": 12,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "night",
+        "flex"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "magnesium",
+        "calm"
+      ],
+      "body": {
+        "benefits": {
+          "nervous": 2,
+          "sleep": 2,
+          "muscles_back": 1
+        },
+        "burdens": {
+          "sleep": 1
+        }
+      },
+      "domains": {
+        "leisure": 2,
+        "body": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Venus"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "calm",
+          "sleep",
+          "muscle"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "magnesium_taurate",
+      "name": "Magnesium Taurate",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 12,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "night",
+        "flex"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "magnesium",
+        "heart_calm"
+      ],
+      "body": {
+        "benefits": {
+          "heart": 2,
+          "nervous": 2,
+          "sleep": 1
+        },
+        "burdens": {
+          "sleep": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "love": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Venus"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "heart",
+          "calm",
+          "downshift"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "nr",
+      "name": "NR",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "personal_protocol",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "short",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "nad_booster",
+        "methylation_driver",
+        "brain_activation"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 3,
+          "brain": 2,
+          "nervous": 1
+        },
+        "burdens": {
+          "nervous": 2,
+          "sleep": 2,
+          "gut": 1
+        }
+      },
+      "domains": {
+        "career": 2,
+        "study": 2,
+        "creative": 1,
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [
+          "tmg",
+          "magnesium_citrate"
+        ],
+        "preferredPairs": [
+          "coq10",
+          "omega_3"
+        ],
+        "avoidSameDay": [
+          "nmn",
+          "nmnh"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun",
+          "Mercury"
+        ],
+        "elements": [
+          "Fire",
+          "Air"
+        ],
+        "qualities": [
+          "vitality",
+          "cognition",
+          "cellular"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "nmn",
+      "name": "NMN",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "personal_protocol",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "short",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "nad_booster",
+        "methylation_driver",
+        "cellular_repair"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 3,
+          "skin_connective": 1,
+          "brain": 1
+        },
+        "burdens": {
+          "nervous": 1,
+          "sleep": 2,
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "career": 1,
+        "creative": 1
+      },
+      "pairing": {
+        "requiredCompanions": [
+          "tmg",
+          "magnesium_citrate"
+        ],
+        "preferredPairs": [
+          "coq10",
+          "creatine_5g"
+        ],
+        "avoidSameDay": [
+          "nr",
+          "nmnh"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun",
+          "Venus"
+        ],
+        "elements": [
+          "Fire",
+          "Earth"
+        ],
+        "qualities": [
+          "repair",
+          "cellular",
+          "vitality"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "nmnh",
+      "name": "NMN-H",
+      "aliases": [
+        "NMNH"
+      ],
+      "available": true,
+      "personalStatus": "active_caution",
+      "evidenceClass": "personal_protocol",
+      "autoSelection": "caution",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 2,
+        "minimumGapHours": 72,
+        "persistenceClass": "short",
+        "residualWindowHours": 36
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "nad_booster",
+        "methylation_driver",
+        "high_voltage",
+        "brain_activation"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 3,
+          "brain": 2
+        },
+        "burdens": {
+          "nervous": 3,
+          "sleep": 3,
+          "heart": 1,
+          "gut": 1
+        }
+      },
+      "domains": {
+        "career": 2,
+        "study": 2,
+        "creative": 1
+      },
+      "pairing": {
+        "requiredCompanions": [
+          "tmg",
+          "magnesium_citrate"
+        ],
+        "preferredPairs": [
+          "coq10",
+          "omega_3"
+        ],
+        "avoidSameDay": [
+          "nr",
+          "nmn",
+          "cordyceps",
+          "b_complex"
+        ],
+        "avoidSameSlot": [
+          "caffeine",
+          "stimulant"
+        ],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Uranus",
+          "Sun"
+        ],
+        "elements": [
+          "Fire",
+          "Air"
+        ],
+        "qualities": [
+          "high_voltage",
+          "probe",
+          "activation"
+        ]
+      },
+      "notes": "High-voltage NAD lane; automatic selection must be conservative."
+    },
+    {
+      "id": "tmg",
+      "name": "TMG",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "personal_protocol",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 5,
+        "maxUses7d": 7,
+        "minimumGapHours": 12,
+        "persistenceClass": "short",
+        "residualWindowHours": 12
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "methylation_support",
+        "nad_companion"
+      ],
+      "body": {
+        "benefits": {
+          "liver": 2,
+          "energy_mitochondria": 1
+        },
+        "burdens": {
+          "nervous": 1
+        }
+      },
+      "domains": {
+        "body": 1,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mercury"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "methylation",
+          "cofactor",
+          "nad_companion"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "creatine_5g",
+      "name": "Creatine 5g",
+      "aliases": [
+        "Creatine"
+      ],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 4,
+        "maxUses7d": 6,
+        "minimumGapHours": 24,
+        "persistenceClass": "tissue_saturation",
+        "residualWindowHours": 72
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "atp",
+        "brain_activation",
+        "muscle_support"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "brain": 2,
+          "muscles_back": 3
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 3,
+        "study": 1,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "water",
+          "cordyceps"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars",
+          "Mercury"
+        ],
+        "elements": [
+          "Earth",
+          "Fire"
+        ],
+        "qualities": [
+          "power",
+          "ATP",
+          "muscle"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "coq10",
+      "name": "CoQ10",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 5,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mitochondrial",
+        "heart_support",
+        "fat_soluble"
+      ],
+      "body": {
+        "benefits": {
+          "heart": 3,
+          "energy_mitochondria": 3
+        },
+        "burdens": {
+          "sleep": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "omega_3"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun"
+        ],
+        "elements": [
+          "Fire"
+        ],
+        "qualities": [
+          "mitochondria",
+          "heart",
+          "vitality"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "omega_3",
+      "name": "Omega-3",
+      "aliases": [
+        "Omega 3"
+      ],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 5,
+        "minimumGapHours": 24,
+        "persistenceClass": "long_tail",
+        "residualWindowHours": 72
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "fat_soluble",
+        "anti_inflammatory",
+        "heart_support"
+      ],
+      "body": {
+        "benefits": {
+          "heart": 2,
+          "nervous": 2,
+          "skin_connective": 2,
+          "eyes": 2
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "love": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "coq10",
+          "d3_k2"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Venus"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "anti_inflammatory",
+          "softening",
+          "carrier"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "multivitamin",
+      "name": "Multivitamin",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "baseline",
+        "broad_spectrum"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 1,
+          "immune": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "liver": 1
+        }
+      },
+      "domains": {
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "baseline",
+          "coverage"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "d3_k2",
+      "name": "D3 + K2",
+      "aliases": [
+        "D3 K2"
+      ],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "long_tail",
+        "residualWindowHours": 96
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "fat_soluble",
+        "immune",
+        "bone"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 2,
+          "muscles_back": 1,
+          "heart": 1
+        },
+        "burdens": {
+          "endocrine": 1
+        }
+      },
+      "domains": {
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "omega_3"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun"
+        ],
+        "elements": [
+          "Fire"
+        ],
+        "qualities": [
+          "sun",
+          "bones",
+          "immune"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "nac",
+      "name": "NAC",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 5,
+        "maxUses7d": 7,
+        "minimumGapHours": 12,
+        "persistenceClass": "short",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "liver_support",
+        "glutathione",
+        "respiratory"
+      ],
+      "body": {
+        "benefits": {
+          "liver": 3,
+          "immune": 1,
+          "respiration": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "milk_thistle"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Saturn",
+          "Mercury"
+        ],
+        "elements": [
+          "Air",
+          "Earth"
+        ],
+        "qualities": [
+          "detox_buffer",
+          "glutathione"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "milk_thistle",
+      "name": "Milk Thistle",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 5,
+        "maxUses7d": 7,
+        "minimumGapHours": 12,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "night",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "liver_support",
+        "recovery"
+      ],
+      "body": {
+        "benefits": {
+          "liver": 3,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "nac"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Jupiter",
+          "Moon"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "liver_cover",
+          "recovery"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "probiotic",
+      "name": "Probiotic",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 5,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon",
+        "flex"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "gut",
+        "immune"
+      ],
+      "body": {
+        "benefits": {
+          "gut": 3,
+          "immune": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "gut",
+          "baseline"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "zinc",
+      "name": "Zinc",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 2,
+        "minimumGapHours": 72,
+        "persistenceClass": "medium",
+        "residualWindowHours": 72
+      },
+      "timeWindows": [
+        "night",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "immune",
+        "skin"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 2,
+          "skin_connective": 2,
+          "endocrine": 1
+        },
+        "burdens": {
+          "gut": 2
+        }
+      },
+      "domains": {
+        "body": 2,
+        "love": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars",
+          "Venus"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "skin",
+          "immune",
+          "repair"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "astragalus",
+      "name": "Astragalus",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "immune_modulator",
+        "adaptogen_like"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 3,
+          "energy_mitochondria": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "vitamin_c"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Jupiter"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "defense",
+          "recovery"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "lions_mane",
+      "name": "Lion's Mane",
+      "aliases": [
+        "Lion's Mane"
+      ],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "mixed_human_evidence",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 5,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "brain_activation",
+        "mushroom",
+        "cognitive"
+      ],
+      "body": {
+        "benefits": {
+          "brain": 3,
+          "nervous": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "immune": 1
+        }
+      },
+      "domains": {
+        "study": 3,
+        "creative": 2,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "l_theanine"
+        ],
+        "avoidSameDay": [
+          "reishi",
+          "chaga"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mercury"
+        ],
+        "elements": [
+          "Air",
+          "Wood"
+        ],
+        "qualities": [
+          "learning",
+          "neuroplasticity",
+          "focus"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "l_theanine",
+      "name": "L-Theanine",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 7,
+        "minimumGapHours": 8,
+        "persistenceClass": "short",
+        "residualWindowHours": 8
+      },
+      "timeWindows": [
+        "morning",
+        "night",
+        "flex"
+      ],
+      "requiresFood": false,
+      "classes": [
+        "calm_focus",
+        "nervous_support"
+      ],
+      "body": {
+        "benefits": {
+          "nervous": 3,
+          "brain": 1,
+          "sleep": 1
+        },
+        "burdens": {
+          "sleep": 1
+        }
+      },
+      "domains": {
+        "study": 2,
+        "spirit": 2,
+        "love": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "lions_mane"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Mercury"
+        ],
+        "elements": [
+          "Water",
+          "Air"
+        ],
+        "qualities": [
+          "calm_focus",
+          "buffer"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "lutein",
+      "name": "Lutein",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "long_tail",
+        "residualWindowHours": 72
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "eyes",
+        "fat_soluble",
+        "antioxidant"
+      ],
+      "body": {
+        "benefits": {
+          "eyes": 3,
+          "brain": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "study": 1,
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "omega_3"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mercury",
+          "Sun"
+        ],
+        "elements": [
+          "Air",
+          "Fire"
+        ],
+        "qualities": [
+          "eyes",
+          "visual_clarity"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "melatonin",
+      "name": "Melatonin",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "manual_only",
+      "evidenceClass": "baseline",
+      "autoSelection": "manual_only",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 0,
+        "maxUses7d": 2,
+        "minimumGapHours": 48,
+        "persistenceClass": "short",
+        "residualWindowHours": 12
+      },
+      "timeWindows": [
+        "night"
+      ],
+      "requiresFood": false,
+      "classes": [
+        "sleep",
+        "hormone"
+      ],
+      "body": {
+        "benefits": {
+          "sleep": 3
+        },
+        "burdens": {
+          "sleep": 1,
+          "nervous": 1
+        }
+      },
+      "domains": {
+        "leisure": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "cordyceps",
+          "nmnh"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "sleep"
+        ]
+      },
+      "notes": "Manual rescue lane only, not automatic daily advice."
+    },
+    {
+      "id": "valerian",
+      "name": "Valerian",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "manual_only",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "manual_only",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 0,
+        "maxUses7d": 2,
+        "minimumGapHours": 48,
+        "persistenceClass": "short",
+        "residualWindowHours": 12
+      },
+      "timeWindows": [
+        "night"
+      ],
+      "requiresFood": false,
+      "classes": [
+        "sleep",
+        "sedative"
+      ],
+      "body": {
+        "benefits": {
+          "sleep": 3,
+          "nervous": 2
+        },
+        "burdens": {
+          "sleep": 2,
+          "gut": 1
+        }
+      },
+      "domains": {
+        "leisure": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "cordyceps",
+          "nmnh"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "sleep_rescue"
+        ]
+      },
+      "notes": "Manual sleep-rescue lane only."
+    },
+    {
+      "id": "collagen",
+      "name": "Collagen",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 5,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48
+      },
+      "timeWindows": [
+        "afternoon",
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "tissue_repair",
+        "protein_support"
+      ],
+      "body": {
+        "benefits": {
+          "skin_connective": 3,
+          "muscles_back": 2,
+          "gut": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 3,
+        "love": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "vitamin_c"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Venus",
+          "Saturn"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "structure",
+          "skin",
+          "repair"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "vitamin_c",
+      "name": "Vitamin C",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 6,
+        "minimumGapHours": 12,
+        "persistenceClass": "short",
+        "residualWindowHours": 12
+      },
+      "timeWindows": [
+        "afternoon",
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "antioxidant",
+        "collagen_cofactor",
+        "immune"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 2,
+          "skin_connective": 2,
+          "liver": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "collagen",
+          "astragalus"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun"
+        ],
+        "elements": [
+          "Fire"
+        ],
+        "qualities": [
+          "antioxidant",
+          "collagen_cofactor"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "msm",
+      "name": "MSM",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "limited_human_evidence",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48
+      },
+      "timeWindows": [
+        "afternoon",
+        "night"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "tissue_repair",
+        "sulfur"
+      ],
+      "body": {
+        "benefits": {
+          "muscles_back": 2,
+          "skin_connective": 2,
+          "liver": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "vitamin_c",
+          "collagen"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Saturn"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "sulfur",
+          "joints"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "quercetin",
+      "name": "Quercetin",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "mixed_human_evidence",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48
+      },
+      "timeWindows": [
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "polyphenol",
+        "immune",
+        "histamine"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 2,
+          "gut": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "liver": 1
+        }
+      },
+      "domains": {
+        "body": 1,
+        "social": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "resveratrol"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": [
+          "polyphenol"
+        ]
+      },
+      "esoteric": {
+        "planets": [
+          "Venus",
+          "Mercury"
+        ],
+        "elements": [
+          "Air",
+          "Earth"
+        ],
+        "qualities": [
+          "polyphenol",
+          "histamine"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "resveratrol",
+      "name": "Resveratrol",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "mixed_human_evidence",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48
+      },
+      "timeWindows": [
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "polyphenol",
+        "longevity"
+      ],
+      "body": {
+        "benefits": {
+          "heart": 1,
+          "skin_connective": 1,
+          "energy_mitochondria": 1
+        },
+        "burdens": {
+          "liver": 1,
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 1,
+        "creative": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "quercetin"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": [
+          "polyphenol"
+        ]
+      },
+      "esoteric": {
+        "planets": [
+          "Venus",
+          "Jupiter"
+        ],
+        "elements": [
+          "Air",
+          "Water"
+        ],
+        "qualities": [
+          "polyphenol",
+          "longevity"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "spermidine",
+      "name": "Spermidine",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "mixed_human_evidence",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "long_tail",
+        "residualWindowHours": 72
+      },
+      "timeWindows": [
+        "afternoon",
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "longevity",
+        "autophagy"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 1,
+          "skin_connective": 1,
+          "brain": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Saturn",
+          "Mercury"
+        ],
+        "elements": [
+          "Earth",
+          "Air"
+        ],
+        "qualities": [
+          "autophagy",
+          "longevity",
+          "repair"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "spirulina",
+      "name": "Spirulina",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "nutrient_dense",
+        "immune",
+        "green_food"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 2,
+          "energy_mitochondria": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Venus",
+          "Moon"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "green_food",
+          "nutrient"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "shilajit",
+      "name": "Shilajit",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active_caution",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "caution",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 2,
+        "minimumGapHours": 72,
+        "persistenceClass": "medium",
+        "residualWindowHours": 72
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "energy_support",
+        "quality_sensitive"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "muscles_back": 1
+        },
+        "burdens": {
+          "nervous": 1,
+          "gut": 1,
+          "liver": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "coq10",
+          "nmn"
+        ],
+        "avoidSameDay": [
+          "nmnh"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Saturn",
+          "Mars"
+        ],
+        "elements": [
+          "Earth",
+          "Fire"
+        ],
+        "qualities": [
+          "mineral",
+          "resin",
+          "recovery"
+        ]
+      },
+      "notes": "Quality-sensitive: hold if product identity/quality unknown."
+    },
+    {
+      "id": "irish_sea_moss",
+      "name": "Irish Sea Moss",
+      "aliases": [
+        "Sea Moss"
+      ],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "medium",
+        "residualWindowHours": 72
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "mucosal",
+        "iodine_caution"
+      ],
+      "body": {
+        "benefits": {
+          "gut": 2,
+          "skin_connective": 1,
+          "immune": 1
+        },
+        "burdens": {
+          "endocrine": 1,
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "minerals",
+          "mucosal"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "gotu_kola",
+      "name": "Gotu Kola",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active_caution",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "caution",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 2,
+        "minimumGapHours": 72,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48
+      },
+      "timeWindows": [
+        "afternoon",
+        "night"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "calm_focus",
+        "skin_connective",
+        "liver_caution"
+      ],
+      "body": {
+        "benefits": {
+          "nervous": 2,
+          "skin_connective": 2,
+          "brain": 1
+        },
+        "burdens": {
+          "liver": 2,
+          "sleep": 1
+        }
+      },
+      "domains": {
+        "study": 1,
+        "body": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "milk_thistle"
+        ],
+        "avoidSameDay": [
+          "ashwagandha"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Mercury"
+        ],
+        "elements": [
+          "Water",
+          "Air"
+        ],
+        "qualities": [
+          "calm_focus",
+          "connective"
+        ]
+      },
+      "notes": "Caution-sensitive due to liver lane."
+    },
+    {
+      "id": "chaga",
+      "name": "Chaga",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active_caution",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "caution",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 2,
+        "minimumGapHours": 72,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48
+      },
+      "timeWindows": [
+        "night",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mushroom",
+        "immune",
+        "antioxidant"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 2,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "immune": 1
+        }
+      },
+      "domains": {
+        "body": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "lions_mane",
+          "reishi"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Saturn"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "mushroom",
+          "recovery"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "reishi",
+      "name": "Reishi",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active_caution",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "caution",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 2,
+        "minimumGapHours": 72,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48
+      },
+      "timeWindows": [
+        "night"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mushroom",
+        "immune",
+        "calm"
+      ],
+      "body": {
+        "benefits": {
+          "nervous": 2,
+          "sleep": 2,
+          "immune": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "immune": 1,
+          "sleep": 1
+        }
+      },
+      "domains": {
+        "leisure": 2,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "lions_mane",
+          "chaga"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Venus"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "calm",
+          "mushroom",
+          "evening"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "cordyceps",
+      "name": "Cordyceps",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "mixed_human_evidence",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 24,
+        "persistenceClass": "short",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "physical_performance",
+        "stimulant",
+        "respiration",
+        "energy_support"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "respiration": 3,
+          "muscles_back": 2,
+          "brain": 1
+        },
+        "burdens": {
+          "nervous": 2,
+          "sleep": 2,
+          "heart": 1,
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 3,
+        "career": 1,
+        "leisure": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "creatine_5g"
+        ],
+        "avoidSameDay": [
+          "nmnh",
+          "melatonin",
+          "valerian"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars"
+        ],
+        "elements": [
+          "Fire",
+          "Wood"
+        ],
+        "qualities": [
+          "activation",
+          "stamina",
+          "movement"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "black_maca",
+      "name": "Black Maca",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active_caution",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "caution",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 2,
+        "minimumGapHours": 72,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "drive",
+        "endocrine_caution",
+        "stimulant"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "endocrine": 2,
+          "muscles_back": 1
+        },
+        "burdens": {
+          "nervous": 2,
+          "sleep": 2,
+          "endocrine": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "love": 1,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "fadogia_agrestis",
+          "turkesterone",
+          "nmnh"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars"
+        ],
+        "elements": [
+          "Fire",
+          "Earth"
+        ],
+        "qualities": [
+          "drive",
+          "libido",
+          "activation"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "b_complex",
+      "name": "B-Complex",
+      "aliases": [
+        "B Complex"
+      ],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "short",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "b_vitamins",
+        "brain_activation",
+        "methylation_driver"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "nervous": 1,
+          "brain": 1
+        },
+        "burdens": {
+          "nervous": 2,
+          "sleep": 2,
+          "gut": 1
+        }
+      },
+      "domains": {
+        "career": 1,
+        "study": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "nr",
+          "nmn",
+          "nmnh"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mercury"
+        ],
+        "elements": [
+          "Air",
+          "Fire"
+        ],
+        "qualities": [
+          "non_nad_energy",
+          "methylation"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "l_citrulline",
+      "name": "L-Citrulline",
+      "aliases": [
+        "Citrulline"
+      ],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "mixed_human_evidence",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 3,
+        "minimumGapHours": 24,
+        "persistenceClass": "short",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": false,
+      "classes": [
+        "circulation",
+        "physical_performance"
+      ],
+      "body": {
+        "benefits": {
+          "heart": 2,
+          "respiration": 1,
+          "muscles_back": 2
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "leisure": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "creatine_5g"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars"
+        ],
+        "elements": [
+          "Fire"
+        ],
+        "qualities": [
+          "circulation",
+          "pump",
+          "movement"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "ashwagandha",
+      "name": "Ashwagandha",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "excluded",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "excluded",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 0,
+        "maxUses7d": 0,
+        "minimumGapHours": 999,
+        "persistenceClass": "unknown_conservative",
+        "residualWindowHours": 0
+      },
+      "timeWindows": [
+        "night"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "adaptogen",
+        "liver_caution"
+      ],
+      "body": {
+        "benefits": {
+          "nervous": 2,
+          "sleep": 1
+        },
+        "burdens": {
+          "liver": 3,
+          "gut": 1,
+          "sleep": 1
+        }
+      },
+      "domains": {
+        "leisure": 1,
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "cortisol",
+          "calm"
+        ]
+      },
+      "notes": "Personal exclusion from automatic scheduling due to liver concern."
+    },
+    {
+      "id": "fadogia_agrestis",
+      "name": "Fadogia Agrestis",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "manual_only",
+      "evidenceClass": "manual_research",
+      "autoSelection": "manual_only",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 0,
+        "maxUses7d": 0,
+        "minimumGapHours": 999,
+        "persistenceClass": "unknown_conservative",
+        "residualWindowHours": 0
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "endocrine_caution",
+        "manual_research"
+      ],
+      "body": {
+        "benefits": {
+          "endocrine": 2,
+          "energy_mitochondria": 1
+        },
+        "burdens": {
+          "liver": 3,
+          "nervous": 2,
+          "endocrine": 2
+        }
+      },
+      "domains": {
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "black_maca",
+          "turkesterone"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars"
+        ],
+        "elements": [
+          "Fire"
+        ],
+        "qualities": [
+          "endocrine",
+          "research"
+        ]
+      },
+      "notes": "Manual research lane only; never automatic."
+    },
+    {
+      "id": "turkesterone",
+      "name": "Turkesterone",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "manual_only",
+      "evidenceClass": "manual_research",
+      "autoSelection": "manual_only",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 0,
+        "maxUses7d": 0,
+        "minimumGapHours": 999,
+        "persistenceClass": "unknown_conservative",
+        "residualWindowHours": 0
+      },
+      "timeWindows": [
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "endocrine_caution",
+        "anabolic",
+        "manual_research"
+      ],
+      "body": {
+        "benefits": {
+          "muscles_back": 2,
+          "endocrine": 1
+        },
+        "burdens": {
+          "liver": 2,
+          "endocrine": 2,
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "black_maca",
+          "fadogia_agrestis"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars"
+        ],
+        "elements": [
+          "Fire",
+          "Earth"
+        ],
+        "qualities": [
+          "training",
+          "research"
+        ]
+      },
+      "notes": "Manual research lane only; never automatic."
+    }
+  ]
+}

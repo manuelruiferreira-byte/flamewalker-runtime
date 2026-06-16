@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ACE Mind Canonical Supplement Registry v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "registryId",
+    "generatedAt",
+    "doctrine",
+    "bodySystems",
+    "lifeDomains",
+    "defaultConfig",
+    "supplements"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "ace_mind_supplement_registry.v1"
+    },
+    "registryId": {
+      "type": "string"
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "doctrine": {
+      "type": "string"
+    },
+    "bodySystems": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "lifeDomains": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "defaultConfig": {
+      "type": "object"
+    },
+    "supplements": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}
