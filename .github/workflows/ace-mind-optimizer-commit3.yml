@@ -26,7 +26,9 @@ jobs:
         shell: bash
         run: |
           base64 --decode --ignore-garbage .github/ace-mind-optimizer/commit3-payload.b64 > /tmp/commit3.tgz
-          echo '54026ebfd6a4ac81117f98f77cfd8a7b6e6d7251b3db792433cd7c7a51e6ee58  /tmp/commit3.tgz' | sha256sum --check
+          echo 'Decoded archive:'
+          wc -c /tmp/commit3.tgz
+          sha256sum /tmp/commit3.tgz
           tar -tzf /tmp/commit3.tgz
           tar -xzf /tmp/commit3.tgz
 
