@@ -1,0 +1,27 @@
+name: Validate ACE Mind Optimizer Commit 2
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+    paths:
+      - 'Jester-Intelligence/packages/engines/supplement/**'
+      - 'Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-layer-engines:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Validate canonical registry
+        run: node Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Validate orthogonal layer engines
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-layer-engines.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
