@@ -1,0 +1,51 @@
+name: Validate ACE Mind Optimizer Commit 6
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+    paths:
+      - 'Jester-Intelligence/ACED-Lifestyle/shared/optimizer/**'
+      - 'Jester-Intelligence/packages/engines/supplement/tests/validate-shadow-report.mjs'
+      - 'Jester-Intelligence/packages/engines/supplement/**'
+      - '.github/workflows/ace-mind-optimizer-commit6.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-shadow-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Validate source syntax
+        shell: bash
+        run: |
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/shadow-report.mjs
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-shadow-report.mjs
+
+      - name: Validate browser module imports fail-open in Node
+        run: node -e "import('./Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs').then(()=>console.log('shadow report import ok'))"
+
+      - name: Validate canonical registry
+        run: node Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Validate upstream layers
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-layer-engines.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Validate focused optimizer
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-individual-optimizer.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Run 28-day and 90-day audit
+        run: node Jester-Intelligence/packages/engines/supplement/tests/audit-optimizer-28-90.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Validate shadow context adapter
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-shadow-context-adapter.mjs
+
+      - name: Validate shadow report aggregation
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-shadow-report.mjs
