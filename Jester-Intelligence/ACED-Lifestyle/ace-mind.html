@@ -400,7 +400,7 @@ details[open].fw-to-details-card .fw-to-summary::before{content:'-'}
 <script type="application/json" id="agent-state">{}</script>
 <script>
 'use strict';
-const APP_VERSION='1.7.0-calibration-bridge-2026-06-16';
+const APP_VERSION='1.7.1-frequency-fastday-2026-06-16';
 const STORAGE_KEY='ace_mind_state_v214';
 const THEON_STORAGE_KEYS=['ace_mind_theon_state_v03_block_claim_engine','ace_mind_theon_state_v06','ace_mind_theon_state_v05','ace_mind_theon_state_v04','ace_mind_theon_state_v03'];
 const OLD_STORAGE_KEYS=['ace_mind_state_v21','ace_mind_v19_state','ace_mind_state_v20','ace_mind_v20_state'];
@@ -9904,6 +9904,228 @@ try{APP_VERSION=APP_VERSION;}catch(e){}
   }catch(e){}
   try{window.ACE_MIND_CALIBRATION_BRIDGE_VERSION=VERSION;state.natal=deep(FW_NATAL_PROFILE);saveState();}catch(e){}
   try{if(document.readyState!=='loading'&&typeof render==='function')render();}catch(e){}
+})();
+
+
+/* ============================================================
+   ACE Mind v25.3.8 FREQUENCY GOVERNOR + FAST DAY SELECTOR
+   Item-level weekly coverage for Cordyceps, Shilajit,
+   Spermidine and Spirulina. Fast partial day rendering.
+   ============================================================ */
+(function aceMindFrequencyFastDay2538(){
+  'use strict';
+  if(window.__ACE_MIND_FREQUENCY_FASTDAY_2538__)return;
+  window.__ACE_MIND_FREQUENCY_FASTDAY_2538__=true;
+  const VERSION='25.3.8-frequency-fastday';
+  const SPECIAL={
+    'Cordyceps':{target:2,max:3,cbr:'M',note:'AM only · physical-demand support · planned maximum 2 primary slots/week'},
+    'Shilajit':{target:2,max:2,cbr:'M',note:'AM with food · quality-verified mineral support · target 2×/week'},
+    'Spermidine':{target:2,max:3,cbr:'M',note:'With a meal · longevity research lane · target 2×/week'},
+    'Spirulina':{target:2,max:3,cbr:'M',note:'With food · nutrient support lane · target 2×/week'}
+  };
+  const SPECIAL_NAMES=Object.keys(SPECIAL);
+  const cache=new Map();
+  const rawDayCache=new Map();
+  const clamp=x=>Math.max(0,Math.min(1,Number(x)||0));
+  const iso=x=>String(x||activeDate||state.activeDate||brusselsISODate()).slice(0,10);
+  const clone=x=>JSON.parse(JSON.stringify(x));
+
+  // Cordyceps is a physical-demand operator, not a generic endocrine default.
+  try{
+    if(BLOCKS&&BLOCKS['6'])BLOCKS['6'].items=(BLOCKS['6'].items||[]).filter(it=>String(it[0])!=='Cordyceps');
+  }catch(e){}
+
+  // Add missing user-owned compounds to the canonical intelligence layer.
+  try{
+    SUPPLEMENT_INTEL['Spermidine']={pair:['meal','quiet longevity day','hydration'],improves:['cellular maintenance','recovery'],watch:['gut sensitivity','product dose'],avoid:['adding to an already crowded experimental stack']};
+    SUPPLEMENT_INTEL['Spirulina']={pair:['food','hydration','repair/mineral day'],improves:['nutrient density','protein support'],watch:['gut sensitivity','product purity'],avoid:['unverified algae products','using as a substitute for meals']};
+  }catch(e){}
+  try{
+    SUPPLEMENT_CARDS['Spermidine']={
+      elements:{Earth:.55,Water:.5,Metal:.4,Wood:.25,Fire:.05},
+      planets:{Saturn:.6,Jupiter:.45,Moon:.35,Mercury:.2},
+      numerology:{4:.6,6:.5,7:.55,9:.45,22:.35},
+      tones:{initiation:.2,radiance:.2,release:.55,dissolution:.6},
+      seals:{Earth:.55,Mirror:.5,Night:.45,Worldbridger:.4,Seed:.35},
+      colors:{White:.5,Blue:.45,Yellow:.35,Red:.05},
+      bodyCard:{supports:{liver:.3,gut:.2,nervous:.2,skin:.2,heart:.1},burdens:{gut:.15},hardContra:{gut:['red']}}
+    };
+    SUPPLEMENT_CARDS['Spirulina']={
+      elements:{Water:.6,Earth:.5,Wood:.4,Metal:.2,Fire:.15},
+      planets:{Moon:.55,Jupiter:.5,Sun:.3,Venus:.25},
+      numerology:{2:.5,3:.4,6:.55,9:.4},
+      tones:{initiation:.45,radiance:.35,release:.3,dissolution:.25},
+      seals:{Dragon:.5,Seed:.5,Earth:.45,Sun:.3,Hand:.3},
+      colors:{Blue:.55,Yellow:.35,Red:.2,White:.2},
+      bodyCard:{supports:{liver:.35,gut:.3,skin:.3,heart:.15,nervous:.1},burdens:{gut:.2},hardContra:{gut:['red'],liver:['red']}}
+    };
+    // Tighten Shilajit activation gates to match the two-day weekly doctrine.
+    if(SUPPLEMENT_CARDS['Shilajit']&&SUPPLEMENT_CARDS['Shilajit'].bodyCard){
+      SUPPLEMENT_CARDS['Shilajit'].bodyCard.hardContra=Object.assign({},SUPPLEMENT_CARDS['Shilajit'].bodyCard.hardContra||{},{gut:['red'],nervous:['red'],sleep:['red'],liver:['red']});
+    }
+  }catch(e){}
+  try{
+    FW_SUPP_TIMING['Spermidine']={planets:['Saturn','Jupiter','Moon'],bestParts:['morning','afternoon'],requiresFood:true,note:'structured longevity lane; use with a meal'};
+    FW_SUPP_TIMING['Spirulina']={planets:['Moon','Jupiter','Sun'],bestParts:['morning','afternoon'],requiresFood:true,note:'nutrient support fits meal timing and verified product quality'};
+  }catch(e){}
+
+  function addDays(date,n){
+    try{return fwAddDaysISO(date,n);}catch(e){const d=new Date(date+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);}
+  }
+  function weekStart(date){
+    const d=new Date(iso(date)+'T12:00:00Z');
+    const delta=(d.getUTCDay()+6)%7;
+    d.setUTCDate(d.getUTCDate()-delta);
+    return d.toISOString().slice(0,10);
+  }
+  function rawDay(date){
+    date=iso(date);
+    if(rawDayCache.has(date))return rawDayCache.get(date);
+    const bz=fwBaziDay(date),may=fwMayanDay(date),num=fwPersonalNums(date),ast=fwAstroPositions(date);
+    const conv=compileConvergence({
+      bazi:{element:bz.element,signature:bz.signature,pillar:bz.pillar},
+      mayan:{dreamspell:may.dreamspell,dsColor:may.dsColor,dsTone:may.dsTone,tzolkin:may.tzolkin},
+      astrology:ast,personalDay:num.pD||num.pd,iso:date
+    });
+    const body=bodySummaryForDate(date);
+    const out={date,bz,may,num,ast,conv,body};
+    rawDayCache.set(date,out);
+    if(rawDayCache.size>48)rawDayCache.delete(rawDayCache.keys().next().value);
+    return out;
+  }
+  function takenOn(date,name){
+    const log=state&&state.suppLog&&state.suppLog[iso(date)];
+    return !!(log&&Array.isArray(log.taken)&&log.taken.map(normSuppName).includes(normSuppName(name)));
+  }
+  function weekTaken(start,name){
+    const out=[];for(let i=0;i<7;i++){const d=addDays(start,i);if(takenOn(d,name))out.push(d);}return out;
+  }
+  function takenSignature(start){
+    const a=[];for(let i=0;i<7;i++){const d=addDays(start,i);const l=state&&state.suppLog&&state.suppLog[d];a.push(d+':'+((l&&l.taken)||[]).map(normSuppName).sort().join(','));}return a.join('|');
+  }
+  // Planetary weekday slots provide a fast symbolic frequency lattice.
+  // The daily four-system score still controls item status, and body veto remains sovereign.
+  const WEEKDAY_SLOTS={
+    'Spirulina':[0,3],     // Monday Moon, Thursday Jupiter
+    'Shilajit':[1,5],      // Tuesday Mars, Saturday Saturn
+    'Spermidine':[3,5],    // Thursday Jupiter, Saturday Saturn
+    'Cordyceps':[1,6]      // Tuesday Mars, Sunday Sun
+  };
+  function weeklyPlan(date){
+    const start=weekStart(date);
+    const key=start+'::'+takenSignature(start)+'::'+APP_VERSION;
+    if(cache.has(key))return cache.get(key);
+    const days=Array.from({length:7},(_,i)=>addDays(start,i));
+    const plan={start,days,slots:{},scores:{}};
+    SPECIAL_NAMES.forEach(name=>{
+      const p=SPECIAL[name],taken=weekTaken(start,name);
+      const need=Math.max(0,p.target-taken.length);
+      const candidates=(WEEKDAY_SLOTS[name]||[]).map(i=>days[i]).filter(d=>!taken.includes(d));
+      const picks=candidates.slice(0,need);
+      plan.slots[name]=new Set([...taken,...picks]);
+      plan.scores[name]=candidates.map((d,i)=>({date:d,score:1-i*.05,raw:1-i*.05}));
+    });
+    cache.set(key,plan);
+    if(cache.size>24)cache.delete(cache.keys().next().value);
+    return plan;
+  }
+  function frequencyStatus(name,date,plan,conv,body){
+    const p=SPECIAL[name];
+    let r={score:.35,status:'ALLOWED',label:'frequency-governed'};
+    try{r=scoreSupplementForDay(name,conv,body.states||{},p.cbr)||r;}catch(e){}
+    let bm={status:'ALLOWED',reasonTrail:[],net:0,scoreMap:{}};
+    try{bm=fwBMAnalyzeItem(name,'supplement',body)||bm;}catch(e){}
+    let status=bm.status||r.status||'ALLOWED';
+    if(r.status==='LOCKED'||r.bodyPermission===0)status='LOCKED';
+    else if(['ALLOWED','SUPPORT'].includes(status)&&Number(r.score||0)>=.58)status='HIGHLIGHT';
+    const rank=(plan.scores[name]||[]).findIndex(x=>x.date===date)+1;
+    const reasons=[...(r.reasonTrail||[]),...(bm.reasonTrail||[]),`Weekly frequency target ${p.target}; maximum ${p.max}.`,rank>0?`Weekly esoteric/body rank ${rank}.`:'Actual-use preservation slot.'];
+    return {name,status,score:Number(r.score||0),label:`Planned ${p.target}×/week · frequency governed`,reasonTrail:reasons,consensus:'ITEM_FREQUENCY_GOVERNOR',axisGate:{bodyScore:bm.scoreMap||{}}};
+  }
+  function applyFrequencyGovernance(d,g){
+    const date=iso(d&&d.id),plan=weeklyPlan(date),body=(g&&g.c&&g.c.body)||bodySummaryForDate(date);
+    const conv=rawDay(date).conv;
+    const original=(g&&g.block&&Array.isArray(g.block.items)?g.block.items:[]).map(it=>it.slice());
+    const baseHadCordyceps=original.some(it=>String(it[0])==='Cordyceps');
+    let items=original.filter(it=>!SPECIAL_NAMES.includes(String(it[0])));
+    const added=[];
+    SPECIAL_NAMES.forEach(name=>{
+      const scheduled=plan.slots[name]&&plan.slots[name].has(date);
+      const taken=takenOn(date,name);
+      let allowed=scheduled||taken;
+      if(name==='Cordyceps')allowed=allowed&&(Number(d&&d.block)===7||taken)&&(baseHadCordyceps||taken);
+      if(!allowed)return;
+      if(items.length>=15)return;
+      const p=SPECIAL[name];items.push([name,p.note,p.cbr]);added.push(name);
+    });
+    g.block=Object.assign({},g.block||{},{items,frequencyGoverned:true});
+    const old=((d&&d.blockAssignment&&d.blockAssignment.itemStatuses)||[]).filter(x=>!SPECIAL_NAMES.includes(String(x.name)));
+    const extras=added.map(name=>frequencyStatus(name,date,plan,conv,body));
+    d.blockAssignment=Object.assign({},d.blockAssignment||{}, {
+      itemStatuses:[...old,...extras],
+      frequencyGovernance:{version:VERSION,weekStart:plan.start,targets:Object.fromEntries(SPECIAL_NAMES.map(n=>[n,SPECIAL[n].target])),maxima:Object.fromEntries(SPECIAL_NAMES.map(n=>[n,SPECIAL[n].max])),scheduled:Object.fromEntries(SPECIAL_NAMES.map(n=>[n,Array.from(plan.slots[n]||[])])),activeItems:added}
+    });
+    g.blockAssignment=d.blockAssignment;
+    if(g.theonBlockSelection)g.theonBlockSelection.itemStatuses=d.blockAssignment.itemStatuses;
+    g.suppMode=String(g.suppMode||'CALIBRATED')+' · ITEM FREQUENCY GOVERNED';
+    return g;
+  }
+
+  // Cache the final calibrated projection. The earlier cache sat below later
+  // wrappers, so day changes still repeated the expensive block/practice work.
+  const finalGuidanceBase=deriveGuidanceV23;
+  const finalCache=new Map();
+  function recentSignature(date){
+    const a=[];for(let i=0;i<=10;i++){const d=addDays(date,-i);const sl=state&&state.suppLog&&state.suppLog[d];const bh=state&&state.blockHistory&&state.blockHistory[d];a.push(d+':'+((sl&&sl.taken)||[]).map(normSuppName).sort().join(',')+':B'+Number((bh&&bh.finalBlock)||(sl&&sl.block)||0));}return a.join('|');
+  }
+  function finalKey(d){
+    const date=iso(d&&d.id);let body='';try{body=AXES.map(a=>a+':'+bodyStatus(date,a)).join('|');}catch(e){}
+    return date+'::'+body+'::'+recentSignature(date)+'::'+APP_VERSION;
+  }
+  deriveGuidanceV23=function aceFinalGuidance2538(d){
+    const key=finalKey(d);
+    if(finalCache.has(key))return finalCache.get(key);
+    const g=applyFrequencyGovernance(d,finalGuidanceBase(d));
+    finalCache.set(key,g);
+    if(finalCache.size>64)finalCache.delete(finalCache.keys().next().value);
+    return g;
+  };
+  window.aceMindFrequencyCacheClear=function(){cache.clear();rawDayCache.clear();finalCache.clear();try{fwGuidanceCacheClearV2524();}catch(e){}};
+
+  function fastRenderSelectedDay(){
+    const track=document.getElementById('carouselTrack');
+    if(!track||!document.getElementById('grid-spades')){render();return;}
+    renderDayRail();
+    const d=day(),g=deriveGuidanceV23(d);
+    renderSpades(d,g);renderClubs(d,g);renderDiamonds(d,g);renderHearts(d,g);renderJester(d,g);renderTemporal(d,g);
+    try{renderDots();safeHeaderLogo();updateAgentState();}catch(e){}
+    try{aceFreezeSelectedBlock(iso(d.id),d,'setDay-fast-selected-date-lock');}catch(e){}
+  }
+  const originalSetDay2538=setDay;
+  setDay=function aceFastSetDay2538(dateOrIndex,opts){
+    opts=opts||{};
+    let nextDate;
+    if(typeof dateOrIndex==='number'){
+      const legacy=ANCHORS[validIndex(dateOrIndex)];nextDate=(legacy&&legacy.id)||brusselsISODate();activeIdx=validIndex(dateOrIndex);
+    }else{
+      nextDate=iso(dateOrIndex);const ai=ANCHORS.findIndex(d=>d.id===nextDate);activeIdx=ai>=0?ai:0;
+    }
+    if(nextDate===activeDate&&!opts.force)return;
+    activeDate=nextDate;state.activeDate=nextDate;state.activeIdx=activeIdx;
+    const rail=document.getElementById('dayRail');
+    if(rail){rail.querySelectorAll('.day-btn').forEach(b=>b.classList.toggle('active',String(b.getAttribute('onclick')||'').includes(nextDate)));}
+    try{if(typeof acePersistStateSoon==='function')acePersistStateSoon();else setTimeout(saveState,0);}catch(e){setTimeout(()=>{try{saveState();}catch(_){}},0);}
+    const run=()=>{
+      try{
+        fastRenderSelectedDay();
+        if(!opts.keepYearMapOpen)document.getElementById('dayRail')?.querySelector('.day-btn.active')?.scrollIntoView({inline:'center',block:'nearest',behavior:'auto'});
+      }catch(e){console.warn('Fast day render fallback',e);originalSetDay2538.call(this,nextDate,opts);}
+    };
+    if(typeof requestAnimationFrame==='function')requestAnimationFrame(run);else run();
+  };
+
+  try{state.frequencyGovernor={version:VERSION,policy:clone(SPECIAL)};saveState();}catch(e){}
+  try{if(document.readyState!=='loading'){window.aceMindFrequencyCacheClear();fastRenderSelectedDay();}}catch(e){}
 })();
 
 
