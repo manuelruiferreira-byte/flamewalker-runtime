@@ -3,7 +3,7 @@
   "name": "ACE Mind",
   "short_name": "ACE Mind",
   "description": "ACE Mind personal kernel for daily convergence, body gates, supplements, practices, AI handoff, governed patches, and trace memory.",
-  "start_url": "./ace-mind-trace.html?v=bootfix-20260615",
+  "start_url": "./ace-mind-trace.html?v=2538-live-20260616",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -12,13 +12,13 @@
   "categories": ["productivity", "health", "lifestyle"],
   "icons": [
     {
-      "src": "./shared/assets/logos/ace-mind.png?v=bootfix-20260615",
+      "src": "./shared/assets/logos/ace-mind.png?v=2538-live-20260616",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./shared/assets/logos/ace-mind.png?v=bootfix-20260615",
+      "src": "./shared/assets/logos/ace-mind.png?v=2538-live-20260616",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
