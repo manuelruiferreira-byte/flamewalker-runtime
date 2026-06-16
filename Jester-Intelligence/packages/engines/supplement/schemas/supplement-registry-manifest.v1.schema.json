@@ -1,0 +1,5 @@
+{
+  "title": "Superseded Supplement Registry Manifest Compatibility Stub",
+  "description": "Not referenced by the package manifest. Canonical cross-record policy lives in registry-policy.v1.json and is enforced by validate-registry.mjs.",
+  "type": "object"
+}
