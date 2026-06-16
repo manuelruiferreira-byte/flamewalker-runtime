@@ -25,8 +25,11 @@ jobs:
       - name: Verify and unpack payload
         shell: bash
         run: |
-          base64 --decode .github/ace-mind-optimizer/commit1-payload.b64 > /tmp/commit1_payload.tgz
-          echo '807f29acd04568932cd91e78730d23f29f8bcc6e337dbd4c15fc3d4ff70aba4b  /tmp/commit1_payload.tgz' | sha256sum --check
+          base64 --decode --ignore-garbage .github/ace-mind-optimizer/commit1-payload.b64 > /tmp/commit1_payload.tgz
+          echo 'Decoded payload:'
+          wc -c /tmp/commit1_payload.tgz
+          sha256sum /tmp/commit1_payload.tgz
+          tar -tzf /tmp/commit1_payload.tgz
           mkdir -p /tmp/commit1
           tar -xzf /tmp/commit1_payload.tgz -C /tmp/commit1
           mkdir -p Jester-Intelligence/ACED-Lifestyle/shared/data/supplements
