@@ -17,6 +17,7 @@ assert(Array.isArray(registry.supplements) && registry.supplements.length >= 30,
 
 const ids = new Set();
 const names = new Set();
+const frequencyTiers = new Set(['constitutional','governed','conditional','maintenance']);
 for (const s of registry.supplements) {
   assert(/^[a-z0-9_]+$/.test(s.id), `bad id ${s.id}`);
   assert(!ids.has(s.id), `duplicate id ${s.id}`);
@@ -25,6 +26,7 @@ for (const s of registry.supplements) {
   names.add(s.name.toLowerCase());
   assert(s.frequency.maxUses7d >= s.frequency.targetUses7d, `${s.id} max < target`);
   assert(s.frequency.minimumGapHours >= 0, `${s.id} negative gap`);
+  assert(frequencyTiers.has(s.frequency.priorityTier), `${s.id} missing/invalid frequency priority tier`);
   assert(Array.isArray(s.timeWindows) && s.timeWindows.length > 0, `${s.id} missing time window`);
   assert(s.body && s.body.benefits && s.body.burdens, `${s.id} missing body vectors`);
 }
@@ -35,13 +37,21 @@ for (const id of ['nr','nmn','nmnh']) {
   assert(byId[id].classes.includes('nad_booster'), `${id} not classed nad_booster`);
   assert(byId[id].pairing.requiredCompanions.includes('tmg'), `${id} missing TMG companion`);
   assert(byId[id].pairing.requiredCompanions.includes('magnesium_citrate'), `${id} missing Magnesium Citrate companion`);
+  assert(byId[id].frequency.priorityTier === 'constitutional', `${id} must be constitutional`);
+  assert(byId[id].frequency.rotationGroup === 'nad_booster', `${id} missing NAD rotation group`);
+  assert(byId[id].frequency.groupTargetUses7d === 5, `${id} NAD group target must be 5`);
 }
 assert(byId.ashwagandha.autoSelection === 'excluded', 'ashwagandha must be excluded');
 assert(byId.fadogia_agrestis.autoSelection === 'manual_only', 'fadogia must be manual_only');
 assert(byId.turkesterone.autoSelection === 'manual_only', 'turkesterone must be manual_only');
 assert(byId.cordyceps.domains.body >= 2, 'cordyceps must be a body/physical candidate');
+assert(byId.cordyceps.frequency.priorityTier === 'conditional', 'cordyceps must be conditional');
+assert(byId.shilajit.frequency.priorityTier === 'constitutional', 'shilajit must be constitutional');
+assert(byId.lions_mane.frequency.priorityTier === 'constitutional', "lion's mane must be constitutional");
 assert(byId.spermidine.frequency.targetUses7d === 2, 'spermidine target must be 2');
 assert(byId.spirulina.frequency.targetUses7d === 2, 'spirulina target must be 2');
+assert(byId.spermidine.frequency.priorityTier === 'governed', 'spermidine must be governed');
+assert(byId.spirulina.frequency.priorityTier === 'governed', 'spirulina must be governed');
 assert(byId.lions_mane.frequency.targetUses7d >= 3, "lion's mane target must be at least 3");
 assert(byId.l_citrulline, 'missing L-Citrulline');
 

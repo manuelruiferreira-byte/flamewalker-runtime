@@ -88,7 +88,8 @@
         "maxUses7d": 7,
         "minimumGapHours": 12,
         "persistenceClass": "short",
-        "residualWindowHours": 12
+        "residualWindowHours": 12,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning",
@@ -157,7 +158,8 @@
         "maxUses7d": 4,
         "minimumGapHours": 24,
         "persistenceClass": "medium",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning",
@@ -228,7 +230,8 @@
         "maxUses7d": 5,
         "minimumGapHours": 12,
         "persistenceClass": "medium",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "night",
@@ -298,7 +301,8 @@
         "maxUses7d": 4,
         "minimumGapHours": 12,
         "persistenceClass": "medium",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "night",
@@ -367,7 +371,10 @@
         "maxUses7d": 3,
         "minimumGapHours": 48,
         "persistenceClass": "short",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "constitutional",
+        "rotationGroup": "nad_booster",
+        "groupTargetUses7d": 5
       },
       "timeWindows": [
         "morning"
@@ -448,7 +455,10 @@
         "maxUses7d": 3,
         "minimumGapHours": 48,
         "persistenceClass": "short",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "constitutional",
+        "rotationGroup": "nad_booster",
+        "groupTargetUses7d": 5
       },
       "timeWindows": [
         "morning"
@@ -530,7 +540,10 @@
         "maxUses7d": 2,
         "minimumGapHours": 72,
         "persistenceClass": "short",
-        "residualWindowHours": 36
+        "residualWindowHours": 36,
+        "priorityTier": "constitutional",
+        "rotationGroup": "nad_booster",
+        "groupTargetUses7d": 5
       },
       "timeWindows": [
         "morning"
@@ -616,7 +629,8 @@
         "maxUses7d": 7,
         "minimumGapHours": 12,
         "persistenceClass": "short",
-        "residualWindowHours": 12
+        "residualWindowHours": 12,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning"
@@ -682,7 +696,8 @@
         "maxUses7d": 6,
         "minimumGapHours": 24,
         "persistenceClass": "tissue_saturation",
-        "residualWindowHours": 72
+        "residualWindowHours": 72,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning",
@@ -755,7 +770,8 @@
         "maxUses7d": 5,
         "minimumGapHours": 24,
         "persistenceClass": "medium",
-        "residualWindowHours": 48
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning"
@@ -824,7 +840,8 @@
         "maxUses7d": 5,
         "minimumGapHours": 24,
         "persistenceClass": "long_tail",
-        "residualWindowHours": 72
+        "residualWindowHours": 72,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning",
@@ -897,7 +914,8 @@
         "maxUses7d": 4,
         "minimumGapHours": 24,
         "persistenceClass": "medium",
-        "residualWindowHours": 48
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning"
@@ -963,7 +981,8 @@
         "maxUses7d": 3,
         "minimumGapHours": 48,
         "persistenceClass": "long_tail",
-        "residualWindowHours": 96
+        "residualWindowHours": 96,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning",
@@ -1031,7 +1050,8 @@
         "maxUses7d": 7,
         "minimumGapHours": 12,
         "persistenceClass": "short",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning",
@@ -1101,7 +1121,8 @@
         "maxUses7d": 7,
         "minimumGapHours": 12,
         "persistenceClass": "medium",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "night",
@@ -1169,7 +1190,8 @@
         "maxUses7d": 5,
         "minimumGapHours": 24,
         "persistenceClass": "medium",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning",
@@ -1235,7 +1257,8 @@
         "maxUses7d": 2,
         "minimumGapHours": 72,
         "persistenceClass": "medium",
-        "residualWindowHours": 72
+        "residualWindowHours": 72,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "night",
@@ -1303,7 +1326,8 @@
         "maxUses7d": 4,
         "minimumGapHours": 24,
         "persistenceClass": "medium",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning"
@@ -1371,7 +1395,8 @@
         "maxUses7d": 5,
         "minimumGapHours": 24,
         "persistenceClass": "medium",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "constitutional"
       },
       "timeWindows": [
         "morning"
@@ -1444,7 +1469,8 @@
         "maxUses7d": 7,
         "minimumGapHours": 8,
         "persistenceClass": "short",
-        "residualWindowHours": 8
+        "residualWindowHours": 8,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning",
@@ -1515,7 +1541,8 @@
         "maxUses7d": 4,
         "minimumGapHours": 24,
         "persistenceClass": "long_tail",
-        "residualWindowHours": 72
+        "residualWindowHours": 72,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning",
@@ -1585,7 +1612,8 @@
         "maxUses7d": 2,
         "minimumGapHours": 48,
         "persistenceClass": "short",
-        "residualWindowHours": 12
+        "residualWindowHours": 12,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "night"
@@ -1650,7 +1678,8 @@
         "maxUses7d": 2,
         "minimumGapHours": 48,
         "persistenceClass": "short",
-        "residualWindowHours": 12
+        "residualWindowHours": 12,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "night"
@@ -1715,7 +1744,8 @@
         "maxUses7d": 5,
         "minimumGapHours": 24,
         "persistenceClass": "medium",
-        "residualWindowHours": 48
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "afternoon",
@@ -1784,7 +1814,8 @@
         "maxUses7d": 6,
         "minimumGapHours": 12,
         "persistenceClass": "short",
-        "residualWindowHours": 12
+        "residualWindowHours": 12,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "afternoon",
@@ -1852,7 +1883,8 @@
         "maxUses7d": 4,
         "minimumGapHours": 24,
         "persistenceClass": "medium",
-        "residualWindowHours": 48
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "afternoon",
@@ -1919,7 +1951,8 @@
         "maxUses7d": 4,
         "minimumGapHours": 24,
         "persistenceClass": "medium",
-        "residualWindowHours": 48
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "afternoon"
@@ -1991,7 +2024,8 @@
         "maxUses7d": 4,
         "minimumGapHours": 24,
         "persistenceClass": "medium",
-        "residualWindowHours": 48
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "afternoon"
@@ -2062,7 +2096,8 @@
         "maxUses7d": 3,
         "minimumGapHours": 48,
         "persistenceClass": "long_tail",
-        "residualWindowHours": 72
+        "residualWindowHours": 72,
+        "priorityTier": "governed"
       },
       "timeWindows": [
         "afternoon",
@@ -2130,7 +2165,8 @@
         "maxUses7d": 3,
         "minimumGapHours": 48,
         "persistenceClass": "medium",
-        "residualWindowHours": 48
+        "residualWindowHours": 48,
+        "priorityTier": "governed"
       },
       "timeWindows": [
         "morning",
@@ -2198,7 +2234,8 @@
         "maxUses7d": 2,
         "minimumGapHours": 72,
         "persistenceClass": "medium",
-        "residualWindowHours": 72
+        "residualWindowHours": 72,
+        "priorityTier": "constitutional"
       },
       "timeWindows": [
         "morning"
@@ -2274,7 +2311,8 @@
         "maxUses7d": 3,
         "minimumGapHours": 48,
         "persistenceClass": "medium",
-        "residualWindowHours": 72
+        "residualWindowHours": 72,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning",
@@ -2340,7 +2378,8 @@
         "maxUses7d": 2,
         "minimumGapHours": 72,
         "persistenceClass": "medium",
-        "residualWindowHours": 48
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "afternoon",
@@ -2414,7 +2453,8 @@
         "maxUses7d": 2,
         "minimumGapHours": 72,
         "persistenceClass": "medium",
-        "residualWindowHours": 48
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "night",
@@ -2485,7 +2525,8 @@
         "maxUses7d": 2,
         "minimumGapHours": 72,
         "persistenceClass": "medium",
-        "residualWindowHours": 48
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "night"
@@ -2557,7 +2598,8 @@
         "maxUses7d": 3,
         "minimumGapHours": 24,
         "persistenceClass": "short",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "conditional"
       },
       "timeWindows": [
         "morning"
@@ -2636,7 +2678,8 @@
         "maxUses7d": 2,
         "minimumGapHours": 72,
         "persistenceClass": "medium",
-        "residualWindowHours": 48
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning"
@@ -2712,7 +2755,8 @@
         "maxUses7d": 4,
         "minimumGapHours": 24,
         "persistenceClass": "short",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning"
@@ -2786,7 +2830,8 @@
         "maxUses7d": 3,
         "minimumGapHours": 24,
         "persistenceClass": "short",
-        "residualWindowHours": 24
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning",
@@ -2854,7 +2899,8 @@
         "maxUses7d": 0,
         "minimumGapHours": 999,
         "persistenceClass": "unknown_conservative",
-        "residualWindowHours": 0
+        "residualWindowHours": 0,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "night"
@@ -2919,7 +2965,8 @@
         "maxUses7d": 0,
         "minimumGapHours": 999,
         "persistenceClass": "unknown_conservative",
-        "residualWindowHours": 0
+        "residualWindowHours": 0,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "morning"
@@ -2986,7 +3033,8 @@
         "maxUses7d": 0,
         "minimumGapHours": 999,
         "persistenceClass": "unknown_conservative",
-        "residualWindowHours": 0
+        "residualWindowHours": 0,
+        "priorityTier": "maintenance"
       },
       "timeWindows": [
         "afternoon"

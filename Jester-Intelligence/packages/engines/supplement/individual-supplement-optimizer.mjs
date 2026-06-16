@@ -5,9 +5,9 @@ import { mergeOptimizerConfig } from './optimizer-config.mjs';
 import { sha256Hex } from './sha256.mjs';
 
 const HOLD_PRIORITY = [
-  'critical data missing','body hold','personal maximum reached','min gap not reached',
+  'critical data missing','body hold','personal maximum reached','min gap not reached','residual active',
   'mandatory companion unavailable','pairing conflict','slot full','class full',
-  'burden ceiling','target at risk','below marginal threshold','trimmed for smallest set','low esoteric fit'
+  'burden ceiling','rotation sibling due','target at risk','below marginal threshold','trimmed for smallest set','low esoteric fit'
 ];
 
 function stableAtomList(atoms) {
@@ -104,8 +104,29 @@ function frequencyGate(atom, layers) {
     if (f.state === 'excluded' || f.state === 'manual_only') return `body hold (${member.id})`;
     if (Number(f.usesThisWindow ?? 0) >= Number(f.maxUses7d ?? Infinity)) return `personal maximum reached (${member.id})`;
     if (f.minGapMet === false || f.state === 'cooling_down') return `min gap not reached (${member.id})`;
+    if (f.state === 'residual') return `residual active (${member.id})`;
   }
   return null;
+}
+
+function rotationFairnessGate(atom, input) {
+  if (!(atom.classes ?? []).includes('nad_booster')) return null;
+  if (atom.frequency?.state !== 'complete') return null;
+
+  const dueSiblings = [...(input.registry?.supplements ?? [])]
+    .filter(s => s.id !== atom.primaryId && (s.classes ?? []).includes('nad_booster'))
+    .filter(s => {
+      const f = input.layers?.frequency?.[s.id];
+      const b = input.layers?.body?.[s.id];
+      if (!f || ['excluded', 'manual_only', 'cooling_down'].includes(f.state)) return false;
+      if (f.minGapMet === false) return false;
+      if (['hold', 'excluded'].includes(b?.label)) return false;
+      return Number(f.usesThisWindow ?? 0) < Number(f.targetUses7d ?? 0);
+    })
+    .map(s => s.id)
+    .sort();
+
+  return dueSiblings.length ? `rotation sibling due (${dueSiblings.join(', ')})` : null;
 }
 
 function pairingGate(atom, materializedMembers) {
@@ -141,6 +162,7 @@ export function admissible(atom, stack, input, configInput = {}) {
     criticalGate(atom),
     bodyGate(atom,input.layers),
     frequencyGate(atom,input.layers),
+    rotationFairnessGate(atom,input),
     pairingGate(atom,existing.members),
     classGate(candidate.members,config),
     burdenGate(candidate.members,config)
@@ -179,9 +201,65 @@ function bestAdmission(pool, stack, input, config) {
   return candidates[0] ?? null;
 }
 
-function greedyBuild(pool,input,config) {
-  const stack=[];
-  const admissions=new Map();
+function deadlineMetrics(atom, config) {
+  const f = atom.frequency ?? {};
+  const tier = f.priorityTier ?? atom.primary?.frequency?.priorityTier ?? 'maintenance';
+  const tierRank = Number(config.FREQUENCY_PRIORITY_RANK?.[tier] ?? 0);
+  const usesRemaining = Math.max(0, Number(f.targetUses7d ?? 0) - Number(f.usesThisWindow ?? 0));
+  const opportunities = Number.isFinite(Number(f.eligibleOpportunitiesRemaining))
+    ? Number(f.eligibleOpportunitiesRemaining)
+    : Number(f.daysLeftInWindow ?? 99);
+  const slack = opportunities - usesRemaining;
+  return { tier, tierRank, usesRemaining, opportunities, slack };
+}
+
+function conditionalNeedTriggered(atom, config) {
+  const tier = atom.frequency?.priorityTier ?? atom.primary?.frequency?.priorityTier ?? 'maintenance';
+  if (tier !== 'conditional') return false;
+  if (Number(atom.frequency?.usesThisWindow ?? 0) >= Number(atom.frequency?.maxUses7d ?? Infinity)) return false;
+  return atom.operational >= Number(config.CONDITIONAL_NEED_MIN_OPERATIONAL ?? 0.75)
+    && atom.esoteric.scalar >= Number(config.CONDITIONAL_NEED_MIN_ESOTERIC ?? 0.64);
+}
+
+function reservationProtected(atom, input, config) {
+  return deadlineProtected(atom) || conditionalNeedTriggered(atom, config);
+}
+
+function reserveDeadlines(pool, input, config) {
+  const stack = [];
+  const admissions = new Map();
+  const candidates = stableAtomList(pool)
+    .map(atom => {
+      const metrics = deadlineMetrics(atom, config);
+      const deadline = metrics.tierRank >= Number(config.DEADLINE_RESERVATION_MIN_RANK ?? 2)
+        && metrics.usesRemaining > 0
+        && metrics.slack <= 0;
+      const conditional = conditionalNeedTriggered(atom, config);
+      return { atom, metrics, deadline, conditional };
+    })
+    .filter(x => x.deadline || x.conditional)
+    .sort((a,b) =>
+      Number(b.deadline) - Number(a.deadline)
+      || b.metrics.tierRank - a.metrics.tierRank
+      || a.metrics.slack - b.metrics.slack
+      || Number(b.atom.frequency?.urgency ?? 0) - Number(a.atom.frequency?.urgency ?? 0)
+      || a.atom.sortKey.localeCompare(b.atom.sortKey)
+    );
+
+  for (const { atom, conditional } of candidates) {
+    const gate = admissible(atom, stack, input, config);
+    if (!gate.ok) continue;
+    const mu = quantize(stackQuality([...stack, atom], config) - stackQuality(stack, config), config.QUANTIZE);
+    admissions.set(atom.id, { marginalUtilityAtAdmission: mu, primaryReason: conditional ? 'operational' : 'frequency' });
+    stack.push(atom);
+    stack.sort((a,b)=>a.sortKey.localeCompare(b.sortKey));
+  }
+  return { stack, admissions };
+}
+
+function greedyBuild(pool,input,config,initialStack=[],initialAdmissions=new Map()) {
+  const stack=[...initialStack].sort((a,b)=>a.sortKey.localeCompare(b.sortKey));
+  const admissions=new Map(initialAdmissions);
   while (true) {
     const best=bestAdmission(pool,stack,input,config);
     if (!best || best.mu < Number(config.MIN_MARGINAL_UTILITY)) break;
@@ -199,6 +277,7 @@ function localRepair(stack,pool,input,config,admissions) {
     const currentQ=stackQuality(current,config);
     const swaps=[];
     for (const a of stableAtomList(current)) {
+      if (reservationProtected(a,input,config)) continue;
       for (const b of stableAtomList(pool.filter(x=>!current.some(y=>y.id===x.id)))) {
         const candidate=current.filter(x=>x.id!==a.id).concat(b).sort((x,y)=>x.sortKey.localeCompare(y.sortKey));
         const gate=admissibleStack(candidate,input,config);
@@ -220,7 +299,7 @@ function localRepair(stack,pool,input,config,admissions) {
 function admissibleStack(stack,input,config) {
   const members=materializeMembers(stack).members;
   for (const atom of stack) {
-    const gates=[criticalGate(atom),bodyGate(atom,input.layers),frequencyGate(atom,input.layers)].filter(Boolean);
+    const gates=[criticalGate(atom),bodyGate(atom,input.layers),frequencyGate(atom,input.layers),rotationFairnessGate(atom,input)].filter(Boolean);
     if (gates.length) return {ok:false,reason:gates[0]};
   }
   for (let i=0;i<members.length;i++) for (let j=i+1;j<members.length;j++) {
@@ -235,7 +314,8 @@ function admissibleStack(stack,input,config) {
 function deadlineProtected(atom) {
   const f=atom.frequency ?? {};
   const remaining=Math.max(0,Number(f.targetUses7d??0)-Number(f.usesThisWindow??0));
-  const slack=Number(f.daysLeftInWindow??99)-remaining;
+  const opportunities=Number.isFinite(Number(f.eligibleOpportunitiesRemaining))?Number(f.eligibleOpportunitiesRemaining):Number(f.daysLeftInWindow??99);
+  const slack=opportunities-remaining;
   return f.state==='due' && remaining>0 && slack<=0;
 }
 
@@ -245,7 +325,7 @@ function trimToSmallest(stack,input,config,admissions,trimmed) {
     const q=stackQuality(current,config);
     const options=[];
     for (const atom of stableAtomList(current)) {
-      if (deadlineProtected(atom)) continue;
+      if (reservationProtected(atom,input,config)) continue;
       const candidate=current.filter(x=>x.id!==atom.id);
       const gate=admissibleStack(candidate,input,config);
       if (!gate.ok) continue;
@@ -271,7 +351,7 @@ function reasonPriority(reason) {
 function finalOmissionReason(atom,stack,input,config,trimmed) {
   if (trimmed.has(atom.id)) return trimmed.get(atom.id);
   const f=atom.frequency ?? {};
-  if (f.state==='residual' || f.state==='complete') return null;
+  if ((f.state==='residual' || f.state==='complete') && !conditionalNeedTriggered(atom,config)) return null;
   const gate=admissible(atom,stack,input,config);
   if (!gate.ok) return [...(gate.allReasons??[gate.reason])].sort((a,b)=>reasonPriority(a)-reasonPriority(b)||a.localeCompare(b))[0];
   const mu=quantize(stackQuality([...stack,atom],config)-stackQuality(stack,config),config.QUANTIZE);
@@ -298,7 +378,8 @@ function selectedRecord(atom,stack,admission,slotPlan) {
 export function optimize(input) {
   const config=mergeOptimizerConfig(input?.config??{});
   const {atoms,excluded}=buildAtoms(input,config);
-  const {stack:greedy,admissions}=greedyBuild(atoms,input,config);
+  const reserved=reserveDeadlines(atoms,input,config);
+  const {stack:greedy,admissions}=greedyBuild(atoms,input,config,reserved.stack,reserved.admissions);
   const repaired=localRepair(greedy,atoms,input,config,admissions);
   const trimmed=new Map();
   const stack=trimToSmallest(repaired,input,config,admissions,trimmed).sort((a,b)=>a.sortKey.localeCompare(b.sortKey));
@@ -312,7 +393,8 @@ export function optimize(input) {
   for(const atom of atoms){
     if(stack.some(x=>x.id===atom.id)||selectedMemberIds.has(atom.primaryId))continue;
     const state=atom.frequency?.state;
-    if(state==='residual'||state==='complete')residual.push({id:atom.primaryId,reason:state});
+    const conditionalDemand=conditionalNeedTriggered(atom,config);
+    if((state==='residual'||state==='complete')&&!conditionalDemand)residual.push({id:atom.primaryId,reason:state});
     else held.push({id:atom.primaryId,reason:finalOmissionReason(atom,stack,input,config,trimmed)});
   }
   residual.sort((a,b)=>a.id.localeCompare(b.id));
