@@ -30,11 +30,13 @@ jobs:
           from pathlib import Path
           import re
           t=Path('Jester-Intelligence/ACED-Lifestyle/ace-mind.html').read_text(encoding='utf-8')
-          scripts='\n'.join(re.findall(r'<script[^>]*>(.*?)</script>',t,re.S))
+          tags=re.findall(r'<script([^>]*)>(.*?)</script>',t,re.S|re.I)
+          scripts='\n'.join(body for attrs,body in tags if 'application/json' not in attrs.lower())
           Path('/tmp/ace-mind.js').write_text(scripts,encoding='utf-8')
           required=["1.7.0-calibration-bridge-2026-06-16","time_local:'09:00'","universal_time:'08:00'","18°20′09″ Virgo","16°23′57″ Gemini","FAIL_CLOSED_SUPPORT_ONLY","Om Bum Budhaya Namaha · Om Budhaya Namaha"]
           missing=[x for x in required if x not in t]
           if missing: raise SystemExit('Missing invariants: '+repr(missing))
+          print('ACE Mind calibration invariants present')
           PY
           node --check /tmp/ace-mind.js
       - name: Commit repaired app to PR branch
