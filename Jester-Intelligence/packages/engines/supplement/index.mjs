@@ -3,3 +3,8 @@ export * from './esoteric-fit-engine.mjs';
 export * from './body-permission-engine.mjs';
 export * from './frequency-persistence-engine.mjs';
 export * from './pairing-compatibility-engine.mjs';
+export * from './optimizer-config.mjs';
+export * from './atom-builder.mjs';
+export * from './slot-planner.mjs';
+export * from './sha256.mjs';
+export * from './individual-supplement-optimizer.mjs';
