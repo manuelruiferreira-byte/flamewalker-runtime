@@ -1,0 +1,433 @@
+{
+  "schemaVersion": "ace_mind_supplement_registry.v1",
+  "registryId": "ace-mind-supplement-registry-v1-commit1",
+  "generatedAt": "2026-06-16",
+  "doctrine": "Canonical supplement registry for Individual Supplement Optimizer v1. It records personal scheduling governance and heuristic benefit/burden vectors. It does not make medical claims.",
+  "bodySystems": [
+    "heart",
+    "brain",
+    "nervous",
+    "sleep",
+    "liver",
+    "gut",
+    "immune",
+    "muscles_back",
+    "skin_connective",
+    "endocrine",
+    "energy_mitochondria",
+    "respiration",
+    "eyes"
+  ],
+  "lifeDomains": [
+    "career",
+    "study",
+    "social",
+    "leisure",
+    "love",
+    "creative",
+    "spirit",
+    "body",
+    "money"
+  ],
+  "defaultConfig": {
+    "slotCaps": {
+      "morning": 4,
+      "afternoon": 4,
+      "night": 3
+    },
+    "classCaps": {
+      "nad_booster": 1,
+      "brain_activation": 2,
+      "endocrine_caution": 1,
+      "immune_mushroom": 2,
+      "stimulant": 1
+    },
+    "labels": {
+      "autoSelection": [
+        "allowed",
+        "caution",
+        "manual_only",
+        "excluded"
+      ],
+      "permission": [
+        "clear",
+        "conditional",
+        "hold",
+        "excluded"
+      ],
+      "frequency": [
+        "due",
+        "optional",
+        "residual",
+        "cooling_down",
+        "complete",
+        "manual_only",
+        "excluded"
+      ]
+    }
+  },
+  "supplements": [
+    {
+      "id": "magnesium_citrate",
+      "name": "Magnesium Citrate",
+      "aliases": [
+        "Mag Citrate ½ dose"
+      ],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "personal_protocol",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 5,
+        "maxUses7d": 7,
+        "minimumGapHours": 12,
+        "persistenceClass": "short",
+        "residualWindowHours": 12
+      },
+      "timeWindows": [
+        "morning",
+        "flex"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "magnesium",
+        "nad_companion"
+      ],
+      "body": {
+        "benefits": {
+          "gut": 2,
+          "nervous": 1,
+          "muscles_back": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Mercury"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "hydration",
+          "buffer",
+          "nad_companion"
+        ]
+      },
+      "notes": "User protocol: required magnesium lane for NAD days; coordinate with other magnesium forms."
+    },
+    {
+      "id": "magnesium_malate",
+      "name": "Magnesium Malate",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "magnesium",
+        "energy_support"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "muscles_back": 2,
+          "brain": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "sleep": 1
+        }
+      },
+      "domains": {
+        "career": 1,
+        "study": 1,
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars",
+          "Mercury"
+        ],
+        "elements": [
+          "Earth",
+          "Fire"
+        ],
+        "qualities": [
+          "ATP",
+          "muscle",
+          "focus"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "magnesium_bisglycinate",
+      "name": "Magnesium Bisglycinate",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 5,
+        "minimumGapHours": 12,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "night",
+        "flex"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "magnesium",
+        "calm"
+      ],
+      "body": {
+        "benefits": {
+          "nervous": 2,
+          "sleep": 2,
+          "muscles_back": 1
+        },
+        "burdens": {
+          "sleep": 1
+        }
+      },
+      "domains": {
+        "leisure": 2,
+        "body": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Venus"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "calm",
+          "sleep",
+          "muscle"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "magnesium_taurate",
+      "name": "Magnesium Taurate",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 12,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "night",
+        "flex"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "magnesium",
+        "heart_calm"
+      ],
+      "body": {
+        "benefits": {
+          "heart": 2,
+          "nervous": 2,
+          "sleep": 1
+        },
+        "burdens": {
+          "sleep": 1
+        }
+      },
+      "domains": {
+        "body": 2,
+        "love": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Venus"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "heart",
+          "calm",
+          "downshift"
+        ]
+      },
+      "notes": ""
+    },
+    {
+      "id": "nr",
+      "name": "NR",
+      "aliases": [],
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "personal_protocol",
+      "autoSelection": "allowed",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "short",
+        "residualWindowHours": 24
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "nad_booster",
+        "methylation_driver",
+        "brain_activation"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 3,
+          "brain": 2,
+          "nervous": 1
+        },
+        "burdens": {
+          "nervous": 2,
+          "sleep": 2,
+          "gut": 1
+        }
+      },
+      "domains": {
+        "career": 2,
+        "study": 2,
+        "creative": 1,
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [
+          "tmg",
+          "magnesium_citrate"
+        ],
+        "preferredPairs": [
+          "coq10",
+          "omega_3"
+        ],
+        "avoidSameDay": [
+          "nmn",
+          "nmnh"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun",
+          "Mercury"
+        ],
+        "elements": [
+          "Fire",
+          "Air"
+        ],
+        "qualities": [
+          "vitality",
+          "cognition",
+          "cellular"
+        ]
+      },
+      "notes": ""
+    }
+  ]
+}
