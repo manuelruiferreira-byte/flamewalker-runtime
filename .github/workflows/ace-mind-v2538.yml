@@ -1,0 +1,47 @@
+name: Validate ACE Mind v25.3.8
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+    paths:
+      - '.github/ace-mind-v2538/trigger.txt'
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix-ace-frequency-speed
+          fetch-depth: 0
+      - name: Reconstruct patch
+        run: |
+          cat .github/ace-mind-v2538/patch.part.00 | base64 --decode | gzip -d > /tmp/patch.py
+          echo '5bc0b6ab1cc8cb03cb0dd7afcf68c87a05ea7e0cf6f2b0c02095c6d9ff84083c  /tmp/patch.py' | sha256sum -c
+      - name: Apply patch
+        run: python /tmp/patch.py
+      - name: Validate app
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('Jester-Intelligence/ACED-Lifestyle/ace-mind.html')
+          t=p.read_text(encoding='utf-8')
+          required=['1.7.1-frequency-fastday-2026-06-16','__ACE_MIND_FREQUENCY_FASTDAY_2538__','fastRenderSelectedDay',"time_local:'09:00'",'18°20′09″ Virgo','16°23′57″ Gemini']
+          missing=[x for x in required if x not in t]
+          if missing: raise SystemExit('Missing invariants: '+repr(missing))
+          tags=re.findall(r'<script([^>]*)>(.*?)</script>',t,re.S|re.I)
+          js='\n'.join(body for attrs,body in tags if 'application/json' not in attrs.lower())
+          Path('/tmp/ace.js').write_text(js,encoding='utf-8')
+          PY
+          node --check /tmp/ace.js
+      - name: Commit repair
+        run: |
+          git config user.name 'ACE Mind Governor'
+          git config user.email 'actions@users.noreply.github.com'
+          git add Jester-Intelligence/ACED-Lifestyle/ace-mind.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'fix: balance ACE Mind frequencies and speed day navigation'
+            git push origin HEAD:fix-ace-frequency-speed
+          fi
