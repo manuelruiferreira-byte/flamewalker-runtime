@@ -400,7 +400,7 @@ details[open].fw-to-details-card .fw-to-summary::before{content:'-'}
 <script type="application/json" id="agent-state">{}</script>
 <script>
 'use strict';
-const APP_VERSION='1.6.2-stability-bridge-2026-05-29';
+const APP_VERSION='1.7.0-calibration-bridge-2026-06-16';
 const STORAGE_KEY='ace_mind_state_v214';
 const THEON_STORAGE_KEYS=['ace_mind_theon_state_v03_block_claim_engine','ace_mind_theon_state_v06','ace_mind_theon_state_v05','ace_mind_theon_state_v04','ace_mind_theon_state_v03'];
 const OLD_STORAGE_KEYS=['ace_mind_state_v21','ace_mind_v19_state','ace_mind_state_v20','ace_mind_v20_state'];
@@ -413,42 +413,35 @@ const ASSETS={jesterLogo:'../shared/assets/logos/jester-intelligence.png',acedLo
 // It must never break daily supplement block locks or body veto governance.
 // ═══════════════════════════════════════════════════════════════════════════
 const FW_NATAL_PROFILE = {
-  profile_id:'flamewalker_astrodienst_d2gw_1972_08_15_1500_porto',
-  source:{provider:'Astrodienst',method:'Web Style / Placidus',zodiac:'tropical',confidence:'verified_from_uploaded_data_sheet',captured_at:'2026-05-27'},
-  birth:{name:'Manuel Ferreira',date:'1972-08-15',time_local:'15:00',universal_time:'14:00',place:'Porto, Portugal',coordinates:{lon:'8w36',lat:'41n11'},sidereal_time:'11:01:54'},
-  // Longitude uses 0° Aries = 0. Display strings preserve Astrodienst notation.
+  profile_id:'flamewalker_swiss_1972_08_15_0900_porto_tropical_placidus_v4',
+  source:{provider:'Swiss Ephemeris 2.10.03',method:'Tropical / Placidus',zodiac:'tropical',confidence:'exact_calculation_major_planets_nodes_angles_houses',captured_at:'2026-06-16',minor_body_policy:'Chiron and asteroids excluded from natal transit weighting until independently verified for 08:00 UT'},
+  birth:{name:'Manuel Rui Santos Ferreira',date:'1972-08-15',time_local:'09:00',universal_time:'08:00',place:'Porto, Portugal',coordinates:{lon:'8w36',lat:'41n11'},sidereal_time:'05:00:54'},
+  // Canonical 09:00 civil / 08:00 UT foundation. Longitude uses 0° Aries = 0.
   planets:{
-    sun:{label:'Sun',display:'22°49′15″ Leo',sign:'Leo',lon:142.8208,house:9,retrograde:false,declination:'13°54′41″ N'},
-    moon:{label:'Moon',display:'6°49′04″ Scorpio',sign:'Scorpio',lon:216.8178,house:11,retrograde:false,declination:'18°37′43″ S'},
-    mercury:{label:'Mercury',display:'10°47′20″ Leo ℞',sign:'Leo',lon:130.7889,house:9,retrograde:true,declination:'14°16′55″ N'},
-    venus:{label:'Venus',display:'7°36′26″ Cancer',sign:'Cancer',lon:97.6072,house:8,retrograde:false,declination:'19°20′32″ N'},
-    mars:{label:'Mars',display:'0°20′40″ Virgo',sign:'Virgo',lon:150.3444,house:9,retrograde:false,declination:'12°23′42″ N'},
-    jupiter:{label:'Jupiter',display:'28°38′11″ Sagittarius ℞',sign:'Sagittarius',lon:268.6364,house:1,retrograde:true,declination:'23°22′20″ S'},
-    saturn:{label:'Saturn',display:'18°35′01″ Gemini',sign:'Gemini',lon:78.5836,house:7,retrograde:false,declination:'21°24′17″ N'},
-    uranus:{label:'Uranus',display:'15°27′42″ Libra',sign:'Libra',lon:195.4617,house:11,retrograde:false,declination:'5°30′59″ S'},
-    neptune:{label:'Neptune',display:'2°29′12″ Sagittarius',sign:'Sagittarius',lon:242.4867,house:1,retrograde:false,declination:'19°03′03″ S'},
-    pluto:{label:'Pluto',display:'0°27′43″ Libra',sign:'Libra',lon:180.4619,house:10,retrograde:false,declination:'14°23′42″ N'},
-    meanNode:{label:'Mean Node',display:'24°34′57″ Capricorn ℞',sign:'Capricorn',lon:294.5825,house:2,retrograde:true,declination:'21°12′37″ S'},
-    trueNode:{label:'True Node',display:'25°40′56″ Capricorn ℞',sign:'Capricorn',lon:295.6822,house:2,retrograde:true,declination:'21°00′40″ S'},
-    chiron:{label:'Chiron',display:'17°04′31″ Aries ℞',sign:'Aries',lon:17.0753,house:5,retrograde:true,declination:'8°22′06″ N'},
-    // v25.2.3: extra Astrodienst objects now participate in transit-to-natal relevance.
-    ceres:{label:'Ceres',display:'23°03′22″ Virgo',sign:'Virgo',lon:173.0561,house:10,retrograde:false},
-    pallas:{label:'Pallas',display:'1°14′17″ Virgo',sign:'Virgo',lon:151.2381,house:9,retrograde:false},
-    juno:{label:'Juno',display:'17°45′02″ Libra',sign:'Libra',lon:197.7506,house:11,retrograde:false},
-    vesta:{label:'Vesta',display:'6°51′35″ Gemini',sign:'Gemini',lon:66.8597,house:7,retrograde:false},
-    pholus:{label:'Pholus',display:'3°52′06″ Pisces ℞',sign:'Pisces',lon:333.8683,house:3,retrograde:true}
+    sun:{label:'Sun',display:'22°34′50″ Leo',sign:'Leo',lon:142.5806,house:12,retrograde:false,declination:'13°59′23″ N'},
+    moon:{label:'Moon',display:'3°49′53″ Scorpio',sign:'Scorpio',lon:213.8315,house:2,retrograde:false,declination:'17°39′19″ S'},
+    mercury:{label:'Mercury',display:'10°51′39″ Leo ℞',sign:'Leo',lon:130.8609,house:11,retrograde:true,declination:'14°11′56″ N'},
+    venus:{label:'Venus',display:'7°23′37″ Cancer',sign:'Cancer',lon:97.3935,house:10,retrograde:false,declination:'19°20′07″ N'},
+    mars:{label:'Mars',display:'0°11′09″ Virgo',sign:'Virgo',lon:150.1857,house:12,retrograde:false,declination:'12°27′07″ N'},
+    jupiter:{label:'Jupiter',display:'28°38′39″ Sagittarius ℞',sign:'Sagittarius',lon:268.6441,house:4,retrograde:true,declination:'23°22′18″ S'},
+    saturn:{label:'Saturn',display:'18°33′50″ Gemini',sign:'Gemini',lon:78.5638,house:10,retrograde:false,declination:'21°24′12″ N'},
+    uranus:{label:'Uranus',display:'15°27′03″ Libra',sign:'Libra',lon:195.4507,house:2,retrograde:false,declination:'5°30′43″ S'},
+    neptune:{label:'Neptune',display:'2°29′12″ Sagittarius',sign:'Sagittarius',lon:242.4865,house:3,retrograde:false,declination:'19°03′02″ S'},
+    pluto:{label:'Pluto',display:'0°27′15″ Libra',sign:'Libra',lon:180.4542,house:1,retrograde:false,declination:'14°23′57″ N'},
+    meanNode:{label:'Mean Node',display:'24°35′45″ Capricorn ℞',sign:'Capricorn',lon:294.5957,house:5,retrograde:true,declination:'21°12′29″ S'},
+    trueNode:{label:'True Node',display:'25°41′23″ Capricorn ℞',sign:'Capricorn',lon:295.6896,house:5,retrograde:true,declination:'21°00′35″ S'}
   },
   angles:{
-    ascendant:{label:'Ascendant',display:'29°08′59″ Scorpio',sign:'Scorpio',lon:239.1497,declination:'19°58′19″ S'},
-    descendant:{label:'Descendant',display:'29°08′59″ Taurus',sign:'Taurus',lon:59.1497,declination:'19°58′19″ N'},
-    mc:{label:'MC',display:'14°13′44″ Virgo',sign:'Virgo',lon:164.2289,declination:'6°12′28″ N'},
-    ic:{label:'IC',display:'14°13′44″ Pisces',sign:'Pisces',lon:344.2289,declination:'6°12′28″ S'}
+    ascendant:{label:'Ascendant',display:'18°20′09″ Virgo',sign:'Virgo',lon:168.3360,declination:'4°36′49″ N'},
+    descendant:{label:'Descendant',display:'18°20′09″ Pisces',sign:'Pisces',lon:348.3360,declination:'4°36′49″ S'},
+    mc:{label:'MC',display:'16°23′57″ Gemini',sign:'Gemini',lon:76.3992,declination:'22°44′57″ N'},
+    ic:{label:'IC',display:'16°23′57″ Sagittarius',sign:'Sagittarius',lon:256.3992,declination:'22°44′57″ S'}
   },
   houses:{
-    h1:{display:'29°08′59″ Scorpio',lon:239.1497},h2:{display:'0°33′33″ Capricorn',lon:270.5592},h3:{display:'7°25′12″ Aquarius',lon:307.4200},h4:{display:'14°13′44″ Pisces',lon:344.2289},h5:{display:'14°55′58″ Aries',lon:14.9328},h6:{display:'9°07′22″ Taurus',lon:39.1228},
-    h7:{display:'29°08′59″ Taurus',lon:59.1497},h8:{display:'0°33′33″ Cancer',lon:90.5592},h9:{display:'7°25′12″ Leo',lon:127.4200},h10:{display:'14°13′44″ Virgo',lon:164.2289},h11:{display:'14°55′58″ Libra',lon:194.9328},h12:{display:'9°07′22″ Scorpio',lon:219.1228}
+    h1:{display:'18°20′09″ Virgo',lon:168.3360},h2:{display:'13°13′36″ Libra',lon:193.2267},h3:{display:'12°55′32″ Scorpio',lon:222.9256},h4:{display:'16°23′57″ Sagittarius',lon:256.3992},h5:{display:'20°25′15″ Capricorn',lon:290.4209},h6:{display:'21°28′10″ Aquarius',lon:321.4694},
+    h7:{display:'18°20′09″ Pisces',lon:348.3360},h8:{display:'13°13′36″ Aries',lon:13.2267},h9:{display:'12°55′32″ Taurus',lon:42.9256},h10:{display:'16°23′57″ Gemini',lon:76.3992},h11:{display:'20°25′15″ Cancer',lon:110.4209},h12:{display:'21°28′10″ Leo',lon:141.4694}
   },
-  engine_policy:{order:'daily_sky → natal_relevance_filter → body_veto → domains/practices/supplements → daily_lock',supplement_lock:'natal transits may explain or modulate warnings but never replace a frozen daily supplement block'}
+  engine_policy:{order:'verified_daily_sky → canonical_natal_relevance → fail_closed_body_permission → esoteric_fit → actual_use_rotation_tiebreak → daily_lock',supplement_lock:'body veto is sovereign; esoteric fit selects only among physiologically permitted blocks; rotation uses actual logged use only and cannot silently replace the field winner'}
 };
 
 const ANCHORS = [
@@ -1952,27 +1945,12 @@ function fwRefDays(isoDate) {
 // At/after 15:00 Brussels: personal day uses CURRENT calendar date.
 function fwHingeDate() {
   const bt = fwBrusselsTime();
-  const isPost = bt.h >= 15;
-  let personalIso = bt.isoDate;
-  if (!isPost) {
-    const d = new Date(bt.isoDate + 'T12:00:00Z');
-    d.setUTCDate(d.getUTCDate() - 1);
-    personalIso = d.toISOString().slice(0, 10);
-  }
-  const currentMins = bt.h * 60 + bt.m;
-  const hingeMins   = 15 * 60;
-  const minsToHinge = isPost
-    ? (24 * 60 - currentMins) + hingeMins
-    : hingeMins - currentMins;
-  const hh = Math.floor(minsToHinge / 60), mm = minsToHinge % 60;
   return {
-    worldIso:    bt.isoDate,
-    personalIso: personalIso,
-    isPost:      isPost,
-    label:       isPost
-      ? 'Post-hinge: current personal day active'
-      : 'Pre-hinge: carrying previous personal day',
-    countdown: `${hh}h ${mm}m until next hinge`
+    worldIso: bt.isoDate,
+    personalIso: bt.isoDate,
+    isPost: true,
+    label: 'Calendar-day numerology active',
+    countdown: 'Resets at Brussels midnight'
   };
 }
 
@@ -2684,7 +2662,7 @@ function fwPtrmFull(isoDate) {
     pY:nums.pY, pYRaw:nums.pYRaw, pM:nums.pM, pMRaw:nums.pMRaw,
     ptrm:`${raw}/${pd} ${lbl[pd]||'GROUNDING'}`,
     hingeAdjusted:personalIso!==worldIso,
-    hingeRule:'Before 15:00 Brussels use the previous personal date; at or after 15:00 use the selected/current date.'
+    hingeRule:'Calendar-day numerology. No unverified 15:00 hinge.'
   };
 }
 
@@ -3559,20 +3537,20 @@ function renderTemporal(d, g) {
   // Natal astrology
   html += '<span class="fw-to-label">Natal Astrology \u00b7 Astrodienst (15 Aug 1972, 15:00, Porto)</span>';
   const natal = [
-    ['Sun',         '22\u00b049\u2032 Leo \u00b7 9th House'],
-    ['Moon',        '6\u00b049\u2032 Scorpio \u00b7 2nd House'],
-    ['Mercury',     '10\u00b047\u2032 Leo Rx'],
-    ['Venus',       '7\u00b036\u2032 Cancer'],
-    ['Mars',        '0\u00b020\u2032 Virgo'],
-    ['Jupiter',     '28\u00b038\u2032 Sagittarius Rx'],
-    ['Saturn',      '18\u00b035\u2032 Gemini'],
-    ['Uranus',      '15\u00b027\u2032 Libra'],
-    ['Neptune',     '2\u00b029\u2032 Sagittarius'],
-    ['Pluto',       '0\u00b027\u2032 Libra'],
-    ['Chiron',      '17\u00b004\u2032 Aries Rx'],
-    ['True Node',   '25\u00b040\u2032 Capricorn'],
-    ['Ascendant',   '29\u00b008\u203259\u2033 Scorpio'],
-    ['MC',          '14\u00b013\u203244\u2033 Virgo']
+    ['Sun',         '22°34′50″ Leo · 12th House'],
+    ['Moon',        '3°49′53″ Scorpio · 2nd House'],
+    ['Mercury',     '10°51′39″ Leo Rx · 11th House'],
+    ['Venus',       '7°23′37″ Cancer · 10th House'],
+    ['Mars',        '0°11′09″ Virgo · 12th House'],
+    ['Jupiter',     '28°38′39″ Sagittarius Rx · 4th House'],
+    ['Saturn',      '18°33′50″ Gemini · 10th House'],
+    ['Uranus',      '15°27′03″ Libra · 2nd House'],
+    ['Neptune',     '2°29′12″ Sagittarius · 3rd House'],
+    ['Pluto',       '0°27′15″ Libra · 1st House'],
+    ['True Node',   '25°41′23″ Capricorn Rx · 5th House'],
+    ['Ascendant',   '18°20′09″ Virgo'],
+    ['MC',          '16°23′57″ Gemini'],
+    ['Minor bodies','Excluded until independently verified at 08:00 UT']
   ];
   natal.forEach(([p,v]) => {
     html += `<div class="fw-to-natal-row"><span class="fw-to-natal-planet">${e(p)}</span><span class="fw-to-natal-pos">${e(v)}</span></div>`;
@@ -9749,6 +9727,184 @@ try{APP_VERSION=APP_VERSION;}catch(e){}
   }catch(e){}
 })();
 
+
+
+/* ============================================================
+   ACE Mind v25.3.7 CALIBRATION BRIDGE
+   Canonical 09:00 natal foundation + fail-closed body permission.
+   Esoteric fit chooses among body-permitted blocks.
+   Rotation is actual-use history only, never a synthetic lattice.
+   ============================================================ */
+(function aceMindCalibrationBridge2537(){
+  'use strict';
+  if(window.__ACE_MIND_CALIBRATION_BRIDGE_2537__)return;
+  window.__ACE_MIND_CALIBRATION_BRIDGE_2537__=true;
+  const VERSION='25.3.7-calibration-bridge';
+  const clamp=x=>Math.max(0,Math.min(1,Number(x)||0));
+  const dateOnly=x=>String(x||activeDate||state.activeDate||brusselsISODate()).slice(0,10);
+  const deep=x=>JSON.parse(JSON.stringify(x));
+
+  // Canonical profile is always the runtime authority. Old imported 15:00 charts
+  // cannot silently re-enter through local state.
+  try{state.natal=deep(FW_NATAL_PROFILE);}catch(e){}
+  try{fwNatalProfile=function(){return deep(FW_NATAL_PROFILE);};}catch(e){}
+  try{
+    fwHingeDate=function(){const bt=fwBrusselsTime();return{worldIso:bt.isoDate,personalIso:bt.isoDate,isPost:true,label:'Calendar-day numerology active',countdown:'Resets at Brussels midnight'};};
+  }catch(e){}
+
+  function actualUseHistory(date,days){
+    const out=[];
+    for(let i=1;i<=days;i++){
+      const iso=fwAddDaysISO(date,-i);
+      const sl=state&&state.suppLog&&state.suppLog[iso];
+      if(sl&&Number(sl.block)&&Array.isArray(sl.taken)&&sl.taken.length){out.push({date:iso,block:Number(sl.block),source:'supplements-taken'});continue;}
+      const bh=state&&state.blockHistory&&state.blockHistory[iso];
+      if(bh&&Number(bh.finalBlock)&&/manual|body-support|supplement-taken/i.test(String(bh.frozenSource||'')))out.push({date:iso,block:Number(bh.finalBlock),source:bh.frozenSource||'manual'});
+    }
+    return out;
+  }
+  function takenLock(date){
+    const sl=state&&state.suppLog&&state.suppLog[date];
+    return sl&&Number(sl.block)&&Array.isArray(sl.taken)&&sl.taken.length?Number(sl.block):null;
+  }
+  function manualLock(date){
+    const bh=state&&state.blockHistory&&state.blockHistory[date];
+    if(!bh||!Number(bh.finalBlock))return null;
+    return /manual|body-support|supplement-taken/i.test(String(bh.frozenSource||''))?Number(bh.finalBlock):null;
+  }
+  function buildConvergence(date,d){
+    const bz=d&&d.bazi||fwBaziDay(date);
+    const may=d&&d.mayan||fwMayanDay(date);
+    const num=fwPersonalNums(date);
+    const ast=d&&d.astrology||fwAstroPositions(date);
+    return compileConvergence({bazi:{element:bz.element,signature:bz.signature,pillar:bz.pillar},mayan:{dreamspell:may.dreamspell,dsColor:may.dsColor,dsTone:may.dsTone,tzolkin:may.tzolkin},astrology:ast,personalDay:num.pD,iso:date});
+  }
+  function candidateTable(date,d,g){
+    const body=(g&&g.c&&g.c.body)||bodySummaryForDate(date);
+    const conv=buildConvergence(date,d);
+    const history=actualUseHistory(date,10);
+    const counts={1:0,2:0,3:0,4:0,5:0,6:0,7:0};history.forEach(x=>counts[x.block]=(counts[x.block]||0)+1);
+    const yesterday=history.find(x=>x.date===fwAddDaysISO(date,-1));
+    const pd=fwPersonalNums(date).pD;
+    const master={33:1,22:4,11:3,9:2}[pd]||null;
+    const rows=[];
+    for(let b=1;b<=7;b++){
+      const field=scoreBlockField(b,conv,body.states||{});
+      const bm=fwBMEvaluateBlock(b,body);
+      const itemCount=Math.max(1,bm.items.length);
+      const bodyFit=clamp(.64+(bm.net/(itemCount*8))-.20*bm.locked-.055*bm.caution+.035*bm.support);
+      const repeatCount=counts[b]||0;
+      const freshness=clamp(1-repeatCount/2-(yesterday&&yesterday.block===b?.25:0));
+      const rotationPenalty=(repeatCount>=2?.22:repeatCount*.055)+(yesterday&&yesterday.block===b?.07:0);
+      const masterBoost=master===b?.055:0;
+      const bodyHard=body.veto&&bm.compromised;
+      const rotationHard=repeatCount>=2;
+      const score=clamp(.76*field.blockScore+.19*bodyFit+.05*freshness+masterBoost-rotationPenalty-(bodyHard?.32:0));
+      rows.push({block:b,name:(BLOCKS[String(b)]||{}).name||('Block '+b),fieldScore:field.blockScore,themeMatch:field.themeMatch,topScore:field.topScore,bodyFit,bodyEval:bm,repeatCount,freshness,rotationPenalty,masterBoost,bodyHard,rotationHard,score});
+    }
+    return {body,conv,history,rows,pd,master};
+  }
+  function selectBlock(date,d,g){
+    const taken=takenLock(date),manual=manualLock(date);
+    const table=candidateTable(date,d,g);
+    const fieldWinner=table.rows.slice().sort((a,b)=>b.fieldScore-a.fieldScore)[0];
+    let selected=null,mode='ESOTERIC_FIT';
+    if(taken){selected=table.rows.find(x=>x.block===taken);mode='TAKEN_LOCK';}
+    else if(manual){selected=table.rows.find(x=>x.block===manual);mode='MANUAL_LOCK';}
+    else if(table.body.veto){
+      const safe=table.rows.filter(x=>!x.bodyHard&&x.bodyEval.locked===0).sort((a,b)=>b.bodyFit-a.bodyFit||b.fieldScore-a.fieldScore);
+      selected=safe[0]||table.rows.slice().sort((a,b)=>a.bodyEval.locked-b.bodyEval.locked||a.bodyEval.caution-b.bodyEval.caution||b.bodyFit-a.bodyFit||b.fieldScore-a.fieldScore)[0];
+      mode='FAIL_CLOSED_BODY_SUPPORT';
+    }else{
+      const admissible=table.rows.filter(x=>!x.bodyHard&&!x.rotationHard).sort((a,b)=>b.score-a.score||b.fieldScore-a.fieldScore);
+      selected=admissible[0]||table.rows.filter(x=>!x.bodyHard).sort((a,b)=>b.score-a.score)[0]||fieldWinner;
+      mode=selected.block===fieldWinner.block?'ESOTERIC_WINNER':'ESOTERIC_WITH_SAFETY_TIEBREAK';
+    }
+    return {selected,fieldWinner,table,mode};
+  }
+  function persistAssignment(date,sel,assignment){
+    if(takenLock(date)||manualLock(date))return;
+    state.blockHistory=state.blockHistory||{};
+    const old=state.blockHistory[date]||{};
+    state.blockHistory[date]=Object.assign({},old,assignment,{finalBlock:sel.block,block:sel.block,frozen:true,frozenSource:'calibration-bridge-v2537',lockVersion:VERSION,at:old.at||new Date().toISOString()});
+    try{state.natal=deep(FW_NATAL_PROFILE);state.version=APP_VERSION;localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}
+  }
+  function enforceBodyItemGate(d,g,body){
+    const items=(d.blockAssignment&&d.blockAssignment.itemStatuses)||[];
+    if(!body.veto)return items;
+    const cbrBy={};(g.block&&g.block.items||[]).forEach(it=>cbrBy[it[0]]=it[2]);
+    return items.map(x=>{
+      const cbr=cbrBy[x.name]||'L';let status=x.status;
+      const trail=[...(x.reasonTrail||[])];
+      if(cbr==='H'){status='LOCKED';trail.push('Fail-closed body veto: HIGH item locked.');}
+      else if(cbr==='M'&&!['SUPPORT','HIGHLIGHT','OPTIMAL'].includes(status)){status=body.governor==='RED'?'ORANGE':'CAUTION';trail.push('Fail-closed body veto: medium-load item downgraded.');}
+      return Object.assign({},x,{status,reasonTrail:trail,consensus:'BODY_PERMISSION_FIRST'});
+    });
+  }
+  function recalibrateBlock(d,g){
+    const date=dateOnly(d&&d.id);
+    const pick=selectBlock(date,d,g),s=pick.selected,b=BLOCKS[String(s.block)]||BLOCKS['1'];
+    const rank=pick.table.rows.slice().sort((a,b)=>b.score-a.score).map(x=>`B${x.block}:${x.score.toFixed(2)} field ${x.fieldScore.toFixed(2)} body ${x.bodyFit.toFixed(2)} use ${x.repeatCount}`).join(' · ');
+    const reason=`${pick.mode}: Block ${s.block} ${s.name}. Esoteric field ${s.fieldScore.toFixed(2)}; body permission ${s.bodyFit.toFixed(2)}; actual-use count ${s.repeatCount}/10. Original field winner B${pick.fieldWinner.block} ${pick.fieldWinner.fieldScore.toFixed(2)}. Rotation is an actual-history restraint only. Ranking ${rank}.`;
+    d.block=s.block;d.finalBlock=s.block;d.supplementBlock=s.block;d.blockReason=reason;
+    d.blockAssignment=Object.assign({},d.blockAssignment||{},{finalBlock:s.block,block:s.block,selectedBlock:s.block,blockName:s.name,reasonSummary:reason,selectionMode:pick.mode,esotericWinner:pick.fieldWinner.block,bodyPermission:s.bodyFit,actualUseCount:s.repeatCount,rotationDoctrine:'actual logged use only; tie-break/safety restraint',frozen:true,frozenSource:takenLock(date)?'supplement-taken-lock':manualLock(date)?'manual-body-support-override':'calibration-bridge-v2537',calibrationVersion:VERSION,candidates:pick.table.rows.map(x=>({block:x.block,fieldScore:x.fieldScore,bodyFit:x.bodyFit,score:x.score,repeatCount:x.repeatCount,bodyHard:x.bodyHard,rotationHard:x.rotationHard}))});
+    g.block=b;g.day=d;g.blockAssignment=d.blockAssignment;
+    g.theonBlockSelection=Object.assign({},g.theonBlockSelection||{},{finalBlock:s.block,block:s.block,status:pick.table.body.veto?'BODY_VETO':(s.score>=.62?'PASS':'COND-PASS'),score:s.score,reasonSummary:reason,selectionMode:pick.mode,esotericWinner:pick.fieldWinner.block,rotationDoctrine:'actual-use-only'});
+    g.suppMode=pick.table.body.veto?`BODY VETO · Block ${s.block} support-only`:`CALIBRATED · Block ${s.block} · ${pick.mode}`;
+    try{fwBMApplySupplementMatrix(d,g);}catch(e){}
+    const gated=enforceBodyItemGate(d,g,pick.table.body);
+    d.blockAssignment.itemStatuses=gated;d.blockAssignment.lockedHighItems=gated.filter(x=>x.status==='LOCKED').map(x=>x.name);
+    if(g.theonBlockSelection){g.theonBlockSelection.itemStatuses=gated;g.theonBlockSelection.lockedHighItems=d.blockAssignment.lockedHighItems;g.theonBlockSelection.blockLevelPermission=pick.table.body.veto?'FAIL_CLOSED_SUPPORT_ONLY':'PERMITTED';}
+    if(pick.table.body.veto)d.blockAssignment.blockLevelPermission='FAIL_CLOSED_SUPPORT_ONLY';
+    persistAssignment(date,s,d.blockAssignment);
+    return g;
+  }
+
+  const DOMAIN_PRACTICE={
+    money:{breath:'Coherent breath 5-5 · value before movement',movement:'Standing reset, then one 20-minute finance review',freq:'741 Hz precision corridor',acu:['ST36','LI4'],chakra:'Root · Solar Plexus'},
+    career:{breath:'Box breath 4-4-4-4 · execution gate',movement:'Posture reset, then one focused work sprint',freq:'741 Hz / 528 Hz precision corridor',acu:['GV20','LI4'],chakra:'Solar Plexus · Throat'},
+    love:{breath:'Coherent breath 5-5 · soften before contact',movement:'Open-posture walk · no chasing',freq:'639 Hz relational coherence',acu:['PC6','HT7'],chakra:'Heart · Sacral'},
+    social:{breath:'Coherent breath 5-5 · listen before signal',movement:'Light walk and relaxed shoulder opening',freq:'639 Hz relational coherence',acu:['PC6','HT7'],chakra:'Heart · Throat'},
+    health:{breath:'Extended exhale 4-8 · body permission first',movement:'Gentle mobility and recovery walk',freq:'432 Hz / 396 Hz recovery corridor',acu:['ST36','KI1'],chakra:'Root · Heart'},
+    creative:{breath:'4-4-6 creative downshift',movement:'Loose shoulder and hip flow, then one artifact sprint',freq:'528 Hz creation corridor',acu:['LV3','GV20'],chakra:'Sacral · Solar Plexus'},
+    study:{breath:'Alternate-nostril or box breath · attention gate',movement:'Precise posture reset, then one deep-study interval',freq:'741 Hz clarity corridor',acu:['GV20','LI4'],chakra:'Throat · Third Eye'},
+    spiritual:{breath:'Bhramari-Brahman humming · 7 gentle rounds',movement:'Still seated witness-awareness, then a slow grounding walk',freq:'432 Hz contemplative corridor',acu:['Yintang','PC6'],chakra:'Third Eye · Heart'},
+    leisure:{breath:'4-7-8 settling breath',movement:'Slow walk, gentle stretch, or floor rest with no performance target',freq:'432 Hz rest corridor',acu:['KI1','SP6'],chakra:'Root · Sacral'}
+  };
+  const ELEMENT_MOVEMENT={Wood:'Add lateral mobility and one clean beginning.',Fire:'Add a brief warm activation without overdriving.',Earth:'Keep feet grounded and movements slow and complete.',Metal:'Favor precision, posture, and clean closure.',Water:'Favor yin pacing, reserve, and longer pauses.'};
+  const DOMAIN_MANTRA={money:'I protect value and move only what is ready.',career:'I convert signal into one completed structure.',love:'I meet love without abandoning myself.',social:'I offer a clear signal and leave space for response.',health:'The body is sovereign. Coherence begins with permission.',creative:'I make one true artifact and release excess judgment.',study:'Attention becomes knowledge through disciplined return.',spiritual:'I witness the field without surrendering discernment.',leisure:'Rest is part of the architecture, not an escape from it.'};
+  function recalibratePractices(d,g){
+    const body=(g.c&&g.c.body)||bodySummaryForDate(d.id);
+    const top=(g.theonFullStack&&g.theonFullStack.ranked&&g.theonFullStack.ranked[0]);
+    const domain=(top&&top.domain)||Object.entries(g.life||{}).sort((a,b)=>Number(b[1].score||0)-Number(a[1].score||0))[0]?.[0]||'health';
+    const el=(d.bazi&&d.bazi.element)||'Earth';
+    if(body.veto){
+      g.breath='Extended exhale 4-8 · no breath retention';g.movement='Floor reset or gentle grounding walk · no heroic output';g.freq='174 Hz / 396 Hz recovery corridor';g.acu=['KI1','PC6'];g.chakra='Root · Heart';g.food='Warm simple meal, hydration, and low digestive load';
+      g.practiceReason=`Fail-closed body routing (${body.governor}). Esoteric convergence remains descriptive, not permission to increase load.`;
+    }else{
+      const p=DOMAIN_PRACTICE[domain]||DOMAIN_PRACTICE.health;
+      g.breath=p.breath;g.movement=p.movement+' '+(ELEMENT_MOVEMENT[el]||ELEMENT_MOVEMENT.Earth);g.freq=p.freq;g.acu=p.acu;g.chakra=p.chakra;
+      g.practiceReason=`Calibrated from canonical natal relevance, daily Mayan/BaZi/numerology/astrology convergence, leading ${domain} domain, ${el} element, and ${body.governor} body permission. Practices may repeat only when the convergence is materially similar.`;
+    }
+    const weekday=String(d.weekday||fwWeekdayName(d.id));
+    if(/^Wednesday$/i.test(weekday))g.mantra='Om Bum Budhaya Namaha · Om Budhaya Namaha';
+    else if(body.veto)g.mantra='I protect the vessel before I pursue the signal.';
+    else g.mantra=(DOMAIN_MANTRA[domain]||DOMAIN_MANTRA.health)+` ${el} moves through one coherent act.`;
+    g.practiceCalibration={version:VERSION,domain,element:el,bodyGovernor:body.governor,weekday,mantraSource:/^Wednesday$/i.test(weekday)?'Wednesday Mercury rule':body.veto?'body veto':'domain + element'};
+    return g;
+  }
+
+  try{
+    const base=deriveGuidanceV23;
+    deriveGuidanceV23=function calibratedGuidance2537(d){let g=base(d);g=recalibrateBlock(d,g);g=recalibratePractices(d,g);return g;};
+  }catch(e){console.warn('ACE calibration guidance wrapper failed',e);}
+  try{
+    const baseExport=exportState;
+    exportState=function(){state.natal=deep(FW_NATAL_PROFILE);state.calibrationBridge={version:VERSION,profile:FW_NATAL_PROFILE.profile_id,blockDoctrine:'body permission → esoteric fit → actual-use rotation tie-break → lock',minorBodies:'excluded until verified'};return baseExport.apply(this,arguments);};
+  }catch(e){}
+  try{window.ACE_MIND_CALIBRATION_BRIDGE_VERSION=VERSION;state.natal=deep(FW_NATAL_PROFILE);saveState();}catch(e){}
+  try{if(document.readyState!=='loading'&&typeof render==='function')render();}catch(e){}
+})();
 
 
 try{if(document.readyState!=='loading')render();}catch(e){}
