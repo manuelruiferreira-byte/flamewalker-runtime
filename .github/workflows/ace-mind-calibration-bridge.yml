@@ -1,0 +1,68 @@
+name: Apply ACE Mind Calibration Bridge
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ace-mind-calibration-bridge.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-ace-mind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconstruct governed patch
+        shell: bash
+        run: |
+          cat .github/ace-mind-calibration/patch.part.00 .github/ace-mind-calibration/patch.part.01 \
+            | base64 --decode | gzip --decompress > /tmp/patch_ace_repo.py
+          echo '5050717d2dd3331abe86c60ba5cee5abdd0bb2b9de2c1a55d2267d7381b512d8  /tmp/patch_ace_repo.py' | sha256sum --check
+
+      - name: Apply calibration bridge
+        run: python /tmp/patch_ace_repo.py
+
+      - name: Validate JavaScript and invariants
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('Jester-Intelligence/ACED-Lifestyle/ace-mind.html')
+          t=p.read_text(encoding='utf-8')
+          scripts='\n'.join(re.findall(r'<script[^>]*>(.*?)</script>',t,re.S))
+          Path('/tmp/ace-mind.js').write_text(scripts,encoding='utf-8')
+          required=[
+            "1.7.0-calibration-bridge-2026-06-16",
+            "time_local:'09:00'",
+            "universal_time:'08:00'",
+            "18°20′09″ Virgo",
+            "16°23′57″ Gemini",
+            "FAIL_CLOSED_SUPPORT_ONLY",
+            "Om Bum Budhaya Namaha · Om Budhaya Namaha"
+          ]
+          missing=[x for x in required if x not in t]
+          if missing: raise SystemExit('Missing invariants: '+repr(missing))
+          print('ACE Mind calibration invariants present')
+          PY
+          node --check /tmp/ace-mind.js
+
+      - name: Commit canonical ACE Mind repair
+        shell: bash
+        run: |
+          git config user.name 'ACE Mind Calibration Governor'
+          git config user.email 'actions@users.noreply.github.com'
+          git add Jester-Intelligence/ACED-Lifestyle/ace-mind.html
+          if git diff --cached --quiet; then
+            echo 'No changes to commit'
+          else
+            git commit -m 'fix(ace-mind): apply v25.3.7 calibration bridge'
+            git push origin main
+          fi
