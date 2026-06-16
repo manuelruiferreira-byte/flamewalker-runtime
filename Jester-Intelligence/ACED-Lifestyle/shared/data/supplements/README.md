@@ -19,6 +19,17 @@ This commit adds data only. It does not alter live ACE Mind recommendations, ret
 - Spermidine and Spirulina have governed weekly targets.
 - L-Citrulline is included as a circulation / physical-performance candidate.
 
+## Frequency priority tiers
+
+The registry distinguishes four scheduling tiers:
+
+- `constitutional`: personal protocol targets that the deadline scheduler protects when eligible, including the NAD 2/2/1 rotation, Shilajit, and Lion's Mane.
+- `governed`: explicit weekly targets that receive deadline protection after constitutional needs, including Spermidine and Spirulina.
+- `conditional`: demand-triggered candidates that may exceed their nominal target up to the maximum only when operational need and esoteric fit are both strong. Cordyceps uses this lane.
+- `maintenance`: ordinary targets that guide urgency but do not become hard reservations.
+
+The NAD family declares `rotationGroup: nad_booster` and `groupTargetUses7d: 5`. Individual targets remain NR 2, NMN 2, and NMN-H 1.
+
 ## Limitation
 
 Benefit and burden vectors are scheduling heuristics, not medical measurements. Unknown dose, medication interactions, product composition, and lab-dependent constraints must be handled conservatively by later engines.
