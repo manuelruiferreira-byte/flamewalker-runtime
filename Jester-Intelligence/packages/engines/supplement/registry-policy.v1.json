@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "expected_supplement_count": 42,
+  "time_caps": {"morning": 4, "afternoon": 4, "night": 3},
+  "groups": {
+    "nad_booster_triad": {
+      "members": ["nr", "nmn", "nmnh"],
+      "group_target_uses_7d": 5,
+      "max_members_per_day": 1,
+      "rotation_horizon_days": 21,
+      "required_companions": ["tmg", "magnesium_citrate"]
+    },
+    "night_calm_triad": {
+      "members": ["l_theanine", "melatonin", "valerian"],
+      "max_members_same_night": 1,
+      "selection_rule": "need_based_rotation"
+    },
+    "liver_cover": {
+      "members": ["nac", "milk_thistle"],
+      "target_covered_days_7d": 6,
+      "minimum_members_per_covered_day": 1
+    }
+  },
+  "doctrine": {
+    "selection_unit": "individual_supplement_or_mandatory_atom",
+    "bundle_authority": "legacy_only_until_shadow_migration",
+    "body_vectors": "governance_heuristics_not_clinical_measurements",
+    "esoteric_affinity": "symbolic_ranking_only_never_safety_permission",
+    "persistence": "conservative_scheduling_band_not_half_life_claim"
+  }
+}
