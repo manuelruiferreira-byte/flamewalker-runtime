@@ -6,10 +6,11 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const registryDir = path.join(here, "registry");
+const policy = JSON.parse(fs.readFileSync(path.join(here, "registry-policy.v1.json"), "utf8"));
 const errors = [];
 const fail = (message) => errors.push(message);
-const EXPECTED_COUNT = 42;
-const SCHEMA_VERSION = "1.0.0";
+const EXPECTED_COUNT = policy.expected_supplement_count;
+const SCHEMA_VERSION = policy.schema_version;
 const requiredAxes = ["heart","brain","nervous","sleep","liver","gut","immune","muscle_back","skin_connective","endocrine","energy_mito"];
 const requiredDomains = ["career","study","social","leisure","love","creative","spirit","body","money"];
 const statuses = new Set(["active","caution_sensitive","manual_research","personal_exclusion","unavailable"]);
@@ -52,28 +53,25 @@ for (const item of supplements) {
   }
 }
 
-for (const id of ["nr","nmn","nmnh"]) {
+const nadPolicy = policy.groups.nad_booster_triad;
+for (const id of nadPolicy.members) {
   const required = new Set(byId[id]?.pairing.required_companions || []);
-  if (!required.has("tmg") || !required.has("magnesium_citrate")) fail(`${id}: missing mandatory companions`);
+  for (const companion of nadPolicy.required_companions) if (!required.has(companion)) fail(`${id}: missing mandatory companion ${companion}`);
   if (!(byId[id]?.frequency.rotation_groups || []).includes("nad_booster_triad")) fail(`${id}: missing NAD rotation group`);
 }
+if (nadPolicy.group_target_uses_7d !== 5 || nadPolicy.max_members_per_day !== 1 || nadPolicy.rotation_horizon_days !== 21) fail("NAD group policy mismatch");
+
+const nightPolicy = policy.groups.night_calm_triad;
+for (const id of nightPolicy.members) if (!(byId[id]?.frequency.rotation_groups || []).includes("night_calm_triad")) fail(`${id}: missing night calm rotation group`);
+if (nightPolicy.max_members_same_night !== 1) fail("Night calm policy mismatch");
+
 if (byId.ashwagandha?.automation_policy !== "excluded") fail("Ashwagandha must remain excluded");
 for (const id of ["fadogia_agrestis","turkesterone"]) if (byId[id]?.automation_policy !== "manual_only") fail(`${id} must remain manual_only`);
 if (byId.shilajit?.frequency.target_uses_7d !== 2 || byId.shilajit?.frequency.max_uses_7d !== 2) fail("Shilajit must be exactly 2/week");
 if ((byId.lion_mane?.frequency.target_uses_7d || 0) < 3) fail("Lion's Mane must target at least 3/week");
 for (const id of ["spermidine","spirulina"]) if (byId[id]?.frequency.target_uses_7d !== 2) fail(`${id} must target 2/week`);
 if (byId.cordyceps?.frequency.target_mode !== "conditional") fail("Cordyceps must be conditional");
-for (const id of ["l_theanine","melatonin","valerian"]) if (!(byId[id]?.frequency.rotation_groups || []).includes("night_calm_triad")) fail(`${id}: missing night calm rotation group`);
 
-const policy = {
-  schema_version: SCHEMA_VERSION,
-  expected_count: EXPECTED_COUNT,
-  time_caps: { morning: 4, afternoon: 4, night: 3 },
-  nad_booster_group_target_uses_7d: 5,
-  nad_rotation_horizon_days: 21,
-  night_calm_max_members_same_night: 1,
-  liver_cover_target_days_7d: 6
-};
 const canonical = JSON.stringify({ policy, supplements: [...supplements].sort((a,b) => a.id.localeCompare(b.id)) });
 const hash = crypto.createHash("sha256").update(canonical).digest("hex");
 if (errors.length) {
