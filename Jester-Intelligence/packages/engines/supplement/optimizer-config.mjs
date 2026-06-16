@@ -18,6 +18,10 @@ export const OPTIMIZER_CONFIG = Object.freeze({
   MIN_MARGINAL_UTILITY: 0.15,
   QUALITY_MARGIN: 0.04,
   LOCAL_SWAP_ROUNDS: 2,
+  FREQUENCY_PRIORITY_RANK: Object.freeze({ constitutional: 3, governed: 2, conditional: 1, maintenance: 0 }),
+  DEADLINE_RESERVATION_MIN_RANK: 2,
+  CONDITIONAL_NEED_MIN_OPERATIONAL: 0.65,
+  CONDITIONAL_NEED_MIN_ESOTERIC: 0.64,
   SLOT_CAPS: Object.freeze({ morning: 4, afternoon: 4, night: 3 }),
   SLOT_ORDER: Object.freeze(['morning', 'afternoon', 'night']),
   CLASS_CAPS: Object.freeze({
