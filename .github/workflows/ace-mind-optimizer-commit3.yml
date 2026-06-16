@@ -5,51 +5,32 @@ on:
     types: [opened, synchronize, reopened]
     branches: [main]
     paths:
-      - '.github/ace-mind-optimizer/commit3-trigger.txt'
-      - '.github/ace-mind-optimizer/commit3-payload.b64'
+      - 'Jester-Intelligence/packages/engines/supplement/**'
+      - 'Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/**'
       - '.github/workflows/ace-mind-optimizer-commit3.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  unpack-test-commit:
+  validate-optimizer:
     runs-on: ubuntu-latest
     steps:
       - name: Check out PR branch
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
-          fetch-depth: 0
-
-      - name: Verify and unpack optimizer payload
-        shell: bash
-        run: |
-          base64 --decode --ignore-garbage .github/ace-mind-optimizer/commit3-payload.b64 > /tmp/commit3.tgz
-          echo 'Decoded archive:'
-          wc -c /tmp/commit3.tgz
-          sha256sum /tmp/commit3.tgz
-          tar -tzf /tmp/commit3.tgz
-          tar -xzf /tmp/commit3.tgz
 
       - name: Validate source syntax
         shell: bash
         run: |
           find Jester-Intelligence/packages/engines/supplement -name '*.mjs' -print0 | xargs -0 -n1 node --check
 
+      - name: Validate canonical registry
+        run: node Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
       - name: Validate upstream layers
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-layer-engines.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
 
       - name: Validate individual optimizer
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-individual-optimizer.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
-
-      - name: Commit validated optimizer to branch
-        shell: bash
-        run: |
-          git config user.name 'ACE Mind Optimizer Governor'
-          git config user.email 'actions@users.noreply.github.com'
-          git add Jester-Intelligence/packages/engines/supplement
-          if ! git diff --cached --quiet; then
-            git commit -m 'feat(ace-mind): add individual supplement optimizer'
-            git push origin HEAD:${{ github.head_ref }}
-          fi
