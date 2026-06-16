@@ -1,0 +1,52 @@
+name: Validate ACE Mind Optimizer Commit 1
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+    paths:
+      - '.github/ace-mind-optimizer/commit1-trigger.txt'
+      - '.github/ace-mind-optimizer/commit1-payload.b64'
+      - '.github/workflows/ace-mind-optimizer-commit1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  unpack-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Verify and unpack payload
+        shell: bash
+        run: |
+          base64 --decode .github/ace-mind-optimizer/commit1-payload.b64 > /tmp/commit1_payload.tgz
+          echo '807f29acd04568932cd91e78730d23f29f8bcc6e337dbd4c15fc3d4ff70aba4b  /tmp/commit1_payload.tgz' | sha256sum --check
+          mkdir -p /tmp/commit1
+          tar -xzf /tmp/commit1_payload.tgz -C /tmp/commit1
+          mkdir -p Jester-Intelligence/ACED-Lifestyle/shared/data/supplements
+          mkdir -p Jester-Intelligence/ACED-Lifestyle/scripts
+          cp /tmp/commit1/supplements/* Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/
+          cp /tmp/commit1/scripts/* Jester-Intelligence/ACED-Lifestyle/scripts/
+
+      - name: Validate supplement registry
+        shell: bash
+        run: |
+          node Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+          node -e "const r=require('./Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json'); if(r.supplements.length!==42) throw new Error('expected 42 supplements'); console.log('supplements', r.supplements.length)"
+
+      - name: Commit validated registry
+        shell: bash
+        run: |
+          git config user.name 'ACE Mind Registry Governor'
+          git config user.email 'actions@users.noreply.github.com'
+          git add Jester-Intelligence/ACED-Lifestyle/shared/data/supplements Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry.mjs
+          if ! git diff --cached --quiet; then
+            git commit -m 'feat(ace-mind): add canonical supplement registry and schemas'
+            git push origin HEAD:${{ github.head_ref }}
+          fi
