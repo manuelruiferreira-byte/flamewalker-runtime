@@ -1,0 +1,54 @@
+name: Validate ACE Mind Optimizer Commit 4
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+    paths:
+      - 'Jester-Intelligence/packages/engines/supplement/**'
+      - 'Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/**'
+      - 'Jester-Intelligence/ACED-Lifestyle/scripts/**supplement**'
+      - '.github/workflows/ace-mind-optimizer-commit4.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Apply idempotent frequency-tier migration
+        run: node Jester-Intelligence/ACED-Lifestyle/scripts/apply-supplement-frequency-tiers.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Validate canonical registry
+        run: node Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Validate source syntax
+        shell: bash
+        run: find Jester-Intelligence/packages/engines/supplement -name '*.mjs' -print0 | xargs -0 -n1 node --check
+
+      - name: Validate upstream layers
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-layer-engines.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Validate focused optimizer
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-individual-optimizer.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Run 28-day and 90-day audit
+        run: node Jester-Intelligence/packages/engines/supplement/tests/audit-optimizer-28-90.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Commit migrated registry to PR branch
+        shell: bash
+        run: |
+          git config user.name 'ACE Mind Audit Governor'
+          git config user.email 'actions@users.noreply.github.com'
+          git add Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'data(ace-mind): add optimizer frequency priority tiers'
+            git push origin HEAD:${{ github.head_ref }}
+          fi
