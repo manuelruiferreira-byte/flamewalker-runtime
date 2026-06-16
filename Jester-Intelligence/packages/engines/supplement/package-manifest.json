@@ -2,16 +2,15 @@
   "package": "@jester-intelligence/supplement-engine",
   "commit_scope": "registry_and_schemas_only",
   "schema_version": "1.0.0",
-  "registry_manifest": "supplement-registry.manifest.v1.json",
-  "shards": [
-    "registry/foundation-minerals.json",
-    "registry/nad-methylation.json",
-    "registry/repair-protection.json",
-    "registry/cognition-sleep.json",
-    "registry/botanicals-mushrooms.json",
-    "registry/longevity-training.json"
+  "registry_policy": "registry-policy.v1.json",
+  "registry_directory": "registry/",
+  "shard_discovery": "all sorted JSON files in registry directory",
+  "schemas": [
+    "schemas/supplement-profile.v1.schema.json",
+    "schemas/supplement-registry-shard.v1.schema.json"
   ],
   "validator": "validate-registry.mjs",
+  "expected_supplement_count": 42,
   "live_engine_changed": false,
   "legacy_bundle_authority_changed": false
 }
