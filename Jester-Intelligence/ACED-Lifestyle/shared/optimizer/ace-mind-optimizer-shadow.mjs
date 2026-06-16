@@ -11,6 +11,7 @@ import {
   snapshotToContext,
   compareLegacyToOptimizer
 } from './shadow-context-adapter.mjs';
+import { buildShadowReport } from './shadow-report.mjs';
 
 const VERSION='ace_mind_optimizer_shadow.v1';
 const DB_NAME='ACE_MIND_OPTIMIZER_SHADOW_DB';
@@ -20,6 +21,7 @@ const DISABLE_KEY='ace_mind_optimizer_shadow_disabled';
 const REGISTRY_URL=new URL('../data/supplements/supplement-registry.v1.json',import.meta.url);
 const STATE_KEYS=['ace_mind_state_v214','ace_mind_theon_state_v03_block_claim_engine','ace_mind_theon_state_v06','ace_mind_theon_state_v05','ace_mind_theon_state_v04','ace_mind_theon_state_v03'];
 let registryPromise=null, latestRecord=null, lastInputHash='', timer=null, running=false;
+let reportPromise=null, reportCache=null;
 
 function disabled(){
   try{return localStorage.getItem(DISABLE_KEY)==='1';}
@@ -94,6 +96,7 @@ async function persist(record){
 }
 
 async function getHistory(limit=30){
+  const safeLimit=Math.max(0,Math.min(5000,Number.isFinite(Number(limit))?Math.floor(Number(limit)):30));
   const db=await openDb();
   if(!db)return latestRecord?[latestRecord]:[];
   return new Promise((resolve,reject)=>{
@@ -102,11 +105,28 @@ async function getHistory(limit=30){
     const request=transaction.objectStore(STORE).index('createdAt').openCursor(null,'prev');
     request.onsuccess=()=>{
       const cursor=request.result;
-      if(cursor&&rows.length<limit){rows.push(cursor.value);cursor.continue();}
+      if(cursor&&rows.length<safeLimit){rows.push(cursor.value);cursor.continue();}
       else{db.close();resolve(rows);}
     };
     request.onerror=()=>{db.close();reject(request.error);};
   });
+}
+
+async function refreshReport(){
+  if(reportPromise)return reportPromise;
+  reportPromise=(async()=>{
+    try{
+      reportCache=buildShadowReport(await getHistory(5000));
+      return reportCache;
+    }catch(error){
+      console.warn('ACE optimizer shadow report failed open',error);
+      reportCache=buildShadowReport([]);
+      return reportCache;
+    }finally{
+      reportPromise=null;
+    }
+  })();
+  return reportPromise;
 }
 
 async function buildContext(){
@@ -155,6 +175,7 @@ async function run(reason='manual'){
     };
     latestRecord=record;
     lastInputHash=inputHash;
+    reportCache=null;
     await persist(record);
     window.dispatchEvent(new CustomEvent('ace-mind:optimizer-shadow',{detail:{date,comparison,optimizerHash:output.determinismHash}}));
     return record;
@@ -191,10 +212,12 @@ if(typeof window!=='undefined'){
     run,
     latest:()=>latestRecord,
     history:getHistory,
+    report:refreshReport,
     disable(){localStorage.setItem(DISABLE_KEY,'1');},
     enable(){localStorage.removeItem(DISABLE_KEY);schedule('enabled');}
   });
   installRenderHook();
+  window.addEventListener('ace-mind:optimizer-shadow',()=>{void refreshReport();});
   window.addEventListener('focus',()=>schedule('focus'));
   document.addEventListener('visibilitychange',()=>{
     if(document.visibilityState==='visible')schedule('visible');
