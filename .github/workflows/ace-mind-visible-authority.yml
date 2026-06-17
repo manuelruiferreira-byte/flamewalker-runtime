@@ -1,0 +1,61 @@
+name: Validate ACE Mind Visible Supplement Authority
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+    paths:
+      - 'Jester-Intelligence/ACED-Lifestyle/shared/optimizer/**'
+      - 'Jester-Intelligence/packages/engines/supplement/**'
+      - '.github/workflows/ace-mind-visible-authority.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-visible-authority:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Validate source syntax
+        shell: bash
+        run: |
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/live-context-adapter.mjs
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-model.mjs
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-renderer.mjs
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-live-context-adapter.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority.mjs
+
+      - name: Validate browser module imports in Node
+        run: node -e "import('./Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs').then(()=>console.log('visible authority import ok'))"
+
+      - name: Validate canonical registry
+        run: node Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Validate upstream layers
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-layer-engines.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Validate focused optimizer
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-individual-optimizer.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Run 28-day and 90-day audit
+        run: node Jester-Intelligence/packages/engines/supplement/tests/audit-optimizer-28-90.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Validate original shadow adapter
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-shadow-context-adapter.mjs
+
+      - name: Validate live day body and untick adapter
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-live-context-adapter.mjs
+
+      - name: Validate visible supplement authority
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority.mjs
+
+      - name: Prohibit legacy status words in visible authority
+        shell: bash
+        run: |
+          ! grep -R -E "HIGHLIGHT|SUPPORT|OPTIMAL" Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-*.mjs
