@@ -7,13 +7,11 @@ import {
   canonicalize,
   sha256Hex
 } from '../../../packages/engines/supplement/index.mjs';
-import {
-  snapshotToContext,
-  compareLegacyToOptimizer
-} from './shadow-context-adapter.mjs';
-import { buildShadowReport } from './shadow-report.mjs';
+import { compareLegacyToOptimizer } from './shadow-context-adapter.mjs';
+import { buildLiveContext, readVisibleSupplementNames } from './live-context-adapter.mjs';
+import { renderVisibleSupplements } from './optimizer-visible-renderer.mjs';
 
-const VERSION='ace_mind_optimizer_shadow.v1';
+const VERSION='ace_mind_optimizer_live.v1';
 const DB_NAME='ACE_MIND_OPTIMIZER_SHADOW_DB';
 const DB_VERSION=1;
 const STORE='runs';
@@ -21,7 +19,6 @@ const DISABLE_KEY='ace_mind_optimizer_shadow_disabled';
 const REGISTRY_URL=new URL('../data/supplements/supplement-registry.v1.json',import.meta.url);
 const STATE_KEYS=['ace_mind_state_v214','ace_mind_theon_state_v03_block_claim_engine','ace_mind_theon_state_v06','ace_mind_theon_state_v05','ace_mind_theon_state_v04','ace_mind_theon_state_v03'];
 let registryPromise=null, latestRecord=null, lastInputHash='', timer=null, running=false;
-let reportPromise=null, reportCache=null;
 
 function disabled(){
   try{return localStorage.getItem(DISABLE_KEY)==='1';}
@@ -32,8 +29,8 @@ function readAgentSnapshot(){
   try{
     const raw=document.getElementById('agent-state')?.textContent;
     const parsed=raw?JSON.parse(raw):null;
-    return parsed&&typeof parsed==='object'?parsed:null;
-  }catch{return null;}
+    return parsed&&typeof parsed==='object'?parsed:{};
+  }catch{return {};}
 }
 
 function brusselsDate(){
@@ -42,16 +39,40 @@ function brusselsDate(){
 }
 
 function readState(){
+  let fallback={};
   for(const key of STATE_KEYS){
     try{
       const raw=localStorage.getItem(key);
-      if(raw){
-        const value=JSON.parse(raw);
-        if(value&&typeof value==='object')return value;
-      }
+      if(!raw)continue;
+      const value=JSON.parse(raw);
+      if(!value||typeof value!=='object')continue;
+      if(!Object.keys(fallback).length)fallback=value;
+      if(value.suppLog&&typeof value.suppLog==='object')return value;
     }catch{}
   }
-  return {};
+  return fallback;
+}
+
+function readSelectedDay(snapshot={}){
+  try{
+    if(typeof window.day==='function'){
+      const value=window.day();
+      if(value&&typeof value==='object')return value;
+    }
+  }catch{}
+  return snapshot.day&&typeof snapshot.day==='object'
+    ? snapshot.day
+    : {id:snapshot.active_day||snapshot.activeDate||brusselsDate()};
+}
+
+function readBodySummary(date,snapshot={}){
+  try{
+    if(typeof window.bodySummaryForDate==='function'){
+      const value=window.bodySummaryForDate(date);
+      if(value&&typeof value==='object')return value;
+    }
+  }catch{}
+  return snapshot.body&&typeof snapshot.body==='object'?snapshot.body:{};
 }
 
 async function registry(){
@@ -91,7 +112,7 @@ async function persist(record){
     });
     db.close();
   }catch(error){
-    console.warn('ACE optimizer shadow storage skipped',error);
+    console.warn('ACE optimizer storage skipped',error);
   }
 }
 
@@ -112,31 +133,55 @@ async function getHistory(limit=30){
   });
 }
 
-async function refreshReport(){
-  if(reportPromise)return reportPromise;
-  reportPromise=(async()=>{
-    try{
-      reportCache=buildShadowReport(await getHistory(5000));
-      return reportCache;
-    }catch(error){
-      console.warn('ACE optimizer shadow report failed open',error);
-      reportCache=buildShadowReport([]);
-      return reportCache;
-    }finally{
-      reportPromise=null;
-    }
-  })();
-  return reportPromise;
-}
-
 async function buildContext(){
   const supplementRegistry=await registry();
   const snapshot=readAgentSnapshot();
   const state=readState();
+  const selectedDay=readSelectedDay(snapshot);
+  const date=String(selectedDay?.id||snapshot.active_day||snapshot.activeDate||brusselsDate()).slice(0,10);
+  const bodySummary=readBodySummary(date,snapshot);
+  const visibleNames=readVisibleSupplementNames();
   return {
     registry:supplementRegistry,
-    context:snapshotToContext(snapshot,supplementRegistry,state,brusselsDate())
+    context:buildLiveContext({
+      snapshot,
+      state,
+      registry:supplementRegistry,
+      day:selectedDay,
+      bodySummary,
+      visibleNames,
+      fallbackDate:brusselsDate()
+    })
   };
+}
+
+function buildDiagnostics(supplementRegistry,layers,output){
+  const selectedIds=new Set((output.selected??[]).flatMap(item=>item?.atom?.memberIds??[]));
+  return Object.fromEntries([...(supplementRegistry.supplements??[])]
+    .sort((a,b)=>a.id.localeCompare(b.id))
+    .map(item=>{
+      const eso=layers.esoteric?.[item.id]??{};
+      const body=layers.body?.[item.id]??{};
+      const frequency=layers.frequency?.[item.id]??{};
+      const pairing=layers.pairing?.[item.id]??{};
+      return [item.id,{
+        esotericLabel:eso.label??'Unscored',
+        esotericScalar:Number.isFinite(Number(eso.scalar))?Number(eso.scalar):null,
+        bodyPermission:body.label??'unknown',
+        frequencyState:frequency.state??'unknown',
+        frequencyUrgency:Number.isFinite(Number(frequency.urgency))?Number(frequency.urgency):null,
+        pairingState:selectedIds.has(item.id)?'complete':pairing.state??'unknown'
+      }];
+    }));
+}
+
+function applyVisibleAuthority(record,supplementRegistry){
+  if(disabled())return null;
+  try{return renderVisibleSupplements(record,supplementRegistry);}
+  catch(error){
+    console.error('ACE optimizer visible authority rejected output',error);
+    return null;
+  }
 }
 
 async function run(reason='manual'){
@@ -146,7 +191,10 @@ async function run(reason='manual'){
     const {registry:supplementRegistry,context}=await buildContext();
     const date=context.date;
     const inputHash=sha256Hex(JSON.stringify(canonicalize(context)));
-    if(inputHash===lastInputHash&&latestRecord)return latestRecord;
+    if(inputHash===lastInputHash&&latestRecord){
+      applyVisibleAuthority(latestRecord,supplementRegistry);
+      return latestRecord;
+    }
 
     const layers={
       esoteric:evaluateEsotericRegistry(supplementRegistry,context.dayField),
@@ -160,7 +208,7 @@ async function run(reason='manual'){
     const record={
       key:`${date}:${inputHash}`,
       version:VERSION,
-      mode:'read-only',
+      mode:'visible-authority',
       date,
       createdAt,
       reason,
@@ -168,6 +216,7 @@ async function run(reason='manual'){
       optimizerHash:output.determinismHash,
       legacy:context.legacy,
       comparison,
+      diagnostics:buildDiagnostics(supplementRegistry,layers,output),
       selected:output.selected,
       residual:output.residual,
       held:output.held,
@@ -175,12 +224,12 @@ async function run(reason='manual'){
     };
     latestRecord=record;
     lastInputHash=inputHash;
-    reportCache=null;
+    applyVisibleAuthority(record,supplementRegistry);
     await persist(record);
-    window.dispatchEvent(new CustomEvent('ace-mind:optimizer-shadow',{detail:{date,comparison,optimizerHash:output.determinismHash}}));
+    window.dispatchEvent(new CustomEvent('ace-mind:optimizer-live',{detail:{date,comparison,optimizerHash:output.determinismHash,authority:'individual'}}));
     return record;
   }catch(error){
-    console.warn('ACE optimizer shadow failed open',error);
+    console.error('ACE optimizer live authority failed',error);
     return null;
   }finally{
     running=false;
@@ -189,35 +238,46 @@ async function run(reason='manual'){
 
 function schedule(reason='render'){
   clearTimeout(timer);
-  timer=setTimeout(()=>run(reason),220);
+  timer=setTimeout(()=>run(reason),120);
 }
 
-function installRenderHook(){
-  const base=window.render;
-  if(typeof base!=='function'||base.__aceOptimizerShadowWrapped)return;
+function wrapAndSchedule(name,reason){
+  const base=window[name];
+  if(typeof base!=='function'||base.__aceOptimizerLiveWrapped)return;
   function wrapped(...args){
     const result=base.apply(this,args);
-    schedule('render');
+    schedule(reason);
     return result;
   }
-  wrapped.__aceOptimizerShadowWrapped=true;
-  wrapped.__aceOptimizerShadowBase=base;
-  window.render=wrapped;
+  wrapped.__aceOptimizerLiveWrapped=true;
+  wrapped.__aceOptimizerLiveBase=base;
+  window[name]=wrapped;
+}
+
+function installHooks(){
+  wrapAndSchedule('render','render');
+  wrapAndSchedule('setDay','day-change');
+  wrapAndSchedule('fastRenderSelectedDay','fast-day-change');
+  wrapAndSchedule('tickSupp','supplement-tick');
+  wrapAndSchedule('setBodyState','body-change');
 }
 
 if(typeof window!=='undefined'){
-  window.AceMindOptimizerShadow=Object.freeze({
+  const api=Object.freeze({
     version:VERSION,
-    mode:'read-only',
+    mode:'visible-authority',
     run,
     latest:()=>latestRecord,
     history:getHistory,
-    report:refreshReport,
-    disable(){localStorage.setItem(DISABLE_KEY,'1');},
+    disable(){
+      localStorage.setItem(DISABLE_KEY,'1');
+      if(typeof window.render==='function')window.render();
+    },
     enable(){localStorage.removeItem(DISABLE_KEY);schedule('enabled');}
   });
-  installRenderHook();
-  window.addEventListener('ace-mind:optimizer-shadow',()=>{void refreshReport();});
+  window.AceMindOptimizerShadow=api;
+  window.AceMindOptimizerLive=api;
+  installHooks();
   window.addEventListener('focus',()=>schedule('focus'));
   document.addEventListener('visibilitychange',()=>{
     if(document.visibilityState==='visible')schedule('visible');
