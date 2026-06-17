@@ -396,7 +396,7 @@ details[open].fw-to-details-card .fw-to-summary::before{content:'-'}
 <div class="modal" id="suppModal"><div class="modal-panel"><div class="modal-head"><div class="modal-title" id="suppTitle">Supplement</div><button class="x" onclick="closeModal('suppModal')">×</button></div><div id="suppContent"></div></div></div>
 <div class="handoff-gate" id="handoffGate"><div class="handoff-card"><div><div class="handoff-model-mark" id="handoffMark">AI</div><div class="handoff-name" id="handoffName">Opening</div></div></div></div>
 <div class="toast" id="toast"></div>
-<script type="application/json" id="agent-manifest">{"app": "ACE Mind", "doctrine": "Shell owns mechanics. ACE Mind owns activeDate, dynamic temporal day generation, body state, supplements, domains, grounding, AI handoff, Lens, Patch Console v2, governed reversible patches, and JSON patches. ANCHORS are legacy migration/reference only, not runtime authority.", "chambers": {"spades": "Overview", "clubs": "Supplements", "diamonds": "Grounding", "hearts": "Domains", "jester": "AI and data", "temporal": "Temporal Observatory"}, "runtime_authority": "state.activeDate + fwEngineDay(activeDate), with ACE Mind THEON v0.3 block-claim engine: TEL/MCP/CIL/PFP/OPI/OCF/CA/CBC/SBC/INV/UACI/CCDS/AARD/SIPR/PNH/CRIT/TEL-AEV/DTC/MCG/EAM/TAW", "allowed_patch_ops": ["set_active_chamber", "set_active_day", "set_active_date", "set_body_status", "set_body_plan", "set_body_log", "set_block_assignment", "set_temporal_config", "tick_supplement", "tick_practice", "set_note", "add_log_entry", "replace_state_subset", "clear_local_state"]}</script>
+<script type="application/json" id="agent-manifest">{"app": "ACE Mind", "doctrine": "Shell owns mechanics. ACE Mind owns activeDate, dynamic temporal day generation, body state, supplements, domains, grounding, AI handoff, Lens, Patch Console v2, governed reversible patches, and JSON patches. ANCHORS are legacy migration/reference only, not runtime authority. Supplement selection is owned exclusively by the individual supplement optimizer (ace-mind-optimizer-live-v2.mjs). There are no supplement blocks.", "chambers": {"spades": "Overview", "clubs": "Supplements", "diamonds": "Grounding", "hearts": "Domains", "jester": "AI and data", "temporal": "Temporal Observatory"}, "runtime_authority": "state.activeDate + fwEngineDay(activeDate), with individual supplement optimizer v2 as the sole clubs-chamber authority. Supplement selection is card-registry-driven, never block-based.", "supplement_authority": "individual-optimizer-v2", "allowed_patch_ops": ["set_active_chamber", "set_active_day", "set_active_date", "set_body_status", "set_body_plan", "set_body_log", "set_temporal_config", "tick_supplement", "tick_practice", "set_note", "add_log_entry", "replace_state_subset", "clear_local_state"]}</script>
 <script type="application/json" id="agent-state">{}</script>
 <script>
 'use strict';
@@ -1476,7 +1476,7 @@ function saveState(){
   try{JesterBridge.notifyStateChanged('save');}catch(e){}
 }
 function day(){return fwEngineDay(activeDate||brusselsISODate())}
-function blockFor(d){return BLOCKS[String(d.block)]||BLOCKS['1']}
+function blockFor(d){return BLOCKS[String(d.block)]||BLOCKS['1']||{name:'',theme:'',items:[]}}
 function fwFreezeBlock(date, assignment, source){
   date=String(date||activeDate||brusselsISODate()).slice(0,10);
   state.blockHistory=state.blockHistory||{};
@@ -1552,8 +1552,6 @@ function setBody(date,axis,val){
   AXES.forEach(a=>{snap[a]=bodyStatus(date,a);});
   state.bodyLog[date]={...snap,at:new Date().toISOString(),axis_changed:axis,value:val,mode:'point_in_time_snapshot'};
   state.logs.push({type:'body-set',date,axis,val,changed:result.changed,reason:'Manual body governor update for selected generated day',at:new Date().toISOString()});
-  // Recompute block after body veto changes
-  try{ const ed=fwEngineDay(date); if(ed.blockAssignment) fwFreezeBlock(date, ed.blockAssignment, 'body-update-preserve'); }catch(e){}
   saveState();
   render();
   toast(AXIS_LABEL[axis]+' '+String(val).toUpperCase());
@@ -1825,17 +1823,14 @@ function tickSupp(date,name){
   const ticked=!state.supp[k];
   state.supp[k]=ticked;
   if(!state.suppLog)state.suppLog={};
-  const ed=fwEngineDay(date);
-  const bl=BLOCKS[String(ed.block)]||BLOCKS['1'];
   const body=bodySummaryForDate(date);
   const taken=Object.keys(state.supp).filter(x=>x.startsWith(date+'__')&&state.supp[x]).map(x=>x.slice(date.length+2));
   const prev=state.suppLog[date]&&typeof state.suppLog[date]==='object'?state.suppLog[date]:{};
   const events=Array.isArray(prev.events)?prev.events.slice(-80):[];
-  const event={name,ticked,at:new Date().toISOString(),block:ed.block,blockName:bl.name,bodyGovernor:body.governor,blockAssignment:ed.blockAssignment||null};
+  const event={name,ticked,at:new Date().toISOString(),bodyGovernor:body.governor};
   events.push(event);
-  state.suppLog[date]={...prev,block:ed.block,blockName:bl.name,taken,events,lastEvent:event,reason:ed.blockReason,blockAssignment:ed.blockAssignment||null,at:event.at};
-  fwFreezeBlock(date, ed.blockAssignment || {finalBlock:ed.block, reasonSummary:ed.blockReason}, 'supplement-toggle');
-  state.logs.push({type:'supplement-toggle',date,name,ticked,block:ed.block,bodyGovernor:body.governor,at:event.at});
+  state.suppLog[date]={...prev,taken,events,lastEvent:event,at:event.at};
+  state.logs.push({type:'supplement-toggle',date,name,ticked,bodyGovernor:body.governor,at:event.at});
   saveState();
   render();
 }
@@ -6133,38 +6128,10 @@ function renderSpades(d,g){
   document.getElementById('grid-spades').innerHTML=panel(fieldHtml)+panel(bodyHtml)+renderDayNote(d);
 }
 function renderClubs(d,g){
-  const groups=groupSupps(g.block.items);
-  // Notes are rendered directly by Spades in the stable ACE Mind shell.
-  const locks=(d.blockAssignment?.lockedHighItems||[]);
-  const trail=d.blockAssignment?.reasonSummary||d.blockReason||'Dynamic temporal engine';
-  let theonBanner='';
-  try{
-    const tb=fwTheonBridge(d,(typeof fwPlanetaryHour==='function')?fwPlanetaryHour(fwActiveCoords().lat,fwActiveCoords().lon):null);
-    const vColor={APPROVE:'var(--green,#4ade80)',DOWNGRADE:'var(--yellow,#fbbf24)',BLOCK:'var(--orange,#fb923c)'}[tb.governor.verdict]||'var(--muted)';
-    theonBanner=`<div class="tiny" style="margin-top:6px;color:${vColor};font-weight:700">THEON Governor ${tb.governor.verdict} · S=${tb.stabilizer.S} ${tb.stabilizer.label}</div><div class="tiny" style="color:var(--muted)">${escapeHtml(tb.governor.action)}</div>`;
-  }catch(e){}
-  document.getElementById('grid-clubs').innerHTML=
-    panel(`<div class="focus-title">Block ${d.block} · ${escapeHtml(g.block.name)}</div><div class="small">${escapeHtml(g.block.theme)}</div><div class="warn" style="margin-top:10px">${escapeHtml(g.suppMode)}</div><div class="tiny" style="margin-top:6px;color:var(--muted)">${escapeHtml(trail)}</div>${locks.length?`<div class="tiny" style="margin-top:6px;color:var(--orange)">Locked HIGH: ${escapeHtml(locks.join(', '))}</div>`:''}${theonBanner}${fwBodyMatrixAlternativeBanner(d,g)}`)+
-    (()=>{
-      const statusMap={};
-      (d.blockAssignment?.itemStatuses||[]).forEach(s=>{statusMap[s.name]={status:s.status,score:s.score,label:s.label,reasonTrail:s.reasonTrail,consensus:s.consensus};});
-      window._aceStatusMap=statusMap;
-      const STATUS_CLASS={HIGHLIGHT:'highlight',SUPPORT:'support',OPTIMAL:'support',ALLOWED:'',YELLOW:'watch',CAUTION:'watch',ORANGE:'dim watch',RED:'dim',MISALIGNED:'dim',LOCKED:'dim watch locked'};
-      const STATUS_COLOR={HIGHLIGHT:'var(--emerald,#34d399)',SUPPORT:'var(--cyan,#22d3ee)',OPTIMAL:'var(--emerald,#34d399)',ALLOWED:'var(--blue,#60a5fa)',YELLOW:'var(--yellow,#fbbf24)',CAUTION:'var(--yellow,#fbbf24)',ORANGE:'var(--orange,#fb923c)',RED:'var(--muted)',MISALIGNED:'var(--muted)',LOCKED:'var(--red,#ef4444)'};
-      return Object.entries(groups).filter(([_,a])=>a.length).map(([name,arr])=>`<div class="supp-group"><div class="supp-head">${name}</div>${arr.map(it=>{
-        const st=statusMap[it[0]]||{status:'ALLOWED',score:null,label:null};
-        const cls=STATUS_CLASS[st.status]||'';
-        const suppName=escapeHtml(it[0]);
-        const suppNote=escapeHtml(it[1]);
-        const suppCbr=escapeHtml(it[2]);
-        const suppDate=escapeHtml(d.id);
-        const labelStr=st.label?`<div class="tiny" style="color:var(--muted);margin-top:1px">${escapeHtml(st.label)}</div>`:'';
-        const pnh=(typeof fwPnhClass==='function')?fwPnhClass(it[0]):{lambdaIndependent:false};
-        const pnhBadge=pnh.lambdaIndependent?`<span class="tiny" style="color:var(--blue,#60a5fa);margin-left:6px" title="${escapeHtml(pnh.note)}">⟲ foundation</span>`:'';
-        return `<div class="supp-item ${cls}" data-date="${suppDate}" data-supp="${suppName}" data-note="${suppNote}" data-cbr="${suppCbr}" onclick="openSupplementCard(this.dataset.supp,this.dataset.note,this.dataset.cbr)"><div class="check ${isTicked(d.id,it[0])?'checked':''}" onclick="event.stopPropagation();tickSupp(this.closest('.supp-item').dataset.date,this.closest('.supp-item').dataset.supp)"></div><div style="flex:1"><div class="supp-name">${suppName}${pnhBadge}</div><div class="supp-note">${suppNote}</div><div class="tiny" style="color:${STATUS_COLOR[st.status]||'var(--muted)'};margin-top:2px;font-weight:600">${st.status}</div>${labelStr}${(st.axisGate&&st.axisGate.bodyScore)?fwBMBadges(st.axisGate.bodyScore,FW_BODY_SCORE_AXES.filter(a=>g.c&&g.c.body&&g.c.body.states&&g.c.body.states[a]&&g.c.body.states[a]!=='green')):''}</div><div class="supp-side"><span class="tag ${suppCbr}">${suppCbr}</span><span class="fw-timing-badge" data-timing-name="${suppName}" data-timing-status="${escapeHtml(st.status||'ALLOWED')}" data-timing-cbr="${suppCbr}" title="Planetary timing gate">TIME</span></div></div>`;
-      }).join('')}</div>`).join('');
-    })();
-  try{fwUpdateTimingBadges();}catch(e){}
+  const chamber=document.getElementById('grid-clubs');
+  if(!chamber)return;
+  if(chamber.querySelector('[data-optimizer-live-v2]'))return;
+  chamber.innerHTML='<div class="card"><div class="small" style="color:var(--muted)">Loading supplement optimizer…</div></div>';
 }
 function renderDiamonds(d,g){
   const sc=v=>v!=null?` · ${v.toFixed(2)}`:'';
@@ -10146,6 +10113,6 @@ try{if(document.readyState!=='loading')render();}catch(e){}
   else setTimeout(applyCanonicalAceMind,0);
 })();
 </script>
-<script type="module" src="./shared/optimizer/ace-mind-optimizer-shadow.mjs"></script>
+<script type="module" src="./shared/optimizer/ace-mind-optimizer-live-v2.mjs"></script>
 </body>
 </html>

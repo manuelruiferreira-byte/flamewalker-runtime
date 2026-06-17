@@ -19,7 +19,7 @@ const DB_VERSION=1;
 const STORE='runs';
 const DISABLE_KEY='ace_mind_optimizer_live_v2_disabled';
 const OLD_DISABLE_KEY='ace_mind_optimizer_shadow_disabled';
-const REGISTRY_URL=new URL('../data/supplements/supplement-registry.v1.json?v=20260617-2',import.meta.url);
+const REGISTRY_URL=new URL('../data/supplements/supplement-registry.v2.json?v=20260617-3',import.meta.url);
 const STATE_KEYS=['ace_mind_state_v214','ace_mind_theon_state_v03_block_claim_engine','ace_mind_theon_state_v06','ace_mind_theon_state_v05','ace_mind_theon_state_v04','ace_mind_theon_state_v03'];
 const NAD_IDS=new Set(['nr','nmn','nmnh']);
 let registryPromise=null,latestRecord=null,lastInputHash='',timer=null,running=false,observer=null;
