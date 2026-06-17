@@ -15,9 +15,11 @@ const registryPath = process.argv[2]
   ?? new URL('../../../../../ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json', import.meta.url).pathname;
 const appPath = new URL('../../../../../ACED-Lifestyle/ace-mind.html', import.meta.url).pathname;
 const liveModulePath = new URL('../../../../../ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-live-v2.mjs', import.meta.url).pathname;
+const visibleRendererPath = new URL('../../../../../ACED-Lifestyle/shared/optimizer/optimizer-visible-renderer.mjs', import.meta.url).pathname;
 const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
 const appSource = fs.readFileSync(appPath, 'utf8');
 const liveSource = fs.readFileSync(liveModulePath, 'utf8');
+const visibleRendererSource = fs.readFileSync(visibleRendererPath, 'utf8');
 
 let passed = 0;
 let failed = 0;
@@ -148,7 +150,14 @@ assert(!/ace-mind-optimizer-shadow\.mjs/.test(appSource), 'ACE Mind does not loa
 assert(/supplement-registry\.v2\.json/.test(liveSource), 'Live optimizer uses the v2 card registry');
 assert(!/g\.block\.items|groupSupps\(/.test(liveSource), 'Live optimizer has no legacy block renderer');
 
-// 5. Regression tripwires for the exact failure that produced identical days.
+// 5. Visible block labels and controls must be removed whenever the optimizer renders.
+assert(/individual card optimizer/.test(visibleRendererSource), 'Visible renderer declares individual card optimizer authority');
+assert(/year-block-label/.test(visibleRendererSource), 'Visible renderer targets stale Year Map block labels for removal');
+assert(/alt-block-card/.test(visibleRendererSource), 'Visible renderer targets stale alternative-block controls for removal');
+assert(/\.remove\(\)/.test(visibleRendererSource), 'Visible renderer physically removes stale block UI nodes');
+assert(!/Block \$\{model\.|supplement block/.test(visibleRendererSource), 'Visible renderer emits no supplement block label');
+
+// 6. Regression tripwires for the exact failure that produced identical days.
 assert(/currentDate\(\)/.test(liveSource), 'Live optimizer reads the selected date');
 assert(/inputHash/.test(liveSource), 'Live optimizer hashes the complete live context');
 assert(/date-race/.test(liveSource), 'Live optimizer rejects selected-day races');
