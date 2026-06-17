@@ -79,5 +79,9 @@ export function renderVisibleSupplements(record,registry,root=document.getElemen
   root.dataset.optimizerAuthority='individual';
   root.dataset.optimizerDate=model.date;
   bindRows(root,model.date);
+  const dayMeta=document.getElementById('dayMeta');
+  if(dayMeta)dayMeta.textContent=`${model.date} · individual card optimizer`;
+  const note=document.getElementById('dayNoteSpades');
+  if(note)note.placeholder='Log observations for today: what worked, what to tune, how the guidance felt, body signals, and anything worth reviewing later.';
   return model;
 }
