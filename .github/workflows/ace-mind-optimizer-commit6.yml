@@ -1,4 +1,4 @@
-name: Validate ACE Mind Optimizer Commit 6
+name: Validate ACE Mind Optimizer Visible Authority
 
 on:
   pull_request:
@@ -6,7 +6,6 @@ on:
     branches: [main]
     paths:
       - 'Jester-Intelligence/ACED-Lifestyle/shared/optimizer/**'
-      - 'Jester-Intelligence/packages/engines/supplement/tests/validate-shadow-report.mjs'
       - 'Jester-Intelligence/packages/engines/supplement/**'
       - '.github/workflows/ace-mind-optimizer-commit6.yml'
 
@@ -14,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  validate-shadow-report:
+  validate-visible-authority:
     runs-on: ubuntu-latest
     steps:
       - name: Check out PR branch
@@ -25,12 +24,13 @@ jobs:
       - name: Validate source syntax
         shell: bash
         run: |
-          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/shadow-report.mjs
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-model.mjs
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-renderer.mjs
           node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs
-          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-shadow-report.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority.mjs
 
-      - name: Validate browser module imports fail-open in Node
-        run: node -e "import('./Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs').then(()=>console.log('shadow report import ok'))"
+      - name: Validate browser module imports in Node
+        run: node -e "import('./Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs').then(()=>console.log('visible authority import ok'))"
 
       - name: Validate canonical registry
         run: node Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
@@ -49,3 +49,11 @@ jobs:
 
       - name: Validate shadow report aggregation
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-shadow-report.mjs
+
+      - name: Validate visible supplement authority
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority.mjs
+
+      - name: Prohibit legacy status words in visible authority
+        shell: bash
+        run: |
+          ! grep -R -E "HIGHLIGHT|SUPPORT|OPTIMAL" Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-*.mjs
