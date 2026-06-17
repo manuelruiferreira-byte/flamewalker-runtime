@@ -1,11 +1,10 @@
-/* ACE Mind Service Worker v25.0.7
-   Live-authority cache seal.
-   Canonical launch file: ./ace-mind-trace.html
-   Runtime app file remains: ./ace-mind.html
-   Critical optimizer modules always bypass the HTTP cache.
+/* ACE Mind Service Worker v25.0.8
+   Native runtime authority restored.
+   Canonical launch file: ./ace-mind.html
+   Purpose: purge stale ACE Mind caches and keep critical supplement assets fresh.
 */
 
-const ACE_MIND_SW_VERSION = "25.0.7-live-authority-v2";
+const ACE_MIND_SW_VERSION = "25.0.8-native-authority";
 const CACHE_PREFIX = "ace-mind-cache-";
 
 self.addEventListener("install", event => {
@@ -32,19 +31,19 @@ self.addEventListener("fetch", event => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  const criticalOptimizerAsset =
+  const criticalAsset =
     url.pathname.includes("/shared/optimizer/") ||
     url.pathname.includes("/packages/engines/supplement/") ||
     url.pathname.endsWith("/supplement-registry.v1.json");
 
-  if (criticalOptimizerAsset) {
+  if (criticalAsset) {
     event.respondWith(fetch(request, { cache: "no-store" }));
   }
 });
 
 self.addEventListener("notificationclick", event => {
   event.notification.close();
-  const targetUrl = "./ace-mind-trace.html?v=2538-live-authority-v2-20260617";
+  const targetUrl = "./ace-mind.html?v=2539-native-authority-20260617";
 
   event.waitUntil(
     (async () => {
@@ -55,7 +54,7 @@ self.addEventListener("notificationclick", event => {
 
       for (const client of allClients) {
         try {
-          if (client.url.includes("ace-mind-trace.html") || client.url.includes("ace-mind.html")) {
+          if (client.url.includes("ace-mind.html")) {
             await client.focus();
             return;
           }
@@ -84,10 +83,10 @@ self.addEventListener("message", event => {
     event.source?.postMessage({
       type: "ACE_MIND_SW_VERSION",
       version: ACE_MIND_SW_VERSION,
-      canonical: "./ace-mind-trace.html",
+      canonical: "./ace-mind.html",
       runtime: "./ace-mind.html",
       trace_store: "./shared/js/ace-mind-trace-store-v0-1.js",
-      cache_mode: "optimizer-network-no-store"
+      cache_mode: "critical-assets-network-no-store"
     });
   }
 });
