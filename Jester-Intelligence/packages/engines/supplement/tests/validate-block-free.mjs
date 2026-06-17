@@ -1,5 +1,5 @@
 // validate-block-free.mjs
-// Tests that no block-based selection path remains in the optimizer
+// Constitutional test: ACE Mind supplements are card-registry-driven and block-free.
 
 import fs from 'node:fs';
 import {
@@ -12,8 +12,12 @@ import {
 } from '../index.mjs';
 
 const registryPath = process.argv[2]
-  ?? new URL('../../../../../ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json', import.meta.url).pathname;
+  ?? new URL('../../../../../ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json', import.meta.url).pathname;
+const appPath = new URL('../../../../../ACED-Lifestyle/ace-mind.html', import.meta.url).pathname;
+const liveModulePath = new URL('../../../../../ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-live-v2.mjs', import.meta.url).pathname;
 const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+const appSource = fs.readFileSync(appPath, 'utf8');
+const liveSource = fs.readFileSync(liveModulePath, 'utf8');
 
 let passed = 0;
 let failed = 0;
@@ -29,8 +33,39 @@ function assert(condition, message) {
   }
 }
 
+function functionBody(source, name) {
+  const marker = `function ${name}`;
+  const start = source.indexOf(marker);
+  if (start < 0) return '';
+  const brace = source.indexOf('{', start);
+  if (brace < 0) return '';
+  let depth = 0;
+  let quote = '';
+  let escaped = false;
+  for (let i = brace; i < source.length; i++) {
+    const ch = source[i];
+    if (quote) {
+      if (escaped) escaped = false;
+      else if (ch === '\\') escaped = true;
+      else if (ch === quote) quote = '';
+      continue;
+    }
+    if (ch === '"' || ch === "'" || ch === '`') {
+      quote = ch;
+      continue;
+    }
+    if (ch === '{') depth++;
+    if (ch === '}') {
+      depth--;
+      if (depth === 0) return source.slice(start, i + 1);
+    }
+  }
+  return '';
+}
+
 const greenBody = Object.fromEntries(registry.bodySystems.map(axis => [axis, 'green']));
 const NAD_BOOSTERS = ['nr', 'nmn', 'nmnh'];
+const BLOCK_KEYS = ['block', 'blockId', 'selectedBlock', 'blockAssignment', 'blockName', 'blockNumber'];
 
 function dayField(scalar = 0.78, tags = ['sun', 'mercury', 'fire', 'focus', 'vitality']) {
   return {
@@ -58,9 +93,8 @@ function inputFor(day, histories = {}, body = greenBody) {
 
 function hasBlockField(obj, depth = 0) {
   if (!obj || typeof obj !== 'object' || depth > 10) return false;
-  const blockKeys = ['block', 'blockId', 'selectedBlock', 'blockAssignment', 'blockName', 'blockNumber'];
   for (const key of Object.keys(obj)) {
-    if (blockKeys.includes(key)) return true;
+    if (BLOCK_KEYS.includes(key)) return true;
     if (Array.isArray(obj[key])) {
       for (const item of obj[key]) {
         if (hasBlockField(item, depth + 1)) return true;
@@ -72,69 +106,58 @@ function hasBlockField(obj, depth = 0) {
   return false;
 }
 
-// --- Test 1: Run optimizer with all-green body state, assert no block fields ---
+// 1. Optimizer outputs must never contain supplement-block fields.
 const baseDay = '2026-06-16';
 const baseOutput = optimize(inputFor(baseDay));
-
-assert(!hasBlockField(baseOutput), 'Output has no block/blockId/selectedBlock/blockAssignment fields');
-
-// Check selected items specifically
+assert(!hasBlockField(baseOutput), 'Optimizer output has no supplement-block fields');
 for (const rec of baseOutput.selected) {
-  const blockKeyCheck = ['block', 'blockId', 'selectedBlock', 'blockAssignment', 'blockName', 'blockNumber'];
-  for (const key of blockKeyCheck) {
+  for (const key of BLOCK_KEYS) {
     assert(!(key in rec), `Selected record for ${rec.atom.primaryId} has no '${key}' field`);
     assert(!(key in (rec.atom ?? {})), `Selected atom for ${rec.atom.primaryId} has no '${key}' field`);
   }
 }
 
-// --- Test 2: Run optimizer with 7 different days, assert output varies ---
+// 2. Seven consecutive days must not collapse into one repeated result.
 const DAYS_7 = Array.from({ length: 7 }, (_, i) => addDays(baseDay, i));
-const outputs7 = [];
-
-for (const day of DAYS_7) {
-  const out = optimize(inputFor(day));
-  outputs7.push(out);
-  // Confirm no block fields on each day
-  assert(!hasBlockField(out), `Day ${day} output has no block fields`);
+const outputs7 = DAYS_7.map(day => optimize(inputFor(day)));
+for (let i = 0; i < outputs7.length; i++) {
+  assert(!hasBlockField(outputs7[i]), `Day ${DAYS_7[i]} output has no supplement-block fields`);
 }
-
-// Assert output is NOT identical for all 7 days (should vary due to frequency state changing)
 const hashes = outputs7.map(o => o.determinismHash);
 const uniqueHashes = new Set(hashes);
-assert(uniqueHashes.size > 1, `Outputs vary across 7 days (got ${uniqueHashes.size} unique hashes out of 7)`);
+assert(uniqueHashes.size > 1, `Outputs vary across seven days (${uniqueHashes.size} unique hashes)`);
 
-// --- Test 3: Assert NAD boosters are mutually exclusive across all 7 days ---
+// 3. NAD-family exclusivity remains constitutional.
 for (let i = 0; i < outputs7.length; i++) {
-  const out = outputs7[i];
-  const selectedNads = out.selected
+  const selectedNads = outputs7[i].selected
     .map(r => r.atom.primaryId)
     .filter(id => NAD_BOOSTERS.includes(id));
-  assert(
-    selectedNads.length <= 1,
-    `Day ${DAYS_7[i]}: at most 1 NAD booster selected (got ${selectedNads.length}: ${selectedNads.join(', ')})`
-  );
+  assert(selectedNads.length <= 1, `Day ${DAYS_7[i]} selects at most one NAD booster`);
 }
 
-// --- Test 4: Not all 7 consecutive days have identical selected sets ---
-const selectedSets7 = outputs7.map(o => new Set(o.selected.map(r => r.atom.primaryId)));
-let allIdentical = true;
-for (let i = 1; i < selectedSets7.length; i++) {
-  const a = selectedSets7[i - 1];
-  const b = selectedSets7[i];
-  if (a.size !== b.size || [...a].some(id => !b.has(id))) {
-    allIdentical = false;
-    break;
-  }
-}
-// Note: with histories accumulating, consecutive days may vary due to NAD rotation
-// At minimum, the hash-based uniqueness check above already validates variation
-assert(uniqueHashes.size > 1, 'Consecutive days do not all have identical selections (hash variation confirms)');
+// 4. The visible chamber must be owned only by the live individual optimizer.
+const renderClubs = functionBody(appSource, 'renderClubs');
+const tickSupp = functionBody(appSource, 'tickSupp');
+const setBody = functionBody(appSource, 'setBody');
+assert(renderClubs.length > 0, 'renderClubs exists');
+assert(!/g\.block|BLOCKS|blockAssignment|fwFreezeBlock|groupSupps/.test(renderClubs), 'renderClubs cannot render legacy supplement blocks');
+assert(!/blockAssignment|fwFreezeBlock|finalBlock|selectedBlock/.test(tickSupp), 'tickSupp cannot write or freeze supplement blocks');
+assert(!/blockAssignment|fwFreezeBlock|finalBlock|selectedBlock/.test(setBody), 'setBody cannot write or freeze supplement blocks');
+assert(/ace-mind-optimizer-live-v2\.mjs/.test(appSource), 'ACE Mind imports the live individual optimizer directly');
+assert(!/ace-mind-optimizer-shadow\.mjs/.test(appSource), 'ACE Mind does not load the shadow bridge as visible authority');
+assert(/supplement-registry\.v2\.json/.test(liveSource), 'Live optimizer uses the v2 card registry');
+assert(!/g\.block\.items|groupSupps\(/.test(liveSource), 'Live optimizer has no legacy block renderer');
+
+// 5. Regression tripwires for the exact failure that produced identical days.
+assert(/currentDate\(\)/.test(liveSource), 'Live optimizer reads the selected date');
+assert(/inputHash/.test(liveSource), 'Live optimizer hashes the complete live context');
+assert(/date-race/.test(liveSource), 'Live optimizer rejects selected-day races');
 
 console.log(`\n=== validate-block-free results ===`);
 console.log(`Passed: ${passed}`);
 console.log(`Failed: ${failed}`);
 if (failures.length) {
   console.log('Failures:');
-  for (const f of failures) console.log(` - ${f}`);
+  for (const failure of failures) console.log(` - ${failure}`);
   process.exit(1);
 }
