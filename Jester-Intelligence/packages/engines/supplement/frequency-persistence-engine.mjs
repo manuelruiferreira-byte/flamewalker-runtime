@@ -73,12 +73,18 @@ export function evaluateFrequencyPersistence(supplement, day, takenHistory = [],
       targetUses7d, maxUses7d, priorityTier, rotationGroup, groupTargetUses7d, daysLeftInWindow: 0, lastTakenDate: null, reasonTrail: ['Manual-only.'] });
   }
 
+  // Weekly-limited herbs use a true rolling N-day window ending today, instead
+  // of a calendar-week window that resets every Monday. This guarantees at most
+  // maxUses7d uses in ANY trailing N-day span (default 7).
+  const weeklyLimited = f.weeklyLimited === true || Number.isFinite(Number(f.rollingWindowDays));
+  const rollingWindowDays = Math.max(1, Number(f.rollingWindowDays ?? 7));
+
   const history = normalizeHistory(takenHistory);
-  const windowStart = mondayOf(date);
-  const windowEnd = addDays(windowStart, 6);
+  const windowStart = weeklyLimited ? addDays(date, -(rollingWindowDays - 1)) : mondayOf(date);
+  const windowEnd = weeklyLimited ? date : addDays(windowStart, 6);
   const inWindow = history.filter(d => d >= windowStart && d <= date);
   const usesThisWindow = inWindow.length;
-  const daysLeftInWindow = Math.max(0, daysBetween(date, windowEnd) + 1);
+  const daysLeftInWindow = weeklyLimited ? 1 : Math.max(0, daysBetween(date, windowEnd) + 1);
   const lastTakenDate = lastOnOrBefore(history, date);
   const gapHours = lastTakenDate ? daysBetween(lastTakenDate, date) * 24 : Infinity;
   const minGapMet = gapHours >= minimumGapHours;
@@ -86,12 +92,20 @@ export function evaluateFrequencyPersistence(supplement, day, takenHistory = [],
   const effectiveRepeatGapHours = Math.max(minimumGapHours, residualWindowHours);
   const eligibleOpportunitiesRemaining = eligibleOpportunityCount(date, windowEnd, effectiveRepeatGapHours, lastTakenDate);
   const base = { usesThisWindow, daysLeftInWindow, eligibleOpportunitiesRemaining, targetUses7d, maxUses7d, minGapMet };
-  const urgency = frequencyUrgency(base, config);
+  const rawUrgency = frequencyUrgency(base, config);
+
+  // Weekly-limited herbs get no automatic frequency boost: they can never be
+  // DUE, only eligible (OPTIONAL). Selection must come from a current-day
+  // reason (body/esoteric/domain signal), never from deadline pressure.
+  const automaticFrequencyBoost = f.automaticFrequencyBoost !== false;
+  const urgency = (weeklyLimited && !automaticFrequencyBoost && rawUrgency != null)
+    ? Math.min(rawUrgency, config.FREQ_BASE_LOW)
+    : rawUrgency;
 
   let state;
   let reason;
   if (usesThisWindow >= maxUses7d) {
-    state = FREQUENCY_STATES.COMPLETE; reason = 'Weekly maximum reached.';
+    state = FREQUENCY_STATES.COMPLETE; reason = weeklyLimited ? `Rolling ${rollingWindowDays}-day maximum reached.` : 'Weekly maximum reached.';
   } else if (!minGapMet) {
     state = FREQUENCY_STATES.COOLING_DOWN; reason = `Minimum gap ${minimumGapHours}h not reached.`;
   } else if (residualActive) {
@@ -101,13 +115,14 @@ export function evaluateFrequencyPersistence(supplement, day, takenHistory = [],
   } else if ((urgency ?? 0) >= 0.55) {
     state = FREQUENCY_STATES.DUE; reason = 'Deadline-pressured frequency target.';
   } else {
-    state = FREQUENCY_STATES.OPTIONAL; reason = 'Eligible with comfortable weekly slack.';
+    state = FREQUENCY_STATES.OPTIONAL; reason = weeklyLimited ? 'Eligible weekly-limited herb; needs a current-day reason.' : 'Eligible with comfortable weekly slack.';
   }
 
   return Object.freeze({
     engine: 'frequency_persistence', engineVersion: ENGINE_VERSION, supplementId: supplement.id,
     state, urgency: quantize(urgency ?? 0, config.QUANTIZE), minGapMet, residualActive,
     usesThisWindow, targetUses7d, maxUses7d, priorityTier, rotationGroup, groupTargetUses7d,
+    weeklyLimited, rollingWindowDays: weeklyLimited ? rollingWindowDays : null,
     daysLeftInWindow, eligibleOpportunitiesRemaining, windowStart, windowEnd,
     lastTakenDate, minimumGapHours, residualWindowHours, effectiveRepeatGapHours, persistenceClass: f.persistenceClass ?? 'unknown_conservative',
     reasonTrail: [reason]

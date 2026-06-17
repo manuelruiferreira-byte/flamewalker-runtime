@@ -94,6 +94,58 @@
       ]
     }
   },
+  "weeklyLimitedHerbs": {
+    "members": [
+      "ashwagandha",
+      "fadogia_agrestis",
+      "gotu_kola",
+      "reishi",
+      "turkesterone"
+    ],
+    "maxUsesPerRolling7Days": 1,
+    "automaticFrequencyBoost": false,
+    "missedWeekRequiresMakeup": false,
+    "permanentHighlightAllowed": false
+  },
+  "mutualExclusionGroups": [
+    {
+      "id": "nad_precursor",
+      "members": [
+        "nr",
+        "nmn",
+        "nmnh"
+      ],
+      "maxPerDay": 1
+    },
+    {
+      "id": "mineral_biomass",
+      "members": [
+        "irish_sea_moss",
+        "shilajit",
+        "spirulina"
+      ],
+      "maxPerDay": 1
+    },
+    {
+      "id": "primary_sleep_aid",
+      "members": [
+        "melatonin",
+        "valerian"
+      ],
+      "maxPerDay": 1
+    },
+    {
+      "id": "weekly_limited_herbs",
+      "members": [
+        "ashwagandha",
+        "fadogia_agrestis",
+        "gotu_kola",
+        "reishi",
+        "turkesterone"
+      ],
+      "maxPerDay": 1
+    }
+  ],
   "supplements": [
     {
       "id": "magnesium_citrate",
@@ -243,22 +295,25 @@
           ]
         },
         "bazi": {
-          "primaryElement": "Water",
+          "primaryElement": "Earth",
           "energeticDirection": "inward",
           "seasonalAffinity": [
             "winter",
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "己",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            2,
-            6
+            7
           ],
           "constructiveQualities": [
             "buffer",
             "balance"
-          ]
+          ],
+          "numerologySum": 70,
+          "numerologyRoot": 7
         },
         "mayan": {
           "dreamspell": "White Mirror",
@@ -434,22 +489,25 @@
           ]
         },
         "bazi": {
-          "primaryElement": "Earth",
+          "primaryElement": "Fire",
           "energeticDirection": "outward",
           "seasonalAffinity": [
             "summer",
             "spring"
-          ]
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
-            9
+            1
           ],
           "constructiveQualities": [
             "drive",
             "ATP"
-          ]
+          ],
+          "numerologySum": 55,
+          "numerologyRoot": 1
         },
         "mayan": {
           "dreamspell": "Red Earth",
@@ -618,17 +676,20 @@
           "energeticDirection": "inward",
           "seasonalAffinity": [
             "winter"
-          ]
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            2,
-            7
+            3
           ],
           "constructiveQualities": [
             "calm",
             "rest"
-          ]
+          ],
+          "numerologySum": 93,
+          "numerologyRoot": 3
         },
         "mayan": {
           "dreamspell": "White Wind",
@@ -792,22 +853,25 @@
           ]
         },
         "bazi": {
-          "primaryElement": "Water",
+          "primaryElement": "Fire",
           "energeticDirection": "inward",
           "seasonalAffinity": [
             "winter",
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "丁",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            2,
-            6
+            8
           ],
           "constructiveQualities": [
             "heart",
             "calm"
-          ]
+          ],
+          "numerologySum": 62,
+          "numerologyRoot": 8
         },
         "mayan": {
           "dreamspell": "White Dog",
@@ -1005,19 +1069,21 @@
           "seasonalAffinity": [
             "summer",
             "spring"
-          ]
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
-            3,
-            9
+            5
           ],
           "constructiveQualities": [
             "vitality",
             "renewal",
             "NAD"
-          ]
+          ],
+          "numerologySum": 14,
+          "numerologyRoot": 5
         },
         "mayan": {
           "dreamspell": "Yellow Sun",
@@ -1218,18 +1284,21 @@
           "energeticDirection": "outward",
           "seasonalAffinity": [
             "summer"
-          ]
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
-            8
+            5
           ],
           "constructiveQualities": [
             "longevity",
             "cellular",
             "NAD"
-          ]
+          ],
+          "numerologySum": 14,
+          "numerologyRoot": 5
         },
         "mayan": {
           "dreamspell": "Yellow Star",
@@ -1441,18 +1510,21 @@
           "seasonalAffinity": [
             "summer",
             "spring"
-          ]
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
-            3
+            22
           ],
           "constructiveQualities": [
             "high_voltage",
             "NAD",
             "activation"
-          ]
+          ],
+          "numerologySum": 22,
+          "numerologyRoot": 22
         },
         "mayan": {
           "dreamspell": "Yellow Warrior",
@@ -1611,23 +1683,26 @@
           ]
         },
         "bazi": {
-          "primaryElement": "Water",
+          "primaryElement": "Earth",
           "energeticDirection": "inward",
           "seasonalAffinity": [
             "winter",
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "戊",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            3,
-            6
+            4
           ],
           "constructiveQualities": [
             "methylation",
             "donation",
             "homocysteine"
-          ]
+          ],
+          "numerologySum": 13,
+          "numerologyRoot": 4
         },
         "mayan": {
           "dreamspell": "White Mirror",
@@ -1805,23 +1880,26 @@
           ]
         },
         "bazi": {
-          "primaryElement": "Fire",
+          "primaryElement": "Earth",
           "energeticDirection": "outward",
           "seasonalAffinity": [
             "summer",
             "spring"
-          ]
+          ],
+          "dayMasterStem": "戊",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
-            9
+            6
           ],
           "constructiveQualities": [
             "strength",
             "ATP",
             "drive"
-          ]
+          ],
+          "numerologySum": 51,
+          "numerologyRoot": 6
         },
         "mayan": {
           "dreamspell": "Red Serpent",
@@ -1988,18 +2066,21 @@
           "energeticDirection": "outward",
           "seasonalAffinity": [
             "summer"
-          ]
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
-            6
+            9
           ],
           "constructiveQualities": [
             "spark",
             "heart",
             "mitochondria"
-          ]
+          ],
+          "numerologySum": 18,
+          "numerologyRoot": 9
         },
         "mayan": {
           "dreamspell": "Yellow Sun",
@@ -2188,18 +2269,21 @@
           "seasonalAffinity": [
             "winter",
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            2,
-            7
+            8
           ],
           "constructiveQualities": [
             "flow",
             "heart",
             "inflammation"
-          ]
+          ],
+          "numerologySum": 26,
+          "numerologyRoot": 8
         },
         "mayan": {
           "dreamspell": "Blue Hand",
@@ -2371,17 +2455,21 @@
           "energeticDirection": "balanced",
           "seasonalAffinity": [
             "all"
-          ]
+          ],
+          "dayMasterStem": "己",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            5
+            1
           ],
           "constructiveQualities": [
             "baseline",
             "spectrum",
             "foundation"
-          ]
+          ],
+          "numerologySum": 55,
+          "numerologyRoot": 1
         },
         "mayan": {
           "dreamspell": "Yellow Human",
@@ -2559,18 +2647,21 @@
           "seasonalAffinity": [
             "summer",
             "winter"
-          ]
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
-            4
+            11
           ],
           "constructiveQualities": [
             "solar",
             "bone",
             "immune"
-          ]
+          ],
+          "numerologySum": 11,
+          "numerologyRoot": 11
         },
         "mayan": {
           "dreamspell": "Yellow Seed",
@@ -2754,18 +2845,21 @@
           "seasonalAffinity": [
             "autumn",
             "winter"
-          ]
+          ],
+          "dayMasterStem": "辛",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            4,
-            7
+            9
           ],
           "constructiveQualities": [
             "detox",
             "glutathione",
             "clearing"
-          ]
+          ],
+          "numerologySum": 9,
+          "numerologyRoot": 9
         },
         "mayan": {
           "dreamspell": "White Wind",
@@ -2930,18 +3024,21 @@
           "seasonalAffinity": [
             "spring",
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "乙",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            4,
-            6
+            3
           ],
           "constructiveQualities": [
             "liver",
             "regeneration",
             "clearing"
-          ]
+          ],
+          "numerologySum": 48,
+          "numerologyRoot": 3
         },
         "mayan": {
           "dreamspell": "White Worldbridger",
@@ -3106,18 +3203,21 @@
           "energeticDirection": "balanced",
           "seasonalAffinity": [
             "all"
-          ]
+          ],
+          "dayMasterStem": "己",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            2,
-            6
+            8
           ],
           "constructiveQualities": [
             "microbiome",
             "balance",
             "gut"
-          ]
+          ],
+          "numerologySum": 53,
+          "numerologyRoot": 8
         },
         "mayan": {
           "dreamspell": "Blue Monkey",
@@ -3293,18 +3393,21 @@
           "energeticDirection": "outward",
           "seasonalAffinity": [
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "庚",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
-            4
+            7
           ],
           "constructiveQualities": [
             "immunity",
             "testosterone",
             "wound_healing"
-          ]
+          ],
+          "numerologySum": 25,
+          "numerologyRoot": 7
         },
         "mayan": {
           "dreamspell": "Red Serpent",
@@ -3470,23 +3573,26 @@
           ]
         },
         "bazi": {
-          "primaryElement": "Earth",
+          "primaryElement": "Wood",
           "energeticDirection": "balanced",
           "seasonalAffinity": [
             "spring",
             "all"
-          ]
+          ],
+          "dayMasterStem": "甲",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            8,
-            6
+            11
           ],
           "constructiveQualities": [
             "longevity",
             "immune",
             "adaptogen"
-          ]
+          ],
+          "numerologySum": 29,
+          "numerologyRoot": 11
         },
         "mayan": {
           "dreamspell": "Blue Eagle",
@@ -3669,18 +3775,21 @@
           "seasonalAffinity": [
             "spring",
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "乙",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            3,
-            7
+            3
           ],
           "constructiveQualities": [
             "neural",
             "growth",
             "NGF"
-          ]
+          ],
+          "numerologySum": 39,
+          "numerologyRoot": 3
         },
         "mayan": {
           "dreamspell": "Blue Storm",
@@ -3854,18 +3963,21 @@
           "seasonalAffinity": [
             "winter",
             "spring"
-          ]
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            2,
             7
           ],
           "constructiveQualities": [
             "calm",
             "focus",
             "alpha_wave"
-          ]
+          ],
+          "numerologySum": 43,
+          "numerologyRoot": 7
         },
         "mayan": {
           "dreamspell": "White Wind",
@@ -4041,18 +4153,21 @@
           "seasonalAffinity": [
             "spring",
             "summer"
-          ]
+          ],
+          "dayMasterStem": "乙",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
-            3
+            9
           ],
           "constructiveQualities": [
             "vision",
             "macular",
             "carotenoid"
-          ]
+          ],
+          "numerologySum": 27,
+          "numerologyRoot": 9
         },
         "mayan": {
           "dreamspell": "Yellow Human",
@@ -4174,8 +4289,10 @@
         "requiredCompanions": [],
         "preferredPairs": [],
         "avoidSameDay": [
+          "ashwagandha",
           "cordyceps",
-          "nmnh"
+          "nmnh",
+          "valerian"
         ],
         "avoidSameSlot": [],
         "redundantWith": []
@@ -4209,18 +4326,21 @@
           "energeticDirection": "inward",
           "seasonalAffinity": [
             "winter"
-          ]
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            2,
-            7
+            4
           ],
           "constructiveQualities": [
             "sleep",
             "circadian",
             "pineal"
-          ]
+          ],
+          "numerologySum": 40,
+          "numerologyRoot": 4
         },
         "mayan": {
           "dreamspell": "White Mirror",
@@ -4344,7 +4464,9 @@
         "requiredCompanions": [],
         "preferredPairs": [],
         "avoidSameDay": [
+          "ashwagandha",
           "cordyceps",
+          "melatonin",
           "nmnh"
         ],
         "avoidSameSlot": [],
@@ -4381,18 +4503,21 @@
           "energeticDirection": "inward",
           "seasonalAffinity": [
             "winter"
-          ]
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            2,
-            4
+            1
           ],
           "constructiveQualities": [
             "sedation",
             "GABA",
             "rest"
-          ]
+          ],
+          "numerologySum": 37,
+          "numerologyRoot": 1
         },
         "mayan": {
           "dreamspell": "Blue Night",
@@ -4560,18 +4685,21 @@
           "energeticDirection": "balanced",
           "seasonalAffinity": [
             "all"
-          ]
+          ],
+          "dayMasterStem": "己",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            4,
-            6
+            33
           ],
           "constructiveQualities": [
             "structure",
             "repair",
             "collagen"
-          ]
+          ],
+          "numerologySum": 33,
+          "numerologyRoot": 33
         },
         "mayan": {
           "dreamspell": "Red Earth",
@@ -4742,23 +4870,26 @@
           ]
         },
         "bazi": {
-          "primaryElement": "Fire",
+          "primaryElement": "Wood",
           "energeticDirection": "outward",
           "seasonalAffinity": [
             "summer",
             "spring"
-          ]
+          ],
+          "dayMasterStem": "甲",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
-            3
+            1
           ],
           "constructiveQualities": [
             "immunity",
             "ascorbic",
             "brightening"
-          ]
+          ],
+          "numerologySum": 37,
+          "numerologyRoot": 1
         },
         "mayan": {
           "dreamspell": "Yellow Star",
@@ -4928,18 +5059,21 @@
           "energeticDirection": "inward",
           "seasonalAffinity": [
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "庚",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            4,
-            8
+            9
           ],
           "constructiveQualities": [
             "sulfur",
             "connective",
             "repair"
-          ]
+          ],
+          "numerologySum": 9,
+          "numerologyRoot": 9
         },
         "mayan": {
           "dreamspell": "White Worldbridger",
@@ -5117,18 +5251,21 @@
           "seasonalAffinity": [
             "spring",
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "乙",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            3,
-            6
+            4
           ],
           "constructiveQualities": [
             "anti_inflammatory",
             "polyphenol",
             "histamine"
-          ]
+          ],
+          "numerologySum": 49,
+          "numerologyRoot": 4
         },
         "mayan": {
           "dreamspell": "Blue Hand",
@@ -5305,23 +5442,26 @@
           ]
         },
         "bazi": {
-          "primaryElement": "Fire",
+          "primaryElement": "Wood",
           "energeticDirection": "outward",
           "seasonalAffinity": [
             "summer",
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "甲",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            3,
             9
           ],
           "constructiveQualities": [
             "longevity",
             "grape",
             "sirtuin"
-          ]
+          ],
+          "numerologySum": 54,
+          "numerologyRoot": 9
         },
         "mayan": {
           "dreamspell": "Yellow Sun",
@@ -5493,18 +5633,21 @@
           "seasonalAffinity": [
             "winter",
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            4,
-            8
+            4
           ],
           "constructiveQualities": [
             "autophagy",
             "renewal",
             "longevity"
-          ]
+          ],
+          "numerologySum": 58,
+          "numerologyRoot": 4
         },
         "mayan": {
           "dreamspell": "White Wizard",
@@ -5642,7 +5785,10 @@
       "pairing": {
         "requiredCompanions": [],
         "preferredPairs": [],
-        "avoidSameDay": [],
+        "avoidSameDay": [
+          "irish_sea_moss",
+          "shilajit"
+        ],
         "avoidSameSlot": [],
         "redundantWith": []
       },
@@ -5681,18 +5827,21 @@
           "seasonalAffinity": [
             "summer",
             "spring"
-          ]
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            3,
-            7
+            11
           ],
           "constructiveQualities": [
             "green",
             "chlorophyll",
             "alkaline"
-          ]
+          ],
+          "numerologySum": 47,
+          "numerologyRoot": 11
         },
         "mayan": {
           "dreamspell": "Blue Eagle",
@@ -5839,7 +5988,9 @@
           "nmn"
         ],
         "avoidSameDay": [
-          "nmnh"
+          "irish_sea_moss",
+          "nmnh",
+          "spirulina"
         ],
         "avoidSameSlot": [],
         "redundantWith": []
@@ -5879,18 +6030,21 @@
           "energeticDirection": "outward",
           "seasonalAffinity": [
             "all"
-          ]
+          ],
+          "dayMasterStem": "戊",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            4,
-            8
+            7
           ],
           "constructiveQualities": [
             "mineral",
             "primordial",
             "vitality"
-          ]
+          ],
+          "numerologySum": 34,
+          "numerologyRoot": 7
         },
         "mayan": {
           "dreamspell": "Red Earth",
@@ -6030,7 +6184,10 @@
       "pairing": {
         "requiredCompanions": [],
         "preferredPairs": [],
-        "avoidSameDay": [],
+        "avoidSameDay": [
+          "shilajit",
+          "spirulina"
+        ],
         "avoidSameSlot": [],
         "redundantWith": []
       },
@@ -6066,18 +6223,21 @@
           "seasonalAffinity": [
             "winter",
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            2,
-            7
+            1
           ],
           "constructiveQualities": [
             "mineral",
             "mucosal",
             "iodine"
-          ]
+          ],
+          "numerologySum": 55,
+          "numerologyRoot": 1
         },
         "mayan": {
           "dreamspell": "White Dog",
@@ -6197,11 +6357,16 @@
       },
       "frequency": {
         "targetUses7d": 1,
-        "maxUses7d": 2,
+        "maxUses7d": 1,
         "minimumGapHours": 72,
         "persistenceClass": "medium",
         "residualWindowHours": 48,
-        "priorityTier": "maintenance"
+        "priorityTier": "maintenance",
+        "weeklyLimited": true,
+        "rollingWindowDays": 7,
+        "automaticFrequencyBoost": false,
+        "missedWeekRequiresMakeup": false,
+        "permanentHighlightAllowed": false
       },
       "timeWindows": [
         "afternoon",
@@ -6224,7 +6389,10 @@
           "milk_thistle"
         ],
         "avoidSameDay": [
-          "ashwagandha"
+          "ashwagandha",
+          "fadogia_agrestis",
+          "reishi",
+          "turkesterone"
         ],
         "avoidSameSlot": [],
         "redundantWith": []
@@ -6264,18 +6432,21 @@
           "seasonalAffinity": [
             "spring",
             "summer"
-          ]
+          ],
+          "dayMasterStem": "乙",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            3,
-            7
+            3
           ],
           "constructiveQualities": [
             "neural",
             "connective",
             "ayurveda"
-          ]
+          ],
+          "numerologySum": 30,
+          "numerologyRoot": 3
         },
         "mayan": {
           "dreamspell": "Blue Monkey",
@@ -6440,23 +6611,26 @@
           ]
         },
         "bazi": {
-          "primaryElement": "Water",
+          "primaryElement": "Metal",
           "energeticDirection": "inward",
           "seasonalAffinity": [
             "winter",
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "辛",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            4,
-            8
+            2
           ],
           "constructiveQualities": [
             "adaptogen",
             "antioxidant",
             "ancient"
-          ]
+          ],
+          "numerologySum": 20,
+          "numerologyRoot": 2
         },
         "mayan": {
           "dreamspell": "White Wizard",
@@ -6573,11 +6747,16 @@
       },
       "frequency": {
         "targetUses7d": 1,
-        "maxUses7d": 2,
+        "maxUses7d": 1,
         "minimumGapHours": 72,
         "persistenceClass": "medium",
         "residualWindowHours": 48,
-        "priorityTier": "maintenance"
+        "priorityTier": "maintenance",
+        "weeklyLimited": true,
+        "rollingWindowDays": 7,
+        "automaticFrequencyBoost": false,
+        "missedWeekRequiresMakeup": false,
+        "permanentHighlightAllowed": false
       },
       "timeWindows": [
         "night"
@@ -6596,8 +6775,12 @@
         "requiredCompanions": [],
         "preferredPairs": [],
         "avoidSameDay": [
+          "ashwagandha",
+          "chaga",
+          "fadogia_agrestis",
+          "gotu_kola",
           "lions_mane",
-          "chaga"
+          "turkesterone"
         ],
         "avoidSameSlot": [],
         "redundantWith": []
@@ -6637,18 +6820,21 @@
           "seasonalAffinity": [
             "winter",
             "autumn"
-          ]
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            2,
-            7
+            5
           ],
           "constructiveQualities": [
             "adaptogen",
             "calm",
             "spirit"
-          ]
+          ],
+          "numerologySum": 41,
+          "numerologyRoot": 5
         },
         "mayan": {
           "dreamspell": "White Mirror",
@@ -6856,18 +7042,21 @@
           "seasonalAffinity": [
             "summer",
             "spring"
-          ]
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
             9
           ],
           "constructiveQualities": [
             "stamina",
             "oxygen",
             "athletic"
-          ]
+          ],
+          "numerologySum": 45,
+          "numerologyRoot": 9
         },
         "mayan": {
           "dreamspell": "Red Dragon",
@@ -7010,8 +7199,8 @@
         "preferredPairs": [],
         "avoidSameDay": [
           "fadogia_agrestis",
-          "turkesterone",
-          "nmnh"
+          "nmnh",
+          "turkesterone"
         ],
         "avoidSameSlot": [],
         "redundantWith": []
@@ -7051,18 +7240,21 @@
           "seasonalAffinity": [
             "spring",
             "summer"
-          ]
+          ],
+          "dayMasterStem": "戊",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
-            6
+            2
           ],
           "constructiveQualities": [
             "libido",
             "fertility",
             "drive"
-          ]
+          ],
+          "numerologySum": 20,
+          "numerologyRoot": 2
         },
         "mayan": {
           "dreamspell": "Red Serpent",
@@ -7249,18 +7441,21 @@
           "seasonalAffinity": [
             "summer",
             "spring"
-          ]
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            3,
-            1
+            9
           ],
           "constructiveQualities": [
             "B_vitamins",
             "methylation",
             "neural"
-          ]
+          ],
+          "numerologySum": 36,
+          "numerologyRoot": 9
         },
         "mayan": {
           "dreamspell": "Yellow Human",
@@ -7435,18 +7630,21 @@
           "energeticDirection": "outward",
           "seasonalAffinity": [
             "summer"
-          ]
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
             9
           ],
           "constructiveQualities": [
             "nitric_oxide",
             "pump",
             "circulation"
-          ]
+          ],
+          "numerologySum": 54,
+          "numerologyRoot": 9
         },
         "mayan": {
           "dreamspell": "Red Dragon",
@@ -7562,11 +7760,16 @@
       },
       "frequency": {
         "targetUses7d": 0,
-        "maxUses7d": 0,
+        "maxUses7d": 1,
         "minimumGapHours": 999,
         "persistenceClass": "unknown_conservative",
         "residualWindowHours": 0,
-        "priorityTier": "maintenance"
+        "priorityTier": "maintenance",
+        "weeklyLimited": true,
+        "rollingWindowDays": 7,
+        "automaticFrequencyBoost": false,
+        "missedWeekRequiresMakeup": false,
+        "permanentHighlightAllowed": false
       },
       "timeWindows": [
         "night"
@@ -7583,7 +7786,14 @@
       "pairing": {
         "requiredCompanions": [],
         "preferredPairs": [],
-        "avoidSameDay": [],
+        "avoidSameDay": [
+          "fadogia_agrestis",
+          "gotu_kola",
+          "melatonin",
+          "reishi",
+          "turkesterone",
+          "valerian"
+        ],
         "avoidSameSlot": [],
         "redundantWith": []
       },
@@ -7619,18 +7829,21 @@
           "energeticDirection": "balanced",
           "seasonalAffinity": [
             "all"
-          ]
+          ],
+          "dayMasterStem": "己",
+          "polarity": "Yin"
         },
         "numerology": {
           "resonantNumbers": [
-            4,
-            8
+            6
           ],
           "constructiveQualities": [
             "adaptogen",
             "cortisol",
             "root"
-          ]
+          ],
+          "numerologySum": 42,
+          "numerologyRoot": 6
         },
         "mayan": {
           "dreamspell": "White Wizard",
@@ -7735,11 +7948,16 @@
       },
       "frequency": {
         "targetUses7d": 0,
-        "maxUses7d": 0,
+        "maxUses7d": 1,
         "minimumGapHours": 999,
         "persistenceClass": "unknown_conservative",
         "residualWindowHours": 0,
-        "priorityTier": "maintenance"
+        "priorityTier": "maintenance",
+        "weeklyLimited": true,
+        "rollingWindowDays": 7,
+        "automaticFrequencyBoost": false,
+        "missedWeekRequiresMakeup": false,
+        "permanentHighlightAllowed": false
       },
       "timeWindows": [
         "morning"
@@ -7756,7 +7974,10 @@
         "requiredCompanions": [],
         "preferredPairs": [],
         "avoidSameDay": [
+          "ashwagandha",
           "black_maca",
+          "gotu_kola",
+          "reishi",
           "turkesterone"
         ],
         "avoidSameSlot": [],
@@ -7791,17 +8012,21 @@
           "energeticDirection": "outward",
           "seasonalAffinity": [
             "summer"
-          ]
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1
+            6
           ],
           "constructiveQualities": [
             "testosterone",
             "drive",
             "manual"
-          ]
+          ],
+          "numerologySum": 69,
+          "numerologyRoot": 6
         },
         "mayan": {
           "dreamspell": "Red Serpent",
@@ -7910,11 +8135,16 @@
       },
       "frequency": {
         "targetUses7d": 0,
-        "maxUses7d": 0,
+        "maxUses7d": 1,
         "minimumGapHours": 999,
         "persistenceClass": "unknown_conservative",
         "residualWindowHours": 0,
-        "priorityTier": "maintenance"
+        "priorityTier": "maintenance",
+        "weeklyLimited": true,
+        "rollingWindowDays": 7,
+        "automaticFrequencyBoost": false,
+        "missedWeekRequiresMakeup": false,
+        "permanentHighlightAllowed": false
       },
       "timeWindows": [
         "afternoon"
@@ -7932,8 +8162,11 @@
         "requiredCompanions": [],
         "preferredPairs": [],
         "avoidSameDay": [
+          "ashwagandha",
           "black_maca",
-          "fadogia_agrestis"
+          "fadogia_agrestis",
+          "gotu_kola",
+          "reishi"
         ],
         "avoidSameSlot": [],
         "redundantWith": []
@@ -7966,22 +8199,25 @@
           ]
         },
         "bazi": {
-          "primaryElement": "Earth",
+          "primaryElement": "Wood",
           "energeticDirection": "outward",
           "seasonalAffinity": [
             "summer"
-          ]
+          ],
+          "dayMasterStem": "甲",
+          "polarity": "Yang"
         },
         "numerology": {
           "resonantNumbers": [
-            1,
-            4
+            9
           ],
           "constructiveQualities": [
             "anabolic",
             "muscle",
             "manual"
-          ]
+          ],
+          "numerologySum": 54,
+          "numerologyRoot": 9
         },
         "mayan": {
           "dreamspell": "Red Serpent",

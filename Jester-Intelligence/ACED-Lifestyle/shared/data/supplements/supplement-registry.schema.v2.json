@@ -12,6 +12,31 @@
     "functionAxes": { "type": "array", "items": { "type": "string" } },
     "lifeDomains": { "type": "array", "items": { "type": "string" } },
     "defaultConfig": { "type": "object" },
+    "weeklyLimitedHerbs": {
+      "type": "object",
+      "description": "Herbs capped at one use per rolling 7 days with no automatic frequency boost, no missed-week makeup, and no permanent highlight.",
+      "required": ["members","maxUsesPerRolling7Days","automaticFrequencyBoost","missedWeekRequiresMakeup","permanentHighlightAllowed"],
+      "properties": {
+        "members": { "type": "array", "items": { "type": "string" } },
+        "maxUsesPerRolling7Days": { "type": "number" },
+        "automaticFrequencyBoost": { "type": "boolean" },
+        "missedWeekRequiresMakeup": { "type": "boolean" },
+        "permanentHighlightAllowed": { "type": "boolean" }
+      }
+    },
+    "mutualExclusionGroups": {
+      "type": "array",
+      "description": "Groups where at most maxPerDay members may be selected on the same day.",
+      "items": {
+        "type": "object",
+        "required": ["id","members","maxPerDay"],
+        "properties": {
+          "id": { "type": "string" },
+          "members": { "type": "array", "items": { "type": "string" } },
+          "maxPerDay": { "type": "number" }
+        }
+      }
+    },
     "supplements": {
       "type": "array",
       "items": { "$ref": "#/definitions/SupplementCard" }
@@ -118,6 +143,11 @@
             "priorityTier": { "type": "string" },
             "rotationGroup": { "type": "string" },
             "groupTargetUses7d": { "type": "number" },
+            "weeklyLimited": { "type": "boolean" },
+            "rollingWindowDays": { "type": "number" },
+            "automaticFrequencyBoost": { "type": "boolean" },
+            "missedWeekRequiresMakeup": { "type": "boolean" },
+            "permanentHighlightAllowed": { "type": "boolean" },
             "maxConsecutiveDays": { "oneOf": [{ "type": "number" }, { "type": "null" }] },
             "minimumGapBetweenCycles": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
             "lastActualIntake": { "oneOf": [{ "type": "string" }, { "type": "null" }] },

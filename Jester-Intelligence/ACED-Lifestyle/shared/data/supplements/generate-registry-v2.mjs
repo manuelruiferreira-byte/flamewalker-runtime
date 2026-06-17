@@ -595,6 +595,130 @@ function buildFunctions(scalarMap) {
 
 const NAD_ROTATION = new Set(['nr', 'nmn', 'nmnh']);
 
+// ---- Authoritative numerology (sum/root) from the supplement table ----
+const NUMEROLOGY = {
+  magnesium_citrate: [70, 7], magnesium_malate: [55, 1], magnesium_bisglycinate: [93, 3],
+  magnesium_taurate: [62, 8], nr: [14, 5], nmn: [14, 5], tmg: [13, 4], creatine_5g: [51, 6],
+  coq10: [18, 9], omega_3: [26, 8], multivitamin: [55, 1], d3_k2: [11, 11], nac: [9, 9],
+  milk_thistle: [48, 3], probiotic: [53, 8], zinc: [25, 7], astragalus: [29, 11],
+  lions_mane: [39, 3], l_theanine: [43, 7], lutein: [27, 9], collagen: [33, 33],
+  vitamin_c: [37, 1], msm: [9, 9], quercetin: [49, 4], resveratrol: [54, 9],
+  spermidine: [58, 4], spirulina: [47, 11], irish_sea_moss: [55, 1], cordyceps: [45, 9],
+  b_complex: [36, 9], l_citrulline: [54, 9], nmnh: [22, 22], shilajit: [34, 7],
+  gotu_kola: [30, 3], chaga: [20, 2], reishi: [41, 5], black_maca: [20, 2],
+  melatonin: [40, 4], valerian: [37, 1], fadogia_agrestis: [69, 6], turkesterone: [54, 9],
+  ashwagandha: [42, 6]
+};
+
+// ---- Authoritative BaZi day-master from the supplement table ----
+// id -> [stem, element, polarity]
+const BAZI = {
+  magnesium_citrate: ['己', 'Earth', 'Yin'], magnesium_malate: ['丙', 'Fire', 'Yang'],
+  magnesium_bisglycinate: ['癸', 'Water', 'Yin'], magnesium_taurate: ['丁', 'Fire', 'Yin'],
+  nr: ['丙', 'Fire', 'Yang'], nmn: ['丙', 'Fire', 'Yang'], tmg: ['戊', 'Earth', 'Yang'],
+  creatine_5g: ['戊', 'Earth', 'Yang'], coq10: ['丙', 'Fire', 'Yang'], omega_3: ['癸', 'Water', 'Yin'],
+  multivitamin: ['己', 'Earth', 'Yin'], d3_k2: ['丙', 'Fire', 'Yang'], nac: ['辛', 'Metal', 'Yin'],
+  milk_thistle: ['乙', 'Wood', 'Yin'], probiotic: ['己', 'Earth', 'Yin'], zinc: ['庚', 'Metal', 'Yang'],
+  astragalus: ['甲', 'Wood', 'Yang'], lions_mane: ['乙', 'Wood', 'Yin'], l_theanine: ['癸', 'Water', 'Yin'],
+  lutein: ['乙', 'Wood', 'Yin'], collagen: ['己', 'Earth', 'Yin'], vitamin_c: ['甲', 'Wood', 'Yang'],
+  msm: ['庚', 'Metal', 'Yang'], quercetin: ['乙', 'Wood', 'Yin'], resveratrol: ['甲', 'Wood', 'Yang'],
+  spermidine: ['癸', 'Water', 'Yin'], spirulina: ['癸', 'Water', 'Yin'], irish_sea_moss: ['癸', 'Water', 'Yin'],
+  cordyceps: ['丙', 'Fire', 'Yang'], b_complex: ['丙', 'Fire', 'Yang'], l_citrulline: ['丙', 'Fire', 'Yang'],
+  nmnh: ['丙', 'Fire', 'Yang'], shilajit: ['戊', 'Earth', 'Yang'], gotu_kola: ['乙', 'Wood', 'Yin'],
+  chaga: ['辛', 'Metal', 'Yin'], reishi: ['癸', 'Water', 'Yin'], black_maca: ['戊', 'Earth', 'Yang'],
+  melatonin: ['癸', 'Water', 'Yin'], valerian: ['癸', 'Water', 'Yin'], fadogia_agrestis: ['丙', 'Fire', 'Yang'],
+  turkesterone: ['甲', 'Wood', 'Yang'], ashwagandha: ['己', 'Earth', 'Yin']
+};
+
+// ---- Weekly-limited herbs: max 1 use per rolling 7 days, no auto boost ----
+const WEEKLY_LIMITED_HERBS = ['ashwagandha', 'reishi', 'gotu_kola', 'fadogia_agrestis', 'turkesterone'];
+const WEEKLY_LIMITED_SET = new Set(WEEKLY_LIMITED_HERBS);
+
+// ---- Per-day mutual-exclusion / anti-clustering rules from conservative rules ----
+// "Choose only one of spirulina, sea moss or shilajit per day"
+const MINERAL_BIOMASS = ['spirulina', 'irish_sea_moss', 'shilajit'];
+// "One primary sleep aid": melatonin and valerian not auto-combined
+const PRIMARY_SLEEP_AID = ['melatonin', 'valerian'];
+
+// Build avoidSameDay additions: each member avoids the others in its group.
+function buildAvoidAdditions() {
+  const additions = {};
+  const add = (id, others) => {
+    if (!additions[id]) additions[id] = new Set();
+    for (const o of others) if (o !== id) additions[id].add(o);
+  };
+  // Weekly-capped herbs must not cluster with each other on the same day.
+  for (const id of WEEKLY_LIMITED_HERBS) add(id, WEEKLY_LIMITED_HERBS);
+  // One mineral-biomass product per day.
+  for (const id of MINERAL_BIOMASS) add(id, MINERAL_BIOMASS);
+  // One primary sleep aid per day; both also avoid ashwagandha (sedative stack).
+  for (const id of PRIMARY_SLEEP_AID) add(id, [...PRIMARY_SLEEP_AID, 'ashwagandha']);
+  add('ashwagandha', PRIMARY_SLEEP_AID);
+  // Black maca never same day as fadogia or turkesterone.
+  add('black_maca', ['fadogia_agrestis', 'turkesterone']);
+  add('fadogia_agrestis', ['black_maca']);
+  add('turkesterone', ['black_maca']);
+  return additions;
+}
+const AVOID_ADDITIONS = buildAvoidAdditions();
+
+// Overlay authoritative numerology + BaZi day-master onto an esoteric signature.
+function applyAuthoritativeEsoteric(esotericSignature, id) {
+  const base = esotericSignature ? { ...esotericSignature } : {
+    astrology: { primaryPlanets: [], elements: [], planetaryHourAffinity: [] },
+    bazi: {}, numerology: {}, mayan: {}
+  };
+  const num = NUMEROLOGY[id];
+  if (num) {
+    const [sum, root] = num;
+    base.numerology = {
+      ...(base.numerology ?? {}),
+      numerologySum: sum,
+      numerologyRoot: root,
+      resonantNumbers: [root, ...(root !== sum ? [] : [])],
+      constructiveQualities: (base.numerology?.constructiveQualities ?? [])
+    };
+  }
+  const bz = BAZI[id];
+  if (bz) {
+    const [stem, element, polarity] = bz;
+    base.bazi = {
+      ...(base.bazi ?? {}),
+      dayMasterStem: stem,
+      primaryElement: element,
+      polarity,
+      energeticDirection: base.bazi?.energeticDirection ?? 'balanced',
+      seasonalAffinity: base.bazi?.seasonalAffinity ?? []
+    };
+  }
+  return base;
+}
+
+// Apply the weekly-limited-herb governance to a frequency block.
+function applyWeeklyLimited(frequency, id) {
+  if (!WEEKLY_LIMITED_SET.has(id)) return frequency;
+  return {
+    ...frequency,
+    // Auto-selectable members are capped at 1; manual/excluded members keep their
+    // (already zero) target but still carry the cap as a documented guard.
+    targetUses7d: Math.min(Number(frequency.targetUses7d ?? 0), 1),
+    maxUses7d: 1,
+    weeklyLimited: true,
+    rollingWindowDays: 7,
+    automaticFrequencyBoost: false,
+    missedWeekRequiresMakeup: false,
+    permanentHighlightAllowed: false
+  };
+}
+
+// Merge anti-clustering avoidSameDay additions into a pairing block.
+function applyAvoidAdditions(pairing, id) {
+  const extra = AVOID_ADDITIONS[id];
+  if (!extra || !extra.size) return pairing;
+  const merged = [...new Set([...(pairing.avoidSameDay ?? []), ...extra])].sort();
+  return { ...pairing, avoidSameDay: merged };
+}
+
 // Migrate a single supplement from v1 to v2
 function migrateSupplementV2(s) {
   const enrichment = ENRICHMENT[s.id];
@@ -607,6 +731,11 @@ function migrateSupplementV2(s) {
       numerology: { resonantNumbers: [1, 3], constructiveQualities: ['immunity','ascorbic','brightening'] }
     };
   }
+  // Overlay authoritative numerology + BaZi from the supplement table.
+  esotericSignature = applyAuthoritativeEsoteric(esotericSignature, s.id);
+
+  const frequency = applyWeeklyLimited(s.frequency, s.id);
+  const pairing = applyAvoidAdditions(s.pairing, s.id);
 
   return {
     // Section A: Identity (v1 compat)
@@ -644,19 +773,19 @@ function migrateSupplementV2(s) {
     // Section E: Stacking Profile
     stackingProfile: enrichment?.stackingProfile ?? { functionalClasses: s.classes ?? [] },
 
-    // Section F: Frequency (v1 compat)
-    frequency: s.frequency,
+    // Section F: Frequency (v1 compat + weekly-limited governance)
+    frequency,
     timeWindows: s.timeWindows ?? ['morning'],
     requiresFood: s.requiresFood ?? false,
 
-    // Section G: Compatibility (v1 compat)
+    // Section G: Compatibility (v1 compat + anti-clustering avoidSameDay)
     classes: s.classes ?? [],
     domains: s.domains ?? {},
-    pairing: s.pairing,
+    pairing,
 
-    // Section H: Esoteric Signature (v2) + v1 compat esoteric
+    // Section H: Esoteric Signature (v2, authoritative numerology + BaZi) + v1 compat esoteric
     esoteric: s.esoteric,
-    esotericSignature: esotericSignature ?? null,
+    esotericSignature,
 
     // Section I: Planetary Hour Profile
     planetaryHourProfile: buildPlanetaryHourProfile(s, enrichment),
@@ -683,6 +812,22 @@ const v2 = {
       immune_mushroom: 2
     }
   },
+  // Governance group: rolling-7-day cap of 1, no automatic frequency boost,
+  // no missed-week makeup, never permanently highlighted.
+  weeklyLimitedHerbs: {
+    members: [...WEEKLY_LIMITED_HERBS].sort(),
+    maxUsesPerRolling7Days: 1,
+    automaticFrequencyBoost: false,
+    missedWeekRequiresMakeup: false,
+    permanentHighlightAllowed: false
+  },
+  // Per-day mutual-exclusion groups (at most one member selected per day).
+  mutualExclusionGroups: [
+    { id: 'nad_precursor', members: ['nr', 'nmn', 'nmnh'], maxPerDay: 1 },
+    { id: 'mineral_biomass', members: [...MINERAL_BIOMASS].sort(), maxPerDay: 1 },
+    { id: 'primary_sleep_aid', members: [...PRIMARY_SLEEP_AID].sort(), maxPerDay: 1 },
+    { id: 'weekly_limited_herbs', members: [...WEEKLY_LIMITED_HERBS].sort(), maxPerDay: 1 }
+  ],
   supplements: v1.supplements.map(migrateSupplementV2)
 };
 

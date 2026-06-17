@@ -71,6 +71,9 @@ jobs:
       - name: Validate daily variation simulation (v2)
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-simulation-variation.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
 
+      - name: Validate weekly-limited herb governance (v2)
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-weekly-limited.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
+
       - name: Validate original shadow adapter
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-shadow-context-adapter.mjs
 

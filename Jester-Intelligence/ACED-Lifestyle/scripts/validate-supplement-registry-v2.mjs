@@ -93,6 +93,39 @@ assert(byId.spirulina.frequency.priorityTier === 'governed', 'spirulina must be 
 assert(byId.lions_mane.frequency.targetUses7d >= 3, "lion's mane target must be at least 3");
 assert(byId.l_citrulline, 'missing L-Citrulline');
 
+// --- Weekly-limited herb governance ---
+const expectedWeekly = ['ashwagandha', 'fadogia_agrestis', 'gotu_kola', 'reishi', 'turkesterone'];
+const grp = registry.weeklyLimitedHerbs;
+assert(grp && typeof grp === 'object', 'missing weeklyLimitedHerbs group');
+assert(JSON.stringify([...(grp.members ?? [])].sort()) === JSON.stringify(expectedWeekly), 'weeklyLimitedHerbs members mismatch');
+assert(grp.maxUsesPerRolling7Days === 1, 'weeklyLimitedHerbs.maxUsesPerRolling7Days must be 1');
+assert(grp.automaticFrequencyBoost === false, 'weeklyLimitedHerbs.automaticFrequencyBoost must be false');
+assert(grp.missedWeekRequiresMakeup === false, 'weeklyLimitedHerbs.missedWeekRequiresMakeup must be false');
+assert(grp.permanentHighlightAllowed === false, 'weeklyLimitedHerbs.permanentHighlightAllowed must be false');
+for (const id of expectedWeekly) {
+  const f = byId[id]?.frequency ?? {};
+  assert(f.weeklyLimited === true, `${id} must be weeklyLimited`);
+  assert(f.maxUses7d === 1, `${id} maxUses7d must be 1`);
+  assert(f.rollingWindowDays === 7, `${id} rollingWindowDays must be 7`);
+  assert(f.automaticFrequencyBoost === false, `${id} automaticFrequencyBoost must be false`);
+  assert(f.missedWeekRequiresMakeup === false, `${id} missedWeekRequiresMakeup must be false`);
+  assert(f.permanentHighlightAllowed === false, `${id} permanentHighlightAllowed must be false`);
+}
+// Weekly-capped herbs must not auto-cluster with each other on the same day.
+for (const id of expectedWeekly) {
+  const avoid = new Set(byId[id].pairing.avoidSameDay ?? []);
+  for (const other of expectedWeekly) {
+    if (other !== id) assert(avoid.has(other), `${id} must avoid ${other} same day`);
+  }
+}
+// One mineral-biomass product per day.
+for (const id of ['spirulina', 'irish_sea_moss', 'shilajit']) {
+  const avoid = new Set(byId[id].pairing.avoidSameDay ?? []);
+  for (const other of ['spirulina', 'irish_sea_moss', 'shilajit']) {
+    if (other !== id) assert(avoid.has(other), `${id} must avoid ${other} same day (one mineral-biomass per day)`);
+  }
+}
+
 const canonical = JSON.stringify(registry);
 const hash = crypto.createHash('sha256').update(canonical).digest('hex');
 console.log(JSON.stringify({ ok: true, schemaVersion: registry.schemaVersion, supplements: registry.supplements.length, hash }, null, 2));
