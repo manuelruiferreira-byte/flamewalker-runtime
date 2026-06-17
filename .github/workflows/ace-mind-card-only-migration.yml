@@ -1,0 +1,45 @@
+name: ACE Mind Card-Only Migration
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ace-mind-card-only-migration.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove legacy supplement-block UI references
+        shell: python
+        run: |
+          from pathlib import Path
+          path = Path('Jester-Intelligence/ACED-Lifestyle/ace-mind.html')
+          text = path.read_text()
+          replacements = {
+            "  const reason=d.blockAssignment?.reasonSummary||d.blockReason||'dynamic';\n  document.getElementById('dayMeta').textContent=`${d.id} · Block ${d.block} · ${d.ptrm||''} · ${reason}`;": "  document.getElementById('dayMeta').textContent=`${d.id} · ${d.ptrm||''} · individual card optimizer`;",
+            "function numerologyLine(d,g){return `${d.ptrm||'unlisted'} · day ${d.dayNum||'?'} · supplement block ${d.block||'?'} (${g.block?.name||'block'}). Use the number field as pacing, not prophecy.`}": "function numerologyLine(d,g){return `${d.ptrm||'unlisted'} · day ${d.dayNum||'?'} · individual supplement scoring. Use the number field as pacing, not prophecy.`}",
+            "how the block felt, body signals, anything worth reviewing later...": "how the guidance felt, body signals, anything worth reviewing later..."
+          }
+          for old, new in replacements.items():
+            if old in text:
+              text = text.replace(old, new)
+            elif new not in text:
+              raise SystemExit('Expected source marker missing')
+          path.write_text(text)
+      - name: Validate permanent block-free architecture
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-block-free.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
+      - name: Commit migration
+        shell: bash
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "ACE Mind Architecture Guard"
+          git config user.email "actions@users.noreply.github.com"
+          git add Jester-Intelligence/ACED-Lifestyle/ace-mind.html
+          git commit -m "fix(ace-mind): remove legacy supplement block UI"
+          git push
