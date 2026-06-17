@@ -6,6 +6,36 @@ const AXIS_ALIASES = Object.freeze({
   skin_connective:'skin', skin:'skin', eyes:'eyes', immune:null, endocrine:null,
   energy_mitochondria:null, respiration:null, body:null
 });
+const PLANETS = Object.freeze(['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto']);
+const WEEKDAY_PLANET = Object.freeze({sunday:'sun',monday:'moon',tuesday:'mars',wednesday:'mercury',thursday:'jupiter',friday:'venus',saturday:'saturn'});
+const SIGN_ELEMENT = Object.freeze({
+  aries:'fire',leo:'fire',sagittarius:'fire',taurus:'earth',virgo:'earth',capricorn:'earth',
+  gemini:'air',libra:'air',aquarius:'air',cancer:'water',scorpio:'water',pisces:'water'
+});
+const NUMEROLOGY_BRIDGE = Object.freeze({
+  1:['sun','initiation','vitality'],2:['moon','receptive','balance'],3:['jupiter','mercury','expression'],
+  4:['saturn','uranus','structure'],5:['mercury','activation','movement'],6:['venus','balance','healing'],
+  7:['neptune','moon','introspection'],8:['saturn','mars','power'],9:['mars','release','completion'],
+  11:['uranus','moon','illumination'],22:['saturn','jupiter','mastery'],33:['venus','jupiter','healing']
+});
+const MAYAN_COLOR_BRIDGE = Object.freeze({
+  red:['fire','mars','initiation','movement'],white:['air','mercury','moon','refinement'],
+  blue:['water','jupiter','uranus','transformation'],yellow:['earth','sun','saturn','integration']
+});
+const MAYAN_ARCHETYPE_BRIDGE = Object.freeze({
+  dragon:['moon','water','nourishment'],wind:['mercury','air','communication'],night:['moon','neptune','rest'],
+  seed:['venus','earth','growth'],serpent:['mars','fire','vitality'],worldbridger:['saturn','release','transition'],
+  hand:['mercury','healing','skill'],star:['venus','beauty','harmony'],moon:['moon','water','purification'],
+  dog:['venus','heart','love'],monkey:['mercury','play','creativity'],human:['jupiter','wisdom','choice'],
+  skywalker:['jupiter','exploration','space'],wizard:['neptune','spirit','receptive'],eagle:['jupiter','vision','air'],
+  warrior:['mars','courage','strategy'],earth:['saturn','earth','navigation'],mirror:['mercury','clarity','reflection'],
+  storm:['uranus','mars','transformation'],sun:['sun','fire','vitality']
+});
+const TONE_BRIDGE = Object.freeze({
+  1:['sun','initiation'],2:['moon','balance'],3:['mercury','activation'],4:['saturn','structure'],
+  5:['jupiter','empowerment'],6:['venus','balance'],7:['neptune','attunement'],8:['venus','harmony'],
+  9:['mars','pulse'],10:['saturn','manifestation'],11:['uranus','release'],12:['jupiter','cooperation'],13:['neptune','transcendence']
+});
 
 export function normalizeToken(value) {
   return String(value ?? '').trim().toLowerCase().normalize('NFKD')
@@ -45,13 +75,85 @@ function scalar(base, verified = false) {
   return Math.max(0, Math.min(1, Number(base) + (verified ? 0.06 : 0)));
 }
 
+function addTokens(target, values) {
+  for (const value of values ?? []) {
+    const token=normalizeToken(value);
+    if(token)target.add(token);
+  }
+}
+
+function planetWords(value) {
+  const text=String(value??'').toLowerCase();
+  return PLANETS.filter(planet=>new RegExp(`\\b${planet}\\b`,'i').test(text));
+}
+
+function signWords(value) {
+  const text=String(value??'').toLowerCase();
+  return Object.keys(SIGN_ELEMENT).filter(sign=>new RegExp(`\\b${sign}\\b`,'i').test(text));
+}
+
+function astrologyTags(day={}) {
+  const tags=new Set();
+  const weekday=normalizeToken(day.weekday);
+  if(WEEKDAY_PLANET[weekday])tags.add(WEEKDAY_PLANET[weekday]);
+  const astrology=day.astrology??{};
+  const active=day.natalTransit?.top??[];
+  for(const row of active.slice(0,4)){
+    addTokens(tags,planetWords(row?.transit_label));
+    addTokens(tags,planetWords(row?.natal_label));
+    addTokens(tags,sortedTokens(row?.aspect));
+  }
+  if(!active.length)addTokens(tags,planetWords(astrology.focus));
+  for(const key of ['sun','moon']){
+    if(astrology[key]){
+      tags.add(key);
+      for(const sign of signWords(astrology[key])){
+        tags.add(sign);
+        tags.add(SIGN_ELEMENT[sign]);
+      }
+    }
+  }
+  addTokens(tags,sortedTokens(astrology.moonPhase));
+  return [...tags].sort();
+}
+
+function baziTags(day={}) {
+  const tags=new Set();
+  addTokens(tags,sortedTokens({element:day.bazi?.element,signature:day.bazi?.signature,pillar:day.bazi?.pillar}));
+  return [...tags].sort();
+}
+
+function numerologyTags(day={}) {
+  const tags=new Set();
+  const number=Number(day.personalDay??day.personalDayRaw??0);
+  addTokens(tags,NUMEROLOGY_BRIDGE[number]??[]);
+  addTokens(tags,[String(number),day.ptrm]);
+  return [...tags].sort();
+}
+
+function mayanTags(day={}) {
+  const tags=new Set();
+  const mayan=day.mayan??{};
+  const color=normalizeToken(mayan.dsColor??mayan.dreamspell?.color??String(mayan.dreamspell?.archetype??'').split(' ')[0]);
+  addTokens(tags,MAYAN_COLOR_BRIDGE[color]??[]);
+  const tone=Number(mayan.dsTone??mayan.dreamspell?.tone??0);
+  addTokens(tags,TONE_BRIDGE[tone]??[]);
+  const tracks=[mayan.dreamspell,mayan.dna,mayan.cosmic,mayan.tzolkin];
+  for(const track of tracks){
+    const words=sortedTokens(track?.archetype??track?.sign??track);
+    addTokens(tags,words);
+    for(const word of words)addTokens(tags,MAYAN_ARCHETYPE_BRIDGE[word]??[]);
+  }
+  return [...tags].sort();
+}
+
 export function buildEsotericDayField(day = {}) {
   const verified = Boolean(day?.verified || day?.astrology?.verified);
   return {
-    astrology:{scalar:scalar(0.66,verified),tags:sortedTokens({astrology:day.astrology,natalTransit:day.natalTransit,focusHint:day.focusHint})},
-    bazi:{scalar:scalar(0.68,false),tags:sortedTokens(day.bazi)},
-    numerology:{scalar:scalar(0.64,false),tags:sortedTokens({ptrm:day.ptrm,personalDay:day.personalDay,personalDayRaw:day.personalDayRaw,personalIso:day.personalIso})},
-    mayan:{scalar:scalar(0.67,false),tags:sortedTokens(day.mayan)}
+    astrology:{scalar:scalar(0.66,verified),tags:astrologyTags(day)},
+    bazi:{scalar:scalar(0.68,false),tags:baziTags(day)},
+    numerology:{scalar:scalar(0.64,false),tags:numerologyTags(day)},
+    mayan:{scalar:scalar(0.67,false),tags:mayanTags(day)}
   };
 }
 
@@ -66,7 +168,7 @@ function scoreFromLifeRecord(record) {
     if (Number.isFinite(Number(record[key]))) return clamp(record[key]);
   }
   const text = JSON.stringify(record).toLowerCase();
-  if (/gold|prime|strong|green|favour|favor|act|open/.test(text)) return 0.82;
+  if (/gold|prime|strong|green|favour|favor|open/.test(text)) return 0.82;
   if (/yellow|watch|conditional|observe/.test(text)) return 0.52;
   if (/red|hold|avoid|closed|veto/.test(text)) return 0.12;
   return null;
@@ -74,13 +176,13 @@ function scoreFromLifeRecord(record) {
 
 const DOMAIN_PATTERNS = Object.freeze({
   career:/career|work|mission|logistics|operations|vocation|job/,
-  study:/study|learn|mercury|analysis|theon|knowledge|focus|cognition/,
+  study:/study|learn|analysis|theon|knowledge|focus|cognition/,
   social:/social|network|friend|community|group/,
   leisure:/leisure|rest|play|recovery|enjoy|fun/,
-  love:/love|relationship|romance|venus|heart|intimacy/,
+  love:/love|relationship|romance|heart|intimacy/,
   creative:/creative|write|music|art|studio|expression|create/,
   spirit:/spirit|prayer|meditation|sophia|logos|ritual|chakra/,
-  body:/body|physical|mars|movement|exercise|stamina|health/,
+  body:/body|physical|movement|exercise|stamina|health/,
   money:/money|trading|finance|provision|market|value/
 });
 
@@ -91,8 +193,8 @@ export function buildDaySignals(day = {}, guidance = {}) {
     const direct = scoreFromLifeRecord(life[key]);
     if (direct != null) out[key] = Math.max(out[key],direct);
   }
-  const text = JSON.stringify({focusHint:day.focusHint,ptrm:day.ptrm,blockReason:day.blockReason,focus:guidance?.c?.focus,summary:guidance?.c?.summary,movement:guidance?.movement,practiceReason:guidance?.practiceReason}).toLowerCase();
-  for (const [key,pattern] of Object.entries(DOMAIN_PATTERNS)) if (pattern.test(text)) out[key] = Math.max(out[key],0.76);
+  const text = JSON.stringify({focus:guidance?.c?.focus,summary:guidance?.c?.summary,movement:guidance?.movement,practiceReason:guidance?.practiceReason}).toLowerCase();
+  for (const [key,pattern] of Object.entries(DOMAIN_PATTERNS)) if (pattern.test(text)) out[key] = Math.max(out[key],0.68);
   const ranked = guidance?.theonFullStack?.ranked ?? guidance?.theonKernel?.ranked ?? [];
   if (Array.isArray(ranked)) ranked.slice(0,4).forEach((entry,index)=>{
     const key = normalizeToken(entry?.domain ?? entry?.id ?? entry?.name);
