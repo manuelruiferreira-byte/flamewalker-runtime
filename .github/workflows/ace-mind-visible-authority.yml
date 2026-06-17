@@ -34,6 +34,7 @@ jobs:
           node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs
           node --check Jester-Intelligence/packages/engines/supplement/tests/validate-live-planner-v3.mjs
           node --check Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority-v2.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/tests/planetary-timing-smoke-v3.mjs
 
       - name: Validate browser module imports in Node
         run: node -e "import('./Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs').then(()=>console.log('daily planner v3 import ok'))"
@@ -58,6 +59,9 @@ jobs:
 
       - name: Validate daily planner v3
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-live-planner-v3.mjs
+
+      - name: Validate planetary-hour timing bridge
+        run: node Jester-Intelligence/packages/engines/supplement/tests/planetary-timing-smoke-v3.mjs
 
       - name: Validate visible supplement authority v1
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority.mjs
