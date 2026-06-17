@@ -8,9 +8,8 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 <title>ACE Mind</title>
-<link rel="manifest" href="./manifest.json?v=2538-live-20260616" />
+<link rel="manifest" href="./manifest.json?v=2538-live-authority-v2-20260617" />
 <meta name="mobile-web-app-capable" content="yes" />
-<meta http-equiv="refresh" content="0;url=./ace-mind.html?v=2538-live-20260616" />
 <style>
   :root{color-scheme:dark}
   html,body{margin:0;width:100%;height:100%;background:#02040a;color:#f8f2dc;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -25,18 +24,29 @@
 </head>
 <body>
 <main class="boot" aria-live="polite">
-  <div class="mark"><img src="./shared/assets/logos/ace-mind.png?v=2538-live-20260616" alt="" /></div>
+  <div class="mark"><img src="./shared/assets/logos/ace-mind.png?v=2538-live-authority-v2-20260617" alt="" /></div>
   <h1>ACE Mind</h1>
-  <p>Opening the calibrated runtime…</p>
-  <a href="./ace-mind.html?v=2538-live-20260616">Open ACE Mind</a>
+  <p>Opening the individual optimizer…</p>
+  <a href="./ace-mind.html?v=2538-live-authority-v2-20260617">Open ACE Mind</a>
 </main>
 <script>
-(function(){
+(async function(){
   'use strict';
-  var target='./ace-mind.html?v=2538-live-20260616';
+  var target='./ace-mind.html?v=2538-live-authority-v2-20260617';
   try{
     ['aced_lifestyle_ai_handoff','ace_mind_return_ai','ace_mind_last_model','ace_mind_pending_ai_payload_meta'].forEach(function(k){sessionStorage.removeItem(k);});
   }catch(e){}
+  try{
+    if('serviceWorker' in navigator){
+      var registration=await navigator.serviceWorker.register('./ace-mind-sw.js?v=2538-live-authority-v2-20260617',{updateViaCache:'none'});
+      await registration.update();
+      if(registration.waiting)registration.waiting.postMessage({type:'ACE_MIND_SKIP_WAITING'});
+      await Promise.race([
+        new Promise(function(resolve){navigator.serviceWorker.addEventListener('controllerchange',resolve,{once:true});}),
+        new Promise(function(resolve){setTimeout(resolve,700);})
+      ]);
+    }
+  }catch(e){console.warn('ACE Mind service worker refresh skipped',e);}
   try{window.location.replace(target);}catch(e){window.location.href=target;}
 })();
 </script>
