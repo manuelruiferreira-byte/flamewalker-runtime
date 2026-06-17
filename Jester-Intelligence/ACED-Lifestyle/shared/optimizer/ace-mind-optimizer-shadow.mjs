@@ -9,7 +9,6 @@ import {
 } from '../../../packages/engines/supplement/index.mjs';
 import { compareLegacyToOptimizer } from './shadow-context-adapter.mjs';
 import { buildLiveContext, readVisibleSupplementNames } from './live-context-adapter.mjs';
-import { buildShadowReport } from './shadow-report.mjs';
 import { renderVisibleSupplements } from './optimizer-visible-renderer.mjs';
 
 const VERSION='ace_mind_optimizer_live.v1';
@@ -20,7 +19,6 @@ const DISABLE_KEY='ace_mind_optimizer_shadow_disabled';
 const REGISTRY_URL=new URL('../data/supplements/supplement-registry.v1.json',import.meta.url);
 const STATE_KEYS=['ace_mind_state_v214','ace_mind_theon_state_v03_block_claim_engine','ace_mind_theon_state_v06','ace_mind_theon_state_v05','ace_mind_theon_state_v04','ace_mind_theon_state_v03'];
 let registryPromise=null, latestRecord=null, lastInputHash='', timer=null, running=false;
-let reportPromise=null, reportCache=null;
 
 function disabled(){
   try{return localStorage.getItem(DISABLE_KEY)==='1';}
@@ -41,16 +39,18 @@ function brusselsDate(){
 }
 
 function readState(){
+  let fallback={};
   for(const key of STATE_KEYS){
     try{
       const raw=localStorage.getItem(key);
-      if(raw){
-        const value=JSON.parse(raw);
-        if(value&&typeof value==='object')return value;
-      }
+      if(!raw)continue;
+      const value=JSON.parse(raw);
+      if(!value||typeof value!=='object')continue;
+      if(!Object.keys(fallback).length)fallback=value;
+      if(value.suppLog&&typeof value.suppLog==='object')return value;
     }catch{}
   }
-  return {};
+  return fallback;
 }
 
 function readSelectedDay(snapshot={}){
@@ -131,23 +131,6 @@ async function getHistory(limit=30){
     };
     request.onerror=()=>{db.close();reject(request.error);};
   });
-}
-
-async function refreshReport(){
-  if(reportPromise)return reportPromise;
-  reportPromise=(async()=>{
-    try{
-      reportCache=buildShadowReport(await getHistory(5000));
-      return reportCache;
-    }catch(error){
-      console.warn('ACE optimizer report failed open',error);
-      reportCache=buildShadowReport([]);
-      return reportCache;
-    }finally{
-      reportPromise=null;
-    }
-  })();
-  return reportPromise;
 }
 
 async function buildContext(){
@@ -241,7 +224,6 @@ async function run(reason='manual'){
     };
     latestRecord=record;
     lastInputHash=inputHash;
-    reportCache=null;
     applyVisibleAuthority(record,supplementRegistry);
     await persist(record);
     window.dispatchEvent(new CustomEvent('ace-mind:optimizer-live',{detail:{date,comparison,optimizerHash:output.determinismHash,authority:'individual'}}));
@@ -287,7 +269,6 @@ if(typeof window!=='undefined'){
     run,
     latest:()=>latestRecord,
     history:getHistory,
-    report:refreshReport,
     disable(){
       localStorage.setItem(DISABLE_KEY,'1');
       if(typeof window.render==='function')window.render();
