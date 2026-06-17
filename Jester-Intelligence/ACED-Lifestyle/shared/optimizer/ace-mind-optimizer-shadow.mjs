@@ -7,10 +7,8 @@ import {
   canonicalize,
   sha256Hex
 } from '../../../packages/engines/supplement/index.mjs';
-import {
-  snapshotToContext,
-  compareLegacyToOptimizer
-} from './shadow-context-adapter.mjs';
+import { compareLegacyToOptimizer } from './shadow-context-adapter.mjs';
+import { buildLiveContext, readVisibleSupplementNames } from './live-context-adapter.mjs';
 import { buildShadowReport } from './shadow-report.mjs';
 import { renderVisibleSupplements } from './optimizer-visible-renderer.mjs';
 
@@ -33,8 +31,8 @@ function readAgentSnapshot(){
   try{
     const raw=document.getElementById('agent-state')?.textContent;
     const parsed=raw?JSON.parse(raw):null;
-    return parsed&&typeof parsed==='object'?parsed:null;
-  }catch{return null;}
+    return parsed&&typeof parsed==='object'?parsed:{};
+  }catch{return {};}
 }
 
 function brusselsDate(){
@@ -53,7 +51,28 @@ function readState(){
     }catch{}
   }
   return {};
+}
 
+function readSelectedDay(snapshot={}){
+  try{
+    if(typeof window.day==='function'){
+      const value=window.day();
+      if(value&&typeof value==='object')return value;
+    }
+  }catch{}
+  return snapshot.day&&typeof snapshot.day==='object'
+    ? snapshot.day
+    : {id:snapshot.active_day||snapshot.activeDate||brusselsDate()};
+}
+
+function readBodySummary(date,snapshot={}){
+  try{
+    if(typeof window.bodySummaryForDate==='function'){
+      const value=window.bodySummaryForDate(date);
+      if(value&&typeof value==='object')return value;
+    }
+  }catch{}
+  return snapshot.body&&typeof snapshot.body==='object'?snapshot.body:{};
 }
 
 async function registry(){
@@ -135,9 +154,21 @@ async function buildContext(){
   const supplementRegistry=await registry();
   const snapshot=readAgentSnapshot();
   const state=readState();
+  const selectedDay=readSelectedDay(snapshot);
+  const date=String(selectedDay?.id||snapshot.active_day||snapshot.activeDate||brusselsDate()).slice(0,10);
+  const bodySummary=readBodySummary(date,snapshot);
+  const visibleNames=readVisibleSupplementNames();
   return {
     registry:supplementRegistry,
-    context:snapshotToContext(snapshot,supplementRegistry,state,brusselsDate())
+    context:buildLiveContext({
+      snapshot,
+      state,
+      registry:supplementRegistry,
+      day:selectedDay,
+      bodySummary,
+      visibleNames,
+      fallbackDate:brusselsDate()
+    })
   };
 }
 
@@ -228,17 +259,25 @@ function schedule(reason='render'){
   timer=setTimeout(()=>run(reason),120);
 }
 
-function installRenderHook(){
-  const base=window.render;
+function wrapAndSchedule(name,reason){
+  const base=window[name];
   if(typeof base!=='function'||base.__aceOptimizerLiveWrapped)return;
   function wrapped(...args){
     const result=base.apply(this,args);
-    schedule('render');
+    schedule(reason);
     return result;
   }
   wrapped.__aceOptimizerLiveWrapped=true;
   wrapped.__aceOptimizerLiveBase=base;
-  window.render=wrapped;
+  window[name]=wrapped;
+}
+
+function installHooks(){
+  wrapAndSchedule('render','render');
+  wrapAndSchedule('setDay','day-change');
+  wrapAndSchedule('fastRenderSelectedDay','fast-day-change');
+  wrapAndSchedule('tickSupp','supplement-tick');
+  wrapAndSchedule('setBodyState','body-change');
 }
 
 if(typeof window!=='undefined'){
@@ -257,7 +296,7 @@ if(typeof window!=='undefined'){
   });
   window.AceMindOptimizerShadow=api;
   window.AceMindOptimizerLive=api;
-  installRenderHook();
+  installHooks();
   window.addEventListener('focus',()=>schedule('focus'));
   document.addEventListener('visibilitychange',()=>{
     if(document.visibilityState==='visible')schedule('visible');
