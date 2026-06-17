@@ -15,9 +15,20 @@ function diagnosticFor(id, diagnostics = {}) {
   return {
     esoteric: d.esotericLabel ?? 'Unscored',
     esotericScalar: Number.isFinite(Number(d.esotericScalar)) ? Number(d.esotericScalar) : null,
+    convergenceBand:d.convergenceBand??'None',
+    convergenceCount:Number(d.convergenceCount??0),
+    convergenceTotal:Number(d.convergenceTotal??4),
+    supportSystems:[...(d.supportSystems??[])],
     body: d.bodyPermission ?? 'unknown',
     frequency: d.frequencyState ?? 'unknown',
     urgency: Number.isFinite(Number(d.frequencyUrgency)) ? Number(d.frequencyUrgency) : null,
+    usesThisWindow:Number(d.usesThisWindow??0),
+    targetUses7d:Number(d.targetUses7d??0),
+    maxUses7d:Number(d.maxUses7d??0),
+    minimumGapHours:Number(d.minimumGapHours??0),
+    residualWindowHours:Number(d.residualWindowHours??0),
+    lastTakenDate:d.lastTakenDate??null,
+    eligibleOpportunitiesRemaining:Number(d.eligibleOpportunitiesRemaining??0),
     pairing: d.pairingState ?? 'unknown'
   };
 }
@@ -38,6 +49,14 @@ function reasonAction(reason = '') {
   return 'NOT SELECTED';
 }
 
+function selectionReason(code,diagnostics){
+  if(code==='frequency')return diagnostics.frequency==='due'?'Due in this week’s rotation':'Frequency balance';
+  if(code==='esoteric')return `${diagnostics.convergenceBand} convergence ${diagnostics.convergenceCount}/${diagnostics.convergenceTotal}`;
+  if(code==='operational')return 'Matches today’s strongest demand';
+  if(code==='confidence')return 'Strong personal fit';
+  return 'Completes today’s support pattern';
+}
+
 function buildSelected(record, index) {
   const rows = new Map();
   for (const selected of record.selected ?? []) {
@@ -46,21 +65,22 @@ function buildSelected(record, index) {
       const existing = rows.get(id);
       const primary = id === primaryId;
       const slot = selected?.memberSlots?.[id] ?? selected?.slot ?? 'morning';
+      const diagnostics=diagnosticFor(id,record.diagnostics);
       const candidate = {
         id,
         name: displayName(id,index),
         tier: index.get(id)?.frequency?.priorityTier ?? 'maintenance',
         action: primary ? 'TAKE TODAY' : 'REQUIRED PAIR',
-        reason: primary ? selected.primaryReason ?? 'optimizer selection' : `Required by ${displayName(primaryId,index)}`,
+        reason: primary ? selectionReason(selected.primaryReason,diagnostics) : `Required with ${displayName(primaryId,index)}`,
         primary,
         primaryId,
         slot: SLOT_ORDER.includes(slot) ? slot : 'morning',
-        diagnostics: diagnosticFor(id,record.diagnostics)
+        diagnostics
       };
       if (!existing || (candidate.primary && !existing.primary)) rows.set(id,candidate);
     }
   }
-  return [...rows.values()].sort((a,b)=>SLOT_ORDER.indexOf(a.slot)-SLOT_ORDER.indexOf(b.slot)||a.name.localeCompare(b.name));
+  return [...rows.values()].sort((a,b)=>SLOT_ORDER.indexOf(a.slot)-SLOT_ORDER.indexOf(b.slot)||b.diagnostics.convergenceCount-a.diagnostics.convergenceCount||a.name.localeCompare(b.name));
 }
 
 function assertUniqueRows(selected) {
@@ -102,7 +122,7 @@ function buildNotToday(record,index,selectedIds) {
       diagnostics:diagnosticFor(supplement.id,record.diagnostics)
     });
   }
-  return rows;
+  return rows.sort((a,b)=>b.diagnostics.convergenceCount-a.diagnostics.convergenceCount||a.name.localeCompare(b.name));
 }
 
 export function buildVisibleSupplementModel(record = {}, registry = {}) {
@@ -114,9 +134,10 @@ export function buildVisibleSupplementModel(record = {}, registry = {}) {
   const notToday=buildNotToday(record,index,selectedIds);
   const groups=Object.fromEntries(SLOT_ORDER.map(slot=>[slot,selected.filter(x=>x.slot===slot)]));
   return Object.freeze({
-    version:'ace_mind_optimizer_visible.v2',
+    version:'ace_mind_optimizer_visible.v3',
     date:String(record.date ?? ''),
-    authority:'INDIVIDUAL_OPTIMIZER_V2',
+    authority:'INDIVIDUAL_OPTIMIZER_V3',
+    historyMode:record.historyMode??'actual',
     selected,
     groups,
     notToday,
