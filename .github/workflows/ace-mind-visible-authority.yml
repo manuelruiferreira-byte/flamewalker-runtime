@@ -6,6 +6,8 @@ on:
     branches: [main]
     paths:
       - 'Jester-Intelligence/ACED-Lifestyle/shared/optimizer/**'
+      - 'Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/**'
+      - 'Jester-Intelligence/ACED-Lifestyle/scripts/**supplement**'
       - 'Jester-Intelligence/packages/engines/supplement/**'
       - '.github/workflows/ace-mind-visible-authority.yml'
 
@@ -16,10 +18,8 @@ jobs:
   validate-visible-authority:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out PR branch
+      - name: Check out pull request merge ref
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
 
       - name: Validate source syntax
         shell: bash
