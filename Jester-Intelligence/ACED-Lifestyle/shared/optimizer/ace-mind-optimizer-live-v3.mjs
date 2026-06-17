@@ -51,6 +51,8 @@ function schedule(reason){clearTimeout(timer);timer=setTimeout(()=>run(reason),2
 function wrap(name){const base=window[name];if(typeof base!=='function'||base.__aceOptimizerV3)return;const wrapped=function(...args){const result=base.apply(this,args);schedule(name);return result;};wrapped.__aceOptimizerV3=true;window[name]=wrapped;}
 function boot(){['render','setDay','fastRenderSelectedDay','tickSupp','setBodyState'].forEach(wrap);const el=root();if(el){observer=new MutationObserver(()=>{if(!running&&!el.querySelector('[data-optimizer-live-v3]'))schedule('legacy overwrite');});observer.observe(el,{childList:true});}schedule('boot');}
 
-window.AceMindOptimizerLive=Object.freeze({version:VERSION,run,latest:()=>latestRecord,lastHash:()=>lastHash});
-window.AceMindOptimizerShadow=window.AceMindOptimizerLive;
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+if(typeof window!=='undefined'){
+  window.AceMindOptimizerLive=Object.freeze({version:VERSION,run,latest:()=>latestRecord,lastHash:()=>lastHash});
+  window.AceMindOptimizerShadow=window.AceMindOptimizerLive;
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+}
