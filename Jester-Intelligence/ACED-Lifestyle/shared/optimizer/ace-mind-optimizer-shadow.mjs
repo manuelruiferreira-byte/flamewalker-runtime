@@ -12,8 +12,9 @@ import {
   compareLegacyToOptimizer
 } from './shadow-context-adapter.mjs';
 import { buildShadowReport } from './shadow-report.mjs';
+import { renderVisibleSupplements } from './optimizer-visible-renderer.mjs';
 
-const VERSION='ace_mind_optimizer_shadow.v1';
+const VERSION='ace_mind_optimizer_live.v1';
 const DB_NAME='ACE_MIND_OPTIMIZER_SHADOW_DB';
 const DB_VERSION=1;
 const STORE='runs';
@@ -52,6 +53,7 @@ function readState(){
     }catch{}
   }
   return {};
+
 }
 
 async function registry(){
@@ -91,7 +93,7 @@ async function persist(record){
     });
     db.close();
   }catch(error){
-    console.warn('ACE optimizer shadow storage skipped',error);
+    console.warn('ACE optimizer storage skipped',error);
   }
 }
 
@@ -119,7 +121,7 @@ async function refreshReport(){
       reportCache=buildShadowReport(await getHistory(5000));
       return reportCache;
     }catch(error){
-      console.warn('ACE optimizer shadow report failed open',error);
+      console.warn('ACE optimizer report failed open',error);
       reportCache=buildShadowReport([]);
       return reportCache;
     }finally{
@@ -139,6 +141,35 @@ async function buildContext(){
   };
 }
 
+function buildDiagnostics(supplementRegistry,layers,output){
+  const selectedIds=new Set((output.selected??[]).flatMap(item=>item?.atom?.memberIds??[]));
+  return Object.fromEntries([...(supplementRegistry.supplements??[])]
+    .sort((a,b)=>a.id.localeCompare(b.id))
+    .map(item=>{
+      const eso=layers.esoteric?.[item.id]??{};
+      const body=layers.body?.[item.id]??{};
+      const frequency=layers.frequency?.[item.id]??{};
+      const pairing=layers.pairing?.[item.id]??{};
+      return [item.id,{
+        esotericLabel:eso.label??'Unscored',
+        esotericScalar:Number.isFinite(Number(eso.scalar))?Number(eso.scalar):null,
+        bodyPermission:body.label??'unknown',
+        frequencyState:frequency.state??'unknown',
+        frequencyUrgency:Number.isFinite(Number(frequency.urgency))?Number(frequency.urgency):null,
+        pairingState:selectedIds.has(item.id)?'complete':pairing.state??'unknown'
+      }];
+    }));
+}
+
+function applyVisibleAuthority(record,supplementRegistry){
+  if(disabled())return null;
+  try{return renderVisibleSupplements(record,supplementRegistry);}
+  catch(error){
+    console.error('ACE optimizer visible authority rejected output',error);
+    return null;
+  }
+}
+
 async function run(reason='manual'){
   if(disabled()||running)return latestRecord;
   running=true;
@@ -146,7 +177,10 @@ async function run(reason='manual'){
     const {registry:supplementRegistry,context}=await buildContext();
     const date=context.date;
     const inputHash=sha256Hex(JSON.stringify(canonicalize(context)));
-    if(inputHash===lastInputHash&&latestRecord)return latestRecord;
+    if(inputHash===lastInputHash&&latestRecord){
+      applyVisibleAuthority(latestRecord,supplementRegistry);
+      return latestRecord;
+    }
 
     const layers={
       esoteric:evaluateEsotericRegistry(supplementRegistry,context.dayField),
@@ -160,7 +194,7 @@ async function run(reason='manual'){
     const record={
       key:`${date}:${inputHash}`,
       version:VERSION,
-      mode:'read-only',
+      mode:'visible-authority',
       date,
       createdAt,
       reason,
@@ -168,6 +202,7 @@ async function run(reason='manual'){
       optimizerHash:output.determinismHash,
       legacy:context.legacy,
       comparison,
+      diagnostics:buildDiagnostics(supplementRegistry,layers,output),
       selected:output.selected,
       residual:output.residual,
       held:output.held,
@@ -176,11 +211,12 @@ async function run(reason='manual'){
     latestRecord=record;
     lastInputHash=inputHash;
     reportCache=null;
+    applyVisibleAuthority(record,supplementRegistry);
     await persist(record);
-    window.dispatchEvent(new CustomEvent('ace-mind:optimizer-shadow',{detail:{date,comparison,optimizerHash:output.determinismHash}}));
+    window.dispatchEvent(new CustomEvent('ace-mind:optimizer-live',{detail:{date,comparison,optimizerHash:output.determinismHash,authority:'individual'}}));
     return record;
   }catch(error){
-    console.warn('ACE optimizer shadow failed open',error);
+    console.error('ACE optimizer live authority failed',error);
     return null;
   }finally{
     running=false;
@@ -189,35 +225,39 @@ async function run(reason='manual'){
 
 function schedule(reason='render'){
   clearTimeout(timer);
-  timer=setTimeout(()=>run(reason),220);
+  timer=setTimeout(()=>run(reason),120);
 }
 
 function installRenderHook(){
   const base=window.render;
-  if(typeof base!=='function'||base.__aceOptimizerShadowWrapped)return;
+  if(typeof base!=='function'||base.__aceOptimizerLiveWrapped)return;
   function wrapped(...args){
     const result=base.apply(this,args);
     schedule('render');
     return result;
   }
-  wrapped.__aceOptimizerShadowWrapped=true;
-  wrapped.__aceOptimizerShadowBase=base;
+  wrapped.__aceOptimizerLiveWrapped=true;
+  wrapped.__aceOptimizerLiveBase=base;
   window.render=wrapped;
 }
 
 if(typeof window!=='undefined'){
-  window.AceMindOptimizerShadow=Object.freeze({
+  const api=Object.freeze({
     version:VERSION,
-    mode:'read-only',
+    mode:'visible-authority',
     run,
     latest:()=>latestRecord,
     history:getHistory,
     report:refreshReport,
-    disable(){localStorage.setItem(DISABLE_KEY,'1');},
+    disable(){
+      localStorage.setItem(DISABLE_KEY,'1');
+      if(typeof window.render==='function')window.render();
+    },
     enable(){localStorage.removeItem(DISABLE_KEY);schedule('enabled');}
   });
+  window.AceMindOptimizerShadow=api;
+  window.AceMindOptimizerLive=api;
   installRenderHook();
-  window.addEventListener('ace-mind:optimizer-shadow',()=>{void refreshReport();});
   window.addEventListener('focus',()=>schedule('focus'));
   document.addEventListener('visibilitychange',()=>{
     if(document.visibilityState==='visible')schedule('visible');
