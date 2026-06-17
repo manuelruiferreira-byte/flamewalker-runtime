@@ -1,11 +1,11 @@
-/* ACE Mind Service Worker v25.0.6
-   Safe cache purge version.
+/* ACE Mind Service Worker v25.0.7
+   Live-authority cache seal.
    Canonical launch file: ./ace-mind-trace.html
    Runtime app file remains: ./ace-mind.html
-   Purpose: stop old boot/cache ghosts and route notifications to ACE Mind with IndexedDB trace memory.
+   Critical optimizer modules always bypass the HTTP cache.
 */
 
-const ACE_MIND_SW_VERSION = "25.0.6-trace-launcher";
+const ACE_MIND_SW_VERSION = "25.0.7-live-authority-v2";
 const CACHE_PREFIX = "ace-mind-cache-";
 
 self.addEventListener("install", event => {
@@ -16,28 +16,35 @@ self.addEventListener("activate", event => {
   event.waitUntil(
     (async () => {
       const names = await caches.keys();
-
       await Promise.all(
         names
           .filter(name => name.startsWith(CACHE_PREFIX))
           .map(name => caches.delete(name))
       );
-
       await self.clients.claim();
     })()
   );
 });
 
 self.addEventListener("fetch", event => {
-  // Network-only service worker.
-  // This prevents old cached boot versions from being served.
-  return;
+  const request = event.request;
+  if (request.method !== "GET") return;
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+
+  const criticalOptimizerAsset =
+    url.pathname.includes("/shared/optimizer/") ||
+    url.pathname.includes("/packages/engines/supplement/") ||
+    url.pathname.endsWith("/supplement-registry.v1.json");
+
+  if (criticalOptimizerAsset) {
+    event.respondWith(fetch(request, { cache: "no-store" }));
+  }
 });
 
 self.addEventListener("notificationclick", event => {
   event.notification.close();
-
-  const targetUrl = "./ace-mind-trace.html";
+  const targetUrl = "./ace-mind-trace.html?v=2538-live-authority-v2-20260617";
 
   event.waitUntil(
     (async () => {
@@ -64,7 +71,6 @@ self.addEventListener("notificationclick", event => {
 
 self.addEventListener("notificationclose", event => {
   // Reserved for future ACE Halo / Attention Garden.
-  // No tracking. No network call.
 });
 
 self.addEventListener("message", event => {
@@ -81,7 +87,7 @@ self.addEventListener("message", event => {
       canonical: "./ace-mind-trace.html",
       runtime: "./ace-mind.html",
       trace_store: "./shared/js/ace-mind-trace-store-v0-1.js",
-      cache_mode: "network-only-cache-purge"
+      cache_mode: "optimizer-network-no-store"
     });
   }
 });
