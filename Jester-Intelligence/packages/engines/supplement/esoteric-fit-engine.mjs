@@ -22,7 +22,7 @@ function supplementTags(supplement) {
 
 function tagOverlapScore(supplementTagList, dayTags) {
   const day = new Set(stableUnique(dayTags));
-  if (!supplementTagList.length || !day.size) return 0.5;
+  if (!supplementTagList.length || !day.size) return 0;
   let matches = 0;
   for (const tag of supplementTagList) if (day.has(tag)) matches += 1;
   return clamp(matches / Math.max(1, Math.min(3, supplementTagList.length)));
@@ -36,12 +36,21 @@ function labelForScalar(scalar, thresholds) {
   return ESOTERIC_LABELS.DISCORDANT;
 }
 
+function convergenceBand(count) {
+  if (count >= 4) return 'Gold';
+  if (count === 3) return 'High';
+  if (count === 2) return 'Medium';
+  if (count === 1) return 'Low';
+  return 'None';
+}
+
 export function evaluateEsotericFit(supplement, dayField = {}, config = DEFAULT_ESOTERIC_CONFIG) {
   assertSupplementRecord(supplement);
   const tags = supplementTags(supplement);
   const components = {};
   let weighted = 0;
   let totalWeight = 0;
+  const supportSystems=[];
 
   for (const system of ['astrology', 'bazi', 'numerology', 'mayan']) {
     const weight = Number(config.SYSTEM_WEIGHTS?.[system] ?? 0);
@@ -53,26 +62,32 @@ export function evaluateEsotericFit(supplement, dayField = {}, config = DEFAULT_
       + Number(config.TAG_MATCH_WEIGHT ?? 0.75) * overlap
     );
     const signalTags = new Set(stableUnique(signal.tags ?? []));
+    const matchedTags=tags.filter(tag => signalTags.has(tag)).sort();
+    if(matchedTags.length)supportSystems.push(system);
     components[system] = {
       scalar: quantize(score, config.QUANTIZE),
       dayScalar: quantize(dayScalar, config.QUANTIZE),
       tagMatch: quantize(overlap, config.QUANTIZE),
-      matchedTags: tags.filter(tag => signalTags.has(tag)).sort()
+      matchedTags
     };
     weighted += score * weight;
     totalWeight += weight;
   }
 
-  const scalar = quantize(totalWeight > 0 ? weighted / totalWeight : 0.5, config.QUANTIZE);
+  const scalar = quantize(totalWeight > 0 ? weighted / totalWeight : 0, config.QUANTIZE);
   const label = labelForScalar(scalar, config.THRESHOLDS);
+  const convergenceCount=supportSystems.length;
+  const band=convergenceBand(convergenceCount);
   return Object.freeze({
-    engine: 'esoteric_fit',
-    engineVersion: ENGINE_VERSION,
-    supplementId: supplement.id,
+    engine: 'esoteric_fit', engineVersion: ENGINE_VERSION, supplementId: supplement.id,
     label,
     scalar,
+    convergenceCount,
+    convergenceTotal:4,
+    convergenceBand:band,
+    supportSystems:Object.freeze([...supportSystems]),
     components,
-    reasonTrail: [`Esoteric fit ${label} (${scalar.toFixed(4)}).`]
+    reasonTrail: [`Esoteric fit ${label} (${scalar.toFixed(4)}); convergence ${band} ${convergenceCount}/4.`]
   });
 }
 
