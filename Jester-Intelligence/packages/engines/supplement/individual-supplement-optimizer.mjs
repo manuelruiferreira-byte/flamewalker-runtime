@@ -3,6 +3,7 @@ import { buildAtoms, materializeMembers } from './atom-builder.mjs';
 import { planSlots } from './slot-planner.mjs';
 import { mergeOptimizerConfig } from './optimizer-config.mjs';
 import { sha256Hex } from './sha256.mjs';
+import { evaluateFunctionalOverlap, updateCoveredFunctions } from './functional-overlap-engine.mjs';
 
 const HOLD_PRIORITY = [
   'critical data missing','body hold','personal maximum reached','min gap not reached','residual active',
@@ -75,6 +76,20 @@ function staticValue(atom, config) {
     + Number(w.W_CONF)*atom.confidence;
 }
 
+function functionalOverlapPenalty(atoms, config) {
+  // Calculate total overlap penalty for the stack using marginal coverage
+  let coveredFunctions = new Map();
+  let totalPenalty = 0;
+  for (const atom of [...atoms].sort((a,b)=>a.sortKey.localeCompare(b.sortKey))) {
+    const supp = atom.primary ?? { id: atom.primaryId, name: atom.primaryId, classes: atom.classes ?? [] };
+    const overlap = evaluateFunctionalOverlap(supp, coveredFunctions);
+    totalPenalty += overlap.overlapPenalty;
+    coveredFunctions = updateCoveredFunctions(coveredFunctions, supp);
+  }
+  const overlapWeight = Number(config.WEIGHTS?.W_OVERLAP ?? 0.05);
+  return atoms.length > 0 ? (totalPenalty / atoms.length) * overlapWeight : 0;
+}
+
 export function stackQuality(atoms, configInput = {}) {
   const config = mergeOptimizerConfig(configInput);
   const materialized = materializeMembers(atoms);
@@ -82,7 +97,8 @@ export function stackQuality(atoms, configInput = {}) {
   const balance = Number(config.WEIGHTS.W_BAL) * benefitQuality(materialized.members,config);
   const burden = burdenPenalty(materialized.members,config);
   const complexity = (atoms.length * (atoms.length + 1) / 2) * Number(config.COMPLEXITY_PENALTY_PER_ATOM ?? 0);
-  return quantize(staticTotal + balance - burden - complexity, config.QUANTIZE);
+  const overlap = functionalOverlapPenalty(atoms, config);
+  return quantize(staticTotal + balance - burden - complexity - overlap, config.QUANTIZE);
 }
 
 function criticalGate(atom) {
@@ -188,6 +204,17 @@ function dominantReason(atom, stackBefore, config) {
   return terms[0][0];
 }
 
+function computeFunctionalOverlapScore(atom, stack) {
+  // Build coveredFunctions from current stack
+  let coveredFunctions = new Map();
+  for (const s of [...stack].sort((a,b)=>a.sortKey.localeCompare(b.sortKey))) {
+    const supp = s.primary ?? { id: s.primaryId, name: s.primaryId, classes: s.classes ?? [] };
+    coveredFunctions = updateCoveredFunctions(coveredFunctions, supp);
+  }
+  const supp = atom.primary ?? { id: atom.primaryId, name: atom.primaryId, classes: atom.classes ?? [] };
+  return evaluateFunctionalOverlap(supp, coveredFunctions).marginalValue;
+}
+
 function bestAdmission(pool, stack, input, config) {
   const currentQ = stackQuality(stack,config);
   const candidates = [];
@@ -195,7 +222,8 @@ function bestAdmission(pool, stack, input, config) {
     const gate = admissible(atom,stack,input,config);
     if (!gate.ok) continue;
     const mu = quantize(stackQuality([...stack,atom],config)-currentQ,config.QUANTIZE);
-    candidates.push({ atom, mu, gate });
+    const functionalOverlapScore = computeFunctionalOverlapScore(atom, stack);
+    candidates.push({ atom, mu, gate, functionalOverlapScore });
   }
   candidates.sort((a,b)=>b.mu-a.mu || a.atom.sortKey.localeCompare(b.atom.sortKey));
   return candidates[0] ?? null;
@@ -264,7 +292,7 @@ function greedyBuild(pool,input,config,initialStack=[],initialAdmissions=new Map
     const best=bestAdmission(pool,stack,input,config);
     if (!best || best.mu < Number(config.MIN_MARGINAL_UTILITY)) break;
     const reason=dominantReason(best.atom,stack,config);
-    admissions.set(best.atom.id,{ marginalUtilityAtAdmission:best.mu, primaryReason:reason });
+    admissions.set(best.atom.id,{ marginalUtilityAtAdmission:best.mu, primaryReason:reason, functionalOverlapScore: best.functionalOverlapScore ?? 1 });
     stack.push(best.atom);
     stack.sort((a,b)=>a.sortKey.localeCompare(b.sortKey));
   }
@@ -370,6 +398,7 @@ function selectedRecord(atom,stack,admission,slotPlan) {
     memberSlots:Object.fromEntries(atom.memberIds.map(id=>[id,slotPlan[id]??null]).sort(([a],[b])=>a.localeCompare(b))),
     marginalUtilityAtAdmission:admission?.marginalUtilityAtAdmission??0,
     primaryReason:admission?.primaryReason??'balance',
+    functionalOverlapScore:admission?.functionalOverlapScore??1,
     benefitAreas:benefits,
     burdenAreas:burdens
   };

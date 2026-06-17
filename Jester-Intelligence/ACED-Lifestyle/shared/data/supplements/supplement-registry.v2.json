@@ -1,0 +1,8242 @@
+{
+  "schemaVersion": "ace_mind_supplement_registry.v2",
+  "registryId": "ace-mind-supplement-registry-v2-commit1",
+  "generatedAt": "2026-06-17",
+  "doctrine": "Canonical supplement registry v2 for ACE Mind Individual Supplement Optimizer. Extends v1 with full personal response data, 14-axis body matrix, functional overlap tracking, esoteric signature structure, and planetary hour profile. Does not make medical claims.",
+  "bodySystems": [
+    "heart",
+    "brain",
+    "nervous",
+    "sleep",
+    "liver",
+    "gut",
+    "immune",
+    "muscles_back",
+    "skin_connective",
+    "endocrine",
+    "energy_mitochondria",
+    "respiration",
+    "eyes",
+    "joints_connective"
+  ],
+  "functionAxes": [
+    "mitochondrial_energy",
+    "physical_energy",
+    "cognition",
+    "memory",
+    "focus",
+    "nervous_system_calming",
+    "sleep_initiation",
+    "sleep_maintenance",
+    "liver_support",
+    "methylation",
+    "antioxidant_support",
+    "heart_circulation",
+    "nitric_oxide",
+    "muscle_back_support",
+    "joints_connective_tissue",
+    "skin",
+    "gut_digestion",
+    "immune_modulation",
+    "endocrine_hormonal",
+    "libido",
+    "respiratory_support",
+    "eyes",
+    "longevity_cellular_repair",
+    "autophagy",
+    "inflammation_modulation"
+  ],
+  "lifeDomains": [
+    "career",
+    "study",
+    "social",
+    "leisure",
+    "love",
+    "creative",
+    "spirit",
+    "body",
+    "money"
+  ],
+  "defaultConfig": {
+    "slotCaps": {
+      "morning": 4,
+      "afternoon": 4,
+      "night": 3
+    },
+    "classCaps": {
+      "nad_booster": 1,
+      "brain_activation": 2,
+      "endocrine_caution": 1,
+      "immune_mushroom": 2,
+      "stimulant": 1
+    },
+    "labels": {
+      "autoSelection": [
+        "allowed",
+        "caution",
+        "manual_only",
+        "excluded"
+      ],
+      "permission": [
+        "clear",
+        "conditional",
+        "hold",
+        "excluded"
+      ],
+      "frequency": [
+        "due",
+        "optional",
+        "residual",
+        "cooling_down",
+        "complete",
+        "manual_only",
+        "excluded"
+      ]
+    }
+  },
+  "weeklyLimitedHerbs": {
+    "members": [
+      "ashwagandha",
+      "fadogia_agrestis",
+      "gotu_kola",
+      "reishi",
+      "turkesterone"
+    ],
+    "maxUsesPerRolling7Days": 1,
+    "automaticFrequencyBoost": false,
+    "missedWeekRequiresMakeup": false,
+    "permanentHighlightAllowed": false
+  },
+  "mutualExclusionGroups": [
+    {
+      "id": "nad_precursor",
+      "members": [
+        "nr",
+        "nmn",
+        "nmnh"
+      ],
+      "maxPerDay": 1
+    },
+    {
+      "id": "mineral_biomass",
+      "members": [
+        "irish_sea_moss",
+        "shilajit",
+        "spirulina"
+      ],
+      "maxPerDay": 1
+    },
+    {
+      "id": "primary_sleep_aid",
+      "members": [
+        "melatonin",
+        "valerian"
+      ],
+      "maxPerDay": 1
+    },
+    {
+      "id": "weekly_limited_herbs",
+      "members": [
+        "ashwagandha",
+        "fadogia_agrestis",
+        "gotu_kola",
+        "reishi",
+        "turkesterone"
+      ],
+      "maxPerDay": 1
+    }
+  ],
+  "supplements": [
+    {
+      "id": "magnesium_citrate",
+      "name": "Magnesium Citrate",
+      "aliases": [
+        "Mag Citrate ½ dose"
+      ],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "personal_protocol",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": "User protocol: required magnesium lane for NAD days; coordinate with other magnesium forms."
+      },
+      "functions": {
+        "primary": [
+          "gut_digestion"
+        ],
+        "secondary": [
+          "nervous_system_calming",
+          "mitochondrial_energy",
+          "muscle_back_support",
+          "methylation"
+        ],
+        "weights": {
+          "mitochondrial_energy": 0.3,
+          "gut_digestion": 0.5,
+          "nervous_system_calming": 0.4,
+          "muscle_back_support": 0.3,
+          "methylation": 0.2
+        }
+      },
+      "functionalClasses": [
+        "mitochondrial_energy",
+        "gut_digestion",
+        "nervous_system_calming",
+        "muscle_back_support",
+        "methylation"
+      ],
+      "body": {
+        "benefits": {
+          "gut": 2,
+          "nervous": 1,
+          "muscles_back": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "gut": {
+          "supportStrength": 2,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "muscles_back": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "mineral_magnesium",
+          "nad_companion",
+          "gut_buffer"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 5,
+        "maxUses7d": 7,
+        "minimumGapHours": 12,
+        "persistenceClass": "short",
+        "residualWindowHours": 12,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning",
+        "flex"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "magnesium",
+        "nad_companion"
+      ],
+      "domains": {
+        "body": 2,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Mercury"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "hydration",
+          "buffer",
+          "nad_companion"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Moon",
+            "Mercury"
+          ],
+          "elements": [
+            "Water",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Moon",
+            "Mercury"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Earth",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "winter",
+            "autumn"
+          ],
+          "dayMasterStem": "己",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            7
+          ],
+          "constructiveQualities": [
+            "buffer",
+            "balance"
+          ],
+          "numerologySum": 70,
+          "numerologyRoot": 7
+        },
+        "mayan": {
+          "dreamspell": "White Mirror",
+          "tzolkinCholQij": "Etznab"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Moon",
+          "Mercury"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "blue",
+        "priorityBadge": "companion"
+      },
+      "notes": "User protocol: required magnesium lane for NAD days; coordinate with other magnesium forms."
+    },
+    {
+      "id": "magnesium_malate",
+      "name": "Magnesium Malate",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "mitochondrial_energy"
+        ],
+        "secondary": [
+          "muscle_back_support",
+          "physical_energy",
+          "focus"
+        ],
+        "weights": {
+          "mitochondrial_energy": 0.7,
+          "physical_energy": 0.5,
+          "muscle_back_support": 0.5,
+          "focus": 0.3
+        }
+      },
+      "functionalClasses": [
+        "mitochondrial_energy",
+        "physical_energy",
+        "muscle_back_support",
+        "focus"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "muscles_back": 2,
+          "brain": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "sleep": 1
+        }
+      },
+      "bodyAxes": {
+        "energy_mitochondria": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "muscles_back": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "brain": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "mineral_magnesium",
+          "energy_support",
+          "muscle_support"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "magnesium",
+        "energy_support"
+      ],
+      "domains": {
+        "career": 1,
+        "study": 1,
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars",
+          "Mercury"
+        ],
+        "elements": [
+          "Earth",
+          "Fire"
+        ],
+        "qualities": [
+          "ATP",
+          "muscle",
+          "focus"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Mars",
+            "Mercury"
+          ],
+          "elements": [
+            "Earth",
+            "Fire"
+          ],
+          "planetaryHourAffinity": [
+            "Mars",
+            "Mercury"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Fire",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer",
+            "spring"
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            1
+          ],
+          "constructiveQualities": [
+            "drive",
+            "ATP"
+          ],
+          "numerologySum": 55,
+          "numerologyRoot": 1
+        },
+        "mayan": {
+          "dreamspell": "Red Earth",
+          "tzolkinCholQij": "Caban"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Mars",
+          "Mercury"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "orange",
+        "priorityBadge": "core"
+      },
+      "notes": ""
+    },
+    {
+      "id": "magnesium_bisglycinate",
+      "name": "Magnesium Bisglycinate",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "nervous_system_calming"
+        ],
+        "secondary": [
+          "sleep_initiation",
+          "sleep_maintenance",
+          "muscle_back_support"
+        ],
+        "weights": {
+          "nervous_system_calming": 0.8,
+          "sleep_initiation": 0.6,
+          "sleep_maintenance": 0.5,
+          "muscle_back_support": 0.3
+        }
+      },
+      "functionalClasses": [
+        "nervous_system_calming",
+        "sleep_initiation",
+        "sleep_maintenance",
+        "muscle_back_support"
+      ],
+      "body": {
+        "benefits": {
+          "nervous": 2,
+          "sleep": 2,
+          "muscles_back": 1
+        },
+        "burdens": {
+          "sleep": 1
+        }
+      },
+      "bodyAxes": {
+        "nervous": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 2,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "muscles_back": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "mineral_magnesium",
+          "nervous_support",
+          "sleep_support"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 5,
+        "minimumGapHours": 12,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "night",
+        "flex"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "magnesium",
+        "calm"
+      ],
+      "domains": {
+        "leisure": 2,
+        "body": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Venus"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "calm",
+          "sleep",
+          "muscle"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Moon",
+            "Venus"
+          ],
+          "elements": [
+            "Water",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Moon",
+            "Venus"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Water",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "winter"
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            3
+          ],
+          "constructiveQualities": [
+            "calm",
+            "rest"
+          ],
+          "numerologySum": 93,
+          "numerologyRoot": 3
+        },
+        "mayan": {
+          "dreamspell": "White Wind",
+          "tzolkinCholQij": "Ik"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Moon",
+          "Venus"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "blue",
+        "priorityBadge": "rest"
+      },
+      "notes": ""
+    },
+    {
+      "id": "magnesium_taurate",
+      "name": "Magnesium Taurate",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "heart_circulation"
+        ],
+        "secondary": [
+          "nervous_system_calming",
+          "sleep_initiation",
+          "muscle_back_support"
+        ],
+        "weights": {
+          "heart_circulation": 0.8,
+          "nervous_system_calming": 0.6,
+          "sleep_initiation": 0.4,
+          "muscle_back_support": 0.2
+        }
+      },
+      "functionalClasses": [
+        "heart_circulation",
+        "nervous_system_calming",
+        "sleep_initiation",
+        "muscle_back_support"
+      ],
+      "body": {
+        "benefits": {
+          "heart": 2,
+          "nervous": 2,
+          "sleep": 1
+        },
+        "burdens": {
+          "sleep": 1
+        }
+      },
+      "bodyAxes": {
+        "heart": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 1,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "mineral_magnesium",
+          "heart_support",
+          "taurine_source"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 12,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "night",
+        "flex"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "magnesium",
+        "heart_calm"
+      ],
+      "domains": {
+        "body": 2,
+        "love": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Venus"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "heart",
+          "calm",
+          "downshift"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Venus",
+            "Moon"
+          ],
+          "elements": [
+            "Water",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Venus",
+            "Moon"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Fire",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "winter",
+            "autumn"
+          ],
+          "dayMasterStem": "丁",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            8
+          ],
+          "constructiveQualities": [
+            "heart",
+            "calm"
+          ],
+          "numerologySum": 62,
+          "numerologyRoot": 8
+        },
+        "mayan": {
+          "dreamspell": "White Dog",
+          "tzolkinCholQij": "Oc"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Venus",
+          "Moon"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "green",
+        "priorityBadge": "heart"
+      },
+      "notes": ""
+    },
+    {
+      "id": "nr",
+      "name": "NR",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "personal_protocol",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "strongly_positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "mitochondrial_energy",
+          "longevity_cellular_repair",
+          "cognition"
+        ],
+        "secondary": [
+          "methylation",
+          "focus"
+        ],
+        "weights": {
+          "mitochondrial_energy": 0.9,
+          "cognition": 0.7,
+          "longevity_cellular_repair": 0.8,
+          "methylation": 0.6,
+          "focus": 0.5
+        }
+      },
+      "functionalClasses": [
+        "mitochondrial_energy",
+        "cognition",
+        "longevity_cellular_repair",
+        "methylation",
+        "focus"
+      ],
+      "rotationFamily": "nad_booster",
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 3,
+          "brain": 2,
+          "nervous": 1
+        },
+        "burdens": {
+          "nervous": 2,
+          "sleep": 2,
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "energy_mitochondria": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "brain": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 1,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 0,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "nad_booster",
+          "nad_precursor",
+          "cellular_repair",
+          "methylation_driver"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "short",
+        "residualWindowHours": 24,
+        "priorityTier": "constitutional",
+        "rotationGroup": "nad_booster",
+        "groupTargetUses7d": 5
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "nad_booster",
+        "methylation_driver",
+        "brain_activation"
+      ],
+      "domains": {
+        "career": 2,
+        "study": 2,
+        "creative": 1,
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [
+          "tmg",
+          "magnesium_citrate"
+        ],
+        "preferredPairs": [
+          "coq10",
+          "omega_3"
+        ],
+        "avoidSameDay": [
+          "nmn",
+          "nmnh"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun",
+          "Mercury"
+        ],
+        "elements": [
+          "Fire",
+          "Air"
+        ],
+        "qualities": [
+          "vitality",
+          "cognition",
+          "cellular"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Sun",
+            "Mercury"
+          ],
+          "elements": [
+            "Fire",
+            "Air"
+          ],
+          "planetaryHourAffinity": [
+            "Sun",
+            "Mercury"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Fire",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer",
+            "spring"
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            5
+          ],
+          "constructiveQualities": [
+            "vitality",
+            "renewal",
+            "NAD"
+          ],
+          "numerologySum": 14,
+          "numerologyRoot": 5
+        },
+        "mayan": {
+          "dreamspell": "Yellow Sun",
+          "tzolkinCholQij": "Ahau"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Sun",
+          "Mercury"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "gold",
+        "priorityBadge": "constitutional"
+      },
+      "notes": ""
+    },
+    {
+      "id": "nmn",
+      "name": "NMN",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "personal_protocol",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "longevity_cellular_repair",
+          "mitochondrial_energy"
+        ],
+        "secondary": [
+          "cognition",
+          "methylation",
+          "focus"
+        ],
+        "weights": {
+          "mitochondrial_energy": 0.9,
+          "longevity_cellular_repair": 0.9,
+          "cognition": 0.6,
+          "methylation": 0.5,
+          "focus": 0.4
+        }
+      },
+      "functionalClasses": [
+        "mitochondrial_energy",
+        "longevity_cellular_repair",
+        "cognition",
+        "methylation",
+        "focus"
+      ],
+      "rotationFamily": "nad_booster",
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 3,
+          "skin_connective": 1,
+          "brain": 1
+        },
+        "burdens": {
+          "nervous": 1,
+          "sleep": 2,
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "energy_mitochondria": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "brain": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 0,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "nad_booster",
+          "nad_precursor",
+          "cellular_repair",
+          "methylation_driver"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "short",
+        "residualWindowHours": 24,
+        "priorityTier": "constitutional",
+        "rotationGroup": "nad_booster",
+        "groupTargetUses7d": 5
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "nad_booster",
+        "methylation_driver",
+        "cellular_repair"
+      ],
+      "domains": {
+        "body": 2,
+        "career": 1,
+        "creative": 1
+      },
+      "pairing": {
+        "requiredCompanions": [
+          "tmg",
+          "magnesium_citrate"
+        ],
+        "preferredPairs": [
+          "coq10",
+          "creatine_5g"
+        ],
+        "avoidSameDay": [
+          "nr",
+          "nmnh"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun",
+          "Venus"
+        ],
+        "elements": [
+          "Fire",
+          "Earth"
+        ],
+        "qualities": [
+          "repair",
+          "cellular",
+          "vitality"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Sun",
+            "Saturn"
+          ],
+          "elements": [
+            "Fire",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Sun",
+            "Saturn"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Fire",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer"
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            5
+          ],
+          "constructiveQualities": [
+            "longevity",
+            "cellular",
+            "NAD"
+          ],
+          "numerologySum": 14,
+          "numerologyRoot": 5
+        },
+        "mayan": {
+          "dreamspell": "Yellow Star",
+          "tzolkinCholQij": "Lamat"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Sun",
+          "Saturn"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "gold",
+        "priorityBadge": "constitutional"
+      },
+      "notes": ""
+    },
+    {
+      "id": "nmnh",
+      "name": "NMN-H",
+      "aliases": [
+        "NMNH"
+      ],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active_caution",
+      "evidenceClass": "personal_protocol",
+      "autoSelection": "caution",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "strongly_positive",
+        "status": "active_caution",
+        "caution": "use_with_care",
+        "notes": "High-voltage NAD lane; automatic selection must be conservative."
+      },
+      "functions": {
+        "primary": [
+          "mitochondrial_energy",
+          "longevity_cellular_repair",
+          "cognition"
+        ],
+        "secondary": [
+          "focus",
+          "methylation"
+        ],
+        "weights": {
+          "mitochondrial_energy": 0.95,
+          "longevity_cellular_repair": 0.9,
+          "cognition": 0.7,
+          "methylation": 0.6,
+          "focus": 0.6
+        }
+      },
+      "functionalClasses": [
+        "mitochondrial_energy",
+        "longevity_cellular_repair",
+        "cognition",
+        "methylation",
+        "focus"
+      ],
+      "rotationFamily": "nad_booster",
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 3,
+          "brain": 2
+        },
+        "burdens": {
+          "nervous": 3,
+          "sleep": 3,
+          "heart": 1,
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "energy_mitochondria": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "brain": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 0,
+          "burdenStrength": 3,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 0,
+          "burdenStrength": 3,
+          "confidence": 0.7
+        },
+        "heart": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "nad_booster",
+          "nad_precursor",
+          "cellular_repair",
+          "methylation_driver",
+          "high_voltage"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 2,
+        "minimumGapHours": 72,
+        "persistenceClass": "short",
+        "residualWindowHours": 36,
+        "priorityTier": "constitutional",
+        "rotationGroup": "nad_booster",
+        "groupTargetUses7d": 5
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "nad_booster",
+        "methylation_driver",
+        "high_voltage",
+        "brain_activation"
+      ],
+      "domains": {
+        "career": 2,
+        "study": 2,
+        "creative": 1
+      },
+      "pairing": {
+        "requiredCompanions": [
+          "tmg",
+          "magnesium_citrate"
+        ],
+        "preferredPairs": [
+          "coq10",
+          "omega_3"
+        ],
+        "avoidSameDay": [
+          "nr",
+          "nmn",
+          "cordyceps",
+          "b_complex"
+        ],
+        "avoidSameSlot": [
+          "caffeine",
+          "stimulant"
+        ],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Uranus",
+          "Sun"
+        ],
+        "elements": [
+          "Fire",
+          "Air"
+        ],
+        "qualities": [
+          "high_voltage",
+          "probe",
+          "activation"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Sun",
+            "Mercury",
+            "Mars"
+          ],
+          "elements": [
+            "Fire",
+            "Air"
+          ],
+          "planetaryHourAffinity": [
+            "Sun",
+            "Mercury"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Fire",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer",
+            "spring"
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            22
+          ],
+          "constructiveQualities": [
+            "high_voltage",
+            "NAD",
+            "activation"
+          ],
+          "numerologySum": 22,
+          "numerologyRoot": 22
+        },
+        "mayan": {
+          "dreamspell": "Yellow Warrior",
+          "tzolkinCholQij": "Cib"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Sun",
+          "Mercury"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "gold",
+        "priorityBadge": "constitutional"
+      },
+      "notes": "High-voltage NAD lane; automatic selection must be conservative."
+    },
+    {
+      "id": "tmg",
+      "name": "TMG",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "personal_protocol",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "methylation"
+        ],
+        "secondary": [
+          "liver_support",
+          "cognition",
+          "heart_circulation"
+        ],
+        "weights": {
+          "methylation": 0.9,
+          "liver_support": 0.5,
+          "heart_circulation": 0.3,
+          "cognition": 0.3
+        }
+      },
+      "functionalClasses": [
+        "methylation",
+        "liver_support",
+        "heart_circulation",
+        "cognition"
+      ],
+      "body": {
+        "benefits": {
+          "liver": 2,
+          "energy_mitochondria": 1
+        },
+        "burdens": {
+          "nervous": 1
+        }
+      },
+      "bodyAxes": {
+        "liver": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "energy_mitochondria": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "methylation_support",
+          "nad_companion",
+          "liver_support"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 5,
+        "maxUses7d": 7,
+        "minimumGapHours": 12,
+        "persistenceClass": "short",
+        "residualWindowHours": 12,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "methylation_support",
+        "nad_companion"
+      ],
+      "domains": {
+        "body": 1,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mercury"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "methylation",
+          "cofactor",
+          "nad_companion"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Mercury",
+            "Moon"
+          ],
+          "elements": [
+            "Water",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Mercury",
+            "Moon"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Earth",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "winter",
+            "autumn"
+          ],
+          "dayMasterStem": "戊",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            4
+          ],
+          "constructiveQualities": [
+            "methylation",
+            "donation",
+            "homocysteine"
+          ],
+          "numerologySum": 13,
+          "numerologyRoot": 4
+        },
+        "mayan": {
+          "dreamspell": "White Mirror",
+          "tzolkinCholQij": "Etznab"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Mercury",
+          "Moon"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "blue",
+        "priorityBadge": "companion"
+      },
+      "notes": ""
+    },
+    {
+      "id": "creatine_5g",
+      "name": "Creatine 5g",
+      "aliases": [
+        "Creatine"
+      ],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "strongly_positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "physical_energy",
+          "muscle_back_support"
+        ],
+        "secondary": [
+          "cognition",
+          "focus",
+          "mitochondrial_energy"
+        ],
+        "weights": {
+          "physical_energy": 0.9,
+          "muscle_back_support": 0.8,
+          "cognition": 0.5,
+          "focus": 0.4,
+          "mitochondrial_energy": 0.4
+        }
+      },
+      "functionalClasses": [
+        "physical_energy",
+        "muscle_back_support",
+        "cognition",
+        "focus",
+        "mitochondrial_energy"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "brain": 2,
+          "muscles_back": 3
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "energy_mitochondria": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "brain": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "muscles_back": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "atp_support",
+          "muscle_support",
+          "cognitive_energy"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 4,
+        "maxUses7d": 6,
+        "minimumGapHours": 24,
+        "persistenceClass": "tissue_saturation",
+        "residualWindowHours": 72,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "atp",
+        "brain_activation",
+        "muscle_support"
+      ],
+      "domains": {
+        "body": 3,
+        "study": 1,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "water",
+          "cordyceps"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars",
+          "Mercury"
+        ],
+        "elements": [
+          "Earth",
+          "Fire"
+        ],
+        "qualities": [
+          "power",
+          "ATP",
+          "muscle"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Mars",
+            "Sun"
+          ],
+          "elements": [
+            "Fire",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Mars",
+            "Sun"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Earth",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer",
+            "spring"
+          ],
+          "dayMasterStem": "戊",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            6
+          ],
+          "constructiveQualities": [
+            "strength",
+            "ATP",
+            "drive"
+          ],
+          "numerologySum": 51,
+          "numerologyRoot": 6
+        },
+        "mayan": {
+          "dreamspell": "Red Serpent",
+          "tzolkinCholQij": "Chicchan"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Mars",
+          "Sun"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "red",
+        "priorityBadge": "core"
+      },
+      "notes": ""
+    },
+    {
+      "id": "coq10",
+      "name": "CoQ10",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "mitochondrial_energy",
+          "heart_circulation",
+          "antioxidant_support"
+        ],
+        "secondary": [
+          "physical_energy"
+        ],
+        "weights": {
+          "mitochondrial_energy": 0.9,
+          "heart_circulation": 0.8,
+          "antioxidant_support": 0.7,
+          "physical_energy": 0.5
+        }
+      },
+      "functionalClasses": [
+        "mitochondrial_energy",
+        "heart_circulation",
+        "antioxidant_support",
+        "physical_energy"
+      ],
+      "body": {
+        "benefits": {
+          "heart": 3,
+          "energy_mitochondria": 3
+        },
+        "burdens": {
+          "sleep": 1
+        }
+      },
+      "bodyAxes": {
+        "heart": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "energy_mitochondria": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "mitochondrial_support",
+          "heart_support",
+          "fat_soluble",
+          "antioxidant"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 5,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mitochondrial",
+        "heart_support",
+        "fat_soluble"
+      ],
+      "domains": {
+        "body": 2,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "omega_3"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun"
+        ],
+        "elements": [
+          "Fire"
+        ],
+        "qualities": [
+          "mitochondria",
+          "heart",
+          "vitality"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Sun",
+            "Venus"
+          ],
+          "elements": [
+            "Fire",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Sun",
+            "Venus"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Fire",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer"
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            9
+          ],
+          "constructiveQualities": [
+            "spark",
+            "heart",
+            "mitochondria"
+          ],
+          "numerologySum": 18,
+          "numerologyRoot": 9
+        },
+        "mayan": {
+          "dreamspell": "Yellow Sun",
+          "tzolkinCholQij": "Ahau"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Sun",
+          "Venus"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "gold",
+        "priorityBadge": "core"
+      },
+      "notes": ""
+    },
+    {
+      "id": "omega_3",
+      "name": "Omega-3",
+      "aliases": [
+        "Omega 3"
+      ],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "heart_circulation",
+          "inflammation_modulation"
+        ],
+        "secondary": [
+          "cognition",
+          "joints_connective_tissue",
+          "skin"
+        ],
+        "weights": {
+          "heart_circulation": 0.8,
+          "inflammation_modulation": 0.8,
+          "cognition": 0.6,
+          "joints_connective_tissue": 0.5,
+          "skin": 0.4
+        }
+      },
+      "functionalClasses": [
+        "heart_circulation",
+        "inflammation_modulation",
+        "cognition",
+        "joints_connective_tissue",
+        "skin"
+      ],
+      "body": {
+        "benefits": {
+          "heart": 2,
+          "nervous": 2,
+          "skin_connective": 2,
+          "eyes": 2
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "heart": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "eyes": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "anti_inflammatory",
+          "heart_support",
+          "fat_soluble",
+          "dha_epa"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 5,
+        "minimumGapHours": 24,
+        "persistenceClass": "long_tail",
+        "residualWindowHours": 72,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "fat_soluble",
+        "anti_inflammatory",
+        "heart_support"
+      ],
+      "domains": {
+        "body": 2,
+        "love": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "coq10",
+          "d3_k2"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Venus"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "anti_inflammatory",
+          "softening",
+          "carrier"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Neptune",
+            "Venus"
+          ],
+          "elements": [
+            "Water",
+            "Air"
+          ],
+          "planetaryHourAffinity": [
+            "Venus",
+            "Moon"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Water",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "winter",
+            "autumn"
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            8
+          ],
+          "constructiveQualities": [
+            "flow",
+            "heart",
+            "inflammation"
+          ],
+          "numerologySum": 26,
+          "numerologyRoot": 8
+        },
+        "mayan": {
+          "dreamspell": "Blue Hand",
+          "tzolkinCholQij": "Manik"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Neptune",
+          "Venus"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "blue",
+        "priorityBadge": "core"
+      },
+      "notes": ""
+    },
+    {
+      "id": "multivitamin",
+      "name": "Multivitamin",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "neutral",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "immune_modulation"
+        ],
+        "secondary": [
+          "methylation",
+          "mitochondrial_energy",
+          "cognition"
+        ],
+        "weights": {
+          "immune_modulation": 0.4,
+          "mitochondrial_energy": 0.3,
+          "methylation": 0.3,
+          "cognition": 0.2
+        }
+      },
+      "functionalClasses": [
+        "immune_modulation",
+        "mitochondrial_energy",
+        "methylation",
+        "cognition"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 1,
+          "immune": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "liver": 1
+        }
+      },
+      "bodyAxes": {
+        "energy_mitochondria": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "immune": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "liver": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "baseline_support",
+          "broad_spectrum"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "baseline",
+        "broad_spectrum"
+      ],
+      "domains": {
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "baseline",
+          "coverage"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Sun",
+            "Jupiter"
+          ],
+          "elements": [
+            "Fire",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Sun",
+            "Jupiter"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Earth",
+          "energeticDirection": "balanced",
+          "seasonalAffinity": [
+            "all"
+          ],
+          "dayMasterStem": "己",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            1
+          ],
+          "constructiveQualities": [
+            "baseline",
+            "spectrum",
+            "foundation"
+          ],
+          "numerologySum": 55,
+          "numerologyRoot": 1
+        },
+        "mayan": {
+          "dreamspell": "Yellow Human",
+          "tzolkinCholQij": "Eb"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Sun",
+          "Jupiter"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "yellow",
+        "priorityBadge": "baseline"
+      },
+      "notes": ""
+    },
+    {
+      "id": "d3_k2",
+      "name": "D3 + K2",
+      "aliases": [
+        "D3 K2"
+      ],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "immune_modulation"
+        ],
+        "secondary": [
+          "heart_circulation",
+          "joints_connective_tissue",
+          "inflammation_modulation",
+          "skin"
+        ],
+        "weights": {
+          "immune_modulation": 0.8,
+          "heart_circulation": 0.5,
+          "joints_connective_tissue": 0.5,
+          "skin": 0.3,
+          "inflammation_modulation": 0.4
+        }
+      },
+      "functionalClasses": [
+        "immune_modulation",
+        "heart_circulation",
+        "joints_connective_tissue",
+        "skin",
+        "inflammation_modulation"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 2,
+          "muscles_back": 1,
+          "heart": 1
+        },
+        "burdens": {
+          "endocrine": 1
+        }
+      },
+      "bodyAxes": {
+        "immune": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "muscles_back": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "heart": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "endocrine": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "fat_soluble",
+          "immune_support",
+          "bone_support"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "long_tail",
+        "residualWindowHours": 96,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "fat_soluble",
+        "immune",
+        "bone"
+      ],
+      "domains": {
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "omega_3"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun"
+        ],
+        "elements": [
+          "Fire"
+        ],
+        "qualities": [
+          "sun",
+          "bones",
+          "immune"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Sun",
+            "Saturn"
+          ],
+          "elements": [
+            "Fire",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Sun",
+            "Saturn"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Fire",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer",
+            "winter"
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            11
+          ],
+          "constructiveQualities": [
+            "solar",
+            "bone",
+            "immune"
+          ],
+          "numerologySum": 11,
+          "numerologyRoot": 11
+        },
+        "mayan": {
+          "dreamspell": "Yellow Seed",
+          "tzolkinCholQij": "Kan"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Sun",
+          "Saturn"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "yellow",
+        "priorityBadge": "core"
+      },
+      "notes": ""
+    },
+    {
+      "id": "nac",
+      "name": "NAC",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "liver_support",
+          "antioxidant_support"
+        ],
+        "secondary": [
+          "respiratory_support",
+          "immune_modulation",
+          "gut_digestion"
+        ],
+        "weights": {
+          "liver_support": 0.8,
+          "antioxidant_support": 0.7,
+          "respiratory_support": 0.6,
+          "immune_modulation": 0.4,
+          "gut_digestion": 0.3
+        }
+      },
+      "functionalClasses": [
+        "liver_support",
+        "antioxidant_support",
+        "respiratory_support",
+        "immune_modulation",
+        "gut_digestion"
+      ],
+      "body": {
+        "benefits": {
+          "liver": 3,
+          "immune": 1,
+          "respiration": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "liver": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "immune": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "respiration": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "liver_support",
+          "glutathione_precursor",
+          "respiratory_support",
+          "antioxidant"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 5,
+        "maxUses7d": 7,
+        "minimumGapHours": 12,
+        "persistenceClass": "short",
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "liver_support",
+        "glutathione",
+        "respiratory"
+      ],
+      "domains": {
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "milk_thistle"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Saturn",
+          "Mercury"
+        ],
+        "elements": [
+          "Air",
+          "Earth"
+        ],
+        "qualities": [
+          "detox_buffer",
+          "glutathione"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Saturn",
+            "Moon"
+          ],
+          "elements": [
+            "Water",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Saturn",
+            "Moon"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Metal",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "autumn",
+            "winter"
+          ],
+          "dayMasterStem": "辛",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            9
+          ],
+          "constructiveQualities": [
+            "detox",
+            "glutathione",
+            "clearing"
+          ],
+          "numerologySum": 9,
+          "numerologyRoot": 9
+        },
+        "mayan": {
+          "dreamspell": "White Wind",
+          "tzolkinCholQij": "Ik"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Saturn",
+          "Moon"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "silver",
+        "priorityBadge": "cleanse"
+      },
+      "notes": ""
+    },
+    {
+      "id": "milk_thistle",
+      "name": "Milk Thistle",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "liver_support"
+        ],
+        "secondary": [
+          "antioxidant_support",
+          "inflammation_modulation"
+        ],
+        "weights": {
+          "liver_support": 0.9,
+          "antioxidant_support": 0.6,
+          "inflammation_modulation": 0.4
+        }
+      },
+      "functionalClasses": [
+        "liver_support",
+        "antioxidant_support",
+        "inflammation_modulation"
+      ],
+      "body": {
+        "benefits": {
+          "liver": 3,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "liver": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "liver_support",
+          "silymarin",
+          "antioxidant"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 5,
+        "maxUses7d": 7,
+        "minimumGapHours": 12,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "night",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "liver_support",
+        "recovery"
+      ],
+      "domains": {
+        "body": 2,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "nac"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Jupiter",
+          "Moon"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "liver_cover",
+          "recovery"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Saturn",
+            "Moon"
+          ],
+          "elements": [
+            "Water",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Saturn",
+            "Moon"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Wood",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "spring",
+            "autumn"
+          ],
+          "dayMasterStem": "乙",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            3
+          ],
+          "constructiveQualities": [
+            "liver",
+            "regeneration",
+            "clearing"
+          ],
+          "numerologySum": 48,
+          "numerologyRoot": 3
+        },
+        "mayan": {
+          "dreamspell": "White Worldbridger",
+          "tzolkinCholQij": "Cimi"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Saturn",
+          "Moon"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "green",
+        "priorityBadge": "cleanse"
+      },
+      "notes": ""
+    },
+    {
+      "id": "probiotic",
+      "name": "Probiotic",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "gut_digestion",
+          "immune_modulation"
+        ],
+        "secondary": [
+          "inflammation_modulation",
+          "nervous_system_calming"
+        ],
+        "weights": {
+          "gut_digestion": 0.9,
+          "immune_modulation": 0.7,
+          "inflammation_modulation": 0.4,
+          "nervous_system_calming": 0.3
+        }
+      },
+      "functionalClasses": [
+        "gut_digestion",
+        "immune_modulation",
+        "inflammation_modulation",
+        "nervous_system_calming"
+      ],
+      "body": {
+        "benefits": {
+          "gut": 3,
+          "immune": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "gut": {
+          "supportStrength": 3,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "immune": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "gut_support",
+          "microbiome",
+          "immune_modulator"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 5,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon",
+        "flex"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "gut",
+        "immune"
+      ],
+      "domains": {
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "gut",
+          "baseline"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Moon",
+            "Mercury"
+          ],
+          "elements": [
+            "Earth",
+            "Water"
+          ],
+          "planetaryHourAffinity": [
+            "Moon",
+            "Mercury"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Earth",
+          "energeticDirection": "balanced",
+          "seasonalAffinity": [
+            "all"
+          ],
+          "dayMasterStem": "己",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            8
+          ],
+          "constructiveQualities": [
+            "microbiome",
+            "balance",
+            "gut"
+          ],
+          "numerologySum": 53,
+          "numerologyRoot": 8
+        },
+        "mayan": {
+          "dreamspell": "Blue Monkey",
+          "tzolkinCholQij": "Chuen"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Moon",
+          "Mercury"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "green",
+        "priorityBadge": "baseline"
+      },
+      "notes": ""
+    },
+    {
+      "id": "zinc",
+      "name": "Zinc",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "immune_modulation"
+        ],
+        "secondary": [
+          "skin",
+          "endocrine_hormonal",
+          "antioxidant_support",
+          "libido"
+        ],
+        "weights": {
+          "immune_modulation": 0.8,
+          "endocrine_hormonal": 0.5,
+          "skin": 0.6,
+          "antioxidant_support": 0.4,
+          "libido": 0.3
+        }
+      },
+      "functionalClasses": [
+        "immune_modulation",
+        "endocrine_hormonal",
+        "skin",
+        "antioxidant_support",
+        "libido"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 2,
+          "skin_connective": 2,
+          "endocrine": 1
+        },
+        "burdens": {
+          "gut": 2
+        }
+      },
+      "bodyAxes": {
+        "immune": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "endocrine": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "mineral_zinc",
+          "immune_support",
+          "skin_support",
+          "testosterone_support"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 2,
+        "minimumGapHours": 72,
+        "persistenceClass": "medium",
+        "residualWindowHours": 72,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "night",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "immune",
+        "skin"
+      ],
+      "domains": {
+        "body": 2,
+        "love": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars",
+          "Venus"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "skin",
+          "immune",
+          "repair"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Mars",
+            "Saturn"
+          ],
+          "elements": [
+            "Earth",
+            "Fire"
+          ],
+          "planetaryHourAffinity": [
+            "Mars",
+            "Saturn"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Metal",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "autumn"
+          ],
+          "dayMasterStem": "庚",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            7
+          ],
+          "constructiveQualities": [
+            "immunity",
+            "testosterone",
+            "wound_healing"
+          ],
+          "numerologySum": 25,
+          "numerologyRoot": 7
+        },
+        "mayan": {
+          "dreamspell": "Red Serpent",
+          "tzolkinCholQij": "Chicchan"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Mars",
+          "Saturn"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "silver",
+        "priorityBadge": "core"
+      },
+      "notes": ""
+    },
+    {
+      "id": "astragalus",
+      "name": "Astragalus",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "immune_modulation"
+        ],
+        "secondary": [
+          "longevity_cellular_repair",
+          "inflammation_modulation",
+          "physical_energy"
+        ],
+        "weights": {
+          "immune_modulation": 0.8,
+          "longevity_cellular_repair": 0.6,
+          "inflammation_modulation": 0.5,
+          "physical_energy": 0.4
+        }
+      },
+      "functionalClasses": [
+        "immune_modulation",
+        "longevity_cellular_repair",
+        "inflammation_modulation",
+        "physical_energy"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 3,
+          "energy_mitochondria": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "immune": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "energy_mitochondria": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "immune_modulator",
+          "adaptogen_like",
+          "longevity"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "immune_modulator",
+        "adaptogen_like"
+      ],
+      "domains": {
+        "body": 2,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "vitamin_c"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Jupiter"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "defense",
+          "recovery"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Jupiter",
+            "Saturn"
+          ],
+          "elements": [
+            "Earth",
+            "Wood"
+          ],
+          "planetaryHourAffinity": [
+            "Jupiter",
+            "Saturn"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Wood",
+          "energeticDirection": "balanced",
+          "seasonalAffinity": [
+            "spring",
+            "all"
+          ],
+          "dayMasterStem": "甲",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            11
+          ],
+          "constructiveQualities": [
+            "longevity",
+            "immune",
+            "adaptogen"
+          ],
+          "numerologySum": 29,
+          "numerologyRoot": 11
+        },
+        "mayan": {
+          "dreamspell": "Blue Eagle",
+          "tzolkinCholQij": "Men"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Jupiter",
+          "Saturn"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "green",
+        "priorityBadge": "core"
+      },
+      "notes": ""
+    },
+    {
+      "id": "lions_mane",
+      "name": "Lion's Mane",
+      "aliases": [
+        "Lion's Mane"
+      ],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "mixed_human_evidence",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "strongly_positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "cognition",
+          "memory",
+          "focus"
+        ],
+        "secondary": [
+          "longevity_cellular_repair",
+          "nervous_system_calming"
+        ],
+        "weights": {
+          "cognition": 0.9,
+          "memory": 0.9,
+          "focus": 0.7,
+          "nervous_system_calming": 0.4,
+          "longevity_cellular_repair": 0.5
+        }
+      },
+      "functionalClasses": [
+        "cognition",
+        "memory",
+        "focus",
+        "nervous_system_calming",
+        "longevity_cellular_repair"
+      ],
+      "body": {
+        "benefits": {
+          "brain": 3,
+          "nervous": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "immune": 1
+        }
+      },
+      "bodyAxes": {
+        "brain": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "immune": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "cognitive_mushroom",
+          "ngf_support",
+          "neural_plasticity"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 5,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 24,
+        "priorityTier": "constitutional"
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "brain_activation",
+        "mushroom",
+        "cognitive"
+      ],
+      "domains": {
+        "study": 3,
+        "creative": 2,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "l_theanine"
+        ],
+        "avoidSameDay": [
+          "reishi",
+          "chaga"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mercury"
+        ],
+        "elements": [
+          "Air",
+          "Wood"
+        ],
+        "qualities": [
+          "learning",
+          "neuroplasticity",
+          "focus"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Mercury",
+            "Moon"
+          ],
+          "elements": [
+            "Air",
+            "Water"
+          ],
+          "planetaryHourAffinity": [
+            "Mercury",
+            "Moon"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Wood",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "spring",
+            "autumn"
+          ],
+          "dayMasterStem": "乙",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            3
+          ],
+          "constructiveQualities": [
+            "neural",
+            "growth",
+            "NGF"
+          ],
+          "numerologySum": 39,
+          "numerologyRoot": 3
+        },
+        "mayan": {
+          "dreamspell": "Blue Storm",
+          "tzolkinCholQij": "Cauac"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Mercury",
+          "Moon"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "purple",
+        "priorityBadge": "constitutional"
+      },
+      "notes": ""
+    },
+    {
+      "id": "l_theanine",
+      "name": "L-Theanine",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "nervous_system_calming",
+          "focus"
+        ],
+        "secondary": [
+          "stress_resilience",
+          "cognition",
+          "sleep_initiation"
+        ],
+        "weights": {
+          "nervous_system_calming": 0.8,
+          "focus": 0.7,
+          "sleep_initiation": 0.4,
+          "cognition": 0.5,
+          "stress_resilience": 0.6
+        }
+      },
+      "functionalClasses": [
+        "nervous_system_calming",
+        "focus",
+        "sleep_initiation",
+        "cognition",
+        "stress_resilience"
+      ],
+      "body": {
+        "benefits": {
+          "nervous": 3,
+          "brain": 1,
+          "sleep": 1
+        },
+        "burdens": {
+          "sleep": 1
+        }
+      },
+      "bodyAxes": {
+        "nervous": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "brain": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 1,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "nervous_support",
+          "calm_focus",
+          "amino_acid"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 7,
+        "minimumGapHours": 8,
+        "persistenceClass": "short",
+        "residualWindowHours": 8,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning",
+        "night",
+        "flex"
+      ],
+      "requiresFood": false,
+      "classes": [
+        "calm_focus",
+        "nervous_support"
+      ],
+      "domains": {
+        "study": 2,
+        "spirit": 2,
+        "love": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "lions_mane"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Mercury"
+        ],
+        "elements": [
+          "Water",
+          "Air"
+        ],
+        "qualities": [
+          "calm_focus",
+          "buffer"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Moon",
+            "Mercury"
+          ],
+          "elements": [
+            "Water",
+            "Air"
+          ],
+          "planetaryHourAffinity": [
+            "Moon",
+            "Venus"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Water",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "winter",
+            "spring"
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            7
+          ],
+          "constructiveQualities": [
+            "calm",
+            "focus",
+            "alpha_wave"
+          ],
+          "numerologySum": 43,
+          "numerologyRoot": 7
+        },
+        "mayan": {
+          "dreamspell": "White Wind",
+          "tzolkinCholQij": "Ik"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Moon",
+          "Mercury"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "light_blue",
+        "priorityBadge": "core"
+      },
+      "notes": ""
+    },
+    {
+      "id": "lutein",
+      "name": "Lutein",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "eyes"
+        ],
+        "secondary": [
+          "antioxidant_support",
+          "cognition",
+          "skin"
+        ],
+        "weights": {
+          "eyes": 0.9,
+          "antioxidant_support": 0.6,
+          "cognition": 0.3,
+          "skin": 0.3
+        }
+      },
+      "functionalClasses": [
+        "eyes",
+        "antioxidant_support",
+        "cognition",
+        "skin"
+      ],
+      "body": {
+        "benefits": {
+          "eyes": 3,
+          "brain": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "eyes": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "brain": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "eye_support",
+          "fat_soluble",
+          "antioxidant",
+          "carotenoid"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "long_tail",
+        "residualWindowHours": 72,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "eyes",
+        "fat_soluble",
+        "antioxidant"
+      ],
+      "domains": {
+        "study": 1,
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "omega_3"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mercury",
+          "Sun"
+        ],
+        "elements": [
+          "Air",
+          "Fire"
+        ],
+        "qualities": [
+          "eyes",
+          "visual_clarity"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Sun",
+            "Mercury"
+          ],
+          "elements": [
+            "Fire",
+            "Air"
+          ],
+          "planetaryHourAffinity": [
+            "Sun",
+            "Mercury"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Wood",
+          "energeticDirection": "balanced",
+          "seasonalAffinity": [
+            "spring",
+            "summer"
+          ],
+          "dayMasterStem": "乙",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            9
+          ],
+          "constructiveQualities": [
+            "vision",
+            "macular",
+            "carotenoid"
+          ],
+          "numerologySum": 27,
+          "numerologyRoot": 9
+        },
+        "mayan": {
+          "dreamspell": "Yellow Human",
+          "tzolkinCholQij": "Eb"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Sun",
+          "Mercury"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "yellow",
+        "priorityBadge": "core"
+      },
+      "notes": ""
+    },
+    {
+      "id": "melatonin",
+      "name": "Melatonin",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "manual_only",
+      "evidenceClass": "baseline",
+      "autoSelection": "manual_only",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "neutral",
+        "status": "manual_only",
+        "caution": null,
+        "notes": "Manual rescue lane only, not automatic daily advice."
+      },
+      "functions": {
+        "primary": [
+          "sleep_initiation",
+          "sleep_maintenance"
+        ],
+        "secondary": [
+          "antioxidant_support",
+          "nervous_system_calming"
+        ],
+        "weights": {
+          "sleep_initiation": 0.9,
+          "sleep_maintenance": 0.7,
+          "antioxidant_support": 0.5,
+          "nervous_system_calming": 0.4
+        }
+      },
+      "functionalClasses": [
+        "sleep_initiation",
+        "sleep_maintenance",
+        "antioxidant_support",
+        "nervous_system_calming"
+      ],
+      "body": {
+        "benefits": {
+          "sleep": 3
+        },
+        "burdens": {
+          "sleep": 1,
+          "nervous": 1
+        }
+      },
+      "bodyAxes": {
+        "sleep": {
+          "supportStrength": 3,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "sleep_hormone",
+          "circadian_regulator",
+          "antioxidant"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 0,
+        "maxUses7d": 2,
+        "minimumGapHours": 48,
+        "persistenceClass": "short",
+        "residualWindowHours": 12,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "night"
+      ],
+      "requiresFood": false,
+      "classes": [
+        "sleep",
+        "hormone"
+      ],
+      "domains": {
+        "leisure": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "ashwagandha",
+          "cordyceps",
+          "nmnh",
+          "valerian"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "sleep"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Moon",
+            "Neptune"
+          ],
+          "elements": [
+            "Water"
+          ],
+          "planetaryHourAffinity": [
+            "Moon"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Water",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "winter"
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            4
+          ],
+          "constructiveQualities": [
+            "sleep",
+            "circadian",
+            "pineal"
+          ],
+          "numerologySum": 40,
+          "numerologyRoot": 4
+        },
+        "mayan": {
+          "dreamspell": "White Mirror",
+          "tzolkinCholQij": "Etznab"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Moon",
+          "Neptune"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "dark_blue",
+        "priorityBadge": "rest"
+      },
+      "notes": "Manual rescue lane only, not automatic daily advice."
+    },
+    {
+      "id": "valerian",
+      "name": "Valerian",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "manual_only",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "manual_only",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "neutral",
+        "status": "manual_only",
+        "caution": null,
+        "notes": "Manual sleep-rescue lane only."
+      },
+      "functions": {
+        "primary": [
+          "sleep_initiation",
+          "nervous_system_calming"
+        ],
+        "secondary": [
+          "sleep_maintenance"
+        ],
+        "weights": {
+          "sleep_initiation": 0.8,
+          "nervous_system_calming": 0.7,
+          "sleep_maintenance": 0.6
+        }
+      },
+      "functionalClasses": [
+        "sleep_initiation",
+        "nervous_system_calming",
+        "sleep_maintenance"
+      ],
+      "body": {
+        "benefits": {
+          "sleep": 3,
+          "nervous": 2
+        },
+        "burdens": {
+          "sleep": 2,
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "sleep": {
+          "supportStrength": 3,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "sleep_sedative",
+          "gaba_support",
+          "nervous_support"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 0,
+        "maxUses7d": 2,
+        "minimumGapHours": 48,
+        "persistenceClass": "short",
+        "residualWindowHours": 12,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "night"
+      ],
+      "requiresFood": false,
+      "classes": [
+        "sleep",
+        "sedative"
+      ],
+      "domains": {
+        "leisure": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "ashwagandha",
+          "cordyceps",
+          "melatonin",
+          "nmnh"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "sleep_rescue"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Moon",
+            "Saturn"
+          ],
+          "elements": [
+            "Water",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Moon",
+            "Saturn"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Water",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "winter"
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            1
+          ],
+          "constructiveQualities": [
+            "sedation",
+            "GABA",
+            "rest"
+          ],
+          "numerologySum": 37,
+          "numerologyRoot": 1
+        },
+        "mayan": {
+          "dreamspell": "Blue Night",
+          "tzolkinCholQij": "Akbal"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Moon",
+          "Saturn"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "dark_blue",
+        "priorityBadge": "rest"
+      },
+      "notes": "Manual sleep-rescue lane only."
+    },
+    {
+      "id": "collagen",
+      "name": "Collagen",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "joints_connective_tissue",
+          "skin"
+        ],
+        "secondary": [
+          "muscle_back_support",
+          "gut_digestion"
+        ],
+        "weights": {
+          "joints_connective_tissue": 0.9,
+          "skin": 0.8,
+          "muscle_back_support": 0.5,
+          "gut_digestion": 0.4
+        }
+      },
+      "functionalClasses": [
+        "joints_connective_tissue",
+        "skin",
+        "muscle_back_support",
+        "gut_digestion"
+      ],
+      "body": {
+        "benefits": {
+          "skin_connective": 3,
+          "muscles_back": 2,
+          "gut": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "skin_connective": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "muscles_back": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 1,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "tissue_repair",
+          "skin_support",
+          "joint_support",
+          "protein"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 5,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "afternoon",
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "tissue_repair",
+        "protein_support"
+      ],
+      "domains": {
+        "body": 3,
+        "love": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "vitamin_c"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Venus",
+          "Saturn"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "structure",
+          "skin",
+          "repair"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Venus",
+            "Saturn"
+          ],
+          "elements": [
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Venus",
+            "Saturn"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Earth",
+          "energeticDirection": "balanced",
+          "seasonalAffinity": [
+            "all"
+          ],
+          "dayMasterStem": "己",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            33
+          ],
+          "constructiveQualities": [
+            "structure",
+            "repair",
+            "collagen"
+          ],
+          "numerologySum": 33,
+          "numerologyRoot": 33
+        },
+        "mayan": {
+          "dreamspell": "Red Earth",
+          "tzolkinCholQij": "Caban"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Venus",
+          "Saturn"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "peach",
+        "priorityBadge": "repair"
+      },
+      "notes": ""
+    },
+    {
+      "id": "vitamin_c",
+      "name": "Vitamin C",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "antioxidant_support",
+          "immune_modulation"
+        ],
+        "secondary": [
+          "skin",
+          "joints_connective_tissue",
+          "inflammation_modulation"
+        ],
+        "weights": {
+          "antioxidant_support": 0.9,
+          "immune_modulation": 0.8,
+          "skin": 0.6,
+          "joints_connective_tissue": 0.5,
+          "inflammation_modulation": 0.4
+        }
+      },
+      "functionalClasses": [
+        "antioxidant_support",
+        "immune_modulation",
+        "skin",
+        "joints_connective_tissue",
+        "inflammation_modulation"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 2,
+          "skin_connective": 2,
+          "liver": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "immune": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "liver": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "antioxidant",
+          "immune_support",
+          "collagen_cofactor"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 3,
+        "maxUses7d": 6,
+        "minimumGapHours": 12,
+        "persistenceClass": "short",
+        "residualWindowHours": 12,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "afternoon",
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "antioxidant",
+        "collagen_cofactor",
+        "immune"
+      ],
+      "domains": {
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "collagen",
+          "astragalus"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Sun"
+        ],
+        "elements": [
+          "Fire"
+        ],
+        "qualities": [
+          "antioxidant",
+          "collagen_cofactor"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Sun",
+            "Venus"
+          ],
+          "elements": [
+            "Fire",
+            "Air"
+          ],
+          "planetaryHourAffinity": [
+            "Sun",
+            "Venus"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Wood",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer",
+            "spring"
+          ],
+          "dayMasterStem": "甲",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            1
+          ],
+          "constructiveQualities": [
+            "immunity",
+            "ascorbic",
+            "brightening"
+          ],
+          "numerologySum": 37,
+          "numerologyRoot": 1
+        },
+        "mayan": {
+          "dreamspell": "Yellow Star",
+          "tzolkinCholQij": "Lamat"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Sun",
+          "Venus"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "orange",
+        "priorityBadge": "core"
+      },
+      "notes": ""
+    },
+    {
+      "id": "msm",
+      "name": "MSM",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "limited_human_evidence",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "joints_connective_tissue"
+        ],
+        "secondary": [
+          "inflammation_modulation",
+          "skin",
+          "muscle_back_support"
+        ],
+        "weights": {
+          "joints_connective_tissue": 0.8,
+          "skin": 0.6,
+          "inflammation_modulation": 0.6,
+          "muscle_back_support": 0.4
+        }
+      },
+      "functionalClasses": [
+        "joints_connective_tissue",
+        "skin",
+        "inflammation_modulation",
+        "muscle_back_support"
+      ],
+      "body": {
+        "benefits": {
+          "muscles_back": 2,
+          "skin_connective": 2,
+          "liver": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "muscles_back": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "liver": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "sulfur_compound",
+          "joint_support",
+          "anti_inflammatory"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "afternoon",
+        "night"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "tissue_repair",
+        "sulfur"
+      ],
+      "domains": {
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "vitamin_c",
+          "collagen"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Saturn"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "sulfur",
+          "joints"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Saturn",
+            "Mars"
+          ],
+          "elements": [
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Saturn",
+            "Mars"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Metal",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "autumn"
+          ],
+          "dayMasterStem": "庚",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            9
+          ],
+          "constructiveQualities": [
+            "sulfur",
+            "connective",
+            "repair"
+          ],
+          "numerologySum": 9,
+          "numerologyRoot": 9
+        },
+        "mayan": {
+          "dreamspell": "White Worldbridger",
+          "tzolkinCholQij": "Cimi"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Saturn",
+          "Mars"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "silver",
+        "priorityBadge": "repair"
+      },
+      "notes": ""
+    },
+    {
+      "id": "quercetin",
+      "name": "Quercetin",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "mixed_human_evidence",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "inflammation_modulation",
+          "antioxidant_support",
+          "immune_modulation"
+        ],
+        "secondary": [
+          "gut_digestion"
+        ],
+        "weights": {
+          "immune_modulation": 0.7,
+          "inflammation_modulation": 0.8,
+          "antioxidant_support": 0.7,
+          "gut_digestion": 0.4
+        }
+      },
+      "functionalClasses": [
+        "immune_modulation",
+        "inflammation_modulation",
+        "antioxidant_support",
+        "gut_digestion"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 2,
+          "gut": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "liver": 1
+        }
+      },
+      "bodyAxes": {
+        "immune": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 1,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "liver": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "polyphenol",
+          "anti_inflammatory",
+          "immune_modulator",
+          "antihistamine"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "polyphenol",
+        "immune",
+        "histamine"
+      ],
+      "domains": {
+        "body": 1,
+        "social": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "resveratrol"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": [
+          "polyphenol"
+        ]
+      },
+      "esoteric": {
+        "planets": [
+          "Venus",
+          "Mercury"
+        ],
+        "elements": [
+          "Air",
+          "Earth"
+        ],
+        "qualities": [
+          "polyphenol",
+          "histamine"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Jupiter",
+            "Venus"
+          ],
+          "elements": [
+            "Air",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Jupiter",
+            "Venus"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Wood",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "spring",
+            "autumn"
+          ],
+          "dayMasterStem": "乙",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            4
+          ],
+          "constructiveQualities": [
+            "anti_inflammatory",
+            "polyphenol",
+            "histamine"
+          ],
+          "numerologySum": 49,
+          "numerologyRoot": 4
+        },
+        "mayan": {
+          "dreamspell": "Blue Hand",
+          "tzolkinCholQij": "Manik"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Jupiter",
+          "Venus"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "green",
+        "priorityBadge": "core"
+      },
+      "notes": ""
+    },
+    {
+      "id": "resveratrol",
+      "name": "Resveratrol",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "mixed_human_evidence",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "longevity_cellular_repair",
+          "antioxidant_support"
+        ],
+        "secondary": [
+          "heart_circulation",
+          "inflammation_modulation"
+        ],
+        "weights": {
+          "longevity_cellular_repair": 0.8,
+          "antioxidant_support": 0.7,
+          "heart_circulation": 0.6,
+          "inflammation_modulation": 0.5
+        }
+      },
+      "functionalClasses": [
+        "longevity_cellular_repair",
+        "antioxidant_support",
+        "heart_circulation",
+        "inflammation_modulation"
+      ],
+      "body": {
+        "benefits": {
+          "heart": 1,
+          "skin_connective": 1,
+          "energy_mitochondria": 1
+        },
+        "burdens": {
+          "liver": 1,
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "heart": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "energy_mitochondria": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "liver": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "polyphenol",
+          "longevity",
+          "sirtuin_activator",
+          "antioxidant"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "polyphenol",
+        "longevity"
+      ],
+      "domains": {
+        "body": 1,
+        "creative": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "quercetin"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": [
+          "polyphenol"
+        ]
+      },
+      "esoteric": {
+        "planets": [
+          "Venus",
+          "Jupiter"
+        ],
+        "elements": [
+          "Air",
+          "Water"
+        ],
+        "qualities": [
+          "polyphenol",
+          "longevity"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Venus",
+            "Jupiter"
+          ],
+          "elements": [
+            "Fire",
+            "Water"
+          ],
+          "planetaryHourAffinity": [
+            "Venus",
+            "Jupiter"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Wood",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer",
+            "autumn"
+          ],
+          "dayMasterStem": "甲",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            9
+          ],
+          "constructiveQualities": [
+            "longevity",
+            "grape",
+            "sirtuin"
+          ],
+          "numerologySum": 54,
+          "numerologyRoot": 9
+        },
+        "mayan": {
+          "dreamspell": "Yellow Sun",
+          "tzolkinCholQij": "Ahau"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Venus",
+          "Jupiter"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "purple",
+        "priorityBadge": "longevity"
+      },
+      "notes": ""
+    },
+    {
+      "id": "spermidine",
+      "name": "Spermidine",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "mixed_human_evidence",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "autophagy",
+          "longevity_cellular_repair"
+        ],
+        "secondary": [
+          "cognition",
+          "inflammation_modulation"
+        ],
+        "weights": {
+          "autophagy": 0.9,
+          "longevity_cellular_repair": 0.9,
+          "cognition": 0.5,
+          "inflammation_modulation": 0.4
+        }
+      },
+      "functionalClasses": [
+        "autophagy",
+        "longevity_cellular_repair",
+        "cognition",
+        "inflammation_modulation"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 1,
+          "skin_connective": 1,
+          "brain": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "energy_mitochondria": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "brain": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "autophagy_activator",
+          "longevity",
+          "cellular_renewal"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "long_tail",
+        "residualWindowHours": 72,
+        "priorityTier": "governed"
+      },
+      "timeWindows": [
+        "afternoon",
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "longevity",
+        "autophagy"
+      ],
+      "domains": {
+        "body": 2,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Saturn",
+          "Mercury"
+        ],
+        "elements": [
+          "Earth",
+          "Air"
+        ],
+        "qualities": [
+          "autophagy",
+          "longevity",
+          "repair"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Saturn",
+            "Pluto"
+          ],
+          "elements": [
+            "Earth",
+            "Water"
+          ],
+          "planetaryHourAffinity": [
+            "Saturn"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Water",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "winter",
+            "autumn"
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            4
+          ],
+          "constructiveQualities": [
+            "autophagy",
+            "renewal",
+            "longevity"
+          ],
+          "numerologySum": 58,
+          "numerologyRoot": 4
+        },
+        "mayan": {
+          "dreamspell": "White Wizard",
+          "tzolkinCholQij": "Ix"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Saturn",
+          "Pluto"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "dark_purple",
+        "priorityBadge": "constitutional"
+      },
+      "notes": ""
+    },
+    {
+      "id": "spirulina",
+      "name": "Spirulina",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "antioxidant_support"
+        ],
+        "secondary": [
+          "immune_modulation",
+          "physical_energy",
+          "mitochondrial_energy",
+          "gut_digestion"
+        ],
+        "weights": {
+          "antioxidant_support": 0.7,
+          "immune_modulation": 0.6,
+          "physical_energy": 0.5,
+          "gut_digestion": 0.3,
+          "mitochondrial_energy": 0.4
+        }
+      },
+      "functionalClasses": [
+        "antioxidant_support",
+        "immune_modulation",
+        "physical_energy",
+        "gut_digestion",
+        "mitochondrial_energy"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 2,
+          "energy_mitochondria": 1,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "immune": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "energy_mitochondria": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "green_food",
+          "antioxidant",
+          "immune_support",
+          "protein_rich"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48,
+        "priorityTier": "governed"
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "nutrient_dense",
+        "immune",
+        "green_food"
+      ],
+      "domains": {
+        "body": 2,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "irish_sea_moss",
+          "shilajit"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Venus",
+          "Moon"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "green_food",
+          "nutrient"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Neptune",
+            "Sun"
+          ],
+          "elements": [
+            "Water",
+            "Fire"
+          ],
+          "planetaryHourAffinity": [
+            "Sun",
+            "Neptune"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Water",
+          "energeticDirection": "balanced",
+          "seasonalAffinity": [
+            "summer",
+            "spring"
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            11
+          ],
+          "constructiveQualities": [
+            "green",
+            "chlorophyll",
+            "alkaline"
+          ],
+          "numerologySum": 47,
+          "numerologyRoot": 11
+        },
+        "mayan": {
+          "dreamspell": "Blue Eagle",
+          "tzolkinCholQij": "Men"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Neptune",
+          "Sun"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "green",
+        "priorityBadge": "baseline"
+      },
+      "notes": ""
+    },
+    {
+      "id": "shilajit",
+      "name": "Shilajit",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active_caution",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "caution",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "strongly_positive",
+        "status": "active_caution",
+        "caution": "use_with_care",
+        "notes": "Quality-sensitive: hold if product identity/quality unknown."
+      },
+      "functions": {
+        "primary": [
+          "mitochondrial_energy",
+          "longevity_cellular_repair"
+        ],
+        "secondary": [
+          "physical_energy",
+          "endocrine_hormonal",
+          "cognition"
+        ],
+        "weights": {
+          "mitochondrial_energy": 0.8,
+          "longevity_cellular_repair": 0.7,
+          "endocrine_hormonal": 0.5,
+          "physical_energy": 0.6,
+          "cognition": 0.4
+        }
+      },
+      "functionalClasses": [
+        "mitochondrial_energy",
+        "longevity_cellular_repair",
+        "endocrine_hormonal",
+        "physical_energy",
+        "cognition"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "muscles_back": 1
+        },
+        "burdens": {
+          "nervous": 1,
+          "gut": 1,
+          "liver": 1
+        }
+      },
+      "bodyAxes": {
+        "energy_mitochondria": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "muscles_back": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "liver": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "mineral_complex",
+          "mitochondrial_support",
+          "adaptogen",
+          "fulvic_acid"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 2,
+        "minimumGapHours": 72,
+        "persistenceClass": "medium",
+        "residualWindowHours": 72,
+        "priorityTier": "constitutional"
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "energy_support",
+        "quality_sensitive"
+      ],
+      "domains": {
+        "body": 2,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "coq10",
+          "nmn"
+        ],
+        "avoidSameDay": [
+          "irish_sea_moss",
+          "nmnh",
+          "spirulina"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Saturn",
+          "Mars"
+        ],
+        "elements": [
+          "Earth",
+          "Fire"
+        ],
+        "qualities": [
+          "mineral",
+          "resin",
+          "recovery"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Saturn",
+            "Sun"
+          ],
+          "elements": [
+            "Earth",
+            "Fire"
+          ],
+          "planetaryHourAffinity": [
+            "Saturn",
+            "Sun"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Earth",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "all"
+          ],
+          "dayMasterStem": "戊",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            7
+          ],
+          "constructiveQualities": [
+            "mineral",
+            "primordial",
+            "vitality"
+          ],
+          "numerologySum": 34,
+          "numerologyRoot": 7
+        },
+        "mayan": {
+          "dreamspell": "Red Earth",
+          "tzolkinCholQij": "Caban"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Saturn",
+          "Sun"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "dark",
+        "priorityBadge": "constitutional"
+      },
+      "notes": "Quality-sensitive: hold if product identity/quality unknown."
+    },
+    {
+      "id": "irish_sea_moss",
+      "name": "Irish Sea Moss",
+      "aliases": [
+        "Sea Moss"
+      ],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "neutral",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "gut_digestion"
+        ],
+        "secondary": [
+          "immune_modulation",
+          "joints_connective_tissue",
+          "skin",
+          "endocrine_hormonal"
+        ],
+        "weights": {
+          "gut_digestion": 0.7,
+          "immune_modulation": 0.5,
+          "joints_connective_tissue": 0.4,
+          "skin": 0.4,
+          "endocrine_hormonal": 0.3
+        }
+      },
+      "functionalClasses": [
+        "gut_digestion",
+        "immune_modulation",
+        "joints_connective_tissue",
+        "skin",
+        "endocrine_hormonal"
+      ],
+      "body": {
+        "benefits": {
+          "gut": 2,
+          "skin_connective": 1,
+          "immune": 1
+        },
+        "burdens": {
+          "endocrine": 1,
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "gut": {
+          "supportStrength": 2,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "immune": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "endocrine": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "mucosal_support",
+          "mineral_dense",
+          "iodine_source",
+          "gut_support"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 3,
+        "minimumGapHours": 48,
+        "persistenceClass": "medium",
+        "residualWindowHours": 72,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mineral",
+        "mucosal",
+        "iodine_caution"
+      ],
+      "domains": {
+        "body": 2
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "shilajit",
+          "spirulina"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "minerals",
+          "mucosal"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Moon",
+            "Neptune"
+          ],
+          "elements": [
+            "Water"
+          ],
+          "planetaryHourAffinity": [
+            "Moon",
+            "Neptune"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Water",
+          "energeticDirection": "balanced",
+          "seasonalAffinity": [
+            "winter",
+            "autumn"
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            1
+          ],
+          "constructiveQualities": [
+            "mineral",
+            "mucosal",
+            "iodine"
+          ],
+          "numerologySum": 55,
+          "numerologyRoot": 1
+        },
+        "mayan": {
+          "dreamspell": "White Dog",
+          "tzolkinCholQij": "Oc"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Moon",
+          "Neptune"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "teal",
+        "priorityBadge": "baseline"
+      },
+      "notes": ""
+    },
+    {
+      "id": "gotu_kola",
+      "name": "Gotu Kola",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active_caution",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "caution",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active_caution",
+        "caution": "use_with_care",
+        "notes": "Caution-sensitive due to liver lane."
+      },
+      "functions": {
+        "primary": [
+          "cognition"
+        ],
+        "secondary": [
+          "nervous_system_calming",
+          "memory",
+          "skin",
+          "joints_connective_tissue"
+        ],
+        "weights": {
+          "cognition": 0.7,
+          "nervous_system_calming": 0.6,
+          "skin": 0.5,
+          "joints_connective_tissue": 0.4,
+          "memory": 0.5
+        }
+      },
+      "functionalClasses": [
+        "cognition",
+        "nervous_system_calming",
+        "skin",
+        "joints_connective_tissue",
+        "memory"
+      ],
+      "body": {
+        "benefits": {
+          "nervous": 2,
+          "skin_connective": 2,
+          "brain": 1
+        },
+        "burdens": {
+          "liver": 2,
+          "sleep": 1
+        }
+      },
+      "bodyAxes": {
+        "nervous": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "brain": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "liver": {
+          "supportStrength": 0,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "cognitive_herb",
+          "nervous_support",
+          "connective_tissue"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 1,
+        "minimumGapHours": 72,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance",
+        "weeklyLimited": true,
+        "rollingWindowDays": 7,
+        "automaticFrequencyBoost": false,
+        "missedWeekRequiresMakeup": false,
+        "permanentHighlightAllowed": false
+      },
+      "timeWindows": [
+        "afternoon",
+        "night"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "calm_focus",
+        "skin_connective",
+        "liver_caution"
+      ],
+      "domains": {
+        "study": 1,
+        "body": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "milk_thistle"
+        ],
+        "avoidSameDay": [
+          "ashwagandha",
+          "fadogia_agrestis",
+          "reishi",
+          "turkesterone"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Mercury"
+        ],
+        "elements": [
+          "Water",
+          "Air"
+        ],
+        "qualities": [
+          "calm_focus",
+          "connective"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Mercury",
+            "Saturn"
+          ],
+          "elements": [
+            "Earth",
+            "Water"
+          ],
+          "planetaryHourAffinity": [
+            "Mercury",
+            "Saturn"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Wood",
+          "energeticDirection": "balanced",
+          "seasonalAffinity": [
+            "spring",
+            "summer"
+          ],
+          "dayMasterStem": "乙",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            3
+          ],
+          "constructiveQualities": [
+            "neural",
+            "connective",
+            "ayurveda"
+          ],
+          "numerologySum": 30,
+          "numerologyRoot": 3
+        },
+        "mayan": {
+          "dreamspell": "Blue Monkey",
+          "tzolkinCholQij": "Chuen"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Mercury",
+          "Saturn"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "green",
+        "priorityBadge": "core"
+      },
+      "notes": "Caution-sensitive due to liver lane."
+    },
+    {
+      "id": "chaga",
+      "name": "Chaga",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active_caution",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "caution",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active_caution",
+        "caution": "use_with_care",
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "antioxidant_support",
+          "immune_modulation"
+        ],
+        "secondary": [
+          "inflammation_modulation",
+          "longevity_cellular_repair"
+        ],
+        "weights": {
+          "antioxidant_support": 0.9,
+          "immune_modulation": 0.8,
+          "inflammation_modulation": 0.6,
+          "longevity_cellular_repair": 0.5
+        }
+      },
+      "functionalClasses": [
+        "antioxidant_support",
+        "immune_modulation",
+        "inflammation_modulation",
+        "longevity_cellular_repair"
+      ],
+      "body": {
+        "benefits": {
+          "immune": 2,
+          "skin_connective": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "immune": 1
+        }
+      },
+      "bodyAxes": {
+        "immune": {
+          "supportStrength": 2,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "skin_connective": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "immune_mushroom",
+          "antioxidant",
+          "adaptogen"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 2,
+        "minimumGapHours": 72,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "night",
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mushroom",
+        "immune",
+        "antioxidant"
+      ],
+      "domains": {
+        "body": 1,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "lions_mane",
+          "reishi"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Saturn"
+        ],
+        "elements": [
+          "Water",
+          "Earth"
+        ],
+        "qualities": [
+          "mushroom",
+          "recovery"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Saturn",
+            "Pluto"
+          ],
+          "elements": [
+            "Earth",
+            "Water"
+          ],
+          "planetaryHourAffinity": [
+            "Saturn"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Metal",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "winter",
+            "autumn"
+          ],
+          "dayMasterStem": "辛",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            2
+          ],
+          "constructiveQualities": [
+            "adaptogen",
+            "antioxidant",
+            "ancient"
+          ],
+          "numerologySum": 20,
+          "numerologyRoot": 2
+        },
+        "mayan": {
+          "dreamspell": "White Wizard",
+          "tzolkinCholQij": "Ix"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Saturn",
+          "Pluto"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "dark",
+        "priorityBadge": "immune"
+      },
+      "notes": ""
+    },
+    {
+      "id": "reishi",
+      "name": "Reishi",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active_caution",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "caution",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active_caution",
+        "caution": "use_with_care",
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "immune_modulation",
+          "nervous_system_calming"
+        ],
+        "secondary": [
+          "inflammation_modulation",
+          "longevity_cellular_repair",
+          "sleep_initiation"
+        ],
+        "weights": {
+          "immune_modulation": 0.9,
+          "nervous_system_calming": 0.7,
+          "sleep_initiation": 0.5,
+          "inflammation_modulation": 0.6,
+          "longevity_cellular_repair": 0.5
+        }
+      },
+      "functionalClasses": [
+        "immune_modulation",
+        "nervous_system_calming",
+        "sleep_initiation",
+        "inflammation_modulation",
+        "longevity_cellular_repair"
+      ],
+      "body": {
+        "benefits": {
+          "nervous": 2,
+          "sleep": 2,
+          "immune": 1
+        },
+        "burdens": {
+          "gut": 1,
+          "immune": 1,
+          "sleep": 1
+        }
+      },
+      "bodyAxes": {
+        "nervous": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 2,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "immune": {
+          "supportStrength": 1,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "immune_mushroom",
+          "adaptogen",
+          "nervous_support",
+          "longevity"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 1,
+        "minimumGapHours": 72,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance",
+        "weeklyLimited": true,
+        "rollingWindowDays": 7,
+        "automaticFrequencyBoost": false,
+        "missedWeekRequiresMakeup": false,
+        "permanentHighlightAllowed": false
+      },
+      "timeWindows": [
+        "night"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "mushroom",
+        "immune",
+        "calm"
+      ],
+      "domains": {
+        "leisure": 2,
+        "spirit": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "ashwagandha",
+          "chaga",
+          "fadogia_agrestis",
+          "gotu_kola",
+          "lions_mane",
+          "turkesterone"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon",
+          "Venus"
+        ],
+        "elements": [
+          "Water"
+        ],
+        "qualities": [
+          "calm",
+          "mushroom",
+          "evening"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Moon",
+            "Saturn"
+          ],
+          "elements": [
+            "Water",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Moon",
+            "Saturn"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Water",
+          "energeticDirection": "inward",
+          "seasonalAffinity": [
+            "winter",
+            "autumn"
+          ],
+          "dayMasterStem": "癸",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            5
+          ],
+          "constructiveQualities": [
+            "adaptogen",
+            "calm",
+            "spirit"
+          ],
+          "numerologySum": 41,
+          "numerologyRoot": 5
+        },
+        "mayan": {
+          "dreamspell": "White Mirror",
+          "tzolkinCholQij": "Etznab"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Moon",
+          "Saturn"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "red_dark",
+        "priorityBadge": "immune"
+      },
+      "notes": ""
+    },
+    {
+      "id": "cordyceps",
+      "name": "Cordyceps",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "mixed_human_evidence",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "strongly_positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "physical_energy",
+          "respiratory_support"
+        ],
+        "secondary": [
+          "mitochondrial_energy",
+          "endocrine_hormonal",
+          "libido"
+        ],
+        "weights": {
+          "physical_energy": 0.9,
+          "respiratory_support": 0.8,
+          "endocrine_hormonal": 0.5,
+          "mitochondrial_energy": 0.6,
+          "libido": 0.4
+        }
+      },
+      "functionalClasses": [
+        "physical_energy",
+        "respiratory_support",
+        "endocrine_hormonal",
+        "mitochondrial_energy",
+        "libido"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "respiration": 3,
+          "muscles_back": 2,
+          "brain": 1
+        },
+        "burdens": {
+          "nervous": 2,
+          "sleep": 2,
+          "heart": 1,
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "energy_mitochondria": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "respiration": {
+          "supportStrength": 3,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "muscles_back": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "brain": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 0,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 0,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "heart": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "immune_mushroom",
+          "physical_performance",
+          "respiratory_support",
+          "stimulant"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 3,
+        "minimumGapHours": 24,
+        "persistenceClass": "short",
+        "residualWindowHours": 24,
+        "priorityTier": "conditional"
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "physical_performance",
+        "stimulant",
+        "respiration",
+        "energy_support"
+      ],
+      "domains": {
+        "body": 3,
+        "career": 1,
+        "leisure": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "creatine_5g"
+        ],
+        "avoidSameDay": [
+          "nmnh",
+          "melatonin",
+          "valerian"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars"
+        ],
+        "elements": [
+          "Fire",
+          "Wood"
+        ],
+        "qualities": [
+          "activation",
+          "stamina",
+          "movement"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Mars",
+            "Sun"
+          ],
+          "elements": [
+            "Fire",
+            "Air"
+          ],
+          "planetaryHourAffinity": [
+            "Mars",
+            "Sun"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Fire",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer",
+            "spring"
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            9
+          ],
+          "constructiveQualities": [
+            "stamina",
+            "oxygen",
+            "athletic"
+          ],
+          "numerologySum": 45,
+          "numerologyRoot": 9
+        },
+        "mayan": {
+          "dreamspell": "Red Dragon",
+          "tzolkinCholQij": "Imix"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Mars",
+          "Sun"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "orange",
+        "priorityBadge": "performance"
+      },
+      "notes": ""
+    },
+    {
+      "id": "black_maca",
+      "name": "Black Maca",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active_caution",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "caution",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "mixed",
+        "status": "active_caution",
+        "caution": "use_with_care",
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "libido",
+          "endocrine_hormonal"
+        ],
+        "secondary": [
+          "physical_energy",
+          "cognition"
+        ],
+        "weights": {
+          "endocrine_hormonal": 0.8,
+          "libido": 0.9,
+          "physical_energy": 0.6,
+          "cognition": 0.4
+        }
+      },
+      "functionalClasses": [
+        "endocrine_hormonal",
+        "libido",
+        "physical_energy",
+        "cognition"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "endocrine": 2,
+          "muscles_back": 1
+        },
+        "burdens": {
+          "nervous": 2,
+          "sleep": 2,
+          "endocrine": 1
+        }
+      },
+      "bodyAxes": {
+        "energy_mitochondria": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "endocrine": {
+          "supportStrength": 2,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "muscles_back": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 0,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 0,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "endocrine_caution",
+          "libido_support",
+          "adaptogen"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 2,
+        "minimumGapHours": 72,
+        "persistenceClass": "medium",
+        "residualWindowHours": 48,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "drive",
+        "endocrine_caution",
+        "stimulant"
+      ],
+      "domains": {
+        "body": 2,
+        "love": 1,
+        "career": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "fadogia_agrestis",
+          "nmnh",
+          "turkesterone"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars"
+        ],
+        "elements": [
+          "Fire",
+          "Earth"
+        ],
+        "qualities": [
+          "drive",
+          "libido",
+          "activation"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Mars",
+            "Venus"
+          ],
+          "elements": [
+            "Earth",
+            "Fire"
+          ],
+          "planetaryHourAffinity": [
+            "Mars",
+            "Venus"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Earth",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "spring",
+            "summer"
+          ],
+          "dayMasterStem": "戊",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            2
+          ],
+          "constructiveQualities": [
+            "libido",
+            "fertility",
+            "drive"
+          ],
+          "numerologySum": 20,
+          "numerologyRoot": 2
+        },
+        "mayan": {
+          "dreamspell": "Red Serpent",
+          "tzolkinCholQij": "Chicchan"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Mars",
+          "Venus"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "dark_red",
+        "priorityBadge": "caution"
+      },
+      "notes": ""
+    },
+    {
+      "id": "b_complex",
+      "name": "B-Complex",
+      "aliases": [
+        "B Complex"
+      ],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "baseline",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "methylation",
+          "cognition"
+        ],
+        "secondary": [
+          "focus",
+          "mitochondrial_energy",
+          "physical_energy"
+        ],
+        "weights": {
+          "methylation": 0.8,
+          "cognition": 0.7,
+          "mitochondrial_energy": 0.6,
+          "focus": 0.6,
+          "physical_energy": 0.4
+        }
+      },
+      "functionalClasses": [
+        "methylation",
+        "cognition",
+        "mitochondrial_energy",
+        "focus",
+        "physical_energy"
+      ],
+      "body": {
+        "benefits": {
+          "energy_mitochondria": 2,
+          "nervous": 1,
+          "brain": 1
+        },
+        "burdens": {
+          "nervous": 2,
+          "sleep": 2,
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "energy_mitochondria": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 1,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "brain": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 0,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "b_vitamins",
+          "methylation_driver",
+          "cognitive_energy"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 2,
+        "maxUses7d": 4,
+        "minimumGapHours": 24,
+        "persistenceClass": "short",
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "b_vitamins",
+        "brain_activation",
+        "methylation_driver"
+      ],
+      "domains": {
+        "career": 1,
+        "study": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "nr",
+          "nmn",
+          "nmnh"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mercury"
+        ],
+        "elements": [
+          "Air",
+          "Fire"
+        ],
+        "qualities": [
+          "non_nad_energy",
+          "methylation"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Mercury",
+            "Sun"
+          ],
+          "elements": [
+            "Air",
+            "Fire"
+          ],
+          "planetaryHourAffinity": [
+            "Mercury",
+            "Sun"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Fire",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer",
+            "spring"
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            9
+          ],
+          "constructiveQualities": [
+            "B_vitamins",
+            "methylation",
+            "neural"
+          ],
+          "numerologySum": 36,
+          "numerologyRoot": 9
+        },
+        "mayan": {
+          "dreamspell": "Yellow Human",
+          "tzolkinCholQij": "Eb"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Mercury",
+          "Sun"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "yellow",
+        "priorityBadge": "core"
+      },
+      "notes": ""
+    },
+    {
+      "id": "l_citrulline",
+      "name": "L-Citrulline",
+      "aliases": [
+        "Citrulline"
+      ],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "active",
+      "evidenceClass": "mixed_human_evidence",
+      "autoSelection": "allowed",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "positive",
+        "status": "active",
+        "caution": null,
+        "notes": ""
+      },
+      "functions": {
+        "primary": [
+          "nitric_oxide",
+          "heart_circulation",
+          "physical_energy"
+        ],
+        "secondary": [
+          "muscle_back_support"
+        ],
+        "weights": {
+          "nitric_oxide": 0.9,
+          "heart_circulation": 0.7,
+          "physical_energy": 0.7,
+          "muscle_back_support": 0.5
+        }
+      },
+      "functionalClasses": [
+        "nitric_oxide",
+        "heart_circulation",
+        "physical_energy",
+        "muscle_back_support"
+      ],
+      "body": {
+        "benefits": {
+          "heart": 2,
+          "respiration": 1,
+          "muscles_back": 2
+        },
+        "burdens": {
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "heart": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "respiration": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "muscles_back": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "nitric_oxide_support",
+          "circulation",
+          "physical_performance",
+          "amino_acid"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 1,
+        "maxUses7d": 3,
+        "minimumGapHours": 24,
+        "persistenceClass": "short",
+        "residualWindowHours": 24,
+        "priorityTier": "maintenance"
+      },
+      "timeWindows": [
+        "morning",
+        "afternoon"
+      ],
+      "requiresFood": false,
+      "classes": [
+        "circulation",
+        "physical_performance"
+      ],
+      "domains": {
+        "body": 2,
+        "leisure": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [
+          "creatine_5g"
+        ],
+        "avoidSameDay": [],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars"
+        ],
+        "elements": [
+          "Fire"
+        ],
+        "qualities": [
+          "circulation",
+          "pump",
+          "movement"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Mars",
+            "Venus"
+          ],
+          "elements": [
+            "Fire",
+            "Water"
+          ],
+          "planetaryHourAffinity": [
+            "Mars",
+            "Sun"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Fire",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer"
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            9
+          ],
+          "constructiveQualities": [
+            "nitric_oxide",
+            "pump",
+            "circulation"
+          ],
+          "numerologySum": 54,
+          "numerologyRoot": 9
+        },
+        "mayan": {
+          "dreamspell": "Red Dragon",
+          "tzolkinCholQij": "Imix"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Mars",
+          "Venus"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "red",
+        "priorityBadge": "performance"
+      },
+      "notes": ""
+    },
+    {
+      "id": "ashwagandha",
+      "name": "Ashwagandha",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "excluded",
+      "evidenceClass": "traditional_or_preclinical",
+      "autoSelection": "manual_only",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "negative",
+        "status": "excluded",
+        "caution": null,
+        "notes": "Personal exclusion from automatic scheduling due to liver concern."
+      },
+      "functions": {
+        "primary": [
+          "nervous_system_calming"
+        ],
+        "secondary": [
+          "endocrine_hormonal",
+          "sleep_initiation",
+          "cognition",
+          "physical_energy"
+        ],
+        "weights": {
+          "nervous_system_calming": 0.8,
+          "endocrine_hormonal": 0.6,
+          "sleep_initiation": 0.5,
+          "physical_energy": 0.4,
+          "cognition": 0.4
+        }
+      },
+      "functionalClasses": [
+        "nervous_system_calming",
+        "endocrine_hormonal",
+        "sleep_initiation",
+        "physical_energy",
+        "cognition"
+      ],
+      "body": {
+        "benefits": {
+          "nervous": 2,
+          "sleep": 1
+        },
+        "burdens": {
+          "liver": 3,
+          "gut": 1,
+          "sleep": 1
+        }
+      },
+      "bodyAxes": {
+        "nervous": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "sleep": {
+          "supportStrength": 1,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        },
+        "liver": {
+          "supportStrength": 0,
+          "burdenStrength": 3,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "adaptogen",
+          "liver_caution",
+          "nervous_support",
+          "endocrine"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 0,
+        "maxUses7d": 1,
+        "minimumGapHours": 999,
+        "persistenceClass": "unknown_conservative",
+        "residualWindowHours": 0,
+        "priorityTier": "maintenance",
+        "weeklyLimited": true,
+        "rollingWindowDays": 7,
+        "automaticFrequencyBoost": false,
+        "missedWeekRequiresMakeup": false,
+        "permanentHighlightAllowed": false
+      },
+      "timeWindows": [
+        "night"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "adaptogen",
+        "liver_caution"
+      ],
+      "domains": {
+        "leisure": 1,
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "fadogia_agrestis",
+          "gotu_kola",
+          "melatonin",
+          "reishi",
+          "turkesterone",
+          "valerian"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Moon"
+        ],
+        "elements": [
+          "Earth"
+        ],
+        "qualities": [
+          "cortisol",
+          "calm"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Saturn",
+            "Mars"
+          ],
+          "elements": [
+            "Earth",
+            "Fire"
+          ],
+          "planetaryHourAffinity": [
+            "Saturn",
+            "Mars"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Earth",
+          "energeticDirection": "balanced",
+          "seasonalAffinity": [
+            "all"
+          ],
+          "dayMasterStem": "己",
+          "polarity": "Yin"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            6
+          ],
+          "constructiveQualities": [
+            "adaptogen",
+            "cortisol",
+            "root"
+          ],
+          "numerologySum": 42,
+          "numerologyRoot": 6
+        },
+        "mayan": {
+          "dreamspell": "White Wizard",
+          "tzolkinCholQij": "Ix"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Saturn",
+          "Mars"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "brown",
+        "priorityBadge": "caution"
+      },
+      "notes": "Personal exclusion from automatic scheduling due to liver concern."
+    },
+    {
+      "id": "fadogia_agrestis",
+      "name": "Fadogia Agrestis",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "manual_only",
+      "evidenceClass": "manual_research",
+      "autoSelection": "manual_only",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "unknown",
+        "status": "manual_only",
+        "caution": null,
+        "notes": "Manual research lane only; never automatic."
+      },
+      "functions": {
+        "primary": [
+          "libido",
+          "endocrine_hormonal"
+        ],
+        "secondary": [],
+        "weights": {
+          "endocrine_hormonal": 0.7,
+          "libido": 0.8
+        }
+      },
+      "functionalClasses": [
+        "endocrine_hormonal",
+        "libido"
+      ],
+      "body": {
+        "benefits": {
+          "endocrine": 2,
+          "energy_mitochondria": 1
+        },
+        "burdens": {
+          "liver": 3,
+          "nervous": 2,
+          "endocrine": 2
+        }
+      },
+      "bodyAxes": {
+        "endocrine": {
+          "supportStrength": 2,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "energy_mitochondria": {
+          "supportStrength": 1,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "liver": {
+          "supportStrength": 0,
+          "burdenStrength": 3,
+          "confidence": 0.7
+        },
+        "nervous": {
+          "supportStrength": 0,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "endocrine_caution",
+          "testosterone_support",
+          "manual_research"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 0,
+        "maxUses7d": 1,
+        "minimumGapHours": 999,
+        "persistenceClass": "unknown_conservative",
+        "residualWindowHours": 0,
+        "priorityTier": "maintenance",
+        "weeklyLimited": true,
+        "rollingWindowDays": 7,
+        "automaticFrequencyBoost": false,
+        "missedWeekRequiresMakeup": false,
+        "permanentHighlightAllowed": false
+      },
+      "timeWindows": [
+        "morning"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "endocrine_caution",
+        "manual_research"
+      ],
+      "domains": {
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "ashwagandha",
+          "black_maca",
+          "gotu_kola",
+          "reishi",
+          "turkesterone"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars"
+        ],
+        "elements": [
+          "Fire"
+        ],
+        "qualities": [
+          "endocrine",
+          "research"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Mars"
+          ],
+          "elements": [
+            "Fire"
+          ],
+          "planetaryHourAffinity": [
+            "Mars"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Fire",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer"
+          ],
+          "dayMasterStem": "丙",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            6
+          ],
+          "constructiveQualities": [
+            "testosterone",
+            "drive",
+            "manual"
+          ],
+          "numerologySum": 69,
+          "numerologyRoot": 6
+        },
+        "mayan": {
+          "dreamspell": "Red Serpent",
+          "tzolkinCholQij": "Chicchan"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Mars"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "dark_red",
+        "priorityBadge": "manual_only"
+      },
+      "notes": "Manual research lane only; never automatic."
+    },
+    {
+      "id": "turkesterone",
+      "name": "Turkesterone",
+      "aliases": [],
+      "productForm": "unknown",
+      "dose": "unknown",
+      "servingUnit": "unknown",
+      "pillCount": "unknown",
+      "available": true,
+      "personalStatus": "manual_only",
+      "evidenceClass": "manual_research",
+      "autoSelection": "manual_only",
+      "source": "unknown",
+      "lastCardReview": "unknown",
+      "criticalData": {
+        "doseKnown": false,
+        "productVerified": false,
+        "medicationInteractionChecked": false,
+        "labDependent": false
+      },
+      "criticalRequirements": [],
+      "personalResponse": {
+        "responsePolarity": "unknown",
+        "status": "manual_only",
+        "caution": null,
+        "notes": "Manual research lane only; never automatic."
+      },
+      "functions": {
+        "primary": [
+          "muscle_back_support",
+          "physical_energy"
+        ],
+        "secondary": [
+          "endocrine_hormonal"
+        ],
+        "weights": {
+          "muscle_back_support": 0.8,
+          "physical_energy": 0.7,
+          "endocrine_hormonal": 0.5
+        }
+      },
+      "functionalClasses": [
+        "muscle_back_support",
+        "physical_energy",
+        "endocrine_hormonal"
+      ],
+      "body": {
+        "benefits": {
+          "muscles_back": 2,
+          "endocrine": 1
+        },
+        "burdens": {
+          "liver": 2,
+          "endocrine": 2,
+          "gut": 1
+        }
+      },
+      "bodyAxes": {
+        "muscles_back": {
+          "supportStrength": 2,
+          "burdenStrength": 0,
+          "confidence": 0.7
+        },
+        "endocrine": {
+          "supportStrength": 1,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "liver": {
+          "supportStrength": 0,
+          "burdenStrength": 2,
+          "confidence": 0.7
+        },
+        "gut": {
+          "supportStrength": 0,
+          "burdenStrength": 1,
+          "confidence": 0.7
+        }
+      },
+      "stackingProfile": {
+        "functionalClasses": [
+          "endocrine_caution",
+          "anabolic",
+          "muscle_support",
+          "manual_research"
+        ]
+      },
+      "frequency": {
+        "targetUses7d": 0,
+        "maxUses7d": 1,
+        "minimumGapHours": 999,
+        "persistenceClass": "unknown_conservative",
+        "residualWindowHours": 0,
+        "priorityTier": "maintenance",
+        "weeklyLimited": true,
+        "rollingWindowDays": 7,
+        "automaticFrequencyBoost": false,
+        "missedWeekRequiresMakeup": false,
+        "permanentHighlightAllowed": false
+      },
+      "timeWindows": [
+        "afternoon"
+      ],
+      "requiresFood": true,
+      "classes": [
+        "endocrine_caution",
+        "anabolic",
+        "manual_research"
+      ],
+      "domains": {
+        "body": 1
+      },
+      "pairing": {
+        "requiredCompanions": [],
+        "preferredPairs": [],
+        "avoidSameDay": [
+          "ashwagandha",
+          "black_maca",
+          "fadogia_agrestis",
+          "gotu_kola",
+          "reishi"
+        ],
+        "avoidSameSlot": [],
+        "redundantWith": []
+      },
+      "esoteric": {
+        "planets": [
+          "Mars"
+        ],
+        "elements": [
+          "Fire",
+          "Earth"
+        ],
+        "qualities": [
+          "training",
+          "research"
+        ]
+      },
+      "esotericSignature": {
+        "astrology": {
+          "primaryPlanets": [
+            "Mars",
+            "Saturn"
+          ],
+          "elements": [
+            "Fire",
+            "Earth"
+          ],
+          "planetaryHourAffinity": [
+            "Mars"
+          ]
+        },
+        "bazi": {
+          "primaryElement": "Wood",
+          "energeticDirection": "outward",
+          "seasonalAffinity": [
+            "summer"
+          ],
+          "dayMasterStem": "甲",
+          "polarity": "Yang"
+        },
+        "numerology": {
+          "resonantNumbers": [
+            9
+          ],
+          "constructiveQualities": [
+            "anabolic",
+            "muscle",
+            "manual"
+          ],
+          "numerologySum": 54,
+          "numerologyRoot": 9
+        },
+        "mayan": {
+          "dreamspell": "Red Serpent",
+          "tzolkinCholQij": "Chicchan"
+        }
+      },
+      "planetaryHourProfile": {
+        "primaryPlanets": [
+          "Mars",
+          "Saturn"
+        ],
+        "peakHours": "unknown",
+        "notes": "unknown"
+      },
+      "display": {
+        "colorHint": "dark_red",
+        "priorityBadge": "manual_only"
+      },
+      "notes": "Manual research lane only; never automatic."
+    }
+  ]
+}

@@ -109,6 +109,32 @@ export function mondayOf(date) {
   return d.toISOString().slice(0, 10);
 }
 
+export const ESOTERIC_CONVERGENCE_LABELS = Object.freeze({
+  GOLDEN: 'Golden',
+  HIGH: 'High',
+  MEDIUM: 'Medium',
+  LOW: 'Low',
+  NONE: 'None'
+});
+
+export const AXIS_COLORS = Object.freeze({
+  GREEN: 'green',
+  BLUE: 'blue',
+  YELLOW: 'yellow',
+  ORANGE: 'orange',
+  RED: 'red'
+});
+
+export const FUNCTION_AXES = Object.freeze([
+  'mitochondrial_energy', 'physical_energy', 'cognition', 'memory', 'focus',
+  'nervous_system_calming', 'sleep_initiation', 'sleep_maintenance',
+  'liver_support', 'methylation', 'antioxidant_support', 'heart_circulation',
+  'nitric_oxide', 'muscle_back_support', 'joints_connective_tissue', 'skin',
+  'gut_digestion', 'immune_modulation', 'endocrine_hormonal', 'libido',
+  'respiratory_support', 'eyes', 'longevity_cellular_repair', 'autophagy',
+  'inflammation_modulation'
+]);
+
 export function canonicalize(value) {
   if (Array.isArray(value)) return value.map(canonicalize);
   if (value && typeof value === 'object') {

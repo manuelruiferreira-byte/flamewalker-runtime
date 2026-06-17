@@ -1,0 +1,356 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ACE Mind Canonical Supplement Registry v2",
+  "type": "object",
+  "required": ["schemaVersion","registryId","generatedAt","doctrine","bodySystems","functionAxes","lifeDomains","defaultConfig","supplements"],
+  "properties": {
+    "schemaVersion": { "const": "ace_mind_supplement_registry.v2" },
+    "registryId": { "type": "string" },
+    "generatedAt": { "type": "string" },
+    "doctrine": { "type": "string" },
+    "bodySystems": { "type": "array", "items": { "type": "string" } },
+    "functionAxes": { "type": "array", "items": { "type": "string" } },
+    "lifeDomains": { "type": "array", "items": { "type": "string" } },
+    "defaultConfig": { "type": "object" },
+    "weeklyLimitedHerbs": {
+      "type": "object",
+      "description": "Herbs capped at one use per rolling 7 days with no automatic frequency boost, no missed-week makeup, and no permanent highlight.",
+      "required": ["members","maxUsesPerRolling7Days","automaticFrequencyBoost","missedWeekRequiresMakeup","permanentHighlightAllowed"],
+      "properties": {
+        "members": { "type": "array", "items": { "type": "string" } },
+        "maxUsesPerRolling7Days": { "type": "number" },
+        "automaticFrequencyBoost": { "type": "boolean" },
+        "missedWeekRequiresMakeup": { "type": "boolean" },
+        "permanentHighlightAllowed": { "type": "boolean" }
+      }
+    },
+    "mutualExclusionGroups": {
+      "type": "array",
+      "description": "Groups where at most maxPerDay members may be selected on the same day.",
+      "items": {
+        "type": "object",
+        "required": ["id","members","maxPerDay"],
+        "properties": {
+          "id": { "type": "string" },
+          "members": { "type": "array", "items": { "type": "string" } },
+          "maxPerDay": { "type": "number" }
+        }
+      }
+    },
+    "supplements": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/SupplementCard" }
+    }
+  },
+  "definitions": {
+    "SupplementCard": {
+      "type": "object",
+      "required": ["id","name","available","personalStatus","autoSelection","evidenceClass","criticalData"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "productForm": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+        "dose": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+        "servingUnit": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+        "pillCount": { "oneOf": [{ "type": "number" }, { "const": "unknown" }] },
+        "available": { "type": "boolean" },
+        "personalStatus": { "enum": ["active","active_caution","paused","caution","excluded","manual_only"] },
+        "autoSelection": { "enum": ["allowed","caution","manual_only","excluded"] },
+        "evidenceClass": { "enum": ["personal_protocol","baseline","mixed_human_evidence","traditional_or_preclinical","manual_research","limited_human_evidence"] },
+        "source": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+        "lastCardReview": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+        "criticalData": {
+          "type": "object",
+          "required": ["doseKnown","productVerified","medicationInteractionChecked","labDependent"],
+          "properties": {
+            "doseKnown": { "type": "boolean" },
+            "productVerified": { "type": "boolean" },
+            "medicationInteractionChecked": { "type": "boolean" },
+            "labDependent": { "type": "boolean" }
+          }
+        },
+        "personalResponse": {
+          "type": "object",
+          "properties": {
+            "personallyTested": { "type": "boolean" },
+            "responsePolarity": { "enum": ["strongly_positive","positive","neutral","negative","unknown"] },
+            "responseStrength": { "enum": ["strong","moderate","mild","unknown"] },
+            "reportedBenefits": { "type": "array", "items": { "type": "string" } },
+            "reportedAdverseEffects": { "type": "array", "items": { "type": "string" } },
+            "firstObservedDate": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+            "mostRecentConfirmationDate": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+            "personalResponseConfidence": { "enum": ["high","medium","low","unknown"] },
+            "personalResponseNotes": { "type": "string" }
+          }
+        },
+        "functions": {
+          "type": "object",
+          "properties": {
+            "primaryFunctions": { "type": "array", "items": { "type": "string" } },
+            "secondaryFunctions": { "type": "array", "items": { "type": "string" } },
+            "mechanismTags": { "type": "array", "items": { "type": "string" } },
+            "operationalFunctions": { "type": "array", "items": { "type": "string" } },
+            "recoveryFunctions": { "type": "array", "items": { "type": "string" } },
+            "acuteOrCumulative": { "enum": ["acute","cumulative","both","unknown"] },
+            "uniqueDifferentiator": { "type": "string" },
+            "doesNotCover": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "bodyAxisMatrix": {
+          "type": "object",
+          "description": "14-axis body burden/support matrix",
+          "properties": {
+            "heart": { "$ref": "#/definitions/AxisEntry" },
+            "brain": { "$ref": "#/definitions/AxisEntry" },
+            "nervous": { "$ref": "#/definitions/AxisEntry" },
+            "sleep": { "$ref": "#/definitions/AxisEntry" },
+            "liver": { "$ref": "#/definitions/AxisEntry" },
+            "gut": { "$ref": "#/definitions/AxisEntry" },
+            "immune": { "$ref": "#/definitions/AxisEntry" },
+            "muscles_back": { "$ref": "#/definitions/AxisEntry" },
+            "joints_connective": { "$ref": "#/definitions/AxisEntry" },
+            "skin": { "$ref": "#/definitions/AxisEntry" },
+            "endocrine": { "$ref": "#/definitions/AxisEntry" },
+            "energy_mitochondria": { "$ref": "#/definitions/AxisEntry" },
+            "respiration": { "$ref": "#/definitions/AxisEntry" },
+            "eyes": { "$ref": "#/definitions/AxisEntry" }
+          }
+        },
+        "stackingProfile": {
+          "type": "object",
+          "properties": {
+            "functionalClasses": { "type": "array", "items": { "type": "string" } },
+            "primaryCoverageAxes": { "type": "array", "items": { "type": "string" } },
+            "secondaryCoverageAxes": { "type": "array", "items": { "type": "string" } },
+            "redundancyGroups": { "type": "array", "items": { "type": "string" } },
+            "stackingBurdenClasses": { "type": "array", "items": { "type": "string" } },
+            "maximumSameFunctionCompanions": { "type": "number" },
+            "diminishingReturnProfile": { "enum": ["strong","moderate","mild","unknown"] },
+            "substantiallyDuplicates": { "type": "array", "items": { "type": "string" } },
+            "partiallyOverlapsWith": { "type": "array", "items": { "type": "string" } },
+            "complementsRatherThanDuplicates": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "frequency": {
+          "type": "object",
+          "properties": {
+            "targetUses7d": { "type": "number" },
+            "maxUses7d": { "type": "number" },
+            "minimumGapHours": { "type": "number" },
+            "persistenceClass": { "type": "string" },
+            "residualWindowHours": { "type": "number" },
+            "priorityTier": { "type": "string" },
+            "rotationGroup": { "type": "string" },
+            "groupTargetUses7d": { "type": "number" },
+            "weeklyLimited": { "type": "boolean" },
+            "rollingWindowDays": { "type": "number" },
+            "automaticFrequencyBoost": { "type": "boolean" },
+            "missedWeekRequiresMakeup": { "type": "boolean" },
+            "permanentHighlightAllowed": { "type": "boolean" },
+            "maxConsecutiveDays": { "oneOf": [{ "type": "number" }, { "type": "null" }] },
+            "minimumGapBetweenCycles": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+            "lastActualIntake": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+            "useExactTimestamp": { "type": "boolean" },
+            "accumulationTendency": { "enum": ["high","moderate","low","none","unknown"] },
+            "washoutWindow": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] }
+          }
+        },
+        "compatibility": {
+          "type": "object",
+          "properties": {
+            "requiredCompanions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "companionId": { "type": "string" },
+                  "required": { "type": "boolean" },
+                  "reason": { "type": "string" },
+                  "timingRelationship": { "type": "string" },
+                  "canBeMetByEquivalent": { "type": "boolean" },
+                  "equivalents": { "type": "array", "items": { "type": "string" } },
+                  "exceptions": { "type": "string" }
+                }
+              }
+            },
+            "preferredPairs": { "type": "array", "items": { "type": "string" } },
+            "optionalSynergies": { "type": "array", "items": { "type": "string" } },
+            "avoidSameDay": { "type": "array", "items": { "type": "string" } },
+            "avoidSameSlot": { "type": "array", "items": { "type": "string" } },
+            "redundantWith": { "type": "array", "items": { "type": "string" } },
+            "rotationFamily": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+            "mutuallyExclusiveWith": { "type": "array", "items": { "type": "string" } },
+            "medicationCautions": { "oneOf": [{ "type": "array", "items": { "type": "string" } }, { "const": "unknown" }] },
+            "conditionCautions": { "oneOf": [{ "type": "array", "items": { "type": "string" } }, { "const": "unknown" }] },
+            "requiresFood": { "type": "boolean" },
+            "fastingCompatible": { "oneOf": [{ "type": "boolean" }, { "const": "unknown" }] },
+            "absorptionConstraints": { "type": "array", "items": { "type": "string" } },
+            "timeWindowCompatibility": {
+              "type": "object",
+              "properties": {
+                "morning": { "enum": ["preferred","compatible","avoid"] },
+                "afternoon": { "enum": ["preferred","compatible","avoid"] },
+                "night": { "enum": ["preferred","compatible","avoid"] }
+              }
+            },
+            "stimulatingOrCalming": { "enum": ["stimulating","neutral","calming","unknown"] },
+            "unknownInteractionStatus": { "type": "boolean" }
+          }
+        },
+        "esoteric": {
+          "type": "object",
+          "properties": {
+            "astrology": {
+              "type": "object",
+              "properties": {
+                "primaryPlanets": { "type": "array", "items": { "type": "string" } },
+                "secondaryPlanets": { "type": "array", "items": { "type": "string" } },
+                "planetaryAffinities": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "planet": { "type": "string" },
+                      "strength": { "type": "number", "minimum": 0, "maximum": 1 },
+                      "polarity": { "enum": ["positive","neutral","negative"] },
+                      "reason": { "type": "string" }
+                    }
+                  }
+                },
+                "planetaryTensions": { "type": "array", "items": { "type": "string" } },
+                "elements": { "type": "array", "items": { "type": "string" } },
+                "modalities": { "type": "array", "items": { "type": "string" } },
+                "signs": { "type": "array", "items": { "type": "string" } },
+                "lunarAffinity": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                "solarAffinity": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                "dayNightPolarity": { "enum": ["day","night","neutral","unknown"] },
+                "waxingWaningAffinity": { "enum": ["waxing","waning","neutral","unknown"] },
+                "planetaryHourAffinity": { "type": "array", "items": { "type": "string" } },
+                "planetaryHourAvoidance": { "type": "array", "items": { "type": "string" } },
+                "archetypes": { "type": "array", "items": { "type": "string" } }
+              }
+            },
+            "bazi": {
+              "type": "object",
+              "properties": {
+                "primaryElement": { "enum": ["Wood","Fire","Earth","Metal","Water","unknown"] },
+                "secondaryElement": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                "yinYangQuality": { "enum": ["yin","yang","balanced","unknown"] },
+                "generatingRelationships": { "type": "array", "items": { "type": "string" } },
+                "controllingRelationships": { "type": "array", "items": { "type": "string" } },
+                "seasonalAffinity": { "type": "array", "items": { "type": "string" } },
+                "excessElementCaution": { "oneOf": [{ "type": "string" }, { "const": "none" }] },
+                "deficientElementSupport": { "oneOf": [{ "type": "string" }, { "const": "none" }] },
+                "organSystemCorrespondence": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                "energeticDirection": { "enum": ["rising","grounding","dispersing","consolidating","warming","cooling","unknown"] }
+              }
+            },
+            "numerology": {
+              "type": "object",
+              "properties": {
+                "resonantNumbers": { "type": "array", "items": { "type": "number" } },
+                "masterNumberAffinity": { "oneOf": [{ "type": "string" }, { "const": "none" }] },
+                "constructiveQualities": { "type": "array", "items": { "type": "string" } },
+                "shadowQualities": { "type": "array", "items": { "type": "string" } },
+                "activationOrCompletion": { "enum": ["activation","completion","both","unknown"] },
+                "intensityStrength": { "enum": ["high","medium","low","unknown"] },
+                "polarity": { "enum": ["positive","neutral","challenging","unknown"] }
+              }
+            },
+            "mayan": {
+              "type": "object",
+              "properties": {
+                "dnaCount": {
+                  "type": "object",
+                  "properties": {
+                    "daySign": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                    "tone": { "oneOf": [{ "type": "number" }, { "const": "unknown" }] },
+                    "color": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                    "quality": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                    "affinity": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] }
+                  }
+                },
+                "dreamspell": {
+                  "type": "object",
+                  "properties": {
+                    "daySign": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                    "tone": { "oneOf": [{ "type": "number" }, { "const": "unknown" }] },
+                    "color": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                    "archetypes": { "type": "array", "items": { "type": "string" } },
+                    "portalAffinity": { "oneOf": [{ "type": "boolean" }, { "const": "unknown" }] }
+                  }
+                },
+                "cosmicCount": {
+                  "type": "object",
+                  "properties": {
+                    "kin": { "oneOf": [{ "type": "number" }, { "const": "unknown" }] },
+                    "daySign": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                    "tone": { "oneOf": [{ "type": "number" }, { "const": "unknown" }] },
+                    "color": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                    "affinity": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] }
+                  }
+                },
+                "tzolkinCholQij": {
+                  "type": "object",
+                  "properties": {
+                    "daySign": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                    "kiche": { "oneOf": [{ "type": "string" }, { "const": "unknown" }] },
+                    "tone": { "oneOf": [{ "type": "number" }, { "const": "unknown" }] },
+                    "qualities": { "type": "array", "items": { "type": "string" } }
+                  }
+                }
+              }
+            },
+            "planets": { "type": "array", "items": { "type": "string" }, "description": "v1 legacy field" },
+            "elements": { "type": "array", "items": { "type": "string" }, "description": "v1 legacy field" },
+            "qualities": { "type": "array", "items": { "type": "string" }, "description": "v1 legacy field" }
+          }
+        },
+        "planetaryHourProfile": {
+          "type": "object",
+          "properties": {
+            "strongestPlanetaryHours": { "type": "array", "items": { "type": "string" } },
+            "supportivePlanetaryHours": { "type": "array", "items": { "type": "string" } },
+            "neutralPlanetaryHours": { "type": "array", "items": { "type": "string" } },
+            "discordantPlanetaryHours": { "type": "array", "items": { "type": "string" } },
+            "hourAffectsWhat": { "type": "array", "items": { "type": "string" } },
+            "preferredTimeWindows": { "type": "array", "items": { "type": "string" } },
+            "latestSafeTimeForStimulants": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+            "earliestUsefulTimeForCalming": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+          }
+        },
+        "display": {
+          "type": "object",
+          "properties": {
+            "bestPairedWith": { "type": "array", "items": { "type": "string" } },
+            "supports": { "type": "array", "items": { "type": "string" } },
+            "bodySystemsImproved": { "type": "array", "items": { "type": "string" } },
+            "bodySystemsToWatch": { "type": "array", "items": { "type": "string" } },
+            "avoidWith": { "type": "array", "items": { "type": "string" } },
+            "mainFunction": { "type": "string" },
+            "uniqueDifferentiator": { "type": "string" },
+            "personalResponseNote": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+          }
+        },
+        "timeWindows": { "type": "array", "items": { "type": "string" } },
+        "classes": { "type": "array", "items": { "type": "string" } },
+        "body": { "type": "object", "description": "v1 legacy benefit/burden vectors" },
+        "domains": { "type": "object", "description": "v1 legacy life domain scores" },
+        "pairing": { "type": "object", "description": "v1 legacy pairing object" },
+        "notes": { "type": "string" }
+      }
+    },
+    "AxisEntry": {
+      "type": "object",
+      "properties": {
+        "supportStrength": { "type": "number", "minimum": 0, "maximum": 3 },
+        "burdenStrength": { "type": "number", "minimum": 0, "maximum": 3 },
+        "confidence": { "enum": ["high","medium","low","unknown"] },
+        "reason": { "type": "string" },
+        "evidenceSource": { "enum": ["personal_observation","established_science","traditional","theoretical","unknown"] },
+        "personalResponseModifier": { "enum": ["enhances","neutral","reduces","unknown"] }
+      }
+    }
+  }
+}

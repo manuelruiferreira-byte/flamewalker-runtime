@@ -8,3 +8,4 @@ export * from './atom-builder.mjs';
 export * from './slot-planner.mjs';
 export * from './sha256.mjs';
 export * from './individual-supplement-optimizer.mjs';
+export * from './functional-overlap-engine.mjs';

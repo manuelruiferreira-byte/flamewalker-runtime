@@ -30,6 +30,7 @@ jobs:
           node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-renderer.mjs
           node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-live-v2.mjs
           node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/functional-overlap-engine.mjs
           node --check Jester-Intelligence/packages/engines/supplement/tests/validate-live-context-adapter.mjs
           node --check Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority.mjs
           node --check Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority-v2.mjs
@@ -37,17 +38,41 @@ jobs:
       - name: Validate browser module imports in Node
         run: node -e "import('./Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs').then(()=>console.log('visible authority v2 import ok'))"
 
-      - name: Validate canonical registry
+      - name: Validate canonical registry (v1 baseline)
         run: node Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
 
-      - name: Validate upstream layers
+      - name: Validate canonical registry (v2 — production)
+        run: node Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry-v2.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
+
+      - name: Validate upstream layers (v1 baseline)
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-layer-engines.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
 
-      - name: Validate focused optimizer
+      - name: Validate focused optimizer (v1 baseline)
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-individual-optimizer.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
 
-      - name: Run 28-day and 90-day audit
+      - name: Validate focused optimizer (v2 — production)
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-individual-optimizer.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
+
+      - name: Run 28-day and 90-day audit (v1 baseline)
         run: node Jester-Intelligence/packages/engines/supplement/tests/audit-optimizer-28-90.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
+
+      - name: Validate canonical card schema v2
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-card-schema-v2.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
+
+      - name: Validate block-free selection (v2)
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-block-free.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
+
+      - name: Validate esoteric convergence labels (v2)
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-esoteric-convergence.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
+
+      - name: Validate functional overlap engine (v2)
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-functional-overlap.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
+
+      - name: Validate daily variation simulation (v2)
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-simulation-variation.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
+
+      - name: Validate weekly-limited herb governance (v2)
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-weekly-limited.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
 
       - name: Validate original shadow adapter
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-shadow-context-adapter.mjs
