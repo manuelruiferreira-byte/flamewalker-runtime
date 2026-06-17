@@ -24,9 +24,11 @@ jobs:
       - name: Validate source syntax
         shell: bash
         run: |
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/live-context-adapter.mjs
           node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-model.mjs
           node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-renderer.mjs
           node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-live-context-adapter.mjs
           node --check Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority.mjs
 
       - name: Validate browser module imports in Node
@@ -44,11 +46,11 @@ jobs:
       - name: Run 28-day and 90-day audit
         run: node Jester-Intelligence/packages/engines/supplement/tests/audit-optimizer-28-90.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
 
-      - name: Validate shadow context adapter
+      - name: Validate original shadow adapter
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-shadow-context-adapter.mjs
 
-      - name: Validate shadow report aggregation
-        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-shadow-report.mjs
+      - name: Validate live day body and untick adapter
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-live-context-adapter.mjs
 
       - name: Validate visible supplement authority
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority.mjs
