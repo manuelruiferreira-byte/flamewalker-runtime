@@ -7676,7 +7676,7 @@
       "available": true,
       "personalStatus": "excluded",
       "evidenceClass": "traditional_or_preclinical",
-      "autoSelection": "excluded",
+      "autoSelection": "manual_only",
       "source": "unknown",
       "lastCardReview": "unknown",
       "criticalData": {

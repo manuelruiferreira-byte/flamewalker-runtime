@@ -6130,7 +6130,7 @@ function renderSpades(d,g){
 function renderClubs(d,g){
   const chamber=document.getElementById('grid-clubs');
   if(!chamber)return;
-  if(chamber.querySelector('[data-optimizer-live-v2]'))return;
+  if(chamber.dataset.optimizerAuthority||chamber.querySelector('[data-optimizer-live-v2]'))return;
   chamber.innerHTML='<div class="card"><div class="small" style="color:var(--muted)">Loading supplement optimizer…</div></div>';
 }
 function renderDiamonds(d,g){

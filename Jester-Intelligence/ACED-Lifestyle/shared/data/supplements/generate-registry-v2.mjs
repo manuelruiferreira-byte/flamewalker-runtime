@@ -595,6 +595,11 @@ function buildFunctions(scalarMap) {
 
 const NAD_ROTATION = new Set(['nr', 'nmn', 'nmnh']);
 
+// Per-supplement autoSelection overrides vs. the v1 baseline.
+const AUTOSELECTION_OVERRIDE = {
+  ashwagandha: 'manual_only'   // weeklyLimited governance; user auth 2026-06-17
+};
+
 // ---- Authoritative numerology (sum/root) from the supplement table ----
 const NUMEROLOGY = {
   magnesium_citrate: [70, 7], magnesium_malate: [55, 1], magnesium_bisglycinate: [93, 3],
@@ -749,7 +754,7 @@ function migrateSupplementV2(s) {
     available: s.available,
     personalStatus: s.personalStatus,
     evidenceClass: s.evidenceClass,
-    autoSelection: s.autoSelection,
+    autoSelection: AUTOSELECTION_OVERRIDE[s.id] ?? s.autoSelection,
     source: 'unknown',
     lastCardReview: 'unknown',
     criticalData: s.criticalData,

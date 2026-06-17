@@ -107,7 +107,9 @@ function applyVisibleAuthority(record,supplementRegistry){
 async function run(reason='manual'){
   if(disabled()){failClosed(currentDate(),new Error('optimizer disabled'));return null;}
   if(running)return latestRecord;
-  running=true;claimPending(reason);
+  running=true;
+  // Skip the loading placeholder when we already have results for today — avoids a visible flash.
+  if(!latestRecord||latestRecord.date!==currentDate()){claimPending(reason);}
   let date=currentDate();
   try{
     const {registry:supplementRegistry,context}=await buildContext();date=context.date;
@@ -128,7 +130,9 @@ async function run(reason='manual'){
 function schedule(reason='render'){clearTimeout(timer);timer=setTimeout(()=>void run(reason),16);}
 function wrapAndSchedule(name,reason){
   const base=window[name];if(typeof base!=='function'||base.__aceOptimizerLiveV2Wrapped)return;
-  function wrapped(...args){const result=base.apply(this,args);claimPending(reason);schedule(reason);return result;}
+  // Do NOT call claimPending here — it would wipe valid results from a prior run.
+  // The overwrite guard (MutationObserver) catches legacy overwrites; schedule() handles re-evaluation.
+  function wrapped(...args){const result=base.apply(this,args);schedule(reason);return result;}
   wrapped.__aceOptimizerLiveV2Wrapped=true;wrapped.__aceOptimizerLiveV2Base=base;window[name]=wrapped;
 }
 function installHooks(){['render','setDay','fastRenderSelectedDay','tickSupp','setBodyState'].forEach(name=>wrapAndSchedule(name,name));}

@@ -76,7 +76,7 @@ for (const id of ['nr', 'nmn', 'nmnh']) {
 }
 
 // --- Personal-status governance ---
-assert(byId.ashwagandha.autoSelection === 'excluded', 'ashwagandha must be excluded');
+assert(byId.ashwagandha.autoSelection === 'manual_only', 'ashwagandha must be manual_only');
 assert(byId.ashwagandha.personalResponse.responsePolarity === 'negative', 'ashwagandha response must be negative');
 assert(byId.fadogia_agrestis.autoSelection === 'manual_only', 'fadogia must be manual_only');
 assert(byId.turkesterone.autoSelection === 'manual_only', 'turkesterone must be manual_only');
