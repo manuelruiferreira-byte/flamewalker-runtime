@@ -21,10 +21,21 @@ function eventState(record = {}) {
   return [...latest.entries()].filter(([,ticked])=>ticked).map(([name])=>name);
 }
 
+let _historiesCache = null, _historiesCacheSignal = '';
+
 export function extractActualHistory(state = {}, registry = {}) {
+  const logs = state?.suppLog && typeof state.suppLog === 'object' ? state.suppLog : {};
+  // Build a cheap signal from the log: number of entries + most recent entry's taken list.
+  // Supplements are only ticked for the current or most recent day, so this catches all real changes.
+  const dates = Object.keys(logs).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort();
+  const lastDate = dates.at(-1) ?? '';
+  const lastEntry = logs[lastDate];
+  const signal = `${dates.length}:${lastDate}:${JSON.stringify(lastEntry?.taken ?? lastEntry?.events ?? '')}`;
+  if (signal === _historiesCacheSignal && _historiesCache) return _historiesCache;
+  _historiesCacheSignal = signal;
+
   const lookup = registryLookup(registry);
   const histories = {};
-  const logs = state?.suppLog && typeof state.suppLog === 'object' ? state.suppLog : {};
 
   for (const date of Object.keys(logs).sort()) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) continue;
@@ -42,6 +53,7 @@ export function extractActualHistory(state = {}, registry = {}) {
   }
 
   for (const id of Object.keys(histories)) histories[id] = [...new Set(histories[id])].sort();
+  _historiesCache = histories;
   return histories;
 }
 

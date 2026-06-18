@@ -19,10 +19,11 @@ const DB_VERSION=1;
 const STORE='runs';
 const DISABLE_KEY='ace_mind_optimizer_live_v2_disabled';
 const OLD_DISABLE_KEY='ace_mind_optimizer_shadow_disabled';
+// Use default browser caching — the ?v= query param busts stale cache when code changes.
 const REGISTRY_URL=new URL('../data/supplements/supplement-registry.v2.json?v=20260617-3',import.meta.url);
 const STATE_KEYS=['ace_mind_state_v214','ace_mind_theon_state_v03_block_claim_engine','ace_mind_theon_state_v06','ace_mind_theon_state_v05','ace_mind_theon_state_v04','ace_mind_theon_state_v03'];
 const NAD_IDS=new Set(['nr','nmn','nmnh']);
-let registryPromise=null,latestRecord=null,lastInputHash='',timer=null,running=false,observer=null;
+let registryPromise=null,latestRecord=null,lastInputHash='',lastQuickKey='',timer=null,running=false,observer=null;
 
 try{localStorage.removeItem(OLD_DISABLE_KEY);}catch{}
 
@@ -62,8 +63,21 @@ function readBodySummary(date,snapshot={}){
   try{if(typeof window.bodySummaryForDate==='function'){const value=window.bodySummaryForDate(date);if(value&&typeof value==='object')return value;}}catch{}
   return snapshot.body&&typeof snapshot.body==='object'?snapshot.body:{};
 }
+// Cheap pre-check: if date, body state, and today's supplement log haven't changed,
+// skip the full buildContext() + sha256 and re-render from the cached record.
+function quickKey(date){
+  try{
+    const snapshot=readAgentSnapshot();
+    const state=readState();
+    const todayLog=state?.suppLog?.[date];
+    const taken=JSON.stringify(todayLog?.taken??todayLog?.events??'');
+    const logCount=Object.keys(state?.suppLog??{}).length;
+    const body=JSON.stringify(readBodySummary(date,snapshot));
+    return `${date}|${logCount}|${taken}|${body}`;
+  }catch{return date;}
+}
 async function registry(){
-  registryPromise??=fetch(REGISTRY_URL,{cache:'no-store'}).then(response=>{if(!response.ok)throw new Error(`registry ${response.status}`);return response.json();});
+  registryPromise??=fetch(REGISTRY_URL).then(response=>{if(!response.ok)throw new Error(`registry ${response.status}`);return response.json();});
   return registryPromise;
 }
 function openDb(){return new Promise((resolve,reject)=>{if(!('indexedDB'in window))return resolve(null);const request=indexedDB.open(DB_NAME,DB_VERSION);request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(STORE)){const store=db.createObjectStore(STORE,{keyPath:'key'});store.createIndex('createdAt','createdAt');store.createIndex('date','date');}};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
@@ -108,26 +122,29 @@ async function run(reason='manual'){
   if(disabled()){failClosed(currentDate(),new Error('optimizer disabled'));return null;}
   if(running)return latestRecord;
   running=true;
-  // Skip the loading placeholder when we already have results for today — avoids a visible flash.
-  if(!latestRecord||latestRecord.date!==currentDate()){claimPending(reason);}
   let date=currentDate();
   try{
+    // Fast path: if date + body + today's log are unchanged and we have results, just re-render.
+    const qk=quickKey(date);
+    if(qk===lastQuickKey&&latestRecord&&latestRecord.date===date){applyVisibleAuthority(latestRecord,await registry());return latestRecord;}
+    // Show loading only when we don't have valid results for today yet.
+    if(!latestRecord||latestRecord.date!==date){claimPending(reason);}
     const {registry:supplementRegistry,context}=await buildContext();date=context.date;
     if(date!==currentDate()){schedule('date-race');return null;}
     const inputHash=sha256Hex(JSON.stringify(canonicalize(context)));
-    if(inputHash===lastInputHash&&latestRecord){applyVisibleAuthority(latestRecord,supplementRegistry);return latestRecord;}
+    if(inputHash===lastInputHash&&latestRecord){lastQuickKey=qk;applyVisibleAuthority(latestRecord,supplementRegistry);return latestRecord;}
     const layers={esoteric:evaluateEsotericRegistry(supplementRegistry,context.dayField),body:evaluateBodyRegistry(supplementRegistry,context.bodyState),frequency:evaluateFrequencyRegistry(supplementRegistry,date,context.histories),pairing:evaluatePairingRegistry(supplementRegistry,[])};
     const output=optimize({day:date,registry:supplementRegistry,daySignals:context.daySignals,layers,config:{}});
     assertOutputSafety(output);
     const comparison=compareLegacyToOptimizer(context.legacy,output),createdAt=new Date().toISOString();
     const record={key:`${date}:${inputHash}`,version:VERSION,build:BUILD,mode:'visible-authority-fail-closed',date,createdAt,reason,inputHash,optimizerHash:output.determinismHash,legacy:context.legacy,comparison,diagnostics:buildDiagnostics(supplementRegistry,layers,output),selected:output.selected,residual:output.residual,held:output.held,excluded:output.excluded};
     if(date!==currentDate()){schedule('date-race-after-build');return null;}
-    latestRecord=record;lastInputHash=inputHash;applyVisibleAuthority(record,supplementRegistry);void persist(record);
+    latestRecord=record;lastInputHash=inputHash;lastQuickKey=qk;applyVisibleAuthority(record,supplementRegistry);void persist(record);
     window.dispatchEvent(new CustomEvent('ace-mind:optimizer-live',{detail:{date,comparison,optimizerHash:output.determinismHash,authority:'individual-v2'}}));
     return record;
   }catch(error){failClosed(date,error);return null;}finally{running=false;}
 }
-function schedule(reason='render'){clearTimeout(timer);timer=setTimeout(()=>void run(reason),16);}
+function schedule(reason='render'){clearTimeout(timer);timer=setTimeout(()=>void run(reason),50);}
 function wrapAndSchedule(name,reason){
   const base=window[name];if(typeof base!=='function'||base.__aceOptimizerLiveV2Wrapped)return;
   // Do NOT call claimPending here — it would wipe valid results from a prior run.
