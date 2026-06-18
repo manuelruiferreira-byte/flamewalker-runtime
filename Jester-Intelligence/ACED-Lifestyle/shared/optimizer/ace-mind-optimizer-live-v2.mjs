@@ -10,7 +10,7 @@ import {
 import { compareLegacyToOptimizer } from './shadow-context-adapter.mjs?v=20260617-2';
 import { buildLiveContext, readVisibleSupplementNames } from './live-context-adapter.mjs?v=20260617-2';
 import { buildVisibleSupplementModel } from './optimizer-visible-model-v2.mjs?v=20260617-2';
-import { renderVisibleSupplements } from './optimizer-visible-renderer.mjs?v=20260617-2';
+import { renderVisibleSupplements } from './optimizer-visible-renderer.mjs?v=20260618-4';
 
 const VERSION='ace_mind_optimizer_live.v2';
 const BUILD='20260617-2';
