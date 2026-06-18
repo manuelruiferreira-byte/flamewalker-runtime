@@ -23,6 +23,9 @@ jobs:
       - name: Check out pull request merge ref
         uses: actions/checkout@v4
 
+      - name: Audit supplement runtime
+        run: node Jester-Intelligence/ACED-Lifestyle/scripts/audit-supplement-runtime.mjs
+
       - name: Validate source syntax
         shell: bash
         run: |
