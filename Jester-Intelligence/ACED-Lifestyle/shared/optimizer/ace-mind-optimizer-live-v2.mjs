@@ -6,21 +6,21 @@ import {
   optimize,
   canonicalize,
   sha256Hex
-} from '../../../packages/engines/supplement/index.mjs?v=20260618-1';
-import { applyCanonicalSupplementPolicy, POLICY_VERSION } from '../data/supplements/canonical-policy-v3.mjs?v=20260618-1';
-import { compareLegacyToOptimizer } from './shadow-context-adapter.mjs?v=20260618-1';
-import { buildLiveContext, readVisibleSupplementNames } from './live-context-adapter.mjs?v=20260618-1';
-import { buildVisibleSupplementModel } from './optimizer-visible-model-v2.mjs?v=20260618-1';
-import { renderVisibleSupplements } from './optimizer-visible-renderer.mjs?v=20260618-1';
+} from '../../../packages/engines/supplement/index.mjs?v=20260618-2';
+import { applyCanonicalSupplementPolicy, POLICY_VERSION } from '../data/supplements/canonical-policy-v3.mjs?v=20260618-2';
+import { compareLegacyToOptimizer } from './shadow-context-adapter.mjs?v=20260618-2';
+import { buildLiveContext, readVisibleSupplementNames } from './live-context-adapter.mjs?v=20260618-2';
+import { buildVisibleSupplementModel } from './optimizer-visible-model-v2.mjs?v=20260618-2';
+import { renderVisibleSupplements } from './optimizer-visible-renderer.mjs?v=20260618-2';
 
 const VERSION='ace_mind_optimizer_live.v3-policy';
-const BUILD='20260618-1';
+const BUILD='20260618-2';
 const DB_NAME='ACE_MIND_OPTIMIZER_POLICY_V3_DB';
 const DB_VERSION=1;
 const STORE='runs';
 const DISABLE_KEY='ace_mind_optimizer_live_v3_disabled';
 const OLD_DISABLE_KEYS=['ace_mind_optimizer_live_v2_disabled','ace_mind_optimizer_shadow_disabled'];
-const REGISTRY_URL=new URL('../data/supplements/supplement-registry.v2.json?v=20260618-1',import.meta.url);
+const REGISTRY_URL=new URL('../data/supplements/supplement-registry.v2.json?v=20260618-2',import.meta.url);
 const STATE_KEYS=['ace_mind_state_v214','ace_mind_theon_state_v03_block_claim_engine','ace_mind_theon_state_v06','ace_mind_theon_state_v05','ace_mind_theon_state_v04','ace_mind_theon_state_v03'];
 const NAD_IDS=new Set(['nr','nmn','nmnh']);
 const WEEKLY_IDS=['ashwagandha','reishi','gotu_kola','fadogia_agrestis','turkesterone'];
@@ -42,8 +42,8 @@ function renderAuthorityState(kind,date,note){
   chamber.dataset.optimizerVersion=VERSION;
   return true;
 }
-function claimPending(reason='loading'){return renderAuthorityState('pending',currentDate(),`Validating canonical policy, body, frequency, pairing, and rotation · ${reason}`);}
-function failClosed(date,error){console.error('ACE optimizer policy v3 safety hold',error);return renderAuthorityState('held',date,'No recommendation is shown until the canonical policy and every safety invariant pass.');}
+function claimPending(reason='loading'){return renderAuthorityState('pending',currentDate(),`Validating canonical profile, policy, body, frequency, pairing, and rotation · ${reason}`);}
+function failClosed(date,error){console.error('ACE optimizer policy v3 safety hold',error);return renderAuthorityState('held',date,'No recommendation is shown until the canonical profile, policy, and every safety invariant pass.');}
 function readAgentSnapshot(){try{const raw=document.getElementById('agent-state')?.textContent;const parsed=raw?JSON.parse(raw):null;return parsed&&typeof parsed==='object'?parsed:{};}catch{return {};}}
 function readState(){
   let fallback={};
@@ -55,6 +55,20 @@ function readState(){
 function readSelectedDay(snapshot={}){try{if(typeof window.day==='function'){const value=window.day();if(value&&typeof value==='object')return value;}}catch{}return snapshot.day&&typeof snapshot.day==='object'?snapshot.day:{id:snapshot.active_day||snapshot.activeDate||brusselsDate()};}
 function currentDate(){const snapshot=readAgentSnapshot();return String(readSelectedDay(snapshot)?.id||snapshot.active_day||snapshot.activeDate||brusselsDate()).slice(0,10);}
 function readBodySummary(date,snapshot={}){try{if(typeof window.bodySummaryForDate==='function'){const value=window.bodySummaryForDate(date);if(value&&typeof value==='object')return value;}}catch{}return snapshot.body&&typeof snapshot.body==='object'?snapshot.body:{};}
+
+async function waitForCanonicalProfile(){
+  if(window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.ok)return window.ACE_MIND_CANONICAL_PROFILE_APPLIED;
+  if(window.ACE_MIND_CANONICAL_PROFILE_READY)return window.ACE_MIND_CANONICAL_PROFILE_READY;
+  if(window.FlamewalkerCanonicalProfileV33?.ensureAceMindApplied){
+    return window.FlamewalkerCanonicalProfileV33.ensureAceMindApplied(false);
+  }
+  if(window.FlamewalkerCanonicalProfileV33?.load&&window.FlamewalkerCanonicalProfileV33?.applyAceMind){
+    const promise=window.FlamewalkerCanonicalProfileV33.load(false).then(window.FlamewalkerCanonicalProfileV33.applyAceMind);
+    window.ACE_MIND_CANONICAL_PROFILE_READY=promise;
+    return promise;
+  }
+  throw new Error('canonical profile bridge unavailable');
+}
 
 function assertCanonicalPolicy(registry){
   if(registry.policyVersion!==POLICY_VERSION)throw new Error(`policy version mismatch: ${registry.policyVersion||'none'}`);
@@ -83,6 +97,8 @@ function openDb(){return new Promise((resolve,reject)=>{if(!('indexedDB'in windo
 async function persist(record){try{const db=await openDb();if(!db)return;await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(record);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});db.close();}catch(error){console.warn('ACE optimizer v3 storage skipped',error);}}
 async function getHistory(limit=30){const safe=Math.max(0,Math.min(5000,Number.isFinite(Number(limit))?Math.floor(Number(limit)):30));const db=await openDb();if(!db)return latestRecord?[latestRecord]:[];return new Promise((resolve,reject)=>{const rows=[];const tx=db.transaction(STORE,'readonly');const request=tx.objectStore(STORE).index('createdAt').openCursor(null,'prev');request.onsuccess=()=>{const cursor=request.result;if(cursor&&rows.length<safe){rows.push(cursor.value);cursor.continue();}else{db.close();resolve(rows);}};request.onerror=()=>{db.close();reject(request.error);};});}
 async function buildContext(){
+  await waitForCanonicalProfile();
+  if(!window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.ok)throw new Error('canonical profile did not apply');
   const supplementRegistry=await registry();
   const snapshot=readAgentSnapshot();
   const state=readState();
@@ -101,17 +117,14 @@ function buildDiagnostics(supplementRegistry,layers,output){
   return Object.fromEntries([...(supplementRegistry.supplements??[])].sort((a,b)=>a.id.localeCompare(b.id)).map(item=>{
     const eso=layers.esoteric?.[item.id]??{},body=layers.body?.[item.id]??{},frequency=layers.frequency?.[item.id]??{},pairing=layers.pairing?.[item.id]??{};
     return [item.id,{
-      esotericLabel:eso.label??'Unscored',
-      convergenceLabel:eso.convergenceLabel??'None',
+      esotericLabel:eso.label??'Unscored',convergenceLabel:eso.convergenceLabel??'None',
       esotericScalar:Number.isFinite(Number(eso.scalar))?Number(eso.scalar):null,
       numerologyScalar:Number.isFinite(Number(eso.components?.numerology?.scalar))?Number(eso.components.numerology.scalar):null,
       baziScalar:Number.isFinite(Number(eso.components?.bazi?.scalar))?Number(eso.components.bazi.scalar):null,
-      bodyPermission:body.label??'unknown',
-      frequencyState:frequency.state??'unknown',
+      bodyPermission:body.label??'unknown',frequencyState:frequency.state??'unknown',
       frequencyUrgency:Number.isFinite(Number(frequency.urgency))?Number(frequency.urgency):null,
       calendarEligible:frequency.calendarEligible??null,
-      pairingState:selectedIds.has(item.id)?'complete':pairing.state??'unknown',
-      policyVersion:supplementRegistry.policyVersion
+      pairingState:selectedIds.has(item.id)?'complete':pairing.state??'unknown',policyVersion:supplementRegistry.policyVersion
     }];
   }));
 }
@@ -134,7 +147,7 @@ async function run(reason='manual'){
   try{
     const {registry:supplementRegistry,context}=await buildContext();date=context.date;
     if(date!==currentDate()){schedule('date-race');return null;}
-    const hashPayload={policyVersion:supplementRegistry.policyVersion,context};
+    const hashPayload={canonicalProfile:window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.profile_id,policyVersion:supplementRegistry.policyVersion,context};
     const inputHash=sha256Hex(JSON.stringify(canonicalize(hashPayload)));
     if(inputHash===lastInputHash&&latestRecord){applyVisibleAuthority(latestRecord,supplementRegistry);return latestRecord;}
     const layers={
@@ -146,26 +159,18 @@ async function run(reason='manual'){
     const output=optimize({day:date,registry:supplementRegistry,daySignals:context.daySignals,layers,config:{}});
     assertOutputSafety(output);
     const comparison=compareLegacyToOptimizer(context.legacy,output),createdAt=new Date().toISOString();
-    const record={key:`${date}:${inputHash}`,version:VERSION,build:BUILD,policyVersion:supplementRegistry.policyVersion,mode:'canonical-card-policy-fail-closed',date,createdAt,reason,inputHash,optimizerHash:output.determinismHash,legacy:context.legacy,comparison,diagnostics:buildDiagnostics(supplementRegistry,layers,output),selected:output.selected,residual:output.residual,held:output.held,excluded:output.excluded};
+    const record={key:`${date}:${inputHash}`,version:VERSION,build:BUILD,canonicalProfile:window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.profile_id,policyVersion:supplementRegistry.policyVersion,mode:'canonical-card-policy-fail-closed',date,createdAt,reason,inputHash,optimizerHash:output.determinismHash,legacy:context.legacy,comparison,diagnostics:buildDiagnostics(supplementRegistry,layers,output),selected:output.selected,residual:output.residual,held:output.held,excluded:output.excluded};
     if(date!==currentDate()){schedule('date-race-after-build');return null;}
     latestRecord=record;lastInputHash=inputHash;applyVisibleAuthority(record,supplementRegistry);void persist(record);
-    window.dispatchEvent(new CustomEvent('ace-mind:optimizer-live',{detail:{date,policyVersion:supplementRegistry.policyVersion,comparison,optimizerHash:output.determinismHash,authority:'canonical-card-policy-v3'}}));
+    window.dispatchEvent(new CustomEvent('ace-mind:optimizer-live',{detail:{date,canonicalProfile:record.canonicalProfile,policyVersion:supplementRegistry.policyVersion,comparison,optimizerHash:output.determinismHash,authority:'canonical-card-policy-v3'}}));
     return record;
   }catch(error){failClosed(date,error);return null;}finally{running=false;}
 }
 function schedule(reason='render'){clearTimeout(timer);timer=setTimeout(()=>void run(reason),20);}
-function wrapAndSchedule(name,reason){
-  const base=window[name];if(typeof base!=='function'||base.__aceOptimizerLiveV3Wrapped)return;
-  function wrapped(...args){const result=base.apply(this,args);schedule(reason);return result;}
-  wrapped.__aceOptimizerLiveV3Wrapped=true;wrapped.__aceOptimizerLiveV3Base=base;window[name]=wrapped;
-}
+function wrapAndSchedule(name,reason){const base=window[name];if(typeof base!=='function'||base.__aceOptimizerLiveV3Wrapped)return;function wrapped(...args){const result=base.apply(this,args);schedule(reason);return result;}wrapped.__aceOptimizerLiveV3Wrapped=true;wrapped.__aceOptimizerLiveV3Base=base;window[name]=wrapped;}
 function installHooks(){['render','setDay','fastRenderSelectedDay','tickSupp','setBodyState'].forEach(name=>wrapAndSchedule(name,name));}
-function installOverwriteGuard(){
-  const chamber=root();if(!chamber||observer)return;
-  observer=new MutationObserver(()=>{if(running)return;if(!chamber.querySelector('[data-optimizer-live-v3]')&&!chamber.querySelector('[data-optimizer-supp]'))schedule('legacy-overwrite');});
-  observer.observe(chamber,{childList:true,subtree:false});
-}
-function boot(){claimPending('boot');installHooks();installOverwriteGuard();schedule('module-ready');window.addEventListener('focus',()=>schedule('focus'));document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')schedule('visible');});}
+function installOverwriteGuard(){const chamber=root();if(!chamber||observer)return;observer=new MutationObserver(()=>{if(running)return;if(!chamber.querySelector('[data-optimizer-live-v3]')&&!chamber.querySelector('[data-optimizer-supp]'))schedule('legacy-overwrite');});observer.observe(chamber,{childList:true,subtree:false});}
+function boot(){claimPending('boot');installHooks();installOverwriteGuard();schedule('module-ready');window.addEventListener('ace-mind:canonical-profile-applied',()=>schedule('canonical-profile-applied'));window.addEventListener('focus',()=>schedule('focus'));document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')schedule('visible');});}
 
 if(typeof window!=='undefined'){
   const api=Object.freeze({version:VERSION,build:BUILD,policyVersion:POLICY_VERSION,mode:'canonical-card-policy-fail-closed',run,latest:()=>latestRecord,history:getHistory,disable(){localStorage.setItem(DISABLE_KEY,'1');failClosed(currentDate(),new Error('optimizer disabled'));},enable(){localStorage.removeItem(DISABLE_KEY);schedule('enabled');}});
