@@ -71,7 +71,9 @@ assert(renderer.includes('data-practical-timing')&&renderer.includes('MutationOb
 assert(!/planetaryHour|planetary hour/i.test(renderer),'no clock ownership');
 assert(live.includes('waitForCanonicalProfile')&&live.includes('applyCanonicalSupplementPolicy'),'profile and policy first');
 assert(renderer.includes('legacy-supplement-firewall.mjs'),'firewall loaded');
-assert(firewall.includes("setGlobalFunction('renderClubs'"),'renderClubs blocked');
+assert(firewall.includes('window.renderClubs=canonicalSupplementRenderBoundary'),'visible renderClubs boundary installed');
+assert(firewall.includes('legacyInternalContractsPreserved:true')&&firewall.includes('stateMutation:false'),'firewall preserves shell contracts and user state');
+assert(!firewall.includes("'aceFreezeSelectedBlock','fwFreezeBlock','persistAssignment'"),'firewall does not replace internal functions with null returns');
 assert(!profile.includes('supplementBlocksV41')&&!profile.includes('installAceMindSupplementsV41'),'no block installer');
 assert(profile.includes("supplementAuthority:'canonical-42-card-policy-v3'"),'card authority declared');
 assert(profile.includes('ensureOptimizerRuntime')&&profile.includes('profile-watchdog-import'),'optimizer watchdog present');
