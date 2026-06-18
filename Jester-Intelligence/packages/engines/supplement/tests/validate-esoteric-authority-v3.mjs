@@ -29,8 +29,8 @@ const result=run(high(['14','5','renewal']),high(['Bing','Fire','Yang']),high(['
 assert(result.authorityOrder[0]==='numerology'&&result.authorityOrder[1]==='bazi','authority order exposed');
 assert(result.primaryScalar===result.components.numerology.scalar,'primary scalar is numerology');
 assert(result.secondaryScalar===result.components.bazi.scalar,'secondary scalar is BaZi');
-assert(result.components.bazi.matchedTags.includes('Bing'),'BaZi stem matched');
-assert(result.components.bazi.matchedTags.includes('Yang'),'BaZi polarity matched');
+assert(result.components.bazi.matchedTags.includes('bing'),'BaZi stem matched');
+assert(result.components.bazi.matchedTags.includes('yang'),'BaZi polarity matched');
 assert(result.components.numerology.matchedTags.includes('14'),'compound numerology matched');
 assert(result.components.numerology.matchedTags.includes('5'),'numerology root matched');
 
