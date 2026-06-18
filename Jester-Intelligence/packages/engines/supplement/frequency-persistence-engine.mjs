@@ -36,6 +36,37 @@ function eligibleOpportunityCount(day, windowEnd, minimumGapHours, lastTakenDate
   return Math.floor(daysBetween(first, windowEnd) / gapDays) + 1;
 }
 
+function stableHash(value) {
+  let hash=2166136261;
+  for (const char of String(value)) {
+    hash^=char.codePointAt(0);
+    hash=Math.imul(hash,16777619);
+  }
+  return hash>>>0;
+}
+
+const ROTATION_PATTERNS=Object.freeze({
+  0:Object.freeze([]),
+  1:Object.freeze([0]),
+  2:Object.freeze([0,3]),
+  3:Object.freeze([0,2,4]),
+  4:Object.freeze([0,2,4,6]),
+  5:Object.freeze([0,1,3,4,6]),
+  6:Object.freeze([0,1,2,3,4,5]),
+  7:Object.freeze([0,1,2,3,4,5,6])
+});
+
+function rotationCadence(supplementId, date, targetUses7d) {
+  const weekStart=mondayOf(date);
+  const count=Math.max(0,Math.min(7,Math.round(Number(targetUses7d ?? 0))));
+  const offset=stableHash(`${supplementId}:${weekStart}`)%7;
+  const slots=(ROTATION_PATTERNS[count] ?? ROTATION_PATTERNS[7])
+    .map(slot=>(slot+offset)%7)
+    .sort((a,b)=>a-b);
+  const dayIndex=Math.max(0,Math.min(6,daysBetween(weekStart,date)));
+  return {weekStart,offset,slots,dayIndex,eligible:count>=7||slots.includes(dayIndex)};
+}
+
 export function frequencyUrgency({ usesThisWindow, daysLeftInWindow, eligibleOpportunitiesRemaining, targetUses7d, maxUses7d, minGapMet }, config = DEFAULT_FREQUENCY_CONFIG) {
   if (usesThisWindow >= maxUses7d || !minGapMet) return null;
   const usesRemaining = Math.max(0, targetUses7d - usesThisWindow);
@@ -61,23 +92,25 @@ export function evaluateFrequencyPersistence(supplement, day, takenHistory = [],
   const groupTargetUses7d = Number(f.groupTargetUses7d ?? 0);
   const minimumGapHours = Number(f.minimumGapHours ?? 0);
   const residualWindowHours = Number(f.residualWindowHours ?? 0);
-
-  if (!supplement.available || supplement.autoSelection === 'excluded') {
-    return Object.freeze({ engine: 'frequency_persistence', engineVersion: ENGINE_VERSION, supplementId: supplement.id,
-      state: FREQUENCY_STATES.EXCLUDED, urgency: 0, minGapMet: false, usesThisWindow: 0,
-      targetUses7d, maxUses7d, priorityTier, rotationGroup, groupTargetUses7d, daysLeftInWindow: 0, lastTakenDate: null, reasonTrail: ['Excluded.'] });
-  }
-  if (supplement.autoSelection === 'manual_only') {
-    return Object.freeze({ engine: 'frequency_persistence', engineVersion: ENGINE_VERSION, supplementId: supplement.id,
-      state: FREQUENCY_STATES.MANUAL_ONLY, urgency: 0, minGapMet: false, usesThisWindow: 0,
-      targetUses7d, maxUses7d, priorityTier, rotationGroup, groupTargetUses7d, daysLeftInWindow: 0, lastTakenDate: null, reasonTrail: ['Manual-only.'] });
-  }
-
-  // Weekly-limited herbs use a true rolling N-day window ending today, instead
-  // of a calendar-week window that resets every Monday. This guarantees at most
-  // maxUses7d uses in ANY trailing N-day span (default 7).
   const weeklyLimited = f.weeklyLimited === true || Number.isFinite(Number(f.rollingWindowDays));
   const rollingWindowDays = Math.max(1, Number(f.rollingWindowDays ?? 7));
+  const automaticFrequencyBoost = f.automaticFrequencyBoost !== false;
+  const cadence=rotationCadence(supplement.id,date,targetUses7d);
+
+  const common={
+    engine:'frequency_persistence',engineVersion:ENGINE_VERSION,supplementId:supplement.id,
+    targetUses7d,maxUses7d,priorityTier,rotationGroup,groupTargetUses7d,
+    weeklyLimited,rollingWindowDays:weeklyLimited?rollingWindowDays:null,
+    automaticFrequencyBoost,calendarEligible:cadence.eligible,
+    calendarSlots:cadence.slots,calendarDayIndex:cadence.dayIndex,rotationWeekStart:cadence.weekStart
+  };
+
+  if (!supplement.available || supplement.autoSelection === 'excluded') {
+    return Object.freeze({...common,state:FREQUENCY_STATES.EXCLUDED,urgency:0,minGapMet:false,usesThisWindow:0,daysLeftInWindow:0,lastTakenDate:null,reasonTrail:['Excluded.']});
+  }
+  if (supplement.autoSelection === 'manual_only') {
+    return Object.freeze({...common,state:FREQUENCY_STATES.MANUAL_ONLY,urgency:0,minGapMet:false,usesThisWindow:0,daysLeftInWindow:0,lastTakenDate:null,calendarEligible:false,reasonTrail:['Manual-only.']});
+  }
 
   const history = normalizeHistory(takenHistory);
   const windowStart = weeklyLimited ? addDays(date, -(rollingWindowDays - 1)) : mondayOf(date);
@@ -93,14 +126,9 @@ export function evaluateFrequencyPersistence(supplement, day, takenHistory = [],
   const eligibleOpportunitiesRemaining = eligibleOpportunityCount(date, windowEnd, effectiveRepeatGapHours, lastTakenDate);
   const base = { usesThisWindow, daysLeftInWindow, eligibleOpportunitiesRemaining, targetUses7d, maxUses7d, minGapMet };
   const rawUrgency = frequencyUrgency(base, config);
-
-  // Weekly-limited herbs get no automatic frequency boost: they can never be
-  // DUE, only eligible (OPTIONAL). Selection must come from a current-day
-  // reason (body/esoteric/domain signal), never from deadline pressure.
-  const automaticFrequencyBoost = f.automaticFrequencyBoost !== false;
-  const urgency = (weeklyLimited && !automaticFrequencyBoost && rawUrgency != null)
-    ? Math.min(rawUrgency, config.FREQ_BASE_LOW)
-    : rawUrgency;
+  const urgency = (!automaticFrequencyBoost || !cadence.eligible)
+    ? 0
+    : quantize(rawUrgency ?? 0, config.QUANTIZE);
 
   let state;
   let reason;
@@ -110,22 +138,23 @@ export function evaluateFrequencyPersistence(supplement, day, takenHistory = [],
     state = FREQUENCY_STATES.COOLING_DOWN; reason = `Minimum gap ${minimumGapHours}h not reached.`;
   } else if (residualActive) {
     state = FREQUENCY_STATES.RESIDUAL; reason = `Residual window ${residualWindowHours}h active.`;
-  } else if (usesThisWindow >= targetUses7d) {
+  } else if (usesThisWindow >= targetUses7d && targetUses7d > 0) {
     state = FREQUENCY_STATES.COMPLETE; reason = 'Weekly target complete.';
-  } else if ((urgency ?? 0) >= 0.55) {
-    state = FREQUENCY_STATES.DUE; reason = 'Deadline-pressured frequency target.';
+  } else if (automaticFrequencyBoost && cadence.eligible && urgency >= 0.55) {
+    state = FREQUENCY_STATES.DUE; reason = 'Deadline-pressured target on an eligible rotation day.';
   } else {
-    state = FREQUENCY_STATES.OPTIONAL; reason = weeklyLimited ? 'Eligible weekly-limited herb; needs a current-day reason.' : 'Eligible with comfortable weekly slack.';
+    state = FREQUENCY_STATES.OPTIONAL;
+    if (!automaticFrequencyBoost) reason = 'Eligible only for a current-day reason; automatic frequency boost disabled.';
+    else if (!cadence.eligible) reason = 'Off-cycle rotation day; requires exceptional current-day fit.';
+    else reason = 'Eligible rotation day with comfortable weekly slack.';
   }
 
   return Object.freeze({
-    engine: 'frequency_persistence', engineVersion: ENGINE_VERSION, supplementId: supplement.id,
-    state, urgency: quantize(urgency ?? 0, config.QUANTIZE), minGapMet, residualActive,
-    usesThisWindow, targetUses7d, maxUses7d, priorityTier, rotationGroup, groupTargetUses7d,
-    weeklyLimited, rollingWindowDays: weeklyLimited ? rollingWindowDays : null,
-    daysLeftInWindow, eligibleOpportunitiesRemaining, windowStart, windowEnd,
-    lastTakenDate, minimumGapHours, residualWindowHours, effectiveRepeatGapHours, persistenceClass: f.persistenceClass ?? 'unknown_conservative',
-    reasonTrail: [reason]
+    ...common,state,urgency,minGapMet,residualActive,
+    usesThisWindow,daysLeftInWindow,eligibleOpportunitiesRemaining,windowStart,windowEnd,
+    lastTakenDate,minimumGapHours,residualWindowHours,effectiveRepeatGapHours,
+    persistenceClass:f.persistenceClass ?? 'unknown_conservative',
+    reasonTrail:[reason]
   });
 }
 
