@@ -9,20 +9,23 @@ import {
 } from './contracts.mjs';
 
 export const DEFAULT_ESOTERIC_CONFIG = Object.freeze({
-  SYSTEM_WEIGHTS: Object.freeze({ astrology: 0.35, bazi: 0.30, numerology: 0.20, mayan: 0.15 }),
+  // Canonical authority order for supplement selection:
+  // numerology is primary, BaZi is the second differentiator,
+  // astrology and Mayan systems are supporting confirmation layers.
+  SYSTEM_WEIGHTS: Object.freeze({ numerology: 0.50, bazi: 0.30, astrology: 0.12, mayan: 0.08 }),
+  PRIMARY_SYSTEM: 'numerology',
+  SECONDARY_SYSTEM: 'bazi',
   DAY_SCALAR_WEIGHT: 0.25,
   TAG_MATCH_WEIGHT: 0.75,
   QUANTIZE: 1e-4,
   THRESHOLDS: Object.freeze({ PRIME: 0.82, STRONG: 0.64, COMPATIBLE: 0.42, LOW_RESONANCE: 0.20 })
 });
 
-// --- v1 tag extraction ---
 function supplementTagsV1(supplement) {
   const eso = supplement.esoteric ?? {};
   return stableUnique([...(eso.planets ?? []), ...(eso.elements ?? []), ...(eso.qualities ?? [])]);
 }
 
-// --- v2 per-system tag extraction ---
 function supplementTagsV2ForSystem(supplement, system) {
   const eso = supplement.esotericSignature ?? {};
   const section = eso[system] ?? {};
@@ -35,12 +38,16 @@ function supplementTagsV2ForSystem(supplement, system) {
       ]);
     case 'bazi':
       return stableUnique([
+        ...(section.dayMasterStem ? [section.dayMasterStem] : []),
         ...(section.primaryElement ? [section.primaryElement] : []),
+        ...(section.polarity ? [section.polarity] : []),
         ...(section.energeticDirection ? [section.energeticDirection] : []),
         ...(section.seasonalAffinity ?? [])
       ]);
     case 'numerology':
       return stableUnique([
+        ...(Number.isFinite(Number(section.numerologySum)) ? [String(section.numerologySum)] : []),
+        ...(Number.isFinite(Number(section.numerologyRoot)) ? [String(section.numerologyRoot)] : []),
         ...(section.resonantNumbers ?? []).map(String),
         ...(section.constructiveQualities ?? [])
       ]);
@@ -60,9 +67,6 @@ function isV2(supplement) {
   return 'esotericSignature' in supplement;
 }
 
-// Card tags are canonical proper nouns (e.g. "Mars", "Fire"); day-signal tags
-// arrive normalized to lowercase tokens. Match case-insensitively so canonical
-// card data resonates with normalized day signals.
 function lc(tag) {
   return String(tag ?? '').toLowerCase();
 }
@@ -84,19 +88,20 @@ function labelForScalar(scalar, thresholds) {
 }
 
 function convergenceLabelForSystems(systemScores, threshold) {
-  const strongCount = Object.values(systemScores).filter(s => s >= threshold).length;
-  if (strongCount >= 4) return ESOTERIC_CONVERGENCE_LABELS.GOLDEN;
-  if (strongCount === 3) return ESOTERIC_CONVERGENCE_LABELS.HIGH;
-  if (strongCount === 2) return ESOTERIC_CONVERGENCE_LABELS.MEDIUM;
-  if (strongCount === 1) return ESOTERIC_CONVERGENCE_LABELS.LOW;
+  const numerologyStrong = Number(systemScores.numerology ?? 0) >= threshold;
+  const baziStrong = Number(systemScores.bazi ?? 0) >= threshold;
+  const supportStrong = ['astrology','mayan'].filter(system => Number(systemScores[system] ?? 0) >= threshold).length;
+
+  if (numerologyStrong && baziStrong && supportStrong >= 1) return ESOTERIC_CONVERGENCE_LABELS.GOLDEN;
+  if (numerologyStrong && baziStrong) return ESOTERIC_CONVERGENCE_LABELS.HIGH;
+  if (numerologyStrong && supportStrong >= 1) return ESOTERIC_CONVERGENCE_LABELS.MEDIUM;
+  if (numerologyStrong || (baziStrong && supportStrong >= 1)) return ESOTERIC_CONVERGENCE_LABELS.LOW;
   return ESOTERIC_CONVERGENCE_LABELS.NONE;
 }
 
 export function evaluateEsotericFit(supplement, dayField = {}, config = DEFAULT_ESOTERIC_CONFIG) {
   assertSupplementRecord(supplement);
   const v2 = isV2(supplement);
-
-  // For v1, precompute unified tag list once
   const v1Tags = v2 ? [] : supplementTagsV1(supplement);
 
   const components = {};
@@ -104,14 +109,11 @@ export function evaluateEsotericFit(supplement, dayField = {}, config = DEFAULT_
   let weighted = 0;
   let totalWeight = 0;
 
-  for (const system of ['astrology', 'bazi', 'numerology', 'mayan']) {
+  for (const system of ['numerology', 'bazi', 'astrology', 'mayan']) {
     const weight = Number(config.SYSTEM_WEIGHTS?.[system] ?? 0);
     const signal = dayField?.[system] ?? {};
     const dayScalar = clamp(signal.scalar ?? 0.5);
-
-    // Extract per-system tags
     const tags = v2 ? supplementTagsV2ForSystem(supplement, system) : v1Tags;
-
     const overlap = tagOverlapScore(tags, signal.tags ?? []);
     const score = clamp(
       Number(config.DAY_SCALAR_WEIGHT ?? 0.25) * dayScalar
@@ -141,8 +143,15 @@ export function evaluateEsotericFit(supplement, dayField = {}, config = DEFAULT_
     label,
     scalar,
     convergenceLabel,
+    authorityOrder: ['numerology','bazi','astrology','mayan'],
+    primaryScalar: systemScalars.numerology ?? null,
+    secondaryScalar: systemScalars.bazi ?? null,
     components,
-    reasonTrail: [`Esoteric fit ${label} (${scalar.toFixed(4)}). Convergence: ${convergenceLabel}.`]
+    reasonTrail: [
+      `Esoteric fit ${label} (${scalar.toFixed(4)}).`,
+      `Authority: numerology first, BaZi second.`,
+      `Convergence: ${convergenceLabel}.`
+    ]
   });
 }
 
