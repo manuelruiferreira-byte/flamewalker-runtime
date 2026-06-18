@@ -14,11 +14,16 @@ function diagnosticFor(id, diagnostics = {}) {
   const d = diagnostics[id] ?? {};
   return {
     esoteric: d.esotericLabel ?? 'Unscored',
+    convergence: d.convergenceLabel ?? 'None',
     esotericScalar: Number.isFinite(Number(d.esotericScalar)) ? Number(d.esotericScalar) : null,
+    numerologyScalar: Number.isFinite(Number(d.numerologyScalar)) ? Number(d.numerologyScalar) : null,
+    baziScalar: Number.isFinite(Number(d.baziScalar)) ? Number(d.baziScalar) : null,
     body: d.bodyPermission ?? 'unknown',
     frequency: d.frequencyState ?? 'unknown',
     urgency: Number.isFinite(Number(d.frequencyUrgency)) ? Number(d.frequencyUrgency) : null,
-    pairing: d.pairingState ?? 'unknown'
+    calendarEligible: typeof d.calendarEligible === 'boolean' ? d.calendarEligible : null,
+    pairing: d.pairingState ?? 'unknown',
+    policyVersion: d.policyVersion ?? null
   };
 }
 
@@ -26,11 +31,12 @@ function reasonAction(reason = '') {
   const text = String(reason).toLowerCase();
   if (text.includes('body hold')) return 'BODY HOLD';
   if (text.includes('critical data')) return 'MANUAL REVIEW';
+  if (text.includes('manual_only') || text.includes('manual-only')) return 'MANUAL ONLY';
   if (text.includes('personal maximum')) return 'WEEKLY LIMIT';
   if (text.includes('min gap')) return 'COOLING DOWN';
   if (text.includes('residual')) return 'RESIDUAL ACTIVE';
   if (text.includes('pairing conflict')) return 'PAIRING HOLD';
-  if (text.includes('rotation sibling')) return 'ROTATION HOLD';
+  if (text.includes('rotation sibling') || text.includes('rotation day')) return 'ROTATION HOLD';
   if (text.includes('mandatory companion')) return 'PAIR INCOMPLETE';
   if (text.includes('slot full') || text.includes('class full')) return 'STACK FULL';
   if (text.includes('target at risk')) return 'TARGET AT RISK';
@@ -46,12 +52,14 @@ function buildSelected(record, index) {
       const existing = rows.get(id);
       const primary = id === primaryId;
       const slot = selected?.memberSlots?.[id] ?? selected?.slot ?? 'morning';
+      const card=index.get(id) ?? {};
       const candidate = {
         id,
         name: displayName(id,index),
-        tier: index.get(id)?.frequency?.priorityTier ?? 'maintenance',
+        tier: card.frequency?.priorityTier ?? 'maintenance',
         action: primary ? 'TAKE TODAY' : 'REQUIRED PAIR',
         reason: primary ? selected.primaryReason ?? 'optimizer selection' : `Required by ${displayName(primaryId,index)}`,
+        conservativeRule:card.protocolPolicy?.conservativeRule ?? '',
         primary,
         primaryId,
         slot: SLOT_ORDER.includes(slot) ? slot : 'morning',
@@ -99,6 +107,7 @@ function buildNotToday(record,index,selectedIds) {
       tier,
       action,
       reason,
+      conservativeRule:supplement.protocolPolicy?.conservativeRule ?? '',
       diagnostics:diagnosticFor(supplement.id,record.diagnostics)
     });
   }
@@ -114,9 +123,10 @@ export function buildVisibleSupplementModel(record = {}, registry = {}) {
   const notToday=buildNotToday(record,index,selectedIds);
   const groups=Object.fromEntries(SLOT_ORDER.map(slot=>[slot,selected.filter(x=>x.slot===slot)]));
   return Object.freeze({
-    version:'ace_mind_optimizer_visible.v2',
+    version:'ace_mind_optimizer_visible.v3',
     date:String(record.date ?? ''),
-    authority:'INDIVIDUAL_OPTIMIZER_V2',
+    policyVersion:String(record.policyVersion ?? registry.policyVersion ?? ''),
+    authority:'CANONICAL_42_CARD_POLICY_V3',
     selected,
     groups,
     notToday,
