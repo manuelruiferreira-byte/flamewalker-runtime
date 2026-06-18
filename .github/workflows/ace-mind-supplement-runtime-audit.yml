@@ -1,26 +1,52 @@
-name: ACE Mind Supplement Runtime Audit
+name: Apply ACE Mind Cards Only
 
 on:
   push:
     branches:
       - ace-mind-runtime-repair-20260618
     paths:
-      - 'Jester-Intelligence/ACED-Lifestyle/ace-mind.html'
       - 'Jester-Intelligence/ACED-Lifestyle/scripts/audit-supplement-runtime.mjs'
       - '.github/workflows/ace-mind-supplement-runtime-audit.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ace-mind-cards-only-migration
+  cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  audit:
+  migrate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Audit supplement runtime
-        run: node Jester-Intelligence/ACED-Lifestyle/scripts/audit-supplement-runtime.mjs
-      - name: Upload audit
-        uses: actions/upload-artifact@v4
         with:
-          name: ace-mind-supplement-runtime-audit
-          path: artifacts/ace-mind-supplement-runtime-audit.json
+          ref: ace-mind-runtime-repair-20260618
+          show-progress: false
+      - name: Apply cards-only runtime
+        shell: bash
+        run: |
+          if [ -f Jester-Intelligence/ACED-Lifestyle/scripts/audit-supplement-runtime.mjs ]; then
+            node Jester-Intelligence/ACED-Lifestyle/scripts/audit-supplement-runtime.mjs
+          fi
+      - name: Validate generated JavaScript
+        shell: bash
+        run: |
+          test -f Jester-Intelligence/ACED-Lifestyle/shared/js/ace-mind-core-runtime.js
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/js/ace-mind-core-runtime.js
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/js/flamewalker-canonical-profile-v3-3.js
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-context-adapter.mjs
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/live-context-adapter.mjs
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-live-v2.mjs
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-renderer.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-card-only-runtime-v4.mjs
+      - name: Commit generated runtime
+        shell: bash
+        run: |
+          git config user.name "ACE Mind Architecture Guard"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "fix(ace-mind): replace obsolete supplement architecture with card-only runtime"
+          git push origin HEAD:ace-mind-runtime-repair-20260618
