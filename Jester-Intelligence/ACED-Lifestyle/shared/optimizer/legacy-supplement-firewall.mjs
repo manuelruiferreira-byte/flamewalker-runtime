@@ -33,7 +33,7 @@ function scrubLegacyState(){
   }catch{}
   try{
     delete state.frequencyGovernor;
-    delete state.calibrationBridge?.blockDoctrine;
+    if(state.calibrationBridge&&typeof state.calibrationBridge==='object')delete state.calibrationBridge.blockDoctrine;
   }catch{}
 }
 
@@ -119,3 +119,5 @@ export function legacySupplementFirewallStatus(){
 }
 
 export { FIREWALL_VERSION };
+
+if(typeof window!=='undefined')installLegacySupplementFirewall();
