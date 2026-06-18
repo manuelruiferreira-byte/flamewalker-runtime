@@ -67,6 +67,14 @@ function rotationCadence(supplementId, date, targetUses7d) {
   return {weekStart,offset,slots,dayIndex,eligible:count>=7||slots.includes(dayIndex)};
 }
 
+function cadenceFor(supplement,date,targetUses7d){
+  const enabled=supplement.protocolPolicy?.practicalTimingAuthority===true
+    && String(supplement.protocolPolicy?.version??'').startsWith('ace_mind_supplement_policy.v3');
+  if(enabled)return {enabled,...rotationCadence(supplement.id,date,targetUses7d)};
+  const weekStart=mondayOf(date);
+  return {enabled:false,weekStart,offset:0,slots:[0,1,2,3,4,5,6],dayIndex:Math.max(0,Math.min(6,daysBetween(weekStart,date))),eligible:true};
+}
+
 export function frequencyUrgency({ usesThisWindow, daysLeftInWindow, eligibleOpportunitiesRemaining, targetUses7d, maxUses7d, minGapMet }, config = DEFAULT_FREQUENCY_CONFIG) {
   if (usesThisWindow >= maxUses7d || !minGapMet) return null;
   const usesRemaining = Math.max(0, targetUses7d - usesThisWindow);
@@ -95,13 +103,13 @@ export function evaluateFrequencyPersistence(supplement, day, takenHistory = [],
   const weeklyLimited = f.weeklyLimited === true || Number.isFinite(Number(f.rollingWindowDays));
   const rollingWindowDays = Math.max(1, Number(f.rollingWindowDays ?? 7));
   const automaticFrequencyBoost = f.automaticFrequencyBoost !== false;
-  const cadence=rotationCadence(supplement.id,date,targetUses7d);
+  const cadence=cadenceFor(supplement,date,targetUses7d);
 
   const common={
     engine:'frequency_persistence',engineVersion:ENGINE_VERSION,supplementId:supplement.id,
     targetUses7d,maxUses7d,priorityTier,rotationGroup,groupTargetUses7d,
     weeklyLimited,rollingWindowDays:weeklyLimited?rollingWindowDays:null,
-    automaticFrequencyBoost,calendarEligible:cadence.eligible,
+    automaticFrequencyBoost,rotationCadenceEnabled:cadence.enabled,calendarEligible:cadence.eligible,
     calendarSlots:cadence.slots,calendarDayIndex:cadence.dayIndex,rotationWeekStart:cadence.weekStart
   };
 
@@ -141,12 +149,13 @@ export function evaluateFrequencyPersistence(supplement, day, takenHistory = [],
   } else if (usesThisWindow >= targetUses7d && targetUses7d > 0) {
     state = FREQUENCY_STATES.COMPLETE; reason = 'Weekly target complete.';
   } else if (automaticFrequencyBoost && cadence.eligible && urgency >= 0.55) {
-    state = FREQUENCY_STATES.DUE; reason = 'Deadline-pressured target on an eligible rotation day.';
+    state = FREQUENCY_STATES.DUE; reason = cadence.enabled ? 'Deadline-pressured target on an eligible rotation day.' : 'Deadline-pressured frequency target.';
   } else {
     state = FREQUENCY_STATES.OPTIONAL;
     if (!automaticFrequencyBoost) reason = 'Eligible only for a current-day reason; automatic frequency boost disabled.';
-    else if (!cadence.eligible) reason = 'Off-cycle rotation day; requires exceptional current-day fit.';
-    else reason = 'Eligible rotation day with comfortable weekly slack.';
+    else if (cadence.enabled && !cadence.eligible) reason = 'Off-cycle rotation day; requires exceptional current-day fit.';
+    else if (cadence.enabled) reason = 'Eligible rotation day with comfortable weekly slack.';
+    else reason = 'Eligible with comfortable weekly slack.';
   }
 
   return Object.freeze({
