@@ -26,6 +26,12 @@ jobs:
       - name: Audit supplement runtime
         run: node Jester-Intelligence/ACED-Lifestyle/scripts/audit-supplement-runtime.mjs
 
+      - name: Upload runtime audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-mind-runtime-audit
+          path: artifacts/ace-mind-supplement-runtime-audit.json
+
       - name: Validate source syntax
         shell: bash
         run: |
