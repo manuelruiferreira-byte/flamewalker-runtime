@@ -59,13 +59,16 @@ for(let i=0;i<7;i++){
   hashes.push(out.determinismHash);
 }
 assert(new Set(hashes).size>1,'selected-day outputs vary');
+assert(Boolean(hashes[3]&&hashes[4]),'two adjacent selected dates complete');
 
-assert(app.includes('ace-mind-optimizer-live-v2.mjs'),'app loads canonical live optimizer');
+assert(app.includes('<script type="module" src="./shared/optimizer/ace-mind-optimizer-live-v2.mjs"></script>'),'browser HTML imports canonical optimizer from correct relative path');
+assert((app.match(/class="app-shell"/g)||[]).length===1,'browser HTML contains one ACE Mind shell');
 assert(live.includes('applyCanonicalSupplementPolicy'),'live runtime applies 42-card policy');
 assert(live.includes('waitForCanonicalProfile'),'live runtime waits for canonical profile');
 assert(!/groupSupps\(|g\.block\.items/.test(live),'live optimizer contains no block renderer');
 assert(renderer.includes('legacy-supplement-firewall.mjs'),'renderer loads legacy firewall');
 assert(renderer.includes('CANONICAL 42-CARD')||renderer.includes('canonical 42-card'),'renderer declares card authority');
+assert(renderer.includes('root.innerHTML=')&&renderer.includes('Individual Supplement Optimizer'),'renderer replaces loading placeholder');
 assert(!/Block \$\{model\.|supplement block/i.test(renderer),'renderer emits no block label');
 assert(renderer.includes('.year-block-label,.alt-block-card')&&renderer.includes('.remove()'),'stale block UI is removed');
 assert(firewall.includes('window.renderClubs=canonicalSupplementRenderBoundary'),'legacy visible renderClubs is replaced');
@@ -77,6 +80,13 @@ assert(!firewall.includes('delete record.block'),'firewall does not destructivel
 assert(!profile.includes('supplementBlocksV41'),'profile bridge contains no supplement blocks');
 assert(!profile.includes('installAceMindSupplementsV41'),'profile bridge cannot install supplement blocks');
 assert(profile.includes('blocks:false'),'profile bridge declares blocks disabled');
+assert(profile.includes('09h00-porto'),'current canonical 09:00 birth foundation remains active');
+
+const stages=['HTML ready','canonical profile script ready','canonical profile applied','optimizer module imported','canonical policy imported','registry fetched','policy applied','live context built','esoteric layer built','body layer built','frequency layer built','pairing layer built','optimizer completed','visible model completed','renderer completed'];
+assert(stages.every(name=>live.includes(name)),'browser boot trace covers every required stage');
+assert(['Failing stage:','Selected date:','Build:','Policy:','Canonical profile:'].every(name=>live.includes(name)),'fail-closed card contains safe diagnostic fields');
+assert(live.includes('timed out after 15 seconds'),'boot waits are bounded');
+assert(!live.includes('<iframe'),'optimizer creates no duplicate shell');
 
 console.log(`Passed: ${passed}`);
 console.log(`Failed: ${failed}`);
