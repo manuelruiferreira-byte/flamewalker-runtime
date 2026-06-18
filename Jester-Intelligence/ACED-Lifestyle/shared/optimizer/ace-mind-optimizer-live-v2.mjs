@@ -1,179 +1,61 @@
 import {
-  evaluateEsotericRegistry,
-  evaluateBodyRegistry,
-  evaluateFrequencyRegistry,
-  evaluatePairingRegistry,
-  optimize,
-  canonicalize,
-  sha256Hex
-} from '../../../packages/engines/supplement/index.mjs?v=20260618-2';
-import { applyCanonicalSupplementPolicy, POLICY_VERSION } from '../data/supplements/canonical-policy-v3.mjs?v=20260618-2';
-import { compareLegacyToOptimizer } from './shadow-context-adapter.mjs?v=20260618-2';
-import { buildLiveContext, readVisibleSupplementNames } from './live-context-adapter.mjs?v=20260618-2';
-import { buildVisibleSupplementModel } from './optimizer-visible-model-v2.mjs?v=20260618-2';
-import { renderVisibleSupplements } from './optimizer-visible-renderer.mjs?v=20260618-2';
+  evaluateEsotericRegistry,evaluateBodyRegistry,evaluateFrequencyRegistry,
+  evaluatePairingRegistry,optimize,canonicalize,sha256Hex
+} from '../../../packages/engines/supplement/index.mjs?v=20260618-3';
+import { applyCanonicalSupplementPolicy, POLICY_VERSION } from '../data/supplements/canonical-policy-v3.mjs?v=20260618-3';
+import { compareLegacyToOptimizer } from './shadow-context-adapter.mjs?v=20260618-3';
+import { buildLiveContext, readVisibleSupplementNames } from './live-context-adapter.mjs?v=20260618-3';
+import { buildVisibleSupplementModel } from './optimizer-visible-model-v2.mjs?v=20260618-3';
+import { renderVisibleSupplements } from './optimizer-visible-renderer.mjs?v=20260618-3';
 
 const VERSION='ace_mind_optimizer_live.v3-policy';
-const BUILD='20260618-2';
-const DB_NAME='ACE_MIND_OPTIMIZER_POLICY_V3_DB';
-const DB_VERSION=1;
-const STORE='runs';
+const BUILD='20260618-3';
+const DB_NAME='ACE_MIND_OPTIMIZER_POLICY_V3_DB',DB_VERSION=1,STORE='runs';
 const DISABLE_KEY='ace_mind_optimizer_live_v3_disabled';
 const OLD_DISABLE_KEYS=['ace_mind_optimizer_live_v2_disabled','ace_mind_optimizer_shadow_disabled'];
-const REGISTRY_URL=new URL('../data/supplements/supplement-registry.v2.json?v=20260618-2',import.meta.url);
+const REGISTRY_URL=new URL('../data/supplements/supplement-registry.v2.json?v=20260618-3',import.meta.url);
 const STATE_KEYS=['ace_mind_state_v214','ace_mind_theon_state_v03_block_claim_engine','ace_mind_theon_state_v06','ace_mind_theon_state_v05','ace_mind_theon_state_v04','ace_mind_theon_state_v03'];
 const NAD_IDS=new Set(['nr','nmn','nmnh']);
 const WEEKLY_IDS=['ashwagandha','reishi','gotu_kola','fadogia_agrestis','turkesterone'];
 let registryPromise=null,latestRecord=null,lastInputHash='',timer=null,running=false,observer=null;
+let stage='optimizer module imported',runNumber=0,loadedPolicyVersion=POLICY_VERSION;
+const trace=[],traceOnce=new Set();
 
 for(const key of OLD_DISABLE_KEYS){try{localStorage.removeItem(key);}catch{}}
-
 function disabled(){try{return localStorage.getItem(DISABLE_KEY)==='1';}catch{return false;}}
-function esc(value){return String(value??'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'})[char]);}
+function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'})[c]);}
+function safe(v,n=180){return String(v??'Unknown runtime error').replace(/[\r\n\t]+/g,' ').replace(/\s{2,}/g,' ').trim().slice(0,n);}
 function brusselsDate(){try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Brussels',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());}catch{return new Date().toISOString().slice(0,10);}}
 function root(){return document.getElementById('grid-clubs');}
-function renderAuthorityState(kind,date,note){
-  const chamber=root();if(!chamber)return false;
-  const tone=kind==='held'?'var(--orange,#f97316)':'var(--cyan,#22d3ee)';
-  const title=kind==='held'?'Supplement optimizer held':'Preparing supplement decision';
-  chamber.innerHTML=`<div data-optimizer-live-v3="${esc(kind)}"><div class="card"><div class="focus-title">${title}</div><div class="small" style="margin-top:5px">${esc(note)}</div><div class="tiny" style="margin-top:5px;color:${tone}">Authority: canonical 42-card policy · ${esc(date||'')}</div></div></div>`;
-  chamber.dataset.optimizerAuthority=`individual-v3-${kind}`;
-  chamber.dataset.optimizerDate=String(date||'');
-  chamber.dataset.optimizerVersion=VERSION;
-  return true;
-}
-function claimPending(reason='loading'){return renderAuthorityState('pending',currentDate(),`Validating canonical profile, policy, body, frequency, pairing, and rotation · ${reason}`);}
-function failClosed(date,error){console.error('ACE optimizer policy v3 safety hold',error);return renderAuthorityState('held',date,'No recommendation is shown until the canonical profile, policy, and every safety invariant pass.');}
-function readAgentSnapshot(){try{const raw=document.getElementById('agent-state')?.textContent;const parsed=raw?JSON.parse(raw):null;return parsed&&typeof parsed==='object'?parsed:{};}catch{return {};}}
-function readState(){
-  let fallback={};
-  for(const key of STATE_KEYS){
-    try{const raw=localStorage.getItem(key);if(!raw)continue;const value=JSON.parse(raw);if(!value||typeof value!=='object')continue;if(!Object.keys(fallback).length)fallback=value;if(value.suppLog&&typeof value.suppLog==='object')return value;}catch{}
-  }
-  return fallback;
-}
-function readSelectedDay(snapshot={}){try{if(typeof window.day==='function'){const value=window.day();if(value&&typeof value==='object')return value;}}catch{}return snapshot.day&&typeof snapshot.day==='object'?snapshot.day:{id:snapshot.active_day||snapshot.activeDate||brusselsDate()};}
-function currentDate(){const snapshot=readAgentSnapshot();return String(readSelectedDay(snapshot)?.id||snapshot.active_day||snapshot.activeDate||brusselsDate()).slice(0,10);}
-function readBodySummary(date,snapshot={}){try{if(typeof window.bodySummaryForDate==='function'){const value=window.bodySummaryForDate(date);if(value&&typeof value==='object')return value;}}catch{}return snapshot.body&&typeof snapshot.body==='object'?snapshot.body:{};}
-
-async function waitForCanonicalProfile(){
-  if(window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.ok)return window.ACE_MIND_CANONICAL_PROFILE_APPLIED;
-  if(window.ACE_MIND_CANONICAL_PROFILE_READY)return window.ACE_MIND_CANONICAL_PROFILE_READY;
-  if(window.FlamewalkerCanonicalProfileV33?.ensureAceMindApplied){
-    return window.FlamewalkerCanonicalProfileV33.ensureAceMindApplied(false);
-  }
-  if(window.FlamewalkerCanonicalProfileV33?.load&&window.FlamewalkerCanonicalProfileV33?.applyAceMind){
-    const promise=window.FlamewalkerCanonicalProfileV33.load(false).then(window.FlamewalkerCanonicalProfileV33.applyAceMind);
-    window.ACE_MIND_CANONICAL_PROFILE_READY=promise;
-    return promise;
-  }
-  throw new Error('canonical profile bridge unavailable');
-}
-
-function assertCanonicalPolicy(registry){
-  if(registry.policyVersion!==POLICY_VERSION)throw new Error(`policy version mismatch: ${registry.policyVersion||'none'}`);
-  if((registry.supplements??[]).length!==42)throw new Error(`canonical table requires 42 cards, found ${(registry.supplements??[]).length}`);
-  const index=new Map(registry.supplements.map(card=>[card.id,card]));
-  for(const id of WEEKLY_IDS){
-    const card=index.get(id);if(!card)throw new Error(`weekly card missing: ${id}`);
-    if(card.autoSelection!=='manual_only')throw new Error(`${id} must be manual_only`);
-    if(card.frequency?.maxUses7d!==1||card.frequency?.rollingWindowDays!==7||card.frequency?.automaticFrequencyBoost!==false)throw new Error(`${id} weekly governance incomplete`);
-  }
-  for(const card of index.values()){
-    if(!card.protocolPolicy?.practicalTimingAuthority)throw new Error(`${card.id} missing practical timing authority`);
-    if(!Number.isFinite(Number(card.esotericSignature?.numerology?.numerologySum)))throw new Error(`${card.id} missing canonical numerology`);
-    if(!card.esotericSignature?.bazi?.dayMasterStem||!card.esotericSignature?.bazi?.polarity)throw new Error(`${card.id} missing canonical BaZi stem/polarity`);
-  }
-}
-
-async function registry(){
-  registryPromise??=fetch(REGISTRY_URL,{cache:'no-store'})
-    .then(response=>{if(!response.ok)throw new Error(`registry ${response.status}`);return response.json();})
-    .then(raw=>applyCanonicalSupplementPolicy(raw))
-    .then(canonical=>{assertCanonicalPolicy(canonical);return canonical;});
-  return registryPromise;
-}
-function openDb(){return new Promise((resolve,reject)=>{if(!('indexedDB'in window))return resolve(null);const request=indexedDB.open(DB_NAME,DB_VERSION);request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(STORE)){const store=db.createObjectStore(STORE,{keyPath:'key'});store.createIndex('createdAt','createdAt');store.createIndex('date','date');}};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
-async function persist(record){try{const db=await openDb();if(!db)return;await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(record);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});db.close();}catch(error){console.warn('ACE optimizer v3 storage skipped',error);}}
-async function getHistory(limit=30){const safe=Math.max(0,Math.min(5000,Number.isFinite(Number(limit))?Math.floor(Number(limit)):30));const db=await openDb();if(!db)return latestRecord?[latestRecord]:[];return new Promise((resolve,reject)=>{const rows=[];const tx=db.transaction(STORE,'readonly');const request=tx.objectStore(STORE).index('createdAt').openCursor(null,'prev');request.onsuccess=()=>{const cursor=request.result;if(cursor&&rows.length<safe){rows.push(cursor.value);cursor.continue();}else{db.close();resolve(rows);}};request.onerror=()=>{db.close();reject(request.error);};});}
-async function buildContext(){
-  await waitForCanonicalProfile();
-  if(!window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.ok)throw new Error('canonical profile did not apply');
-  const supplementRegistry=await registry();
-  const snapshot=readAgentSnapshot();
-  const state=readState();
-  const selectedDay=readSelectedDay(snapshot);
-  const date=String(selectedDay?.id||snapshot.active_day||snapshot.activeDate||brusselsDate()).slice(0,10);
-  return {registry:supplementRegistry,context:buildLiveContext({snapshot,state,registry:supplementRegistry,day:selectedDay,bodySummary:readBodySummary(date,snapshot),visibleNames:readVisibleSupplementNames(),fallbackDate:brusselsDate()})};
-}
-function selectedMembers(output={}){return [...new Set((output.selected??[]).flatMap(item=>item?.atom?.memberIds??[]))].sort();}
-function assertOutputSafety(output={}){
-  const nad=selectedMembers(output).filter(id=>NAD_IDS.has(id));
-  if(nad.length>1)throw new Error(`NAD exclusivity breach: ${nad.join(', ')}`);
-  for(const item of output.selected??[]){if(!item?.atom?.primaryId||!(item?.atom?.memberIds??[]).includes(item.atom.primaryId))throw new Error('Malformed selected atom');}
-}
-function buildDiagnostics(supplementRegistry,layers,output){
-  const selectedIds=new Set(selectedMembers(output));
-  return Object.fromEntries([...(supplementRegistry.supplements??[])].sort((a,b)=>a.id.localeCompare(b.id)).map(item=>{
-    const eso=layers.esoteric?.[item.id]??{},body=layers.body?.[item.id]??{},frequency=layers.frequency?.[item.id]??{},pairing=layers.pairing?.[item.id]??{};
-    return [item.id,{
-      esotericLabel:eso.label??'Unscored',convergenceLabel:eso.convergenceLabel??'None',
-      esotericScalar:Number.isFinite(Number(eso.scalar))?Number(eso.scalar):null,
-      numerologyScalar:Number.isFinite(Number(eso.components?.numerology?.scalar))?Number(eso.components.numerology.scalar):null,
-      baziScalar:Number.isFinite(Number(eso.components?.bazi?.scalar))?Number(eso.components.bazi.scalar):null,
-      bodyPermission:body.label??'unknown',frequencyState:frequency.state??'unknown',
-      frequencyUrgency:Number.isFinite(Number(frequency.urgency))?Number(frequency.urgency):null,
-      calendarEligible:frequency.calendarEligible??null,
-      pairingState:selectedIds.has(item.id)?'complete':pairing.state??'unknown',policyVersion:supplementRegistry.policyVersion
-    }];
-  }));
-}
-function applyVisibleAuthority(record,supplementRegistry){
-  if(disabled())return failClosed(record?.date||currentDate(),new Error('optimizer disabled'));
-  if(String(record?.date||'')!==currentDate())throw new Error(`stale optimizer date ${record?.date||'none'} != ${currentDate()}`);
-  assertOutputSafety(record);
-  buildVisibleSupplementModel(record,supplementRegistry);
-  const model=renderVisibleSupplements(record,supplementRegistry);
-  const chamber=root();
-  if(chamber){const marker=document.createElement('span');marker.hidden=true;marker.dataset.optimizerLiveV3='1';chamber.prepend(marker);chamber.dataset.optimizerAuthority='individual-card-policy-v3';chamber.dataset.optimizerVersion=VERSION;}
-  return model;
-}
-async function run(reason='manual'){
-  if(disabled()){failClosed(currentDate(),new Error('optimizer disabled'));return null;}
-  if(running)return latestRecord;
-  running=true;
-  if(!latestRecord||latestRecord.date!==currentDate())claimPending(reason);
-  let date=currentDate();
-  try{
-    const {registry:supplementRegistry,context}=await buildContext();date=context.date;
-    if(date!==currentDate()){schedule('date-race');return null;}
-    const hashPayload={canonicalProfile:window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.profile_id,policyVersion:supplementRegistry.policyVersion,context};
-    const inputHash=sha256Hex(JSON.stringify(canonicalize(hashPayload)));
-    if(inputHash===lastInputHash&&latestRecord){applyVisibleAuthority(latestRecord,supplementRegistry);return latestRecord;}
-    const layers={
-      esoteric:evaluateEsotericRegistry(supplementRegistry,context.dayField),
-      body:evaluateBodyRegistry(supplementRegistry,context.bodyState),
-      frequency:evaluateFrequencyRegistry(supplementRegistry,date,context.histories),
-      pairing:evaluatePairingRegistry(supplementRegistry,[])
-    };
-    const output=optimize({day:date,registry:supplementRegistry,daySignals:context.daySignals,layers,config:{}});
-    assertOutputSafety(output);
-    const comparison=compareLegacyToOptimizer(context.legacy,output),createdAt=new Date().toISOString();
-    const record={key:`${date}:${inputHash}`,version:VERSION,build:BUILD,canonicalProfile:window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.profile_id,policyVersion:supplementRegistry.policyVersion,mode:'canonical-card-policy-fail-closed',date,createdAt,reason,inputHash,optimizerHash:output.determinismHash,legacy:context.legacy,comparison,diagnostics:buildDiagnostics(supplementRegistry,layers,output),selected:output.selected,residual:output.residual,held:output.held,excluded:output.excluded};
-    if(date!==currentDate()){schedule('date-race-after-build');return null;}
-    latestRecord=record;lastInputHash=inputHash;applyVisibleAuthority(record,supplementRegistry);void persist(record);
-    window.dispatchEvent(new CustomEvent('ace-mind:optimizer-live',{detail:{date,canonicalProfile:record.canonicalProfile,policyVersion:supplementRegistry.policyVersion,comparison,optimizerHash:output.determinismHash,authority:'canonical-card-policy-v3'}}));
-    return record;
-  }catch(error){failClosed(date,error);return null;}finally{running=false;}
-}
+function mark(name,status='ok',detail={}){stage=name;trace.push({at:new Date().toISOString(),stage:name,status,...detail});if(trace.length>80)trace.shift();window.ACE_MIND_OPTIMIZER_BOOT_TRACE=trace.map(x=>Object.freeze({...x}));}
+function markOnce(name,status='ok',detail={}){const k=name+':'+status;if(traceOnce.has(k))return;traceOnce.add(k);mark(name,status,detail);}
+function profileStatus(){if(window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.ok)return'applied';if(window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.ok===false)return'failed';if(window.ACE_MIND_CANONICAL_PROFILE_READY)return'loading';if(window.FlamewalkerCanonicalProfileV33)return'bridge-ready';return'unavailable';}
+function header(date){const e=document.getElementById('dayMeta');if(e){e.textContent=`${String(date||currentDate()).slice(0,10)} · numerology-first card optimizer`;e.dataset.supplementBlockAuthority='disabled';}}
+function renderAuthorityState(kind,date,note){const c=root();if(!c)return false;header(date);const tone=kind==='held'?'var(--orange,#f97316)':'var(--cyan,#22d3ee)',title=kind==='held'?'Supplement optimizer held':'Preparing supplement decision';c.innerHTML=`<div data-optimizer-live-v3="${esc(kind)}"><div class="card"><div class="focus-title">${title}</div><div class="small" style="margin-top:5px">${esc(note)}</div><div class="tiny" style="margin-top:5px;color:${tone}">Authority: canonical 42-card policy · ${esc(date||'')}</div></div></div>`;c.dataset.optimizerAuthority=`individual-v3-${kind}`;c.dataset.optimizerDate=String(date||'');c.dataset.optimizerVersion=VERSION;return true;}
+function claimPending(reason='loading'){return renderAuthorityState('pending',currentDate(),`Validating canonical profile, policy, body, frequency, pairing, and rotation · ${safe(reason,80)}`);}
+function failClosed(date,error,failedStage=stage){const d=String(date||currentDate()).slice(0,10),msg=safe(error?.message||error);mark(failedStage,'failed',{date:d,reason:msg,build:BUILD,policyVersion:loadedPolicyVersion,profileStatus:profileStatus(),run:runNumber});console.error('ACE optimizer policy v3 safety hold',failedStage,error);const c=root();if(!c)return false;header(d);c.innerHTML=`<div data-optimizer-live-v3="held"><div class="card"><div class="focus-title">Supplement optimizer held</div><div class="small" style="margin-top:6px">The canonical optimizer stopped safely instead of leaving an endless loading state.</div><div class="tiny" style="margin-top:9px;line-height:1.55"><b>Failing stage:</b> ${esc(failedStage)}<br><b>Error:</b> ${esc(msg)}<br><b>Selected date:</b> ${esc(d)}<br><b>Build:</b> ${esc(BUILD)}<br><b>Policy:</b> ${esc(loadedPolicyVersion||'not loaded')}<br><b>Canonical profile:</b> ${esc(profileStatus())}</div></div></div>`;c.dataset.optimizerAuthority='individual-v3-held';c.dataset.optimizerDate=d;c.dataset.optimizerVersion=VERSION;c.dataset.optimizerFailureStage=safe(failedStage,80);return true;}
+function readAgentSnapshot(){try{const raw=document.getElementById('agent-state')?.textContent,p=raw?JSON.parse(raw):null;return p&&typeof p==='object'?p:{};}catch{return {};}}
+function readState(){let fallback={};for(const key of STATE_KEYS){try{const raw=localStorage.getItem(key);if(!raw)continue;const v=JSON.parse(raw);if(!v||typeof v!=='object')continue;if(!Object.keys(fallback).length)fallback=v;if(v.suppLog&&typeof v.suppLog==='object')return v;}catch{}}return fallback;}
+function readSelectedDay(snapshot={}){try{if(typeof window.day==='function'){const v=window.day();if(v&&typeof v==='object')return v;}}catch{}return snapshot.day&&typeof snapshot.day==='object'?snapshot.day:{id:snapshot.active_day||snapshot.activeDate||brusselsDate()};}
+function currentDate(){const s=readAgentSnapshot();return String(readSelectedDay(s)?.id||s.active_day||s.activeDate||brusselsDate()).slice(0,10);}
+function readBodySummary(date,snapshot={}){try{if(typeof window.bodySummaryForDate==='function'){const v=window.bodySummaryForDate(date);if(v&&typeof v==='object')return v;}}catch{}return snapshot.body&&typeof snapshot.body==='object'?snapshot.body:{};}
+function timeout(p,ms,label){let id;return Promise.race([Promise.resolve(p),new Promise((_,reject)=>{id=setTimeout(()=>reject(new Error(`${label} timed out after ${Math.round(ms/1000)} seconds`)),ms);})]).finally(()=>clearTimeout(id));}
+async function waitForCanonicalProfile(){if(!window.FlamewalkerCanonicalProfileV33){markOnce('canonical profile script ready','failed',{reason:'bridge unavailable'});throw new Error('canonical profile bridge unavailable');}markOnce('canonical profile script ready','ok',{version:window.FlamewalkerCanonicalProfileV33.version||'unknown'});let p;if(window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.ok)p=window.ACE_MIND_CANONICAL_PROFILE_APPLIED;else if(window.ACE_MIND_CANONICAL_PROFILE_READY)p=window.ACE_MIND_CANONICAL_PROFILE_READY;else if(window.FlamewalkerCanonicalProfileV33.ensureAceMindApplied)p=window.FlamewalkerCanonicalProfileV33.ensureAceMindApplied(false);else{p=window.FlamewalkerCanonicalProfileV33.load(false).then(window.FlamewalkerCanonicalProfileV33.applyAceMind);window.ACE_MIND_CANONICAL_PROFILE_READY=p;}const result=await timeout(p,15000,'canonical profile');if(!window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.ok&&result?.ok!==true)throw new Error('canonical profile did not apply');markOnce('canonical profile applied','ok',{version:window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.version||result?.version||'unknown'});return result;}
+function assertCanonicalPolicy(r){if(r.policyVersion!==POLICY_VERSION)throw new Error(`policy version mismatch: ${r.policyVersion||'none'}`);if((r.supplements??[]).length!==42)throw new Error(`canonical table requires 42 cards, found ${(r.supplements??[]).length}`);const index=new Map(r.supplements.map(x=>[x.id,x]));for(const id of WEEKLY_IDS){const c=index.get(id);if(!c)throw new Error(`weekly card missing: ${id}`);if(c.autoSelection!=='manual_only')throw new Error(`${id} must be manual_only`);if(c.frequency?.maxUses7d!==1||c.frequency?.rollingWindowDays!==7||c.frequency?.automaticFrequencyBoost!==false)throw new Error(`${id} weekly governance incomplete`);}for(const c of index.values()){if(!c.protocolPolicy?.practicalTimingAuthority)throw new Error(`${c.id} missing practical timing authority`);if(!Number.isFinite(Number(c.esotericSignature?.numerology?.numerologySum)))throw new Error(`${c.id} missing canonical numerology`);if(!c.esotericSignature?.bazi?.dayMasterStem||!c.esotericSignature?.bazi?.polarity)throw new Error(`${c.id} missing canonical BaZi stem/polarity`);}}
+async function registry(){registryPromise??=(async()=>{const controller=typeof AbortController==='function'?new AbortController():null,id=setTimeout(()=>controller?.abort(),15000);let response;try{response=await fetch(REGISTRY_URL,{cache:'no-store',...(controller?{signal:controller.signal}:{})});}catch(e){if(e?.name==='AbortError')throw new Error('registry fetch timed out after 15 seconds');throw e;}finally{clearTimeout(id);}if(!response.ok)throw new Error(`registry request failed with status ${response.status}`);mark('registry fetched','ok',{date:currentDate(),run:runNumber});const raw=await response.json(),canonical=applyCanonicalSupplementPolicy(raw);loadedPolicyVersion=canonical.policyVersion||POLICY_VERSION;mark('policy applied','ok',{date:currentDate(),count:canonical.supplements?.length??0,policyVersion:loadedPolicyVersion,run:runNumber});assertCanonicalPolicy(canonical);return canonical;})();return registryPromise;}
+function openDb(){return new Promise((resolve,reject)=>{if(!('indexedDB'in window))return resolve(null);const q=indexedDB.open(DB_NAME,DB_VERSION);q.onupgradeneeded=()=>{const db=q.result;if(!db.objectStoreNames.contains(STORE)){const s=db.createObjectStore(STORE,{keyPath:'key'});s.createIndex('createdAt','createdAt');s.createIndex('date','date');}};q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error);});}
+async function persist(record){try{const db=await openDb();if(!db)return;await new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(record);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});db.close();}catch(e){console.warn('ACE optimizer v3 storage skipped',e);}}
+async function getHistory(limit=30){const safeLimit=Math.max(0,Math.min(5000,Number.isFinite(Number(limit))?Math.floor(Number(limit)):30)),db=await openDb();if(!db)return latestRecord?[latestRecord]:[];return new Promise((resolve,reject)=>{const rows=[],tx=db.transaction(STORE,'readonly'),q=tx.objectStore(STORE).index('createdAt').openCursor(null,'prev');q.onsuccess=()=>{const c=q.result;if(c&&rows.length<safeLimit){rows.push(c.value);c.continue();}else{db.close();resolve(rows);}};q.onerror=()=>{db.close();reject(q.error);};});}
+async function buildContext(){stage='canonical profile applied';await waitForCanonicalProfile();if(!window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.ok)throw new Error('canonical profile did not apply');stage='registry fetched';const r=await registry(),snapshot=readAgentSnapshot(),stateValue=readState(),selectedDay=readSelectedDay(snapshot),date=String(selectedDay?.id||snapshot.active_day||snapshot.activeDate||brusselsDate()).slice(0,10);stage='live context built';const context=buildLiveContext({snapshot,state:stateValue,registry:r,day:selectedDay,bodySummary:readBodySummary(date,snapshot),visibleNames:readVisibleSupplementNames(),fallbackDate:brusselsDate()});mark('live context built','ok',{date:context.date||date,run:runNumber});return{registry:r,context};}
+function selectedMembers(out={}){return[...new Set((out.selected??[]).flatMap(x=>x?.atom?.memberIds??[]))].sort();}
+function assertOutputSafety(out={}){const nad=selectedMembers(out).filter(id=>NAD_IDS.has(id));if(nad.length>1)throw new Error(`NAD exclusivity breach: ${nad.join(', ')}`);for(const x of out.selected??[]){if(!x?.atom?.primaryId||!(x?.atom?.memberIds??[]).includes(x.atom.primaryId))throw new Error('Malformed selected atom');}}
+function buildDiagnostics(r,layers,out){const selected=new Set(selectedMembers(out));return Object.fromEntries([...(r.supplements??[])].sort((a,b)=>a.id.localeCompare(b.id)).map(item=>{const e=layers.esoteric?.[item.id]??{},b=layers.body?.[item.id]??{},f=layers.frequency?.[item.id]??{},p=layers.pairing?.[item.id]??{};return[item.id,{esotericLabel:e.label??'Unscored',convergenceLabel:e.convergenceLabel??'None',esotericScalar:Number.isFinite(Number(e.scalar))?Number(e.scalar):null,numerologyScalar:Number.isFinite(Number(e.components?.numerology?.scalar))?Number(e.components.numerology.scalar):null,baziScalar:Number.isFinite(Number(e.components?.bazi?.scalar))?Number(e.components.bazi.scalar):null,bodyPermission:b.label??'unknown',frequencyState:f.state??'unknown',frequencyUrgency:Number.isFinite(Number(f.urgency))?Number(f.urgency):null,calendarEligible:f.calendarEligible??null,pairingState:selected.has(item.id)?'complete':p.state??'unknown',policyVersion:r.policyVersion}];}));}
+function applyVisibleAuthority(record,r){if(disabled())return failClosed(record?.date||currentDate(),new Error('optimizer disabled'),'optimizer disabled');if(String(record?.date||'')!==currentDate())throw new Error(`stale optimizer date ${record?.date||'none'} != ${currentDate()}`);assertOutputSafety(record);stage='visible model completed';buildVisibleSupplementModel(record,r);mark('visible model completed','ok',{date:record.date,count:selectedMembers(record).length,run:runNumber});stage='renderer completed';const model=renderVisibleSupplements(record,r);if(!model)throw new Error('supplement renderer did not find the Clubs chamber');mark('renderer completed','ok',{date:record.date,count:model.selectedCount,run:runNumber});const c=root();if(c){const m=document.createElement('span');m.hidden=true;m.dataset.optimizerLiveV3='1';c.prepend(m);c.dataset.optimizerAuthority='individual-card-policy-v3';c.dataset.optimizerVersion=VERSION;}header(record.date);return model;}
+async function run(reason='manual'){if(disabled()){failClosed(currentDate(),new Error('optimizer disabled'),'optimizer disabled');return null;}if(running)return latestRecord;running=true;runNumber++;if(!latestRecord||latestRecord.date!==currentDate())claimPending(reason);let date=currentDate();try{const built=await buildContext(),r=built.registry,context=built.context;date=context.date;if(date!==currentDate()){schedule('date-race');return null;}const inputHash=sha256Hex(JSON.stringify(canonicalize({canonicalProfile:window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.profile_id,policyVersion:r.policyVersion,context})));if(inputHash===lastInputHash&&latestRecord){applyVisibleAuthority(latestRecord,r);return latestRecord;}stage='esoteric layer built';const esoteric=evaluateEsotericRegistry(r,context.dayField);mark(stage,'ok',{date,run:runNumber});stage='body layer built';const body=evaluateBodyRegistry(r,context.bodyState);mark(stage,'ok',{date,run:runNumber});stage='frequency layer built';const frequency=evaluateFrequencyRegistry(r,date,context.histories);mark(stage,'ok',{date,run:runNumber});stage='pairing layer built';const pairing=evaluatePairingRegistry(r,[]);mark(stage,'ok',{date,run:runNumber});const layers={esoteric,body,frequency,pairing};stage='optimizer completed';const output=optimize({day:date,registry:r,daySignals:context.daySignals,layers,config:{}});assertOutputSafety(output);mark(stage,'ok',{date,count:selectedMembers(output).length,run:runNumber});const comparison=compareLegacyToOptimizer(context.legacy,output),createdAt=new Date().toISOString(),record={key:`${date}:${inputHash}`,version:VERSION,build:BUILD,canonicalProfile:window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.profile_id,policyVersion:r.policyVersion,mode:'canonical-card-policy-fail-closed',date,createdAt,reason,inputHash,optimizerHash:output.determinismHash,legacy:context.legacy,comparison,diagnostics:buildDiagnostics(r,layers,output),selected:output.selected,residual:output.residual,held:output.held,excluded:output.excluded};if(date!==currentDate()){schedule('date-race-after-build');return null;}latestRecord=record;lastInputHash=inputHash;applyVisibleAuthority(record,r);void persist(record);window.dispatchEvent(new CustomEvent('ace-mind:optimizer-live',{detail:{date,canonicalProfile:record.canonicalProfile,policyVersion:r.policyVersion,comparison,optimizerHash:output.determinismHash,authority:'canonical-card-policy-v3'}}));return record;}catch(e){failClosed(date,e,stage);return null;}finally{running=false;}}
 function schedule(reason='render'){clearTimeout(timer);timer=setTimeout(()=>void run(reason),20);}
 function wrapAndSchedule(name,reason){const base=window[name];if(typeof base!=='function'||base.__aceOptimizerLiveV3Wrapped)return;function wrapped(...args){const result=base.apply(this,args);schedule(reason);return result;}wrapped.__aceOptimizerLiveV3Wrapped=true;wrapped.__aceOptimizerLiveV3Base=base;window[name]=wrapped;}
 function installHooks(){['render','setDay','fastRenderSelectedDay','tickSupp','setBodyState'].forEach(name=>wrapAndSchedule(name,name));}
-function installOverwriteGuard(){const chamber=root();if(!chamber||observer)return;observer=new MutationObserver(()=>{if(running)return;if(!chamber.querySelector('[data-optimizer-live-v3]')&&!chamber.querySelector('[data-optimizer-supp]'))schedule('legacy-overwrite');});observer.observe(chamber,{childList:true,subtree:false});}
-function boot(){claimPending('boot');installHooks();installOverwriteGuard();schedule('module-ready');window.addEventListener('ace-mind:canonical-profile-applied',()=>schedule('canonical-profile-applied'));window.addEventListener('focus',()=>schedule('focus'));document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')schedule('visible');});}
+function installOverwriteGuard(){const c=root();if(!c||observer)return;observer=new MutationObserver(()=>{if(running)return;if(!c.querySelector('[data-optimizer-live-v3]')&&!c.querySelector('[data-optimizer-supp]'))schedule('legacy-overwrite');});observer.observe(c,{childList:true,subtree:false});}
+function boot(){markOnce('HTML ready','ok',{build:BUILD});if(window.FlamewalkerCanonicalProfileV33)markOnce('canonical profile script ready','ok',{version:window.FlamewalkerCanonicalProfileV33.version||'unknown'});claimPending('boot');installHooks();installOverwriteGuard();schedule('module-ready');window.addEventListener('ace-mind:canonical-profile-applied',()=>schedule('canonical-profile-applied'));window.addEventListener('focus',()=>schedule('focus'));document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')schedule('visible');});}
 
-if(typeof window!=='undefined'){
-  const api=Object.freeze({version:VERSION,build:BUILD,policyVersion:POLICY_VERSION,mode:'canonical-card-policy-fail-closed',run,latest:()=>latestRecord,history:getHistory,disable(){localStorage.setItem(DISABLE_KEY,'1');failClosed(currentDate(),new Error('optimizer disabled'));},enable(){localStorage.removeItem(DISABLE_KEY);schedule('enabled');}});
-  window.AceMindOptimizerShadow=api;window.AceMindOptimizerLive=api;
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-}
+if(typeof window!=='undefined'){markOnce('optimizer module imported','ok',{version:VERSION,build:BUILD});markOnce('canonical policy imported','ok',{policyVersion:POLICY_VERSION,build:BUILD});if(document.getElementById('grid-clubs'))markOnce('HTML ready','ok',{build:BUILD});const api=Object.freeze({version:VERSION,build:BUILD,policyVersion:POLICY_VERSION,mode:'canonical-card-policy-fail-closed',run,latest:()=>latestRecord,history:getHistory,trace:()=>trace.map(x=>({...x})),disable(){localStorage.setItem(DISABLE_KEY,'1');failClosed(currentDate(),new Error('optimizer disabled'),'optimizer disabled');},enable(){localStorage.removeItem(DISABLE_KEY);schedule('enabled');}});window.AceMindOptimizerShadow=api;window.AceMindOptimizerLive=api;if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();}
