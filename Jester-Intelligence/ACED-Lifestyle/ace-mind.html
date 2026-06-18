@@ -10114,5 +10114,32 @@ try{if(document.readyState!=='loading')render();}catch(e){}
 })();
 </script>
 <script type="module" src="./shared/optimizer/ace-mind-optimizer-live-v2.mjs"></script>
+<script src="./shared/js/flamewalker-canonical-profile-v3-3.js?v=20260618-5"></script>
+<script src="./shared/js/ace-mind-canonical-handoff-v1.js?v=20260618-1"></script>
+<script>
+(function(){
+  function applyCanonicalBinding(){
+    try{
+      if(window.FlamewalkerCanonicalProfileV33 && window.FlamewalkerCanonicalProfileV33.ensureAceMindApplied){
+        window.FlamewalkerCanonicalProfileV33.ensureAceMindApplied(true).catch(function(e){
+          console.warn('ACE Mind canonical profile apply failed', e);
+        });
+      }
+      if(window.AceMindCanonicalHandoffV1 && window.AceMindCanonicalHandoffV1.ensure){
+        window.AceMindCanonicalHandoffV1.ensure(true).catch(function(e){
+          console.warn('ACE Mind canonical handoff apply failed', e);
+        });
+      }
+    }catch(e){
+      console.warn('ACE Mind canonical binding failed', e);
+    }
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyCanonicalBinding, {once:true});
+  }else{
+    setTimeout(applyCanonicalBinding, 0);
+  }
+})();
+</script>
 </body>
 </html>
