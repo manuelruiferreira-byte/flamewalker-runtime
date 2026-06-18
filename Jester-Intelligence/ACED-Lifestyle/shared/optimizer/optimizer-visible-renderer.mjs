@@ -1,3 +1,4 @@
+import './legacy-supplement-firewall.mjs?v=20260618-2';
 import { buildVisibleSupplementModel } from './optimizer-visible-model-v2.mjs';
 
 const SLOT_LABELS=Object.freeze({morning:'Morning',afternoon:'Afternoon',night:'Night'});
