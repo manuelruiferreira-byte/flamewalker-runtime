@@ -1,2 +1,0 @@
-'use strict';
-const ACE_MIND_CARD_RUNTIME='cards-only-v4';
