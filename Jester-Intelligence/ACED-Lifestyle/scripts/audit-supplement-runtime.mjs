@@ -20,4 +20,11 @@ for(let i=0;i<lines.length;i++){
 }
 fs.mkdirSync('artifacts',{recursive:true});
 fs.writeFileSync('artifacts/ace-mind-supplement-runtime-audit.json',JSON.stringify(report,null,2));
-console.log(JSON.stringify(report,null,2));
+console.log('ACE_MIND_SUPPLEMENT_RUNTIME_AUDIT');
+console.log(`totalLines=${report.totalLines}`);
+for(const term of terms){
+  const hits=report.terms[term];
+  const first=hits.slice(0,12).map(hit=>hit.line).join(',');
+  console.log(`${term}=${hits.length}${first?` lines:${first}`:''}`);
+}
+console.log(`functions=${report.functions.map(item=>`${item.name}@${item.line}`).join(',')}`);
