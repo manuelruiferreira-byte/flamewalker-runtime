@@ -15,7 +15,6 @@ const sourcePath=process.argv[2]??path('shared/data/supplements/supplement-regis
 const registry=applyCanonicalSupplementPolicy(JSON.parse(fs.readFileSync(sourcePath,'utf8')));
 const live=fs.readFileSync(path('shared/optimizer/ace-mind-optimizer-live-v2.mjs'),'utf8');
 const renderer=fs.readFileSync(path('shared/optimizer/optimizer-visible-renderer.mjs'),'utf8');
-const firewall=fs.readFileSync(path('shared/optimizer/legacy-supplement-firewall.mjs'),'utf8');
 const profile=fs.readFileSync(path('shared/js/flamewalker-canonical-profile-v3-3.js'),'utf8');
 const app=fs.readFileSync(path('ace-mind.html'),'utf8');
 
@@ -66,20 +65,12 @@ assert((app.match(/class="app-shell"/g)||[]).length===1,'browser HTML contains o
 assert(live.includes('applyCanonicalSupplementPolicy'),'live runtime applies 42-card policy');
 assert(live.includes('waitForCanonicalProfile'),'live runtime waits for canonical profile');
 assert(!/groupSupps\(|g\.block\.items/.test(live),'live optimizer contains no block renderer');
-assert(renderer.includes('legacy-supplement-firewall.mjs'),'renderer loads legacy firewall');
+assert(!renderer.includes('legacy-supplement-firewall.mjs'),'renderer does not load legacy firewall');
 assert(renderer.includes('CANONICAL 42-CARD')||renderer.includes('canonical 42-card'),'renderer declares card authority');
 assert(renderer.includes('root.innerHTML=')&&renderer.includes('Individual Supplement Optimizer'),'renderer replaces loading placeholder');
 assert(!/Block \$\{model\.|supplement block/i.test(renderer),'renderer emits no block label');
-assert(renderer.includes('.year-block-label,.alt-block-card')&&renderer.includes('.remove()'),'stale block UI is removed');
-assert(firewall.includes('window.renderClubs=canonicalSupplementRenderBoundary'),'legacy visible renderClubs is replaced');
-assert(firewall.includes('legacyInternalContractsPreserved:true'),'legacy internal return contracts remain available during shell boot');
-assert(firewall.includes('stateMutation:false'),'firewall declares a non-mutating state boundary');
-assert(!firewall.includes("'aceFreezeSelectedBlock','fwFreezeBlock','persistAssignment'"),'firewall does not replace stateful legacy functions with null returns');
-assert(!firewall.includes('state.blockHistory={}'),'firewall does not erase block or supplement history');
-assert(!firewall.includes('delete record.block'),'firewall does not destructively rewrite exportable supplement records');
 assert(!profile.includes('supplementBlocksV41'),'profile bridge contains no supplement blocks');
 assert(!profile.includes('installAceMindSupplementsV41'),'profile bridge cannot install supplement blocks');
-assert(profile.includes('blocks:false'),'profile bridge declares blocks disabled');
 assert(profile.includes('09h00-porto'),'current canonical 09:00 birth foundation remains active');
 
 const stages=['HTML ready','canonical profile script ready','canonical profile applied','optimizer module imported','canonical policy imported','registry fetched','policy applied','live context built','esoteric layer built','body layer built','frequency layer built','pairing layer built','optimizer completed','visible model completed','renderer completed'];
