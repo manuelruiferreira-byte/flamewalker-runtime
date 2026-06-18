@@ -1,61 +1,46 @@
-// Runtime boundary between the historical ACE Mind monolith and the canonical
-// 42-card supplement engine. This module does not change overview, body,
-// practice, temporal, or canonical-profile calculations.
+// Runtime UI boundary between the historical ACE Mind monolith and the
+// canonical 42-card supplement engine.
+//
+// Important: the monolith still calls its internal block functions while it
+// builds non-supplement guidance. Those functions are legacy internals, but
+// their return contracts must remain intact until they are extracted. This
+// firewall therefore owns only the visible supplement chamber and header. It
+// never rewrites supplement history, block history, localStorage, IndexedDB,
+// export payloads, or stateful global functions.
 
-const FIREWALL_VERSION='ace_mind_legacy_supplement_firewall.v1';
-const disabledFunctions=new Map();
+const FIREWALL_VERSION='ace_mind_legacy_supplement_firewall.v2-contract-safe';
+let dayMetaObserver=null;
 
-function globalValue(expression,fallback=null){
-  try{return Function(`try{return (${expression})}catch(e){return null}`)()??fallback;}catch{return fallback;}
+function cleanDayMetaText(value){
+  return String(value??'')
+    .replace(/\s*·\s*Block\s+\d+\s*/ig,' · ')
+    .replace(/\s*·\s*·\s*/g,' · ')
+    .replace(/^\s*·\s*|\s*·\s*$/g,'')
+    .replace(/\s{2,}/g,' ')
+    .trim();
 }
 
-function setGlobalFunction(name,replacement){
-  try{
-    const existing=window[name];
-    if(typeof existing==='function'&&!disabledFunctions.has(name))disabledFunctions.set(name,existing);
-    window[name]=replacement;
-    return true;
-  }catch{return false;}
+function scrubVisibleDayMeta(){
+  const element=document.getElementById('dayMeta');
+  if(!element)return false;
+  const cleaned=cleanDayMetaText(element.textContent);
+  if(cleaned!==element.textContent)element.textContent=cleaned;
+  element.dataset.supplementBlockAuthority='disabled';
+  return true;
 }
 
-function scrubLegacyState(){
-  const state=globalValue('typeof state!=="undefined"?state:null');
-  if(!state||typeof state!=='object')return;
-  try{state.blockHistory={};}catch{}
-  try{
-    for(const record of Object.values(state.suppLog??{})){
-      if(!record||typeof record!=='object')continue;
-      delete record.block;
-      delete record.finalBlock;
-      delete record.supplementBlock;
-      delete record.blockAssignment;
-    }
-  }catch{}
-  try{
-    delete state.frequencyGovernor;
-    if(state.calibrationBridge&&typeof state.calibrationBridge==='object')delete state.calibrationBridge.blockDoctrine;
-  }catch{}
-}
-
-function neutralizeDayBlockFields(day){
-  if(!day||typeof day!=='object')return day;
-  for(const key of ['block','finalBlock','supplementBlock','blockReason','blockAssignment']){
-    try{delete day[key];}catch{}
-  }
-  return day;
-}
-
-function neutralizeGuidance(guidance){
-  if(!guidance||typeof guidance!=='object')return guidance;
-  try{delete guidance.block;}catch{}
-  try{delete guidance.blockAssignment;}catch{}
-  try{delete guidance.theonBlockSelection;}catch{}
-  try{guidance.suppMode='CANONICAL 42-CARD POLICY';}catch{}
-  return guidance;
+function installDayMetaFirewall(){
+  scrubVisibleDayMeta();
+  dayMetaObserver?.disconnect();
+  const element=document.getElementById('dayMeta');
+  if(!element||typeof MutationObserver!=='function')return;
+  dayMetaObserver=new MutationObserver(()=>scrubVisibleDayMeta());
+  dayMetaObserver.observe(element,{childList:true,characterData:true,subtree:true});
 }
 
 function installRenderFirewall(){
-  setGlobalFunction('renderClubs',function canonicalSupplementRenderBoundary(){
+  const legacyRender=window.renderClubs;
+  function canonicalSupplementRenderBoundary(){
     const chamber=document.getElementById('grid-clubs');
     if(!chamber)return null;
     if(!chamber.querySelector('[data-optimizer-live-v3],[data-optimizer-supp]')){
@@ -63,52 +48,26 @@ function installRenderFirewall(){
     }
     chamber.dataset.optimizerAuthority='canonical-card-policy-pending';
     return chamber;
-  });
-}
-
-function installWriteFirewall(){
-  const noWrite=function(){return null;};
-  for(const name of ['aceFreezeSelectedBlock','fwFreezeBlock','persistAssignment'])setGlobalFunction(name,noWrite);
-}
-
-function installGuidanceScrubber(){
-  const base=window.deriveGuidanceV23;
-  if(typeof base!=='function'||base.__canonicalCardFirewall)return;
-  function wrapped(day){
-    const guidance=base.apply(this,arguments);
-    neutralizeDayBlockFields(day);
-    neutralizeGuidance(guidance);
-    scrubLegacyState();
-    return guidance;
   }
-  wrapped.__canonicalCardFirewall=true;
-  wrapped.__legacyBase=base;
-  window.deriveGuidanceV23=wrapped;
-}
-
-function installExportScrubber(){
-  const base=window.exportState;
-  if(typeof base!=='function'||base.__canonicalCardFirewall)return;
-  function wrapped(){
-    scrubLegacyState();
-    return base.apply(this,arguments);
-  }
-  wrapped.__canonicalCardFirewall=true;
-  wrapped.__legacyBase=base;
-  window.exportState=wrapped;
+  canonicalSupplementRenderBoundary.__canonicalCardFirewall=true;
+  canonicalSupplementRenderBoundary.__legacyBase=typeof legacyRender==='function'?legacyRender:null;
+  window.renderClubs=canonicalSupplementRenderBoundary;
 }
 
 export function installLegacySupplementFirewall(){
   installRenderFirewall();
-  installWriteFirewall();
-  installGuidanceScrubber();
-  installExportScrubber();
-  scrubLegacyState();
+  installDayMetaFirewall();
   try{
     delete window.ACE_MIND_SUPPLEMENT_V41;
     delete window.ACE_MIND_SUPPLEMENT_V41_APPLIED;
   }catch{}
-  const detail={version:FIREWALL_VERSION,legacyBlocks:false,authority:'canonical-42-card-policy-v3'};
+  const detail={
+    version:FIREWALL_VERSION,
+    legacyBlocks:false,
+    visibleAuthority:'canonical-42-card-policy-v3',
+    legacyInternalContractsPreserved:true,
+    stateMutation:false
+  };
   window.ACE_MIND_LEGACY_SUPPLEMENT_FIREWALL=Object.freeze(detail);
   window.dispatchEvent(new CustomEvent('ace-mind:legacy-supplement-firewall',{detail}));
   return detail;
@@ -118,6 +77,6 @@ export function legacySupplementFirewallStatus(){
   return window.ACE_MIND_LEGACY_SUPPLEMENT_FIREWALL??null;
 }
 
-export { FIREWALL_VERSION };
+export { FIREWALL_VERSION, cleanDayMetaText };
 
 if(typeof window!=='undefined')installLegacySupplementFirewall();
