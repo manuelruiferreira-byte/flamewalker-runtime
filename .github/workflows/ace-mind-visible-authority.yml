@@ -37,7 +37,7 @@ jobs:
           node --check Jester-Intelligence/packages/engines/supplement/esoteric-fit-engine.mjs
           node --check Jester-Intelligence/packages/engines/supplement/frequency-persistence-engine.mjs
           node --check Jester-Intelligence/packages/engines/supplement/canonical-policy-optimizer.mjs
-          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-canonical-policy-v3.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-canonical-policy-v3-root.mjs
           node --check Jester-Intelligence/packages/engines/supplement/tests/validate-canonical-rotation-v3.mjs
           node --check Jester-Intelligence/packages/engines/supplement/tests/validate-esoteric-authority-v3.mjs
 
@@ -48,7 +48,7 @@ jobs:
         run: node Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry-v2.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
 
       - name: Validate complete 42-card policy
-        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-canonical-policy-v3.mjs
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-canonical-policy-v3-root.mjs
 
       - name: Validate numerology-first esoteric authority
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-esoteric-authority-v3.mjs
