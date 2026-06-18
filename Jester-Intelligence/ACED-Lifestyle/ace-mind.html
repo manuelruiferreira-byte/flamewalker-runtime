@@ -3003,7 +3003,6 @@ function renderTemporal(d, g) {
   html += `<div class="fw-to-num-box"><div class="fw-to-num-val">${e(pNums.pM)}</div><div class="fw-to-num-key">Personal Month</div></div>`;
   html += `<div class="fw-to-num-box"><div class="fw-to-num-val">${e(pNums.pY)}</div><div class="fw-to-num-key">Personal Year</div></div>`;
   html += '</div>';
-  if (pdInfo.desc) html += `<div class="small" style="margin-top:8px">${e(pdInfo.desc)}</div>`;
   html += '<div class="tiny fw-to-static-note" style="margin-top:7px">Life Path 33/6 \u00b7 Expression 111/3 \u00b7 Birth: 15 Aug 1972 \u00b7 Porto</div>';
   html += '</div>';
 
@@ -3039,7 +3038,7 @@ function renderTemporal(d, g) {
     html += `<div class="fw-to-theon-btn ${mode === theon ? 'fw-to-theon-active' : ''}">${e(mode)}</div>`;
   });
   html += '</div>';
-  html += `<div class="small" style="margin-top:8px"><span id="fw-theon-label">${e(theon)}</span> \u00b7 ${e(FW_THEON_DESC[theon] || '')}</div>`;
+  html += `<div class="tiny" style="margin-top:6px;color:var(--muted)"><span id="fw-theon-label">${e(theon)}</span></div>`;
   html += '<div class="tiny fw-to-static-note" style="margin-top:5px">Override: window.ACE_MIND_TEMPORAL_DATA.theonMode</div>';
   html += '</div>';
 
@@ -5410,13 +5409,8 @@ function renderDiamonds(d,g){
   if(g.theon){
     const t=g.theon;
     const vColor={APPROVE:'var(--green,#4ade80)',DOWNGRADE:'var(--yellow,#fbbf24)',BLOCK:'var(--orange,#fb923c)'}[t.governor.verdict]||'var(--muted)';
-    theonCard=panel(`<span class="fw-to-label">THEON 3·6·9 Control Grammar</span>`+
-      `<div class="focus-title" style="margin-top:4px">Base Marker ${t.baseMarker} → Stabilizer ${t.stabilizer.S} · ${escapeHtml(t.stabilizer.label)}</div>`+
-      `<div class="small" style="margin-top:4px">${escapeHtml(t.stabilizer.desc)}</div>`+
-      `<div class="tiny" style="margin-top:8px;color:var(--muted)">Clock R_ext: ${escapeHtml(t.critPhase.note)}</div>`+
-      `<div class="tiny" style="margin-top:3px;color:var(--muted)">SIPR phase: ${escapeHtml(t.sipr.note)}</div>`+
-      `<div class="tiny" style="margin-top:3px;color:var(--muted)">AARD attention: ${escapeHtml(t.aard.attention)} — ${escapeHtml(t.aard.note)}</div>`+
-      `<div class="tiny" style="margin-top:6px;color:${vColor};font-weight:700">Governor ${escapeHtml(t.governor.verdict)}: ${escapeHtml(t.governor.action)}</div>`);
+    theonCard=panel(`<div class="tiny" style="color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-size:.66rem">THEON · S${t.stabilizer.S}</div>`+
+      `<div class="tiny" style="margin-top:4px;color:${vColor};font-weight:700">${escapeHtml(t.governor.verdict)}: ${escapeHtml(t.governor.action)}</div>`);
   }
   const _pd=d.id;
   function pcheck(name){const ticked=isPracticeTicked(_pd,name);const el=document.createElement('span');el.className='check'+(ticked?' checked':'');el.setAttribute('onclick',"event.stopPropagation();tickPractice('"+_pd+"','"+name+"')");return el.outerHTML;}
@@ -5430,7 +5424,7 @@ function renderDiamonds(d,g){
       `<div class="practice-card food-card" onclick="openFoodCard()"><b>Food</b>${escapeHtml(g.food||'Warm balanced meal')}${fwBodyMatrixPracticeBadge(g.food,'food',d.id)}</div>`+
       `</div><button class="gravitic-route" onclick="openGravitic()">Open ACE Gravitic for breath, movement &amp; chakra routing</button>`)+
     theonCard+
-    panel(`<div class="focus-title">${escapeHtml(g.mantra)}</div><div class="small" style="margin-top:6px">${escapeHtml(g.practiceReason||'Practice keyed by the temporal engine and body gate.')}</div>`);
+    panel(`<div class="focus-title">${escapeHtml(g.mantra)}</div>`);
 }
 function foodAlternatives(g){const gov=g.c.body.governor;const base=[`Protein + minerals + clean hydration`,`Warm simple meal with easy digestion`,`Greek-style plate: protein, olive oil, greens, rice or potatoes`,`Soup or stew when the nervous system needs grounding`];if(g.c.body.veto||gov==='RED'||gov==='ORANGE')return [`Warm simple food only`,`Soup/stew + electrolytes`,`Avoid experiments, heavy fats, alcohol, and stimulant stacking`,`Keep portions moderate and digestion easy`];if(gov==='YELLOW'||gov==='WATCH')return [`Protein + cooked vegetables`,`Rice/potato base + olive oil + salt/minerals`,`Avoid extreme spice, heavy sugar, and late caffeine`,`Hydrate before adding supplements`];return base}
 function openFoodCard(){const d=day(),g=deriveGuidanceV23(d);document.getElementById('suppTitle').textContent='Food Advice · Alternatives';document.getElementById('suppContent').innerHTML=`<div class="row-note">${escapeHtml(g.food)} · body gate ${escapeHtml(g.c.body.governor)}</div><div class="supp-modal-grid" style="margin-top:10px"><div class="supp-modal-box"><b>Best choices today</b>${listHtml(foodAlternatives(g))}</div><div class="supp-modal-box"><b>Keep away from</b>${listHtml(g.c.body.veto?['new supplement experiments','heavy detox foods','large late meals','alcohol / overstimulation']:['excess sugar','chaotic snacking','heavy late food','food that fights the current body state'])}</div><div class="supp-modal-box"><b>Simple formula</b>${listHtml(['Protein anchor','Mineral/hydration support','One digestion-friendly carb if needed','One calming element: soup, tea, or warm meal'])}</div><div class="supp-modal-box"><b>Plan B</b>${listHtml(['If tired: soup + protein','If rushed: yogurt/eggs/tuna + fruit','If social: choose the cleanest warm option','If skin/liver feels reactive: simplify'])}</div></div><div class="supp-modal-note">Food advice stays inside ACE Mind. ACE Gravitic remains for breath, movement, acupressure, chakra, and frequency routing.</div>`;openModal('suppModal')}
@@ -7849,16 +7843,10 @@ function aceMindStableSynthesisLine(d,g){
 }
 function aceMindStableConvergenceHtml(d,g){
   const focus=aceMindStableCleanFocusText(g&&g.c&&g.c.focus);
-  const summary=String((g&&g.c&&g.c.summary)||'').replace(/\bTHEON\b/gi,'engine').replace(/\s+/g,' ').trim();
+  const body=(g&&g.c&&g.c.body&&g.c.body.governor)||'';
+  const intensity=String((g&&g.c&&g.c.intensity)||'').replace(/THEON/gi,'').trim();
   return `<div class="focus-title">${aceMindStableSafeText(focus)}</div>`+
-    (summary?`<div class="small" style="margin-top:6px">${aceMindStableSafeText(summary)}</div>`:'')+
-    `<div class="conv-grid">`+
-      `<div class="conv-card"><b>Mayan</b><div>${aceMindStableSafeText(aceMindStableMayanLine(d))}</div></div>`+
-      `<div class="conv-card"><b>BaZi</b><div>${aceMindStableSafeText(aceMindStableBaziLine(d))}</div></div>`+
-      `<div class="conv-card"><b>Numerology</b><div>${aceMindStableSafeText(aceMindStableNumerologyLine(d,g))}</div></div>`+
-      `<div class="conv-card"><b>Astrology</b><div>${aceMindStableSafeText(aceMindStableAstrologyLine(d))}</div></div>`+
-    `</div>`+
-    `<div class="conv-synthesis">${aceMindStableSafeText(aceMindStableSynthesisLine(d,g))}</div>`;
+    (body?`<div class="tiny" style="margin-top:5px;color:var(--muted)">Body ${aceMindStableSafeText(body)}${intensity?' · '+aceMindStableSafeText(intensity):''}</div>`:'');
 }
 function aceMindStableBodyHtml(d,g){
   const c=(g&&g.c)||{};

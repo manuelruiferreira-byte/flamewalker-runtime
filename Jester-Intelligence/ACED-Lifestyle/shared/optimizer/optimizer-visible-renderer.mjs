@@ -61,8 +61,9 @@ export function renderVisibleSupplements(record,registry,root=document.getElemen
   const notTodayHtml=model.notToday.length
     ? `<details class="supp-group"><summary class="supp-head" style="cursor:pointer">Not today · ${model.notToday.length}</summary>${model.notToday.map(notTodayRow).join('')}</details>`
     : '';
-  root.innerHTML=`<div class="card"><div class="focus-title">Individual Supplement Optimizer</div>`+
-    `<div class="tiny" style="margin-top:5px;color:var(--cyan)">Authority: individual optimizer · ${esc(model.date)}</div></div>`+
+  const profileOk=!!(typeof window!=='undefined'&&(window.ACE_MIND_CANONICAL_HANDOFF_V1?.ok||window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.ok));
+  root.innerHTML=`<div class="card"><div class="focus-title">Supplements</div>`+
+    `<div class="tiny" style="margin-top:5px;color:var(--muted)">Card optimizer · ${(model.selected||[]).length} active · ${profileOk?'Profile loaded':'Profile fallback'}</div></div>`+
     (selectedHtml||`<div class="supp-group"><div class="small">No supplement cleared every gate today.</div></div>`)+notTodayHtml;
   root.dataset.optimizerAuthority='individual';
   root.dataset.optimizerDate=model.date;
