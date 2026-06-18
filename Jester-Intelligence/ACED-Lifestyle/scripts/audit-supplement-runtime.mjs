@@ -1,14 +1,7 @@
 import fs from 'node:fs';
 
 const file='Jester-Intelligence/ACED-Lifestyle/ace-mind.html';
-let source=fs.readFileSync(file,'utf8');
-source=source
-  .replaceAll('Loading supplement optimizer…','Preparing canonical card optimizer…')
-  .replaceAll('Loading supplement optimizer...','Preparing canonical card optimizer...')
-  .replace(/title="\$\{iso\} · Block \$\{block\}"/g,'title="${iso} · card optimizer"')
-  .replace(/<span class="year-block-label">B\$\{escapeHtml\(block\)\}<\/span>/g,'')
-  .replace(/\s*document\.querySelectorAll\('\.year-block-label,\.alt-block-card'\)\.forEach\(element=>element\.remove\(\)\);/g,'');
-fs.writeFileSync(file,source);
+const source=fs.readFileSync(file,'utf8');
 const lines=source.split(/\r?\n/);
 const terms=[
   'fwFreezeBlock','aceFreezeSelectedBlock','persistAssignment','blockHistory',
