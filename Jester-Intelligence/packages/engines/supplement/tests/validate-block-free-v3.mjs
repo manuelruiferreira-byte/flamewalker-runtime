@@ -68,10 +68,12 @@ assert(renderer.includes('legacy-supplement-firewall.mjs'),'renderer loads legac
 assert(renderer.includes('CANONICAL 42-CARD')||renderer.includes('canonical 42-card'),'renderer declares card authority');
 assert(!/Block \$\{model\.|supplement block/i.test(renderer),'renderer emits no block label');
 assert(renderer.includes('.year-block-label,.alt-block-card')&&renderer.includes('.remove()'),'stale block UI is removed');
-assert(firewall.includes("setGlobalFunction('renderClubs'"),'legacy renderClubs is replaced');
-assert(firewall.includes("'aceFreezeSelectedBlock','fwFreezeBlock','persistAssignment'"),'legacy block writers are disabled');
-assert(firewall.includes('state.blockHistory={}'),'legacy block history is scrubbed');
-assert(firewall.includes("delete record.block")&&firewall.includes("delete record.blockAssignment"),'exportable block state is scrubbed');
+assert(firewall.includes('window.renderClubs=canonicalSupplementRenderBoundary'),'legacy visible renderClubs is replaced');
+assert(firewall.includes('legacyInternalContractsPreserved:true'),'legacy internal return contracts remain available during shell boot');
+assert(firewall.includes('stateMutation:false'),'firewall declares a non-mutating state boundary');
+assert(!firewall.includes("'aceFreezeSelectedBlock','fwFreezeBlock','persistAssignment'"),'firewall does not replace stateful legacy functions with null returns');
+assert(!firewall.includes('state.blockHistory={}'),'firewall does not erase block or supplement history');
+assert(!firewall.includes('delete record.block'),'firewall does not destructively rewrite exportable supplement records');
 assert(!profile.includes('supplementBlocksV41'),'profile bridge contains no supplement blocks');
 assert(!profile.includes('installAceMindSupplementsV41'),'profile bridge cannot install supplement blocks');
 assert(profile.includes('blocks:false'),'profile bridge declares blocks disabled');
