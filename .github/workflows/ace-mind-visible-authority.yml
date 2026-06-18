@@ -30,7 +30,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ace-mind-runtime-audit
-          path: artifacts/ace-mind-supplement-runtime-audit.json
+          path: |
+            artifacts/ace-mind-supplement-runtime-audit.json
+            Jester-Intelligence/ACED-Lifestyle/ace-mind.html
 
       - name: Validate source syntax
         shell: bash
