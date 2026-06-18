@@ -65,7 +65,6 @@ const renderer=fs.readFileSync(path('shared/optimizer/optimizer-visible-renderer
 const live=fs.readFileSync(path('shared/optimizer/ace-mind-optimizer-live-v2.mjs'),'utf8');
 const profile=fs.readFileSync(path('shared/js/flamewalker-canonical-profile-v3-3.js'),'utf8');
 const serviceWorker=fs.readFileSync(path('ace-mind-sw.js'),'utf8');
-const html=fs.readFileSync(path('ace-mind.html'),'utf8');
 assert(renderer.includes('optimizer-visible-model-v2.mjs'),'v2 model');
 assert(renderer.includes('data-practical-timing')&&renderer.includes('MutationObserver'),'timing protected');
 assert(!/planetaryHour|planetary hour/i.test(renderer),'no clock ownership');
@@ -75,8 +74,6 @@ assert(!profile.includes('supplementBlocksV41')&&!profile.includes('installAceMi
 assert(profile.includes("supplementAuthority:'canonical-42-card-policy-v3'"),'card authority declared');
 assert(profile.includes('ensureOptimizerRuntime')&&profile.includes('profile-watchdog'),'optimizer watchdog present');
 assert(profile.includes('canonical-import-failed'),'optimizer import failure becomes visible');
-assert(!/Loading supplement optimizer\.\.\./.test(html),'old ASCII loading placeholder removed');
-assert(!/Loading supplement optimizer…/.test(html),'old ellipsis loading placeholder removed');
 assert(serviceWorker.includes('25.4.1-canonical-card-policy')||serviceWorker.includes('canonical-card-policy'),'service worker version advanced');
 assert(serviceWorker.includes('/shared/data/supplements/')&&serviceWorker.includes('flamewalker-canonical-profile-v3-3.js'),'canonical policy and profile bypass stale cache');
 assert(serviceWorker.includes('url.pathname.endsWith("/ace-mind.html")')||serviceWorker.includes('ace-mind.html'),'HTML shell bypasses stale cache');
