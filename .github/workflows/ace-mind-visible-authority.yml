@@ -1,4 +1,4 @@
-name: Validate ACE Mind Block-Free Supplement Authority
+name: Validate ACE Mind Canonical Card Authority
 
 on:
   pull_request:
@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'Jester-Intelligence/ACED-Lifestyle/ace-mind.html'
+      - 'Jester-Intelligence/ACED-Lifestyle/shared/js/flamewalker-canonical-profile-v3-3.js'
       - 'Jester-Intelligence/ACED-Lifestyle/shared/optimizer/**'
       - 'Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/**'
       - 'Jester-Intelligence/ACED-Lifestyle/scripts/**supplement**'
@@ -16,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  validate-block-free-authority:
+  validate-canonical-card-authority:
     runs-on: ubuntu-latest
     steps:
       - name: Check out pull request merge ref
@@ -25,65 +26,56 @@ jobs:
       - name: Validate source syntax
         shell: bash
         run: |
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/js/flamewalker-canonical-profile-v3-3.js
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/canonical-policy-v3.mjs
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/legacy-supplement-firewall.mjs
           node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/live-context-adapter.mjs
-          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-model.mjs
+          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/shadow-context-adapter.mjs
           node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-model-v2.mjs
           node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/optimizer-visible-renderer.mjs
           node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-live-v2.mjs
-          node --check Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-shadow.mjs
-          node --check Jester-Intelligence/packages/engines/supplement/functional-overlap-engine.mjs
-          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-block-free.mjs
-          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-live-context-adapter.mjs
-          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority.mjs
-          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority-v2.mjs
-
-      - name: Validate live individual optimizer import
-        run: node -e "import('./Jester-Intelligence/ACED-Lifestyle/shared/optimizer/ace-mind-optimizer-live-v2.mjs').then(()=>console.log('block-free live authority import ok'))"
+          node --check Jester-Intelligence/packages/engines/supplement/esoteric-fit-engine.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/frequency-persistence-engine.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/canonical-policy-optimizer.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-canonical-policy-v3-root.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-canonical-rotation-v3.mjs
+          node --check Jester-Intelligence/packages/engines/supplement/tests/validate-esoteric-authority-v3.mjs
 
       - name: Validate canonical registry v1 baseline
         run: node Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
 
-      - name: Validate canonical registry v2 production
+      - name: Validate canonical registry v2 source
         run: node Jester-Intelligence/ACED-Lifestyle/scripts/validate-supplement-registry-v2.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
 
-      - name: Validate upstream layers v1 baseline
+      - name: Validate complete 42-card policy
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-canonical-policy-v3-root.mjs
+
+      - name: Validate numerology-first esoteric authority
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-esoteric-authority-v3.mjs
+
+      - name: Validate 28-day canonical rotation
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-canonical-rotation-v3.mjs
+
+      - name: Validate original layer contracts
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-layer-engines.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
 
-      - name: Validate focused optimizer v1 baseline
+      - name: Validate focused optimizer baseline
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-individual-optimizer.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
 
-      - name: Validate focused optimizer v2 production
-        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-individual-optimizer.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
-
-      - name: Run 28-day and 90-day audit
-        run: node Jester-Intelligence/packages/engines/supplement/tests/audit-optimizer-28-90.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v1.json
-
-      - name: Validate canonical card schema v2
-        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-card-schema-v2.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
-
-      - name: Enforce permanent block-free architecture
-        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-block-free.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
-
-      - name: Validate esoteric convergence labels v2
-        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-esoteric-convergence.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
-
-      - name: Validate functional overlap engine v2
+      - name: Validate functional overlap
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-functional-overlap.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
 
-      - name: Validate daily variation simulation v2
-        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-simulation-variation.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
-
-      - name: Validate weekly-limited herb governance v2
-        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-weekly-limited.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
-
-      - name: Validate live day body and untick adapter
+      - name: Validate live context and untick history
         run: node Jester-Intelligence/packages/engines/supplement/tests/validate-live-context-adapter.mjs
 
-      - name: Validate visible supplement authority v1
-        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority.mjs
+      - name: Validate visible authority contracts
+        shell: bash
+        run: |
+          node Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority.mjs
+          node Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority-v2.mjs
 
-      - name: Validate visible supplement authority v2
-        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-visible-supplement-authority-v2.mjs
+      - name: Enforce block-free visible path
+        run: node Jester-Intelligence/packages/engines/supplement/tests/validate-block-free.mjs Jester-Intelligence/ACED-Lifestyle/shared/data/supplements/supplement-registry.v2.json
 
       - name: Prohibit legacy visible status words
         shell: bash

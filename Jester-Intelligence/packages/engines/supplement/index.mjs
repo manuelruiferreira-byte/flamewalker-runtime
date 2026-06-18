@@ -7,5 +7,6 @@ export * from './optimizer-config.mjs';
 export * from './atom-builder.mjs';
 export * from './slot-planner.mjs';
 export * from './sha256.mjs';
-export * from './individual-supplement-optimizer.mjs';
+export { stackQuality, admissible } from './individual-supplement-optimizer.mjs';
+export { optimize } from './canonical-policy-optimizer.mjs';
 export * from './functional-overlap-engine.mjs';
