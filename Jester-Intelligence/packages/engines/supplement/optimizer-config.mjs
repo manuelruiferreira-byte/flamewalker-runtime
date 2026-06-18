@@ -1,8 +1,8 @@
 export const OPTIMIZER_CONFIG = Object.freeze({
   WEIGHTS: Object.freeze({
-    W_ESO: 0.30,
-    W_OP: 0.25,
-    W_FREQ: 0.20,
+    W_ESO: 0.45,
+    W_OP: 0.20,
+    W_FREQ: 0.10,
     W_BAL: 0.15,
     W_CONF: 0.10
   }),
@@ -22,6 +22,9 @@ export const OPTIMIZER_CONFIG = Object.freeze({
   DEADLINE_RESERVATION_MIN_RANK: 2,
   CONDITIONAL_NEED_MIN_OPERATIONAL: 0.65,
   CONDITIONAL_NEED_MIN_ESOTERIC: 0.64,
+  ROTATION_OVERRIDE_NUMEROLOGY: 0.82,
+  ROTATION_OVERRIDE_BAZI: 0.64,
+  ROTATION_OVERRIDE_OPERATIONAL: 0.82,
   SLOT_CAPS: Object.freeze({ morning: 4, afternoon: 4, night: 3 }),
   SLOT_ORDER: Object.freeze(['morning', 'afternoon', 'night']),
   CLASS_CAPS: Object.freeze({
@@ -29,10 +32,12 @@ export const OPTIMIZER_CONFIG = Object.freeze({
     brain_activation: 2,
     endocrine_caution: 1,
     immune_mushroom: 2,
-    stimulant: 1
+    stimulant: 1,
+    magnesium: 1
   }),
   CLASS_ALIASES: Object.freeze({
-    immune_mushroom: Object.freeze(['immune_mushroom', 'mushroom'])
+    immune_mushroom: Object.freeze(['immune_mushroom', 'mushroom']),
+    magnesium: Object.freeze(['magnesium','mineral_magnesium'])
   }),
   QUANTIZE: 1e-4,
   CONFIDENCE: Object.freeze({
