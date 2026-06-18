@@ -10,11 +10,86 @@
   if(window.FlamewalkerCanonicalProfileV33)return;
 
   var PROFILE_URL='./shared/data/flamewalker-canonical-esoteric-profile-v3-3.json';
+  var BRIDGE_SCRIPT_URL=(document.currentScript&&document.currentScript.src)||location.href;
+  var OPTIMIZER_VERSION='20260618-3';
   var cache=null;
   var pending=null;
   var appliedPromise=null;
+  var optimizerImportPromise=null;
+  var dayMetaObserver=null;
 
   function clone(x){return JSON.parse(JSON.stringify(x));}
+
+  function cleanDayMetaText(value){
+    return String(value||'')
+      .replace(/\s*·\s*Block\s+\d+\s*/ig,' · ')
+      .replace(/\s*·\s*·\s*/g,' · ')
+      .replace(/^\s*·\s*|\s*·\s*$/g,'')
+      .replace(/\s{2,}/g,' ')
+      .trim();
+  }
+
+  function scrubDayMeta(){
+    var el=document.getElementById('dayMeta');
+    if(!el)return false;
+    var clean=cleanDayMetaText(el.textContent);
+    if(clean!==el.textContent)el.textContent=clean;
+    el.dataset.supplementBlockAuthority='disabled';
+    return true;
+  }
+
+  function installDayMetaGuard(){
+    scrubDayMeta();
+    if(dayMetaObserver)dayMetaObserver.disconnect();
+    var el=document.getElementById('dayMeta');
+    if(!el)return;
+    dayMetaObserver=new MutationObserver(function(){scrubDayMeta();});
+    dayMetaObserver.observe(el,{childList:true,characterData:true,subtree:true});
+  }
+
+  function optimizerModuleUrl(){
+    return new URL('../optimizer/ace-mind-optimizer-live-v2.mjs?v='+OPTIMIZER_VERSION,BRIDGE_SCRIPT_URL).href;
+  }
+
+  function showOptimizerImportFailure(error){
+    var chamber=document.getElementById('grid-clubs');
+    if(!chamber)return;
+    var message=String(error&&error.message||error||'Unknown optimizer import failure');
+    chamber.innerHTML='<div data-optimizer-live-v3="held"><div class="card"><div class="focus-title">Supplement optimizer held</div><div class="small" style="margin-top:5px">The canonical optimizer could not start.</div><div class="tiny" style="margin-top:5px;color:var(--orange,#f97316)"></div></div></div>';
+    var detail=chamber.querySelector('.tiny');
+    if(detail)detail.textContent=message;
+    chamber.dataset.optimizerAuthority='canonical-import-failed';
+  }
+
+  function ensureOptimizerRuntime(reason){
+    if(window.AceMindOptimizerLive){
+      return Promise.resolve(window.AceMindOptimizerLive.run?window.AceMindOptimizerLive.run(reason||'profile-ready'):window.AceMindOptimizerLive);
+    }
+    if(optimizerImportPromise)return optimizerImportPromise;
+    window.ACE_MIND_OPTIMIZER_WATCHDOG={status:'importing',reason:reason||'profile-watchdog',url:optimizerModuleUrl(),at:new Date().toISOString()};
+    optimizerImportPromise=import(optimizerModuleUrl()).then(function(){
+      if(!window.AceMindOptimizerLive)throw new Error('Optimizer module loaded without publishing runtime authority');
+      window.ACE_MIND_OPTIMIZER_WATCHDOG={status:'ready',reason:reason||'profile-watchdog',version:window.AceMindOptimizerLive.version||null,at:new Date().toISOString()};
+      return window.AceMindOptimizerLive.run?window.AceMindOptimizerLive.run(reason||'profile-watchdog'):window.AceMindOptimizerLive;
+    }).catch(function(error){
+      window.ACE_MIND_OPTIMIZER_WATCHDOG={status:'failed',reason:reason||'profile-watchdog',error:String(error&&error.message||error),at:new Date().toISOString()};
+      showOptimizerImportFailure(error);
+      optimizerImportPromise=null;
+      throw error;
+    });
+    return optimizerImportPromise;
+  }
+
+  function armOptimizerWatchdog(){
+    installDayMetaGuard();
+    setTimeout(function(){
+      if(window.AceMindOptimizerLive){
+        if(window.AceMindOptimizerLive.run)window.AceMindOptimizerLive.run('profile-watchdog-ready');
+        return;
+      }
+      ensureOptimizerRuntime('profile-watchdog-import').catch(function(){});
+    },1200);
+  }
 
   function load(force){
     if(cache&&!force)return Promise.resolve(clone(cache));
@@ -155,6 +230,7 @@
       if(typeof saveState==='function')saveState();
       installPayloadGovernance(p);
       if(typeof render==='function')render();
+      installDayMetaGuard();
       window.ACE_MIND_CANONICAL_PROFILE_APPLIED={
         ok:true,
         version:p.version,
@@ -164,6 +240,7 @@
         at:new Date().toISOString()
       };
       window.dispatchEvent(new CustomEvent('ace-mind:canonical-profile-applied',{detail:clone(window.ACE_MIND_CANONICAL_PROFILE_APPLIED)}));
+      setTimeout(function(){ensureOptimizerRuntime('canonical-profile-applied').catch(function(){});},0);
       return clone(window.ACE_MIND_CANONICAL_PROFILE_APPLIED);
     }catch(e){
       window.ACE_MIND_CANONICAL_PROFILE_APPLIED={ok:false,version:p.version,error:String(e&&e.message||e),at:new Date().toISOString()};
@@ -231,7 +308,11 @@
   window.FlamewalkerCanonicalProfileV33={
     version:'3.3_UNIVERSAL',url:PROFILE_URL,load:load,aceMindNatal:aceMindNatal,
     summary:profileSummary,applyAceMind:applyAceMind,ensureAceMindApplied:ensureAceMindApplied,
+    ensureOptimizerRuntime:ensureOptimizerRuntime,installDayMetaGuard:installDayMetaGuard,
     applyCluster:applyCluster,applyInvestment:applyInvestment,
     supplementAuthority:'canonical-42-card-policy-v3',blocks:false
   };
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',armOptimizerWatchdog,{once:true});
+  else armOptimizerWatchdog();
 })();

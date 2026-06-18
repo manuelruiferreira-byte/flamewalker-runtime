@@ -1,10 +1,10 @@
-/* ACE Mind Service Worker v25.0.8
+/* ACE Mind Service Worker v25.4.1
    Native runtime authority restored.
    Canonical launch file: ./ace-mind.html
-   Purpose: purge stale ACE Mind caches and keep critical supplement assets fresh.
+   Purpose: purge stale ACE Mind caches and keep canonical supplement assets fresh.
 */
 
-const ACE_MIND_SW_VERSION = "25.0.8-native-authority";
+const ACE_MIND_SW_VERSION = "25.4.1-canonical-card-policy";
 const CACHE_PREFIX = "ace-mind-cache-";
 
 self.addEventListener("install", event => {
@@ -32,9 +32,11 @@ self.addEventListener("fetch", event => {
   if (url.origin !== self.location.origin) return;
 
   const criticalAsset =
+    url.pathname.endsWith("/ace-mind.html") ||
+    url.pathname.endsWith("/shared/js/flamewalker-canonical-profile-v3-3.js") ||
     url.pathname.includes("/shared/optimizer/") ||
-    url.pathname.includes("/packages/engines/supplement/") ||
-    url.pathname.endsWith("/supplement-registry.v1.json");
+    url.pathname.includes("/shared/data/supplements/") ||
+    url.pathname.includes("/packages/engines/supplement/");
 
   if (criticalAsset) {
     event.respondWith(fetch(request, { cache: "no-store" }));
@@ -43,7 +45,7 @@ self.addEventListener("fetch", event => {
 
 self.addEventListener("notificationclick", event => {
   event.notification.close();
-  const targetUrl = "./ace-mind.html?v=2539-native-authority-20260617";
+  const targetUrl = "./ace-mind.html?v=2541-canonical-card-policy-20260618";
 
   event.waitUntil(
     (async () => {
@@ -86,7 +88,7 @@ self.addEventListener("message", event => {
       canonical: "./ace-mind.html",
       runtime: "./ace-mind.html",
       trace_store: "./shared/js/ace-mind-trace-store-v0-1.js",
-      cache_mode: "critical-assets-network-no-store"
+      cache_mode: "canonical-assets-network-no-store"
     });
   }
 });
