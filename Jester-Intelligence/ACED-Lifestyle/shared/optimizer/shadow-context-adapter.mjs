@@ -9,7 +9,7 @@ const AXIS_ALIASES = Object.freeze({
 
 export function normalizeToken(value) {
   return String(value ?? '').trim().toLowerCase().normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
+    .replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\u4e00-\u9fff]+/g,'_').replace(/^_+|_+$/g,'');
 }
 
 export function collectTokens(value, out = new Set(), depth = 0) {
@@ -18,9 +18,9 @@ export function collectTokens(value, out = new Set(), depth = 0) {
     const raw = String(value);
     const full = normalizeToken(raw);
     if (full) out.add(full);
-    for (const part of raw.split(/[^A-Za-z0-9]+/)) {
+    for (const part of raw.split(/[^A-Za-z0-9\u4e00-\u9fff]+/)) {
       const token = normalizeToken(part);
-      if (token && token.length > 1) out.add(token);
+      if (token) out.add(token);
     }
     return out;
   }
@@ -45,13 +45,71 @@ function scalar(base, verified = false) {
   return Math.max(0, Math.min(1, Number(base) + (verified ? 0.06 : 0)));
 }
 
+function digitRoot(value) {
+  let n = Math.abs(Number(value));
+  if (!Number.isFinite(n)) return null;
+  n = Math.trunc(n);
+  while (n > 9 && ![11,22,33].includes(n)) {
+    n = String(n).split('').reduce((sum,digit)=>sum+Number(digit),0);
+  }
+  return n;
+}
+
+function dateNumerology(date) {
+  const digits=String(date??'').replace(/\D/g,'').split('').map(Number);
+  if (digits.length !== 8) return {};
+  const sum=digits.reduce((a,b)=>a+b,0);
+  return { dateSum:sum, dateRoot:digitRoot(sum) };
+}
+
+function numerologyField(day = {}) {
+  const dateNumbers=dateNumerology(day.id);
+  const source={
+    ptrm:day.ptrm,
+    personalDay:day.personalDay,
+    personalDayRaw:day.personalDayRaw,
+    personalIso:day.personalIso,
+    personalNumerology:day.personalNumerology,
+    numerology:day.numerology,
+    dayNumber:day.dayNum,
+    ...dateNumbers
+  };
+  return {
+    scalar: scalar(0.78, Boolean(day.ptrm || day.personalDay || day.numerology)),
+    tags: sortedTokens(source)
+  };
+}
+
+function baziField(day = {}) {
+  const source={
+    bazi:day.bazi,
+    pillar:day.bazi?.pillar,
+    hanzi:day.bazi?.hanzi,
+    signature:day.bazi?.signature,
+    stem:day.bazi?.stem ?? day.bazi?.dayMasterStem,
+    branch:day.bazi?.branch,
+    element:day.bazi?.element ?? day.bazi?.primaryElement,
+    polarity:day.bazi?.polarity
+  };
+  return {
+    scalar: scalar(0.74, Boolean(day.bazi?.pillar || day.bazi?.hanzi || day.bazi?.dayMasterStem)),
+    tags: sortedTokens(source)
+  };
+}
+
 export function buildEsotericDayField(day = {}) {
   const verified = Boolean(day?.verified || day?.astrology?.verified);
   return {
-    astrology:{scalar:scalar(0.66,verified),tags:sortedTokens({astrology:day.astrology,natalTransit:day.natalTransit,focusHint:day.focusHint})},
-    bazi:{scalar:scalar(0.68,false),tags:sortedTokens(day.bazi)},
-    numerology:{scalar:scalar(0.64,false),tags:sortedTokens({ptrm:day.ptrm,personalDay:day.personalDay,personalDayRaw:day.personalDayRaw,personalIso:day.personalIso})},
-    mayan:{scalar:scalar(0.67,false),tags:sortedTokens(day.mayan)}
+    numerology:numerologyField(day),
+    bazi:baziField(day),
+    astrology:{
+      scalar:scalar(0.66,verified),
+      tags:sortedTokens({astrology:day.astrology,natalTransit:day.natalTransit,focusHint:day.focusHint})
+    },
+    mayan:{
+      scalar:scalar(0.64,Boolean(day.mayan)),
+      tags:sortedTokens(day.mayan)
+    }
   };
 }
 
@@ -91,7 +149,7 @@ export function buildDaySignals(day = {}, guidance = {}) {
     const direct = scoreFromLifeRecord(life[key]);
     if (direct != null) out[key] = Math.max(out[key],direct);
   }
-  const text = JSON.stringify({focusHint:day.focusHint,ptrm:day.ptrm,blockReason:day.blockReason,focus:guidance?.c?.focus,summary:guidance?.c?.summary,movement:guidance?.movement,practiceReason:guidance?.practiceReason}).toLowerCase();
+  const text = JSON.stringify({focusHint:day.focusHint,ptrm:day.ptrm,focus:guidance?.c?.focus,summary:guidance?.c?.summary,movement:guidance?.movement,practiceReason:guidance?.practiceReason}).toLowerCase();
   for (const [key,pattern] of Object.entries(DOMAIN_PATTERNS)) if (pattern.test(text)) out[key] = Math.max(out[key],0.76);
   const ranked = guidance?.theonFullStack?.ranked ?? guidance?.theonKernel?.ranked ?? [];
   if (Array.isArray(ranked)) ranked.slice(0,4).forEach((entry,index)=>{
