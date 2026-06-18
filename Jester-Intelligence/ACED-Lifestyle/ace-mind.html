@@ -2789,12 +2789,12 @@ function renderYearMap(){
   for(let i=0;i<first;i++)cells.push('<button class="year-day-cell blank" aria-hidden="true"></button>');
   for(let d=1;d<=total;d++){
     const iso=fwIsoFromYMD(y,month,d);
-    let cls='green', block='?';
+    let cls='green';
     try{const obj=fwEngineDay(iso); cls=fwYearMapStatusFastV2524(obj);}catch(e){cls='orange'}
     const today=iso===brusselsISODate()?' today':'';
     const selected=iso===fwYearMapSelected?' selected':'';
     const eph=fwEphemerisDay(iso)?'<span class="year-dot cyan" title="Ephemeris loaded"></span>':'';
-    cells.push(`<button class="year-day-cell${today}${selected}" onclick="fwPreviewYearDate('${iso}')" title="${iso} · Block ${block}"><span class="year-day-num">${d}</span><span class="year-block-label">B${escapeHtml(block)}</span><span class="year-day-marks"><span class="year-dot ${cls}"></span>${eph}</span></button>`);
+    cells.push(`<button class="year-day-cell${today}${selected}" onclick="fwPreviewYearDate('${iso}')" title="${iso}"><span class="year-day-num">${d}</span><span class="year-day-marks"><span class="year-dot ${cls}"></span>${eph}</span></button>`);
   }
   dg.innerHTML=weekday+cells.join('');
   const sel=fwYearMapSelected||fwIsoFromYMD(y,month,1);
@@ -5370,16 +5370,16 @@ function renderDayRail(){
   const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   document.getElementById('dayName').textContent=`${d.weekday} · ${dy} ${MON[mo-1]}`;
   const reason=d.blockAssignment?.reasonSummary||d.blockReason||'dynamic';
-  document.getElementById('dayMeta').textContent=`${d.id} · Block ${d.block} · ${d.ptrm||''} · ${reason}`;
+  document.getElementById('dayMeta').textContent=`${d.id} · ${d.ptrm||''}`;
   const days=buildRollingDates();
   document.getElementById('dayRail').innerHTML=days.map(x=>`<button class="day-btn ${x.iso===activeDate?'active':''}" onclick="setDay('${x.iso}')" title="${x.visible?'rolling rail':'selected outside rail'}"><b>${x.wd.slice(0,3)}</b><span>${x.iso.slice(5)}</span></button>`).join('');
 }
 function panel(html){return `<div class="card">${html}</div>`}
 function mayanLine(d){const m=d.mayan||{};return `DNA K${m.dna?.kin||'?'} Tone ${m.dna?.tone||'?'} ${m.dna?.archetype||''}; Dreamspell K${m.dreamspell?.kin||'?'} Tone ${m.dreamspell?.tone||'?'} ${m.dreamspell?.archetype||''}; Cosmic K${m.cosmic?.kin||'?'} Tone ${m.cosmic?.tone||'?'} ${m.cosmic?.archetype||''}; Tzolkin Tone ${m.tzolkin?.tone||'?'} ${m.tzolkin?.sign||m.tzolkin?.archetype||''}.`}
 function baziLine(d){const sig=d.bazi?.signature||'';const pillar=d.bazi?.pillar||'';let tone='containment and timing';if(/Water|Rat/i.test(sig))tone='adaptive water moving through structure';if(/Fire|Horse|Snake/i.test(sig))tone='heat, visibility, and controlled output';if(/Metal|Monkey|Rooster/i.test(sig))tone='precision, sorting, and boundary craft';if(/Wood|Tiger|Rabbit/i.test(sig))tone='growth pressure and directional movement';return `${d.bazi?.hanzi||''} ${pillar} · ${sig}. Operational tone: ${tone}.`}
-function numerologyLine(d,g){return `${d.ptrm||'unlisted'} · day ${d.dayNum||'?'} · supplement block ${d.block||'?'} (${g.block?.name||'block'}). Use the number field as pacing, not prophecy.`}
+function numerologyLine(d,g){return `${d.ptrm||'unlisted'} · day ${d.dayNum||'?'} · pacing layer only.`}
 function astrologyLine(d){const a=d.astrology||{};const planets=[a.sun&&`Sun ${a.sun}`,a.moon&&`Moon ${a.moon}`,a.mercury&&`Mercury ${a.mercury}`,a.venus&&`Venus ${a.venus}`,a.mars&&`Mars ${a.mars}`,a.jupiter&&`Jupiter ${a.jupiter}`].filter(Boolean).join(' · ');return `${a.focus||'No focus recorded.'}${planets?` ${planets}.`:''}`}
-function synthesisLine(d,g){const c=g.c;const tk=g.theonKernel?` THEON Kernel: ${g.theonKernel.line}.`:'';return `${c.focus}. ${c.theon}. Intensity ${c.intensity}. Supplement lane ${g.suppMode}.${d.blockReason?' Block rationale: '+d.blockReason+'.':''}${tk} The invariant: one clean signal, body gate first, then action.`}
+function synthesisLine(d,g){const c=g.c;const tk=g.theonKernel?` THEON Kernel: ${g.theonKernel.line}.`:'';return `${c.focus}. ${c.theon}. Intensity ${c.intensity}. Supplement lane ${g.suppMode}.${tk} One clean signal, body gate first.`}
 function convergenceHtml(d,g){return `<div class="conv-grid"><div class="conv-card"><b>Mayan</b><div>${escapeHtml(mayanLine(d))}</div></div><div class="conv-card"><b>BaZi</b><div>${escapeHtml(baziLine(d))}</div></div><div class="conv-card"><b>Numerology</b><div>${escapeHtml(numerologyLine(d,g))}</div></div><div class="conv-card"><b>Astrology</b><div>${escapeHtml(astrologyLine(d))}</div></div></div><div class="conv-synthesis">${escapeHtml(synthesisLine(d,g))}</div>`}
 function renderSpades(d,g){
   const c=g.c;
@@ -7891,7 +7891,7 @@ try{
     const dayName=document.getElementById('dayName');
     const dayMeta=document.getElementById('dayMeta');
     if(dayName)dayName.textContent=`${d.weekday} · ${dy} ${MON[mo-1]}`;
-    if(dayMeta)dayMeta.textContent=`${d.id} · Block ${d.block} · ${d.ptrm||''}`;
+    if(dayMeta)dayMeta.textContent=`${d.id} · ${d.ptrm||''}`;
     const days=buildRollingDates();
     const rail=document.getElementById('dayRail');
     if(rail)rail.innerHTML=days.map(x=>`<button class="day-btn ${x.iso===activeDate?'active':''}" onclick="setDay('${x.iso}')" title="${x.visible?'rolling rail':'selected outside rail'}"><b>${x.wd.slice(0,3)}</b><span>${x.iso.slice(5)}</span></button>`).join('');
