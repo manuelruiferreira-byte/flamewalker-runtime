@@ -9,8 +9,7 @@ function sumVectors(members, key, bodyLayers = {}) {
   const out = {};
   const layerKey = key === 'benefits' ? 'benefitVec' : 'burdenVec';
   for (const member of members) {
-    const vector = bodyLayers?.[member.id]?.[layerKey] ?? member.body?.[key] ?? {};
-    for (const [axis, value] of Object.entries(vector)) {
+    for (const [axis, value] of Object.entries(bodyLayers?.[member.id]?.[layerKey] ?? member.body?.[key] ?? {})) {
       out[axis] = (out[axis] ?? 0) + Number(value ?? 0);
     }
   }
@@ -89,7 +88,7 @@ export function buildAtoms(input, config) {
       };
     });
 
-    const eso = input.layers?.esoteric?.[supplement.id] ?? { scalar: 0, label: 'Discordant' };
+    const eso = input.layers?.esoteric?.[supplement.id] ?? { scalar: 0, label: 'Discordant', components:{} };
     const freq = input.layers?.frequency?.[supplement.id] ?? { urgency: 0, state: 'optional', minGapMet: true };
     const body = input.layers?.body?.[supplement.id] ?? { label: 'conditional' };
     const pairing = input.layers?.pairing?.[supplement.id] ?? { state: 'complete' };
@@ -105,7 +104,15 @@ export function buildAtoms(input, config) {
       classes: stableUnique(members.flatMap(m => m.classes ?? [])),
       benefitVec: sumVectors(members, 'benefits', input.layers?.body),
       burdenVec: sumVectors(members, 'burdens', input.layers?.body),
-      esoteric: { scalar: clamp(eso.scalar ?? 0), label: eso.label ?? 'Discordant' },
+      esoteric: {
+        scalar: clamp(eso.scalar ?? 0),
+        label: eso.label ?? 'Discordant',
+        convergenceLabel: eso.convergenceLabel ?? 'None',
+        authorityOrder: [...(eso.authorityOrder ?? ['numerology','bazi','astrology','mayan'])],
+        primaryScalar: clamp(eso.primaryScalar ?? eso.components?.numerology?.scalar ?? 0),
+        secondaryScalar: clamp(eso.secondaryScalar ?? eso.components?.bazi?.scalar ?? 0),
+        components: { ...(eso.components ?? {}) }
+      },
       operational: normalizedDomainScore(input.daySignals, supplement.domains),
       frequency: { ...freq },
       body: { ...body },
