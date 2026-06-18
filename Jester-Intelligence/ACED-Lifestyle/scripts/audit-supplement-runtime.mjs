@@ -29,3 +29,4 @@ for(const term of terms){
   console.log(`${term}=${hits.length}${first?` lines:${first}`:''}`);
 }
 console.log(`functions=${report.functions.map(item=>`${item.name}@${item.line}`).join(',')}`);
+// Read-only audit. Do not mutate app state or source files.
