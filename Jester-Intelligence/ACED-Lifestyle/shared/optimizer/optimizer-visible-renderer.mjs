@@ -14,22 +14,13 @@ function actionColor(action) {
   return 'var(--muted,#91a3b9)';
 }
 
-function diagnosticsHtml(row) {
-  const d=row.diagnostics ?? {};
-  return `<div class="tiny" style="margin-top:4px;line-height:1.45;color:var(--muted)">`+
-    `Esoteric: ${esc(d.esoteric)} · Body: ${esc(d.body)}<br>`+
-    `Frequency: ${esc(d.frequency)} · Pairing: ${esc(d.pairing)}`+
-    `</div>`;
-}
 
 function selectedRow(row,date) {
   const ticked=typeof window!=='undefined'&&typeof window.isTicked==='function'&&window.isTicked(date,row.name);
   return `<div class="supp-item" data-optimizer-supp="${esc(row.name)}" data-optimizer-reason="${esc(row.reason)}">`+
     `<button type="button" class="check${ticked?' checked':''}" data-optimizer-tick="1" aria-label="Mark ${esc(row.name)} taken"></button>`+
     `<div><div class="supp-name">${esc(row.name)}</div>`+
-    `<div class="supp-note">${esc(row.reason)}</div>`+
-    `<div class="tiny" style="margin-top:3px;font-weight:850;color:${actionColor(row.action)}">${esc(row.action)}</div>`+
-    diagnosticsHtml(row)+`</div>`+
+    `<div class="tiny" style="margin-top:3px;font-weight:850;color:${actionColor(row.action)}">${esc(row.action)}</div></div>`+
     `<div class="supp-side"><span class="fw-timing-badge now">${esc(row.slot.toUpperCase())}</span></div></div>`;
 }
 
@@ -37,9 +28,7 @@ function notTodayRow(row) {
   return `<div class="supp-item dim" data-optimizer-supp="${esc(row.name)}" data-optimizer-reason="${esc(row.reason)}">`+
     `<div class="check" aria-hidden="true"></div>`+
     `<div><div class="supp-name">${esc(row.name)}</div>`+
-    `<div class="supp-note">${esc(row.reason)}</div>`+
-    `<div class="tiny" style="margin-top:3px;font-weight:850;color:${actionColor(row.action)}">${esc(row.action)}</div>`+
-    diagnosticsHtml(row)+`</div>`+
+    `<div class="tiny" style="margin-top:3px;font-weight:850;color:${actionColor(row.action)}">${esc(row.action)}</div></div>`+
     `<div class="supp-side"><span class="fw-timing-badge hold">${esc(String(row.tier).toUpperCase())}</span></div></div>`;
 }
 
@@ -73,7 +62,6 @@ export function renderVisibleSupplements(record,registry,root=document.getElemen
     ? `<details class="supp-group"><summary class="supp-head" style="cursor:pointer">Not today · ${model.notToday.length}</summary>${model.notToday.map(notTodayRow).join('')}</details>`
     : '';
   root.innerHTML=`<div class="card"><div class="focus-title">Individual Supplement Optimizer</div>`+
-    `<div class="small" style="margin-top:5px">Smallest compatible set · one NAD booster maximum · mandatory pairs closed</div>`+
     `<div class="tiny" style="margin-top:5px;color:var(--cyan)">Authority: individual optimizer · ${esc(model.date)}</div></div>`+
     (selectedHtml||`<div class="supp-group"><div class="small">No supplement cleared every gate today.</div></div>`)+notTodayHtml;
   root.dataset.optimizerAuthority='individual';
