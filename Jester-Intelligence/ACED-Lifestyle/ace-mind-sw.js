@@ -1,12 +1,13 @@
-/* ACE Mind Service Worker v25.8.1
+/* ACE Mind Service Worker v25.8.2
    Direct-performance runtime.
-   ace-mind.html now contains the v8 performance cache directly, so this worker
-   no longer rewrites HTML. It only purges old ACE Mind caches and fetches the
+   ace-mind.html contains the canonical performance runtime, so this worker
+   no longer rewrites HTML. It purges old ACE Mind caches and fetches the
    canonical runtime fresh from network.
 */
 
-const ACE_MIND_SW_VERSION = "25.8.1-direct-performance-20260618";
+const ACE_MIND_SW_VERSION = "25.8.2-jester-audit-v2-1-20260620";
 const CACHE_PREFIX = "ace-mind-cache-";
+const ACE_MIND_BUILD = "ace-mind-jester-audit-v2-1-20260620";
 
 self.addEventListener("install", event => {
   self.skipWaiting();
@@ -46,7 +47,7 @@ self.addEventListener("fetch", event => {
 
 self.addEventListener("notificationclick", event => {
   event.notification.close();
-  const targetUrl = "./ace-mind.html?v=2581-direct-performance-20260618";
+  const targetUrl = "./ace-mind.html?v=ace-mind-jester-audit-v2-1-20260620";
 
   event.waitUntil(
     (async () => {
@@ -86,6 +87,7 @@ self.addEventListener("message", event => {
     event.source?.postMessage({
       type: "ACE_MIND_SW_VERSION",
       version: ACE_MIND_SW_VERSION,
+      build: ACE_MIND_BUILD,
       canonical: "./ace-mind.html",
       runtime: "./ace-mind.html",
       trace_store: "./shared/js/ace-mind-trace-store-v0-1.js",
