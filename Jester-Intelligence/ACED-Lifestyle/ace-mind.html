@@ -3878,7 +3878,6 @@ function render(){
   renderDots();
   setChamber(activeChamber,false,true);
   safeHeaderLogo();
-  saveState();
 }
 function buildRollingDates(){
   const today=brusselsISODate();
@@ -8147,6 +8146,8 @@ details.supp-group summary::-webkit-details-marker{display:none}
 (function(){
   'use strict';
   const PATCH_VERSION='ace-supplement-card-repair-v9-canonical-data-1-1-2026-06-20';
+  const SUPPLEMENT_POLICY_VERSION='weekly-esoteric-coverage-v3-canonical-data-1.1';
+  const DAILY_SUPPLEMENT_FREEZE_REASON='daily supplement freeze';
   const WEEKLY_LIMITED_HERBS=['ashwagandha','reishi','gotu_kola','fadogia_agrestis','turkesterone'];
   const WEEKLY_LIMITED_POLICY=Object.freeze({
     maximum_uses_per_rolling_7_days:1,
@@ -8389,6 +8390,50 @@ details.supp-group summary::-webkit-details-marker{display:none}
     try{return JSON.stringify(state&&state.body?state.body:{});}catch(e){return 'body';}
   }
   function aceCacheKey(iso){return String(iso||brusselsISODate()).slice(0,10)+'__'+aceBodyHash();}
+  function aceStableJson(value){
+    if(Array.isArray(value))return '['+value.map(aceStableJson).join(',')+']';
+    if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+aceStableJson(value[k])).join(',')+'}';
+    return JSON.stringify(value);
+  }
+  function aceHashString(value){
+    const s=String(value||'');
+    let h=2166136261;
+    for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}
+    return (h>>>0).toString(36);
+  }
+  function aceSupplementBodySnapshot(iso){
+    const date=String(iso||activeDate||brusselsISODate()).slice(0,10);
+    const states={};
+    AXES.forEach(axis=>{states[axis]=validBodyState(bodyStatus(date,axis));});
+    return {date,states};
+  }
+  function aceSupplementBodyHash(iso){
+    return aceHashString(aceStableJson(aceSupplementBodySnapshot(iso)));
+  }
+  function aceSupplementStateSchemaVersion(){
+    return String(typeof STORAGE_KEY!=='undefined'?STORAGE_KEY:'ace_mind_state_unknown');
+  }
+  function aceDailySupplementFreezeKey(iso,bodyHash){
+    const date=String(iso||activeDate||brusselsISODate()).slice(0,10);
+    return [date,APP_VERSION,SUPPLEMENT_POLICY_VERSION,bodyHash||aceSupplementBodyHash(date)].join('__');
+  }
+  function aceValidSupplementFreeze(date){
+    try{
+      const key=String(date||activeDate||brusselsISODate()).slice(0,10);
+      const rec=state?.suppCardPlanHistory?.[key];
+      const bodyHash=aceSupplementBodyHash(key);
+      if(!rec||rec.reason!==DAILY_SUPPLEMENT_FREEZE_REASON)return null;
+      const selected=Array.isArray(rec.selected)?rec.selected:(Array.isArray(rec.selectedIds)?rec.selectedIds:[]);
+      if(!selected.length||selected.some(id=>!BY_ID[id]))return null;
+      if(rec.date!==key)return null;
+      if(rec.bodyHash!==bodyHash)return null;
+      if(rec.appVersion!==APP_VERSION)return null;
+      if(rec.policyVersion!==SUPPLEMENT_POLICY_VERSION)return null;
+      if(rec.stateSchemaVersion!==aceSupplementStateSchemaVersion())return null;
+      if(rec.freezeKey!==aceDailySupplementFreezeKey(key,bodyHash))return null;
+      return rec;
+    }catch(e){return null;}
+  }
   function aceGetDayPacket(iso){
     const key=aceCacheKey(iso);
     if(ACE_DAY_PACKET_CACHE[key])return ACE_DAY_PACKET_CACHE[key];
@@ -8632,7 +8677,7 @@ details.supp-group summary::-webkit-details-marker{display:none}
       }
     }
 
-    const result={weekStart,dates,byDate,scoredByDate,counts,overflow,policy:'weekly-esoteric-coverage-v3-canonical-data-1.1',nad_days:NAD_IDS.reduce((s,id)=>s+(counts[id]||0),0),daily_cap:WEEKLY_DAILY_CAP};
+    const result={weekStart,dates,byDate,scoredByDate,counts,overflow,policy:SUPPLEMENT_POLICY_VERSION,nad_days:NAD_IDS.reduce((s,id)=>s+(counts[id]||0),0),daily_cap:WEEKLY_DAILY_CAP};
     WEEKLY_PLAN_CACHE[cacheKey]=result;
     return result;
   }
@@ -8656,7 +8701,27 @@ details.supp-group summary::-webkit-details-marker{display:none}
     for(const o of plan.overflow||[]){
       if(o.iso===d.id&&!selectedIds.has(o.item.card.id))held.unshift(o.item);
     }
-    return {selected,held,scored,weeklyPlan:plan,weeklyPolicy:'weekly-esoteric-coverage-v3-canonical-data-1.1'};
+    return {selected,held,scored,weeklyPlan:plan,weeklyPolicy:SUPPLEMENT_POLICY_VERSION};
+  }
+
+  function buildFrozenSupplementModel(d,g,freeze){
+    const date=String(d?.id||activeDate||brusselsISODate()).slice(0,10);
+    const frozenIds=(Array.isArray(freeze?.selected)?freeze.selected:freeze?.selectedIds||[]).filter(id=>BY_ID[id]);
+    const scored=(aceScoredForDate(date)||[]).slice().sort((a,b)=>b.score-a.score);
+    const byId=Object.fromEntries(scored.map(item=>[item.card.id,item]));
+    const selected=frozenIds.map(id=>byId[id]||scoreCard(BY_ID[id],d,g));
+    const selectedIds=new Set(frozenIds);
+    const held=[];
+    for(const item of scored){
+      if(selectedIds.has(item.card.id))continue;
+      const copy=clonePlanItem(item);
+      const conflict=conflicts(item.card,selected);
+      if(conflict)copy.hold=conflict;
+      else if(item.body&&item.body.status==='LOCKED')copy.hold=item.body.note||'Body veto';
+      else copy.hold='Daily freeze preserved today\'s selected card order';
+      held.push(copy);
+    }
+    return {selected,held,scored,weeklyPlan:null,weeklyPolicy:SUPPLEMENT_POLICY_VERSION,freeze,freezeAuthority:DAILY_SUPPLEMENT_FREEZE_REASON};
   }
 
   function slotRank(card){const w=(card.windows||['Flexible'])[0];return w==='Morning'?1:w==='Afternoon'?2:w==='Night'?3:4;}
@@ -8694,13 +8759,27 @@ details.supp-group summary::-webkit-details-marker{display:none}
       state.suppCardPlanHistory=state.suppCardPlanHistory||{};
       const key=String(date||activeDate||brusselsISODate()).slice(0,10);
       const selected=(model.selected||[]).map(x=>x.card.id);
+      const selectedNames=(model.selected||[]).map(x=>x.card.name);
+      const bodyHash=aceSupplementBodyHash(key);
+      const freezeKey=aceDailySupplementFreezeKey(key,bodyHash);
       const existing=state.suppCardPlanHistory[key];
-      if(existing&&Array.isArray(existing.selected)&&existing.selected.join('|')===selected.join('|'))return existing;
-      const rec={date:key,authority:'weekly-esoteric-coverage-v3-canonical-data-1.1',selected,held_count:(model.held||[]).length,at:new Date().toISOString(),patch:PATCH_VERSION};
+      if(existing&&existing.reason===DAILY_SUPPLEMENT_FREEZE_REASON&&existing.freezeKey===freezeKey&&Array.isArray(existing.selected)&&existing.selected.join('|')===selected.join('|'))return existing;
+      const rec={date:key,authority:SUPPLEMENT_POLICY_VERSION,selected,selectedIds:selected.slice(),selectedNames,bodyHash,appVersion:APP_VERSION,policyVersion:SUPPLEMENT_POLICY_VERSION,stateSchemaVersion:aceSupplementStateSchemaVersion(),freezeKey,held_count:(model.held||[]).length,createdAt:new Date().toISOString(),reason:DAILY_SUPPLEMENT_FREEZE_REASON,patch:PATCH_VERSION};
       state.suppCardPlanHistory[key]=rec;
+      try{saveState();}catch(e){}
       return rec;
     }catch(e){return null;}
   }
+  window.aceRecalculateDailySupplementFreeze=function(date){
+    try{
+      const key=String(date||activeDate||brusselsISODate()).slice(0,10);
+      if(state&&state.suppCardPlanHistory)delete state.suppCardPlanHistory[key];
+      try{saveState();}catch(e){}
+      const pkt=aceGetDayPacket(key);
+      renderClubs(pkt.d,pkt.g);
+      return state?.suppCardPlanHistory?.[key]||null;
+    }catch(e){return null;}
+  };
   window.aceRenderSuppAlternatives=function(details,date){
     try{
       if(!details||!details.open)return;
@@ -8713,13 +8792,20 @@ details.supp-group summary::-webkit-details-marker{display:none}
       try{if(typeof fwUpdateTimingBadges==='function')fwUpdateTimingBadges();}catch(e){}
     }catch(e){try{details.querySelector('[data-alt-list]').innerHTML='<div class="tiny">Alternatives unavailable: '+html(e.message||e)+'</div>';}catch(_){} }
   };
-  window.aceBuildSupplementCardModel=buildSupplementModel;
+  window.aceBuildSupplementCardModel=function(d,g){
+    const date=String(d?.id||activeDate||brusselsISODate()).slice(0,10);
+    const freeze=aceValidSupplementFreeze(date);
+    return freeze?buildFrozenSupplementModel(d,g,freeze):buildSupplementModel(d,g);
+  };
   renderClubs=function(d,g){
     const root=document.getElementById('grid-clubs'); if(!root)return;
-    const model=buildSupplementModel(d,g);
-    freezeSupplementCardPlan(d.id,model);
-    window.ACE_MIND_SUPPLEMENT_MODEL={date:d.id,patch:PATCH_VERSION,selected:model.selected.map(x=>x.card.id),weekly_limited_herbs:WEEKLY_LIMITED_HERBS,weekly_limited_policy:WEEKLY_LIMITED_POLICY,nad_days:WEEKLY_NAD_DAYS,daily_cap:WEEKLY_DAILY_CAP,repeatable_support_ids:REPEATABLE_SUPPORT_IDS};
+    try{if(d&&d.id===brusselsISODate())console.info('ACE Mind life domains before supplement render',d.id,topDomains(g));}catch(e){}
+    const freeze=aceValidSupplementFreeze(d.id);
+    const model=freeze?buildFrozenSupplementModel(d,g,freeze):buildSupplementModel(d,g);
+    const activeFreeze=freeze||freezeSupplementCardPlan(d.id,model);
+    window.ACE_MIND_SUPPLEMENT_MODEL={date:d.id,patch:PATCH_VERSION,selected:model.selected.map(x=>x.card.id),freeze_key:activeFreeze&&activeFreeze.freezeKey||null,freeze_reason:activeFreeze&&activeFreeze.reason||null,weekly_limited_herbs:WEEKLY_LIMITED_HERBS,weekly_limited_policy:WEEKLY_LIMITED_POLICY,nad_days:WEEKLY_NAD_DAYS,daily_cap:WEEKLY_DAILY_CAP,repeatable_support_ids:REPEATABLE_SUPPORT_IDS};
     root.innerHTML=supplementSummary(d,g,model)+renderGroups(model.selected,d.id,true)+`<details class="supp-group" ontoggle="this.open&&window.aceRenderSuppAlternatives&&window.aceRenderSuppAlternatives(this,'${html(d.id)}')"><summary class="supp-head">Not today / alternatives · ${model.held.length}</summary><div data-alt-list="1"><div class="tiny" style="padding:10px 4px;color:var(--muted)">Open to render alternatives only when needed.</div></div></details>`;
+    try{if(d&&d.id===brusselsISODate())console.info('ACE Mind life domains after supplement render',d.id,topDomains(g));}catch(e){}
     try{if(typeof fwUpdateTimingBadges==='function')fwUpdateTimingBadges();}catch(e){}
   };
   window.aceRenderActiveDateFast=function(){
@@ -8790,10 +8876,10 @@ details.supp-group summary::-webkit-details-marker{display:none}
     state.suppLog=state.suppLog||{};
     const prev=state.suppLog[date]&&typeof state.suppLog[date]==='object'?state.suppLog[date]:{};
     const events=Array.isArray(prev.events)?prev.events.slice(-80).map(e=>{const c=Object.assign({},e);delete c.block;delete c.blockName;delete c.blockAssignment;return c;}):[];
-    const event={name,ticked,at:new Date().toISOString(),policy:'weekly-esoteric-coverage-v3-canonical-data-1.1'};
+    const event={name,ticked,at:new Date().toISOString(),policy:SUPPLEMENT_POLICY_VERSION};
     events.push(event);
     const taken=Object.keys(state.supp).filter(x=>x.startsWith(date+'__')&&state.supp[x]).map(x=>x.slice(date.length+2));
-    state.suppLog[date]={taken,events,lastEvent:event,policy:'weekly-esoteric-coverage-v3-canonical-data-1.1',at:event.at};
+    state.suppLog[date]={taken,events,lastEvent:event,policy:SUPPLEMENT_POLICY_VERSION,at:event.at};
     saveState();
     try{
       const pkt=aceGetDayPacket(date);
@@ -8824,7 +8910,7 @@ details.supp-group summary::-webkit-details-marker{display:none}
   try{
     state.blockHistory={};
     if(state.suppLog)for(const rec of Object.values(state.suppLog)){if(rec&&typeof rec==='object'){delete rec.block;delete rec.blockName;delete rec.blockAssignment;delete rec.reason;(rec.events||[]).forEach(e=>{delete e.block;delete e.blockName;delete e.blockAssignment;});}}
-    saveState();
+    // No save-on-view: daily supplement freezes and user actions persist through their own explicit writes.
   }catch(e){}
   window.WEEKLY_LIMITED_HERBS=WEEKLY_LIMITED_HERBS.slice();
   window.ACE_SUPPLEMENT_POLICY_V4={patch:PATCH_VERSION,performance:'day-packet-cache+lazy-alternatives+lazy-year-map',weekly_limited_herbs:WEEKLY_LIMITED_HERBS.slice(),weekly_limited_policy:WEEKLY_LIMITED_POLICY,nad_days:WEEKLY_NAD_DAYS,daily_cap:WEEKLY_DAILY_CAP,repeatable_support_ids:REPEATABLE_SUPPORT_IDS,weekly_esoteric_quotas:WEEKLY_ESOTERIC_QUOTAS,cards:CARDS.length};
