@@ -1,0 +1,30 @@
+name: ACE Mind Supplement Runtime Audit
+
+on:
+  push:
+    branches:
+      - ace-mind-runtime-repair-20260618
+    paths:
+      - 'Jester-Intelligence/ACED-Lifestyle/ace-mind.html'
+      - 'Jester-Intelligence/ACED-Lifestyle/scripts/audit-supplement-runtime.mjs'
+      - '.github/workflows/ace-mind-supplement-runtime-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ace-mind-runtime-repair-20260618
+          show-progress: false
+      - name: Audit supplement runtime
+        run: node Jester-Intelligence/ACED-Lifestyle/scripts/audit-supplement-runtime.mjs
+      - name: Upload audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: ace-mind-supplement-runtime-audit
+          path: artifacts/ace-mind-supplement-runtime-audit.json
