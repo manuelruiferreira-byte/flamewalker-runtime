@@ -3,7 +3,7 @@
   "name": "ACE Cluster",
   "short_name": "Cluster",
   "description": "ACE Cluster orchestration chamber for agents, council, suite command, savings, clustering, and cross-app routing.",
-  "start_url": "./?v=cluster-purpose-any",
+  "start_url": "./?v=cluster-forecast-v1-20260627",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
