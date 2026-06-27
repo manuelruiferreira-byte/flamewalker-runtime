@@ -168,6 +168,26 @@ tr:hover{background:rgba(214,168,79,.035)}
 .fetch-status.warn{color:#fde68a;background:rgba(245,158,11,.07);border-left-color:#f59e0b}
 .fetch-status.error{color:#fca5a5;background:rgba(220,38,38,.07);border-left-color:#dc2626}
 .fetch-status.ok{color:#86efac;background:rgba(34,197,94,.07);border-left-color:#22c55e}
+.forecast-board{display:grid;gap:12px}
+.forecast-section{border:1px solid rgba(217,166,74,.22);border-radius:18px;background:linear-gradient(145deg,rgba(3,10,24,.76),rgba(2,6,14,.68));padding:12px;overflow:hidden}
+.forecast-section-title{display:block!important;color:var(--gold2);font-weight:900;font-size:.86rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.forecast-lede{display:block!important;color:#dbeafe;font-size:.8rem;line-height:1.35;margin:0 0 8px}
+.forecast-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.forecast-row{display:grid;grid-template-columns:58px 1fr auto;gap:8px;align-items:center;border-top:1px solid rgba(255,255,255,.06);padding:8px 0}
+.forecast-row:first-child{border-top:0}
+.forecast-sym{color:var(--gold2);font-weight:900;letter-spacing:.04em}
+.forecast-copy{color:#dbeafe;font-size:.78rem;line-height:1.32}
+.forecast-meta{color:#9fb4ce;font-family:ui-monospace,monospace;font-size:.68rem;line-height:1.3}
+.forecast-score{font-family:ui-monospace,monospace;font-size:.88rem;color:var(--gold);text-align:right}
+.forecast-chip{display:inline-block;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:3px 7px;margin:2px 3px 2px 0;font-size:.66rem;font-weight:900;color:#dbeafe;background:rgba(255,255,255,.04);text-transform:uppercase}
+.forecast-chip.hot{color:#fff0ad;border-color:rgba(217,166,74,.58);background:rgba(217,166,74,.12)}
+.forecast-chip.good{color:#bbf7d0;border-color:rgba(34,197,94,.45);background:rgba(34,197,94,.09)}
+.forecast-chip.warn{color:#fed7aa;border-color:rgba(249,115,22,.48);background:rgba(249,115,22,.10)}
+.forecast-chip.bad{color:#fecaca;border-color:rgba(248,113,113,.52);background:rgba(220,38,38,.12)}
+.forecast-field-label{display:block!important;color:#a5b4fc;text-transform:uppercase;letter-spacing:.08em;font-size:.68rem;font-weight:900;margin:8px 0 4px}
+.forecast-input,.forecast-textarea{width:100%;background:rgba(3,5,11,.86);border:1px solid rgba(214,168,79,.18);color:var(--text);border-radius:10px;padding:9px;font-size:.86rem}
+.forecast-textarea{min-height:86px;font-family:ui-monospace,monospace;line-height:1.35}
+@media(max-width:620px){.forecast-grid{grid-template-columns:1fr}.forecast-row{grid-template-columns:50px 1fr auto}}
 .handoff-gate{position:fixed;inset:0;z-index:260;display:none;place-items:center;background:#000;overflow:hidden}
 .handoff-gate.open{display:grid}
 .handoff-card{width:min(82vw,420px);min-height:260px;border:1px solid rgba(214,168,79,.34);border-radius:34px;background:radial-gradient(circle at 50% 20%,rgba(32,231,255,.12),transparent 42%),linear-gradient(145deg,rgba(7,18,36,.96),rgba(1,3,10,.98));box-shadow:0 0 80px rgba(214,168,79,.12),0 24px 80px rgba(0,0,0,.65);display:grid;place-items:center;text-align:center;padding:34px;transform:scale(.96);opacity:0;filter:blur(12px);animation:handoffEnter 760ms var(--ease) forwards}
@@ -359,6 +379,13 @@ body.booting .app-shell{opacity:1!important;pointer-events:auto!important;visibi
         </div>
       </div>
 
+      <div class="chamber" id="ch-forecast">
+        <div class="chamber-inner">
+          <div class="chamber-head"><div class="suit suit-star">F</div><div><div class="chamber-title">FORECAST</div><div class="chamber-sub">Coming Gates - Resonance Divergence</div></div></div>
+          <div class="chamber-body" id="forecastBody"></div>
+        </div>
+      </div>
+
       <div class="chamber" id="ch-portfolio">
         <div class="chamber-inner">
           <div class="chamber-head"><div class="suit suit-diamonds">♦</div><div><div class="chamber-title">PORTFOLIO</div><div class="chamber-sub">Value audit · PnL · moves</div></div></div>
@@ -458,7 +485,7 @@ body.booting .app-shell{opacity:1!important;pointer-events:auto!important;visibi
 'use strict';
 const APP_VERSION='3.2.1-full-esoteric-clean-pass1-2026-06-19';
 const STORAGE_KEY='ace_cluster_v300';
-const NUM_CHAMBERS=7;
+const NUM_CHAMBERS=8;
 
 const FW={name:'Manuel Rui Santos Ferreira',birth:'1972-08-15',birthYear:1972,birthMonth:8,birthDay:15,birthHour:9,birthTimeLocal:'09:00',birthTimeUtc:'08:00',birthPlace:'Porto, Portugal',dayMaster:'Wu',dayMasterElement:'Earth',baziHour:'Bing Chen',baziHourAnimal:'Dragon',lifePathRaw:33,lifePathReduced:6,expressionRaw:111,expressionReduced:3,sunSign:'Leo',ascSign:'Virgo',ascendant:'Virgo 18°20′09″',midheaven:'Gemini 16°23′57″',siderealAscendant:'Leo 23°58′25″',canonicalProfileVersion:'3.3_UNIVERSAL',interpretationOrder:['geometry','universal human meaning','full-domain scan','personal resonance','current application'],keyNums:[3,6,9,11,22,33]};
 
@@ -919,7 +946,7 @@ function mergeCoins(existing){
   return base;
 }
 function defaultState(){
-  return{appVersion:APP_VERSION,createdAt:nowIso(),updatedAt:nowIso(),activeDate:activeDateIso(),activeChamber:0,coins:seedCoins(),inspectInputs:{},ledger:[],portfolioMoves:[],settings:{dustThreshold:10},governance:{bodyState:'green',source:'manual',notes:''},macro:{},syncCounts:{}};
+  return{appVersion:APP_VERSION,createdAt:nowIso(),updatedAt:nowIso(),activeDate:activeDateIso(),activeChamber:2,forecastVisiblePatchV1:false,coins:seedCoins(),inspectInputs:{},ledger:[],portfolioMoves:[],settings:{dustThreshold:10},governance:{bodyState:'green',source:'manual',notes:''},macro:{},syncCounts:{}};
 }
 let state=defaultState();
 (function loadState(){
@@ -927,6 +954,7 @@ let state=defaultState();
     const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return;
     const p=JSON.parse(raw);
     state=Object.assign({},defaultState(),p,{coins:mergeCoins(p.coins),inspectInputs:p.inspectInputs||{},ledger:Array.isArray(p.ledger)?p.ledger:[],portfolioMoves:Array.isArray(p.portfolioMoves)?p.portfolioMoves:[],settings:Object.assign({dustThreshold:10},p.settings||{}),governance:Object.assign({bodyState:'green',source:'manual',notes:''},p.governance||{}),macro:p.macro||{},syncCounts:p.syncCounts||{}});
+    if(!state.forecastVisiblePatchV1){state.activeChamber=2;state.forecastVisiblePatchV1=true}
     const QU={CVX:40,ICP:23,KSM:10.45,ADX:125.6,SNX:116.4,INJ:6};
     if(!state.qtyUpdateV258){Object.keys(QU).forEach(sym=>{if(state.coins[sym])state.coins[sym].qty=QU[sym]});state.qtyUpdateV258=true}
   }catch(e){console.error('Load fail',e)}
@@ -953,6 +981,20 @@ function openChamber(n){
 }
 function prevChamber(){openChamber(activeChamber-1)}
 function nextChamber(){openChamber(activeChamber+1)}
+function normalizeSuitNav(){
+  const nav=document.querySelector('.suit-nav');if(!nav)return;
+  const items=[
+    ['nav-spades','Overview','♠',0],
+    ['nav-clubs','Watch','♣',1],
+    ['nav-star','Forecast','F',2],
+    ['nav-diamonds','Portfolio','♦',3],
+    ['nav-hearts','Radar','♥',4],
+    ['nav-jester','AI','🃏',5],
+    ['nav-star','Esoteric','★',6],
+    ['nav-star','NCE Heatmap','◎',7]
+  ];
+  nav.innerHTML=items.map(([cls,title,label,idx])=>`<button class="${cls}" onclick="openChamber(${idx})" id="nav${idx}" title="${title}">${label}</button>`).join('');
+}
 function buildDots(){
   const el=document.getElementById('dots');if(!el)return;el.innerHTML='';
   for(let i=0;i<NUM_CHAMBERS;i++){const d=document.createElement('div');d.className='dot'+(i===activeChamber?' active':'');d.onclick=()=>openChamber(i);el.appendChild(d)}
@@ -1010,7 +1052,7 @@ function updateDayMeta(){
 }
 
 function renderChamber(n){
-  switch(n){case 0:renderOverview();break;case 1:renderWatchTable();break;case 2:renderPortfolio();break;case 3:renderRadar();break;case 4:renderJester();break;case 5:renderTemporal();break;case 6:renderNCE();break}
+  switch(n){case 0:renderOverview();break;case 1:renderWatchTable();break;case 2:renderForecast();break;case 3:renderPortfolio();break;case 4:renderRadar();break;case 5:renderJester();break;case 6:renderTemporal();break;case 7:renderNCE();break}
 }
 
 // CHAMBER 0: OVERVIEW
@@ -1076,7 +1118,88 @@ function renderWatchTable(){
   el.innerHTML=html||'<tr><td colspan="10" class="empty">No coins.</td></tr>';
 }
 
-// CHAMBER 2: PORTFOLIO
+// CHAMBER 2: FORECAST
+function forecastTriWeight(badge){
+  return({GREEN:5,BLUE:4,YELLOW_EARLY:2.5,YELLOW_LATE:1,ORANGE:-1,RED:-3,STALE:-.5,LITE:1.5}[badge]||0);
+}
+function forecastCoinRows(dateIso){
+  const coins=Object.values(state.coins||{});
+  return coins.map(c=>{
+    const sym=c.symbol,eso=coinEsoResonance(sym,dateIso,c),tri=triBadge(sym,dateIso),sig=combinedSignal(sym,dateIso);
+    const inp=state.inspectInputs[sym]||{};const price=Number(inp.price||inp.lastPrice||0);const qty=Number(c.qty||c.seedQty||0);
+    const value=price>0&&qty>0?price*qty:0;const chg=inp.chg24!=null&&inp.chg24!==''?Number(inp.chg24):null;
+    const score=(eso?eso.score:0)+forecastTriWeight(tri.badge)+(sig.isHighOpp?3:0)-(sig.isHighRisk?2.5:0)+(value>=Number(state.settings.dustThreshold||10)?.4:0);
+    return{coin:c,sym,eso,tri,sig,price,qty,value,chg,score};
+  }).sort((a,b)=>b.score-a.score);
+}
+function forecastComingGates(baseIso){
+  const gates=[];
+  for(let i=0;i<=10;i++){
+    const d=new Date(new Date(baseIso).getTime()+i*86400000);const iso=localIso(d);const move=calcMovePosture(iso);
+    const rows=forecastCoinRows(iso);const top=rows[0];const hot=rows.filter(r=>r.sig.isHighOpp||(r.eso&&['PRIME','RESONANT'].includes(r.eso.tier))).length;
+    gates.push({iso,offset:i,move,top,hot,gateScore:move.score+(top?top.score/3:0)+hot*.25});
+  }
+  return gates.sort((a,b)=>b.gateScore-a.gateScore);
+}
+function forecastValidationPayload(){
+  const date=state.activeDate;const rows=forecastCoinRows(date);const gates=forecastComingGates(date);
+  return{
+    version:'ace_cluster_forecast_visible_v1',
+    activeDate:date,
+    generatedAt:nowIso(),
+    comingGates:gates.slice(0,5).map(g=>({date:g.iso,posture:g.move.posture,gateScore:Number(g.gateScore.toFixed(2)),top:g.top?g.top.sym:null,hot:g.hot})),
+    topUrgent:rows.slice(0,6).map(r=>({symbol:r.sym,score:Number(r.score.toFixed(2)),tri:r.tri.badge,eso:r.eso?r.eso.tier:null,signal:r.sig.label,value:Number(r.value.toFixed(2))})),
+    flushWatch:rows.filter(r=>['ORANGE','RED'].includes(r.tri.badge)&&r.eso&&['CAUTION','CLASH'].includes(r.eso.tier)).slice(0,6).map(r=>r.sym),
+    capitulationCandidate:rows.filter(r=>r.score<0&&r.value>0).sort((a,b)=>a.score-b.score).slice(0,4).map(r=>r.sym),
+    reclaimIgnition:rows.filter(r=>r.eso&&['PRIME','RESONANT'].includes(r.eso.tier)&&!['GREEN','BLUE'].includes(r.tri.badge)).slice(0,5).map(r=>r.sym),
+    brokenSignal:rows.filter(r=>['GREEN','BLUE'].includes(r.tri.badge)&&r.eso&&['CAUTION','CLASH'].includes(r.eso.tier)).slice(0,5).map(r=>r.sym),
+    humanFeedback:state.forecastFeedback||{}
+  };
+}
+function forecastRowHtml(r,extra){
+  const eso=r.eso||{};const cls=r.sig.isHighRisk?'bad':(r.sig.isHighOpp?'hot':(['GREEN','BLUE'].includes(r.tri.badge)?'good':'warn'));
+  return`<div class="forecast-row"><div class="forecast-sym">${esc(r.sym)}</div><div><span class="forecast-chip ${cls}">${esc(r.tri.badge)}</span>${r.eso?`<span class="forecast-chip ${eso.tier==='PRIME'?'hot':eso.tier==='RESONANT'?'good':eso.tier==='WATCH'?'':'warn'}">${esc(eso.tier)}</span>`:''}<div class="forecast-copy">${esc(extra||r.sig.label)}</div><div class="forecast-meta">C${r.tri.cScore} E${r.tri.eScore} N${r.tri.nScore}${r.value>0?' · '+fmtUSD(r.value):''}</div></div><div class="forecast-score">${r.score>=0?'+':''}${r.score.toFixed(1)}</div></div>`;
+}
+function saveForecastFeedback(){
+  state.forecastFeedback={
+    status:(document.getElementById('forecastFeedbackStatus')||{}).value||'watching',
+    notes:(document.getElementById('forecastFeedbackNotes')||{}).value||'',
+    updatedAt:nowIso()
+  };
+  saveState();renderForecast();showToast('Forecast feedback saved');
+}
+function copyForecastValidation(){
+  const payload=JSON.stringify(forecastValidationPayload(),null,2);
+  const box=document.getElementById('forecastValidationExport');if(box)box.value=payload;
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(payload).then(()=>showToast('Validation export copied'))}
+  else if(box){box.focus();box.select();try{document.execCommand('copy');showToast('Validation export copied')}catch(e){showToast('Manual copy needed')}}
+}
+function renderForecast(){
+  const el=document.getElementById('forecastBody');if(!el)return;
+  const date=state.activeDate;const rows=forecastCoinRows(date);const gates=forecastComingGates(date);const feedback=state.forecastFeedback||{};
+  const topUrgent=rows.slice(0,5);
+  const flushWatch=rows.filter(r=>['ORANGE','RED'].includes(r.tri.badge)&&r.eso&&['CAUTION','CLASH'].includes(r.eso.tier)).slice(0,4);
+  const capitulation=rows.filter(r=>r.score<0&&r.value>0).sort((a,b)=>a.score-b.score).slice(0,4);
+  const reclaim=rows.filter(r=>r.eso&&['PRIME','RESONANT'].includes(r.eso.tier)&&!['GREEN','BLUE'].includes(r.tri.badge)).slice(0,4);
+  const broken=rows.filter(r=>['GREEN','BLUE'].includes(r.tri.badge)&&r.eso&&['CAUTION','CLASH'].includes(r.eso.tier)).slice(0,4);
+  const divergence=rows.filter(r=>(r.sig.isHighOpp||r.sig.isHighRisk)||(['GREEN','BLUE'].includes(r.tri.badge)&&r.eso&&['CAUTION','CLASH'].includes(r.eso.tier))||(r.eso&&['PRIME','RESONANT'].includes(r.eso.tier)&&!['GREEN','BLUE'].includes(r.tri.badge))).slice(0,6);
+  el.innerHTML=`<div class="forecast-board">
+    <div class="forecast-section"><span class="forecast-section-title">COMING GATES</span><div class="forecast-grid">${gates.slice(0,4).map(g=>`<div><span class="forecast-chip ${g.move.posture==='COMMIT'?'hot':g.move.posture==='REGULATE'?'good':g.move.posture==='VETO'?'bad':'warn'}">${g.offset===0?'TODAY':g.iso}</span><div class="forecast-copy">${esc(g.move.posture)} gate${g.top?' · '+esc(g.top.sym)+' leads':''}</div><div class="forecast-meta">score ${g.gateScore.toFixed(1)} · hot ${g.hot}</div></div>`).join('')}</div></div>
+    <div class="forecast-section"><span class="forecast-section-title">TOP URGENT</span>${topUrgent.map(r=>forecastRowHtml(r,'Priority watch: '+r.sig.label)).join('')||'<div class="forecast-copy">No urgent rows.</div>'}</div>
+    <div class="forecast-section"><span class="forecast-section-title">RESONANCE DIVERGENCE</span>${divergence.map(r=>forecastRowHtml(r,'Triangulation and resonance disagree or amplify.')).join('')||'<div class="forecast-copy">No divergence rows.</div>'}</div>
+    <div class="forecast-grid">
+      <div class="forecast-section"><span class="forecast-section-title">FLUSH WATCH</span>${flushWatch.map(r=>forecastRowHtml(r,'Weak triage plus weak resonance.')).join('')||'<div class="forecast-copy">No flush watch.</div>'}</div>
+      <div class="forecast-section"><span class="forecast-section-title">CAPITULATION CANDIDATE</span>${capitulation.map(r=>forecastRowHtml(r,'Negative composite while position has value.')).join('')||'<div class="forecast-copy">No capitulation candidate.</div>'}</div>
+      <div class="forecast-section"><span class="forecast-section-title">RECLAIM IGNITION</span>${reclaim.map(r=>forecastRowHtml(r,'Resonance leads before triage confirms.')).join('')||'<div class="forecast-copy">No reclaim ignition.</div>'}</div>
+      <div class="forecast-section"><span class="forecast-section-title">BROKEN SIGNAL</span>${broken.map(r=>forecastRowHtml(r,'Triage is strong but resonance rejects it.')).join('')||'<div class="forecast-copy">No broken signal.</div>'}</div>
+    </div>
+    <div class="forecast-section"><span class="forecast-section-title">HUMAN FEEDBACK</span><label class="forecast-field-label">Outcome</label><select class="forecast-input" id="forecastFeedbackStatus"><option value="watching">Watching</option><option value="validated">Validated</option><option value="invalidated">Invalidated</option><option value="reclaim">Reclaim</option><option value="flush">Flush</option></select><label class="forecast-field-label">Notes</label><textarea class="forecast-textarea" id="forecastFeedbackNotes" placeholder="What actually happened?">${esc(feedback.notes||'')}</textarea><div class="btn-row"><button class="btn btn-primary" onclick="saveForecastFeedback()">Save Feedback</button><button class="btn" onclick="renderForecast()">Refresh Forecast</button></div></div>
+    <div class="forecast-section"><span class="forecast-section-title">VALIDATION EXPORT</span><textarea class="forecast-textarea" id="forecastValidationExport" readonly>${esc(JSON.stringify(forecastValidationPayload(),null,2))}</textarea><div class="btn-row"><button class="btn btn-blue" onclick="copyForecastValidation()">Copy Export</button></div></div>
+  </div>`;
+  const sel=document.getElementById('forecastFeedbackStatus');if(sel)sel.value=feedback.status||'watching';
+}
+
+// CHAMBER 3: PORTFOLIO
 function renderPortfolio(){
   const el=document.getElementById('portfolioBody');if(!el)return;
   const date=state.activeDate;const coins=Object.values(state.coins||{});const dust=Number(state.settings.dustThreshold||10);
@@ -1630,7 +1753,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const today=todayIso();if(state.activeDate!==today){state.activeDate=today;saveState();}
   const gate=document.getElementById('handoffGate');if(gate)gate.classList.remove('open');
   window.ACE_CLUSTER_FULL_ESOTERIC_RULE={ok:true,version:'3.2.0',systems:['numerology','bazi','mayan_dreamspell_dna_cosmic','astrology_lunar_weekday'],at:new Date().toISOString()};
-  buildDots();buildDayRail();openChamber(activeChamber);
+  normalizeSuitNav();buildDots();buildDayRail();openChamber(activeChamber);
   const sel=document.getElementById('govBodyState');if(sel)sel.addEventListener('change',()=>{state.governance.bodyState=sel.value;updateGovReadout()});
 });
 </script>
