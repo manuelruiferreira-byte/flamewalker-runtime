@@ -1,4 +1,4 @@
-const CACHE_NAME = "flamewalker-runtime-v0-1-shell";
+const CACHE_NAME = "flamewalker-runtime-v0-2-forecast-refresh-20260627";
 
 const SHELL_FILES = [
   "./",
@@ -29,6 +29,22 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
+
+  const url = new URL(event.request.url);
+  const isRuntimePage =
+    event.request.mode === "navigate" ||
+    url.pathname.endsWith(".html") ||
+    url.pathname.includes("/Jester-Intelligence/ACE-Cluster-App/") ||
+    url.pathname.includes("/Jester-Intelligence/ACED-Lifestyle/ace-cluster.html");
+
+  if (isRuntimePage) {
+    event.respondWith(
+      fetch(event.request, { cache: "no-store" })
+        .then(response => response)
+        .catch(() => caches.match(event.request).then(cached => cached || caches.match("./index.html")))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then(cached => {
