@@ -77,7 +77,7 @@ assert(profile.includes("supplementAuthority:'canonical-42-card-policy-v3'"),'ca
 assert(profile.includes('ensureOptimizerRuntime')&&profile.includes('profile-watchdog-import'),'optimizer watchdog present');
 assert(profile.includes('cleanDayMetaText')&&profile.includes('Block\\s+\\d+'),'legacy block metadata scrubbed');
 assert(profile.includes('canonical-import-failed'),'optimizer import failure becomes visible');
-assert(serviceWorker.includes('25.4.1-canonical-card-policy'),'service worker version advanced');
+assert(serviceWorker.includes('25.8.3-profile-redaction-20260705'),'service worker version advanced');
 assert(serviceWorker.includes('/shared/data/supplements/')&&serviceWorker.includes('flamewalker-canonical-profile-v3-3.js'),'canonical policy and profile bypass stale cache');
 assert(serviceWorker.includes('url.pathname.endsWith("/ace-mind.html")'),'HTML shell bypasses stale cache');
 

@@ -1,11 +1,11 @@
-/* ACE Mind Service Worker v25.8.2
+/* ACE Mind Service Worker v25.8.3
    Direct-performance runtime.
    ace-mind.html contains the canonical performance runtime, so this worker
    no longer rewrites HTML. It purges old ACE Mind caches and fetches the
    canonical runtime fresh from network.
 */
 
-const ACE_MIND_SW_VERSION = "25.8.2-jester-audit-v2-1-20260620";
+const ACE_MIND_SW_VERSION = "25.8.3-profile-redaction-20260705";
 const CACHE_PREFIX = "ace-mind-cache-";
 const ACE_MIND_BUILD = "ace-mind-jester-audit-v2-1-20260620";
 
