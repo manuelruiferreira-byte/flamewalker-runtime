@@ -16,8 +16,8 @@ def write_if_changed(path: str, text: str) -> None:
 # ACE Cluster: replace obsolete 15:00 / Scorpio profile projection.
 path = "Jester-Intelligence/ACED-Lifestyle/ace-cluster.html"
 text = Path(path).read_text(encoding="utf-8")
-old = "const FW={name:'Manuel Rui Santos Ferreira',birth:'1972-08-15',birthYear:1972,birthMonth:8,birthDay:15,birthHour:15,dayMaster:'Wu',dayMasterElement:'Earth',lifePathRaw:33,lifePathReduced:6,expressionRaw:111,expressionReduced:3,sunSign:'Leo',ascSign:'Scorpio',keyNums:[3,6,9,11,22,33]};"
-new = "const FW={name:'Manuel Rui Santos Ferreira',birth:'1972-08-15',birthYear:1972,birthMonth:8,birthDay:15,birthHour:9,birthTimeLocal:'09:00',birthTimeUtc:'08:00',birthPlace:'Porto, Portugal',dayMaster:'Wu',dayMasterElement:'Earth',baziHour:'Bing Chen',baziHourAnimal:'Dragon',lifePathRaw:33,lifePathReduced:6,expressionRaw:111,expressionReduced:3,sunSign:'Leo',ascSign:'Virgo',ascendant:'Virgo 18°20′09″',midheaven:'Gemini 16°23′57″',siderealAscendant:'Leo 23°58′25″',canonicalProfileVersion:'3.3_UNIVERSAL',interpretationOrder:['geometry','universal human meaning','full-domain scan','personal resonance','current application'],keyNums:[3,6,9,11,22,33]};"
+old = "const FW={name:'REDACTED',birth:'REDACTED',birthYear:0,birthMonth:8,birthDay:15,birthHour:15,dayMaster:'Wu',dayMasterElement:'Earth',lifePathRaw:33,lifePathReduced:6,expressionRaw:111,expressionReduced:3,sunSign:'Leo',ascSign:'Scorpio',keyNums:[3,6,9,11,22,33]};"
+new = "const FW={name:'REDACTED',birth:'REDACTED',birthYear:0,birthMonth:8,birthDay:15,birthHour:9,birthTimeLocal:'09:00',birthTimeUtc:'08:00',birthPlace:'REDACTED',dayMaster:'Wu',dayMasterElement:'Earth',baziHour:'Bing Chen',baziHourAnimal:'Dragon',lifePathRaw:33,lifePathReduced:6,expressionRaw:111,expressionReduced:3,sunSign:'Leo',ascSign:'Virgo',ascendant:'Virgo 18°20′09″',midheaven:'Gemini 16°23′57″',siderealAscendant:'Leo 23°58′25″',canonicalProfileVersion:'3.3_UNIVERSAL',interpretationOrder:['geometry','universal human meaning','full-domain scan','personal resonance','current application'],keyNums:[3,6,9,11,22,33]};"
 if old not in text:
     raise SystemExit("ACE Cluster exact profile constant not found; migration stopped")
 text = text.replace(old, new, 1)
@@ -48,8 +48,8 @@ report.append("ACE Cluster corrected to 09:00 local / 08:00 UT, Virgo Ascendant,
 path = "investment-cockpit-v11.html"
 text = Path(path).read_text(encoding="utf-8")
 old_block = '''const FW_PROFILE = {
-  name: "Manuel Rui Santos Ferreira",
-  birth: "1972-08-15",
+  name: "REDACTED",
+  birth: "REDACTED",
   birthMonth: 8,
   birthDay: 15,
   birthHour: 15,
@@ -61,14 +61,14 @@ old_block = '''const FW_PROFILE = {
   expressionReduced: 3
 };'''
 new_block = '''const FW_PROFILE = {
-  name: "Manuel Rui Santos Ferreira",
-  birth: "1972-08-15",
+  name: "REDACTED",
+  birth: "REDACTED",
   birthMonth: 8,
   birthDay: 15,
   birthHour: 9,
   birthTimeLocal: "09:00",
   birthTimeUtc: "08:00",
-  birthPlace: "Porto, Portugal",
+  birthPlace: "REDACTED",
   ascSign: "Virgo",
   ascendant: "Virgo 18°20′09″",
   midheaven: "Gemini 16°23′57″",
