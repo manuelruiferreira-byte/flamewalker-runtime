@@ -291,28 +291,8 @@ details[open].fw-to-details-card .fw-to-summary::before{content:'-'}
 @media(max-width:620px){:root{--aced-frozen-day-top:calc(env(safe-area-inset-top) + 92px)}}
 
 
-/* v24.6 Year Map + Swiss/Astrodienst ephemeris bridge.
-   UI-only navigation layer. It calls setDay(date) and does not modify scoring/body/patch logic. */
 .day-actions{display:flex;gap:7px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
-.year-map-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
-.year-month-btn{border:1px solid rgba(217,166,74,.24);background:rgba(255,255,255,.045);border-radius:14px;padding:9px 8px;color:var(--muted);font-size:.78rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
-.year-month-btn.active{border-color:rgba(32,231,255,.58);background:rgba(32,231,255,.10);color:#a5f3fc;box-shadow:0 0 18px rgba(32,231,255,.08)}
-.year-days-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:8px}
-.year-weekday{font-size:.62rem;color:#64748b;text-align:center;letter-spacing:.12em;text-transform:uppercase;padding:4px 0}
-.year-day-cell{position:relative;border:1px solid rgba(255,255,255,.09);background:rgba(0,0,0,.18);border-radius:12px;min-height:46px;padding:7px 6px;text-align:left;color:#cbd5e1;display:flex;flex-direction:column;gap:4px;justify-content:space-between}
-.year-day-cell.blank{opacity:0;pointer-events:none}
-.year-day-cell.today{border-color:rgba(217,166,74,.70);box-shadow:0 0 18px rgba(217,166,74,.14)}
-.year-day-cell.selected{border-color:rgba(32,231,255,.78);background:rgba(32,231,255,.11);box-shadow:0 0 22px rgba(32,231,255,.12)}
-.year-day-num{font-size:.82rem;font-weight:900;color:#fff7dc;line-height:1}
-.year-block-label{font-size:.56rem;color:#a5f3fc;letter-spacing:.08em;font-weight:900;line-height:1;opacity:.9}
-.year-day-marks{display:flex;gap:4px;align-items:center;min-height:7px}
-.year-dot{width:7px;height:7px;border-radius:999px;background:#64748b;display:inline-block}
-.year-dot.green{background:#34d399}.year-dot.yellow{background:#facc15}.year-dot.orange{background:#fb923c}.year-dot.red{background:#ef4444}.year-dot.purple{background:#8b5cf6}.year-dot.gold{background:#d9a64a}.year-dot.cyan{background:#20e7ff}
-.year-preview{border:1px solid rgba(217,166,74,.20);background:rgba(0,0,0,.22);border-radius:18px;padding:12px;margin-top:12px}
-.year-preview-title{font-weight:900;color:var(--gold2);font-size:.92rem;margin-bottom:6px}
-.year-preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;font-size:.76rem;color:#aebdd1;line-height:1.35}
-.year-preview-grid b{color:#fde68a;font-weight:850}
-@media(max-width:620px){.day-current{grid-template-columns:1fr}.day-actions{justify-content:flex-start}.year-map-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.year-day-cell{min-height:42px;padding:6px 5px}.year-preview-grid{grid-template-columns:1fr}}
+@media(max-width:620px){.day-current{grid-template-columns:1fr}.day-actions{justify-content:flex-start}}
 
 
 
@@ -342,21 +322,21 @@ details[open].fw-to-details-card .fw-to-summary::before{content:'-'}
 
 
 /* v25.2.8/v1.5: Reishi added to card-read liver gates. Liver red/orange now locks Reishi through bodyCard hardContra and watch/avoid liver-sensitivity text; regex-name matching replaced with explicit name arrays to avoid word-boundary escape failures. */
-/* v25.2.5: AI payload compacting + Spades cleanup. Default AI State/Day/Bug/Patch/Snapshot handoffs now send small agent-safe packets instead of full app state, full day object, full guidance, or full HTML snapshot. Full backups remain through Export/Import, not AI paste. Love/Social Axis Calibration remains in the engine/Lens/Year Map but is no longer displayed on Spades overview. */
+/* v25.2.5: AI payload compacting + Spades cleanup. Default AI State/Day/Bug/Patch/Snapshot handoffs now send small agent-safe packets instead of full app state, full day object, full guidance, or full HTML snapshot. Full backups remain through Export/Import, not AI paste. Love/Social Axis Calibration remains in the engine/Lens but is no longer displayed on Spades overview. */
 /* v25.0.5: no in-app boot overlay. Android/PWA system splash only. */
 /* v25.2.3: Convergence chromatic calibration. Adds multi-level domain signal states (gold, full/dim green, full/dim blue, full/dim yellow, high caution), base-clock convergence gates, anti-saturation caps for over-green domains, extra Astrodienst object relevance (Juno/Vesta/Ceres/Pallas/Pholus), and runtime version/cache identity fix. */
 /* v25.2.2: Relational green-day fix. (1) fwLoveSocialScoreCap now caps ACTION POSTURE only — body-safe Green/Gold axis days rise to a competitive ceiling (love .92, social green .82 / gold .96) instead of a fixed .82/.86 that locked Love/Social out of #1; stressed/Amber/Silver/Red stay protectively capped. (2) Hearts dots now color by an honest activation STATE (Love/Social read their own axis state) rather than the single-winner rank race — green is no longer exclusive to rank-0; the day's #1 keeps a separate primary ring. (3) Creative card de-saturated with discriminating negative weights (was all-positive → flat ceiling ~0.93, primary ~172d/yr; now varies, primary ~110d/yr). (4) Weekend DOW multipliers softened so Creative/Spiritual/Leisure stop saturating at 1.0. Net backtest 2026: Love green 0→101 days, Social green 1→292 days, with no green manufactured outside genuine axis confirmation. Supplement block identity unchanged (still frozen/body-gated). */
 /* v25.0.8.2: practice tickboxes fixed: tickPractice now calls render(), not missing renderAll(). */
 /* v25.1.4: Love/Social state preservation. Seasonal context cannot upgrade Amber/Red into Green/Gold or dominate ranking. */
 /* v25.2.0: ACE Kernel v0. pattern-inspired evidence vector, falsifier gates, domain micro-governance. */
-/* v25.2.1: Year Map live-date bridge. Calendar taps now update activeDate and preview with differentiated top domains. */
+/* v25.2.1: Live-date bridge. Calendar taps updated activeDate and preview with differentiated top domains. */
 /* v25.1.3: Love/Social balance damper. Seasonal layers now contextualize without forcing fire-state. */
 /* v25.1.2: Seasonal Precision Balance Engine added: progressions, solar return, lunar return, Venus window, object layer, balance caps. */
 /* v25.1.1: Love/Social Axis Calibration + annual domain backtest panel. */
 /* v25.1.0: Natal Profile Engine added from verified Astrodienst data sheet. */
 
 
-/* v25.2.4: Overall health hardening. Runtime version fixed, export filename fixed, legacy deriveGuidanceV23 quarantined, guidance memo cache added, strict Gold requiring four core confirmations plus two strong core layers, Year Map month cells use lightweight status while selected preview stays full precision, header logo null-safe, and agent/AI/Gravitic pathways preserved. */
+/* v25.2.4: Overall health hardening. Runtime version fixed, export filename fixed, legacy deriveGuidanceV23 quarantined, guidance memo cache added, strict Gold requiring four core confirmations plus two strong core layers, header logo null-safe, and agent/AI/Gravitic pathways preserved. */
 
 /* ACE Mind ACE v1.4: card-read liver gates. Same liver-specific card logic as ACE Mind, preserving ACE block/day engine while fixing item-level locks. */
 
@@ -409,13 +389,12 @@ body[data-ace-data-seal="fail"] .brand-card{box-shadow:0 22px 80px rgba(0,0,0,.6
 <body>
 <div class="app-shell" id="appShell">
 <header class="topbar"><div class="brand-card"><div class="brand-mark"><img alt="" id="brandLogo"/></div><div class="brand-copy"><div class="title">ACE Mind</div></div><div class="top-actions"><button class="small-btn" onclick="openModal('lensModal')" type="button">Lens</button><button aria-label="AI" class="icon-btn" onclick="openModal('aiModal')" type="button">AI</button></div></div></header>
-<main class="main"><section class="day-panel"><div class="day-current"><div><div class="day-name" id="dayName"></div><div class="day-meta" id="dayMeta"></div></div><div class="day-actions"><button class="secondary" onclick="openYearMap()">Year</button><button class="secondary" onclick="fwSetToday()">Today</button></div></div><div class="day-rail" id="dayRail"></div></section><section class="carousel-wrap" id="carouselWrap"><button class="car-arrow left" onclick="moveChamber(-1)">‹</button><div class="carousel-track" id="carouselTrack"></div><button class="car-arrow right" onclick="moveChamber(1)">›</button><div class="dots" id="dots"></div></section></main>
+<main class="main"><section class="day-panel"><div class="day-current"><div><div class="day-name" id="dayName"></div><div class="day-meta" id="dayMeta"></div></div><div class="day-actions"><button class="secondary" onclick="fwSetToday()">Today</button></div></div><div class="day-rail" id="dayRail"></div></section><section class="carousel-wrap" id="carouselWrap"><button class="car-arrow left" onclick="moveChamber(-1)">‹</button><div class="carousel-track" id="carouselTrack"></div><button class="car-arrow right" onclick="moveChamber(1)">›</button><div class="dots" id="dots"></div></section></main>
 <nav aria-label="Utilities" class="utility-dock"><button class="dock-btn" onclick="openModal('aiModal')">AI</button><button class="dock-btn" onclick="openModal('lensModal')">Lens</button><button class="dock-btn" onclick="openModal('patchModal')">Patch</button><button class="dock-btn" onclick="exportState()">Export</button><button class="dock-btn" onclick="document.getElementById('importFile').click()">Import</button><input accept="application/json,.json" id="importFile" onchange="importStateFile(event)" type="file"/></nav>
 </div>
 <div class="modal" id="aiModal"><div class="modal-panel"><div class="modal-head"><div class="modal-title">AI</div><button class="x" onclick="closeModal('aiModal')">×</button></div><div class="ai-section-label">What to send</div><div class="payload-grid" id="payloadGrid"></div><div class="ai-section-label">Where to send it</div><div class="model-grid" id="modelGrid"></div><div class="action-row"><button class="secondary" onclick="openJesterBridge()">Bridge</button><button class="secondary" onclick="copyCurrentPayload()">Copy</button></div><div class="copy-status" id="copyStatus"></div><textarea id="handoffBox" spellcheck="false"></textarea></div></div>
 <div class="modal" id="lensModal"><div class="modal-panel"><div class="modal-head"><div class="modal-title">Lens</div><button class="x" onclick="closeModal('lensModal')">×</button></div><div class="lens-box"><pre id="lensPre"></pre></div></div></div>
 <div class="modal" id="patchModal"><div class="modal-panel"><div class="modal-head"><div class="modal-title">Patch Console v2 · Governed</div><button class="x" onclick="closeModal('patchModal')">×</button></div><div class="patch-console-card"><div class="patch-console-grid" id="patchGovGrid"><div class="patch-console-pill"><b>Risk 0-3</b><span>derived before apply</span></div><div class="patch-console-pill"><b>Preview</b><span>before / after digest</span></div><div class="patch-console-pill"><b>Rollback</b><span>Undo Last snapshot</span></div><div class="patch-console-pill"><b>History</b><span>audit trail stored locally</span></div></div><div class="tiny">Agents propose. Patch Console validates. High-risk changes require explicit confirmation. Undo restores the last pre-patch state snapshot.</div></div><textarea id="patchInput" placeholder='{"patch_type":"ace_mind_patch","version":"1.0","source":"manual","reason":"one clear mission","ops":[]}' spellcheck="false"></textarea><label class="patch-confirm"><input id="highRiskConfirm" type="checkbox"/><span><b>High-risk confirmation.</b> Required for risk level 3 operations such as clear state, replace state subset, or temporal/location config changes.</span></label><div class="action-row"><button class="secondary" onclick="loadPatchTemplate()">Template</button><button class="secondary" onclick="previewPatch()">Preview</button><button class="primary" onclick="applyPatch()">Apply</button><button class="danger" onclick="undoLastPatch()">Undo Last</button></div><div class="lens-box" style="margin-top:10px"><pre id="patchOutput"></pre></div><div class="patch-history-note" id="patchHistoryNote"></div></div></div>
-<div class="modal" id="yearMapModal"><div class="modal-panel"><div class="modal-head"><div class="modal-title">Year Map · 2026</div><button class="x" onclick="closeModal('yearMapModal')">×</button></div><div class="year-map-grid" id="yearMonthGrid"></div><div class="lens-box"><div class="year-days-grid" id="yearDaysGrid"></div></div><div class="year-preview" id="yearPreview"></div><div class="action-row"><button class="secondary" onclick="fwSetToday();closeModal('yearMapModal')">Back to Today</button><button class="primary" onclick="fwApplyYearDate()">Select Date</button></div></div></div>
 <div class="modal" id="suppModal"><div class="modal-panel"><div class="modal-head"><div class="modal-title" id="suppTitle">Supplement</div><button class="x" onclick="closeModal('suppModal')">×</button></div><div id="suppContent"></div></div></div>
 
 <div class="modal" id="jesterAuditModal"><div class="modal-panel"><div class="modal-head"><div class="modal-title">Jester Audit · ACE Mind</div><button class="x" onclick="closeModal('jesterAuditModal')">×</button></div><div class="jester-audit-hint">Hidden read-only integrity panel. Open by 5 taps or long-press on the ACE Mind logo/title, by visiting <code>#jester-audit</code>, or by pressing Ctrl+Alt+J on desktop. It never changes scoring or recommendations.</div><div class="jester-audit-summary" id="jesterAuditSummary"></div><div class="jester-audit-grid" id="jesterAuditCards"></div><div class="jester-audit-actions"><button type="button" onclick="window.copyJesterAudit&&window.copyJesterAudit()">Copy JSON</button><button type="button" onclick="window.exportJesterAudit&&window.exportJesterAudit()">Export JSON</button><button type="button" onclick="window.aceMindClearDerivedPlanHistory&&window.aceMindClearDerivedPlanHistory()">Clear Derived Plan History</button></div></div></div>
@@ -3468,51 +3447,6 @@ function fwSetToday(){
 }
 
 
-// ── Year Map: full-year selector powered by fwEngineDay(date) ────────────────
-let fwYearMapMonth = Math.max(0, Math.min(11, Number((activeDate||brusselsISODate()).slice(5,7))-1));
-let fwYearMapSelected = activeDate || brusselsISODate();
-const FW_MONTH_LABELS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-function fwIsoFromYMD(y,m,d){return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
-function fwDaysInMonth(y,m){return new Date(Date.UTC(y,m,0)).getUTCDate();}
-function fwYearMapStatus(d,g){
-  if(g?.c?.body?.veto)return 'red';
-  if(g?.c?.body?.governor==='ORANGE')return 'orange';
-  if(g?.c?.body?.governor==='YELLOW'||g?.c?.body?.governor==='WATCH')return 'yellow';
-  if(d?.astrology?.moonPhase&&/Full|New/.test(d.astrology.moonPhase))return 'purple';
-  if(d?.blockAssignment?.reasonSummary&&/transit|major/i.test(d.blockAssignment.reasonSummary))return 'gold';
-  return 'green';
-}
-function openYearMap(){
-  fwYearMapSelected=activeDate||brusselsISODate();
-  fwYearMapMonth=Math.max(0,Math.min(11,Number(fwYearMapSelected.slice(5,7))-1));
-  renderYearMap();
-  openModal('yearMapModal');
-}
-function fwSelectYearMonth(m){
-  fwYearMapMonth=Math.max(0,Math.min(11,Number(m)||0));
-  const wantedMonth=String(fwYearMapMonth+1).padStart(2,'0');
-  if(!fwYearMapSelected || String(fwYearMapSelected).slice(5,7)!==wantedMonth){
-    fwYearMapSelected=fwIsoFromYMD(2026,fwYearMapMonth+1,1);
-  }
-  renderYearMap();
-}
-function fwPreviewYearDate(iso){
-  // v25.2.1: Year Map taps are now live selections, not passive previews.
-  // This prevents the modal from appearing to show one repeated day-field while the main app remains on the old activeDate.
-  const clean=String(iso||brusselsISODate()).slice(0,10);
-  fwYearMapSelected=clean;
-  fwYearMapMonth=Math.max(0,Math.min(11,Number(clean.slice(5,7))-1));
-  setDay(clean,{source:'year-map-live-preview',keepYearMapOpen:true});
-  renderYearMap();
-}
-function fwApplyYearDate(){setDay(fwYearMapSelected||brusselsISODate(),{source:'year-map-apply'});closeModal('yearMapModal');}
-function renderYearMap(){
-  // ACE clean-ui stale-pass1: placeholder binding only.
-  // The current Year Map renderer is installed later by the active calendar bridge.
-}
-
-
-
 // ── Synchronicity Tapper ──────────────────────────────────────────────────────
 // localStorage key: aceMind.temporal.syncCounts (namespaced, no pollution)
 const FW_SYNC_LS_KEY = 'aceMind.temporal.syncCounts';
@@ -5933,18 +5867,6 @@ deriveGuidanceV23 = function(d){
   }
   return val;
 };
-function fwYearMapStatusFastV2524(d){
-  try{
-    const b=bodySummaryForDate(d.id);
-    if(b.veto)return 'red';
-    if(b.governor==='ORANGE')return 'orange';
-    if(b.governor==='YELLOW'||b.governor==='WATCH')return 'yellow';
-    if(d&&d.astrology&&d.astrology.moonPhase&&/Full|New/.test(d.astrology.moonPhase))return 'purple';
-    if(d&&d.blockAssignment&&d.blockAssignment.reasonSummary&&/transit|major|gold|venus|jupiter/i.test(d.blockAssignment.reasonSummary))return 'gold';
-    return 'green';
-  }catch(e){return 'orange';}
-}
-
 function renderDayNote(d){
   const note = state.notes?.[d.id] || '';
   return `<div class="card" style="margin-top:0">
@@ -6135,7 +6057,7 @@ function aceDomainTap(k, el){
 // ACE Mind v24.9 — PWA Nudge Lab
 // Free experimental path for privacy-safe local nudges.
 // Core rule: this module is delivery-only. It never changes scoring, blocks,
-// body gates, supplement ticks, Year Map, Patch Console, or AI payload logic.
+// body gates, supplement ticks, Patch Console, or AI payload logic.
 // ═══════════════════════════════════════════════════════════════════════════
 const ACE_NUDGE_KEY='aceMind.nudgeLab.v1';
 const ACE_NUDGE_MAX_PER_DAY=3;
@@ -6468,9 +6390,7 @@ function setDay(dateOrIndex, opts){
     if(typeof aceRenderActiveDateFast==='function')aceRenderActiveDateFast();
     else render();
   }catch(e){try{render();}catch(_){}}
-  if(!opts.keepYearMapOpen){
-    document.getElementById('dayRail')?.querySelector('.day-btn.active')?.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
-  }
+  document.getElementById('dayRail')?.querySelector('.day-btn.active')?.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
 }
 function initSwipe(){
   const el=document.getElementById('carouselWrap');
@@ -7651,6 +7571,7 @@ renderSpades=function(d,g){
 try{
   const __aceMindStableRenderDayRailBase=renderDayRail;
   renderDayRail=function(){
+    try{if(typeof ensureRollingSupplementLedger==='function')ensureRollingSupplementLedger();}catch(e){console.warn('ACE supplement ledger ensure skipped',e);}
     const d=(typeof aceGetDayPacket==='function'?aceGetDayPacket(activeDate||brusselsISODate()).d:day());
     const [,mo,dy]=d.id.split('-').map(Number);
     const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -7881,7 +7802,7 @@ try{
     activeIdx=typeof dateOrIndex==='number'?validIndex(dateOrIndex):(ai>=0?ai:0);
     state.activeDate=activeDate; state.activeIdx=activeIdx;
     saveState(); render();
-    if(!opts.keepYearMapOpen){document.getElementById('dayRail')?.querySelector('.day-btn.active')?.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});}
+    document.getElementById('dayRail')?.querySelector('.day-btn.active')?.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
   };
 }catch(e){console.warn('ACE v25.3.2 setDay wrapper failed',e);}
 try{
@@ -8119,7 +8040,7 @@ try{if(document.readyState!=='loading')render();}catch(e){}
      Replaces only the supplement selection/rendering authority with individual cards.
 -->
 <style id="ace-supplement-card-repair-css">
-.year-block-label,.alt-block-card{display:none!important}
+.alt-block-card{display:none!important}
 .supp-policy-chip{display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(32,231,255,.24);background:rgba(32,231,255,.06);color:#a5f3fc;border-radius:999px;padding:3px 7px;font-size:.62rem;font-weight:900;letter-spacing:.05em;line-height:1.15}
 .supp-policy-chip.hold{border-color:rgba(249,115,22,.34);background:rgba(249,115,22,.08);color:#fdba74}
 .supp-policy-chip.manual{border-color:rgba(139,92,246,.34);background:rgba(139,92,246,.08);color:#ddd6fe}
@@ -8229,11 +8150,27 @@ details.supp-group summary::-webkit-details-marker{display:none}
     }catch(e){}
     return [...new Set(ids)];
   }
+  function selectedIdsFromFreezeRecord(rec){
+    const raw=Array.isArray(rec?.selected)?rec.selected:(Array.isArray(rec?.selectedIds)?rec.selectedIds:[]);
+    return [...new Set(raw.map(cardIdFromName).filter(id=>BY_ID[id]))];
+  }
+  function plannedIdsOn(date){
+    try{
+      const key=String(date).slice(0,10);
+      const rec=state?.suppCardPlanHistory?.[key];
+      if(!rec||rec.date!==key)return [];
+      return selectedIdsFromFreezeRecord(rec);
+    }catch(e){return [];}
+  }
+  function historyIdsOn(date){
+    return [...new Set([...plannedIdsOn(date),...takenIdsOn(date)])];
+  }
   function countRolling(id,date,days=7){
     let count=0;
     for(let i=0;i<days;i++){
       const d=typeof addDays==='function'?addDays(date,-i):new Date(Date.parse(date+'T12:00:00Z')-i*86400000).toISOString().slice(0,10);
-      if(takenIdsOn(d).includes(id))count++;
+      const ids=i===0?takenIdsOn(d):historyIdsOn(d);
+      if(ids.includes(id))count++;
     }
     return count;
   }
@@ -8415,22 +8352,22 @@ details.supp-group summary::-webkit-details-marker{display:none}
   }
   function aceDailySupplementFreezeKey(iso,bodyHash){
     const date=String(iso||activeDate||brusselsISODate()).slice(0,10);
-    return [date,APP_VERSION,SUPPLEMENT_POLICY_VERSION,bodyHash||aceSupplementBodyHash(date)].join('__');
+    return [date,DAILY_SUPPLEMENT_FREEZE_REASON,bodyHash||aceSupplementBodyHash(date)].join('__');
+  }
+  function aceFreezeAuthorityDecodes(rec){
+    if(!rec||typeof rec!=='object')return false;
+    if(rec.reason===DAILY_SUPPLEMENT_FREEZE_REASON)return true;
+    const authority=[rec.freezeAuthority,rec.ledgerVersion,rec.authority,rec.policyVersion,rec.freezeKey].filter(Boolean).join(' ');
+    return /supplement|freeze|rolling-selector-ledger|weekly-esoteric|canonical-data/i.test(authority);
   }
   function aceValidSupplementFreeze(date){
     try{
       const key=String(date||activeDate||brusselsISODate()).slice(0,10);
       const rec=state?.suppCardPlanHistory?.[key];
-      const bodyHash=aceSupplementBodyHash(key);
-      if(!rec||rec.reason!==DAILY_SUPPLEMENT_FREEZE_REASON)return null;
-      const selected=Array.isArray(rec.selected)?rec.selected:(Array.isArray(rec.selectedIds)?rec.selectedIds:[]);
+      if(!rec||rec.date!==key)return null;
+      if(!aceFreezeAuthorityDecodes(rec))return null;
+      const selected=selectedIdsFromFreezeRecord(rec);
       if(!selected.length||selected.some(id=>!BY_ID[id]))return null;
-      if(rec.date!==key)return null;
-      if(rec.bodyHash!==bodyHash)return null;
-      if(rec.appVersion!==APP_VERSION)return null;
-      if(rec.policyVersion!==SUPPLEMENT_POLICY_VERSION)return null;
-      if(rec.stateSchemaVersion!==aceSupplementStateSchemaVersion())return null;
-      if(rec.freezeKey!==aceDailySupplementFreezeKey(key,bodyHash))return null;
       return rec;
     }catch(e){return null;}
   }
@@ -8477,8 +8414,8 @@ details.supp-group summary::-webkit-details-marker{display:none}
   }
   function acePrewarmSupplementWeeks(seedIso){
     const seed=String(seedIso||activeDate||brusselsISODate()).slice(0,10);
-    const seeds=[seed, addDays(seed,-7), addDays(seed,7)];
-    seeds.forEach((iso,i)=>aceIdle(()=>{try{buildWeeklyEsotericPlan(iso);}catch(e){console.warn('ACE supplement prewarm skipped',iso,e);}},260+i*260));
+    const days=(typeof buildRollingDates==='function'?buildRollingDates():[{iso:seed}]).filter(x=>x&&x.visible!==false).slice(0,15).map(x=>x.iso||seed);
+    days.forEach((iso,i)=>aceIdle(()=>{try{aceGetDayPacket(iso);}catch(e){console.warn('ACE supplement day prewarm skipped',iso,e);}},120+i*40));
   }
 
   function isoWeekStart(iso){
@@ -8682,31 +8619,202 @@ details.supp-group summary::-webkit-details-marker{display:none}
     return result;
   }
 
-  function buildSupplementModel(d,g){
-    const plan=buildWeeklyEsotericPlan(d.id);
-    const selected=(plan.byDate[d.id]||[]).slice().sort((a,b)=>slotRank(a.card)-slotRank(b.card)||b.score-a.score);
-    const selectedIds=new Set(selected.map(x=>x.card.id));
-    const scored=(plan.scoredByDate[d.id]||aceScoredForDate(d.id)).slice().sort((a,b)=>b.score-a.score);
-    const held=[];
+  function aceIsoDow(iso){
+    const d=new Date(String(iso).slice(0,10)+'T12:00:00Z');
+    return d.getUTCDay()||7;
+  }
+  function aceAddDays(iso,n){
+    try{
+      if(typeof fwAddDaysISO==='function')return fwAddDaysISO(iso,n);
+    }catch(e){}
+    const d=new Date(String(iso).slice(0,10)+'T12:00:00Z');
+    d.setUTCDate(d.getUTCDate()+Number(n||0));
+    return d.toISOString().slice(0,10);
+  }
+  function aceHistoryWindowBefore(iso,days=14){
+    const out=[];
+    for(let i=days;i>=1;i--)out.push(aceAddDays(iso,-i));
+    return out;
+  }
+  function aceWeekDatesBefore(iso){
+    const start=isoWeekStart(iso), out=[];
+    for(let d=start;d<iso;d=aceAddDays(d,1))out.push(d);
+    return out;
+  }
+  function aceCountOnDates(id,dates){
+    return (dates||[]).reduce((sum,date)=>sum+(historyIdsOn(date).includes(id)?1:0),0);
+  }
+  function aceCountWeekBefore(id,iso){return aceCountOnDates(id,aceWeekDatesBefore(iso));}
+  function aceCountRollingBefore(id,iso,days=7){
+    let count=0;
+    for(let i=1;i<=days;i++)if(historyIdsOn(aceAddDays(iso,-i)).includes(id))count++;
+    return count;
+  }
+  function aceWeekRemainingIncluding(iso){return Math.max(1,8-aceIsoDow(iso));}
+  function aceWeekQuotaState(card,iso){
+    const q=quotaForCard(card);
+    const weekBefore=aceCountWeekBefore(card.id,iso);
+    const rollingBefore=aceCountRollingBefore(card.id,iso,7);
+    const remaining=aceWeekRemainingIncluding(iso);
+    const dow=aceIsoDow(iso);
+    const target=dow===7?Number(q.min||0):Math.floor((dow*Number(q.min||0))/7);
+    return {q,weekBefore,rollingBefore,remaining,target,need:Math.max(0,Number(q.min||0)-weekBefore)};
+  }
+  function aceIsExplicitQuotaCard(card){
+    return !!WEEKLY_ESOTERIC_QUOTAS[card.id]||WEEKLY_LIMITED_HERBS.includes(card.id)||card.id==='shilajit'||Number(card.max7||0)>0;
+  }
+  function aceSequentialQuotaPressure(item,iso){
+    const card=item.card, qState=aceWeekQuotaState(card,iso), q=qState.q;
+    const must=qState.need>0&&qState.need>=qState.remaining;
+    const behind=qState.weekBefore<qState.target;
+    const explicit=aceIsExplicitQuotaCard(card);
+    const strongFit=Number(item.score||0)>=.74;
+    const should=qState.need>0&&(must||behind||(explicit&&strongFit));
+    return {must,behind,explicit,strongFit,should,qState,q};
+  }
+  function aceConsecutiveHold(card,iso){
+    const id=card.id;
+    const yesterday=historyIdsOn(aceAddDays(iso,-1)).includes(id);
+    if(!yesterday)return '';
+    const repeatOk=REPEATABLE_SUPPORT_IDS.includes(id)||NAD_PAIR_IDS.includes(id)||(card.groups||[]).includes('magnesium')||['omega_3','coq10','creatine','collagen','vitamin_c'].includes(id);
+    return repeatOk?'':'Consecutive-day cooldown from frozen history';
+  }
+  function canPlaceSequential(item,selected,ctx,opts){
+    opts=opts||{};
+    if(!item||!item.card)return 'missing card score';
+    const card=item.card, qState=aceWeekQuotaState(card,ctx.date), q=qState.q;
+    if(!opts.ignoreQuota){
+      if(qState.weekBefore>=q.max)return 'weekly quota already filled by frozen history';
+      if(qState.rollingBefore>=q.max&&q.max<=3)return 'rolling 7-day quota already filled by frozen history';
+    }
+    if(item.body&&item.body.status==='LOCKED')return item.body.note||'body veto';
+    if(selected.length>=WEEKLY_DAILY_CAP)return 'daily card cap reached';
+    if(selected.some(x=>x.card.id===card.id))return 'already placed on this date';
+    const conflict=conflicts(card,selected); if(conflict)return conflict;
+    if(!opts.ignoreConsecutive){
+      const consecutive=aceConsecutiveHold(card,ctx.date); if(consecutive)return consecutive;
+    }
+    return '';
+  }
+  function addSequentialItem(selected,item,reason,quota){
+    const copy=clonePlanItem(item,reason);
+    copy.weeklyQuota=quota||quotaForCard(item.card);
+    copy.forwardPlanned=true;
+    selected.push(copy);
+    selected.sort((a,b)=>slotRank(a.card)-slotRank(b.card)||b.score-a.score);
+    return copy;
+  }
+  function aceShouldPlaceNad(iso){
+    const weekBefore=NAD_IDS.reduce((sum,id)=>sum+aceCountWeekBefore(id,iso),0);
+    if(weekBefore>=WEEKLY_NAD_DAYS)return false;
+    const remaining=aceWeekRemainingIncluding(iso);
+    const need=WEEKLY_NAD_DAYS-weekBefore;
+    if(need>=remaining)return true;
+    const dow=aceIsoDow(iso);
+    const pace=dow===7?WEEKLY_NAD_DAYS:Math.floor((dow*WEEKLY_NAD_DAYS)/7);
+    const rollingBefore=NAD_IDS.reduce((sum,id)=>sum+aceCountRollingBefore(id,iso,6),0);
+    return weekBefore<pace||rollingBefore<5;
+  }
+  function placeSequentialNadBundle(selected,ctx){
+    if(!aceShouldPlaceNad(ctx.date))return '';
+    const scoredById=ctx.scoredById;
+    const candidates=NAD_IDS.map(id=>scoredById[id]).filter(Boolean).sort((a,b)=>{
+      const ac=aceCountRollingBefore(a.card.id,ctx.date,14), bc=aceCountRollingBefore(b.card.id,ctx.date,14);
+      if(ac!==bc)return ac-bc;
+      const aw=aceCountWeekBefore(a.card.id,ctx.date), bw=aceCountWeekBefore(b.card.id,ctx.date);
+      if(aw!==bw)return aw-bw;
+      return Number(b.score||0)-Number(a.score||0);
+    });
+    for(const booster of candidates){
+      const tmg=scoredById.tmg, citrate=scoredById.magnesium_citrate;
+      let hold=canPlaceSequential(booster,selected,ctx,{});
+      if(hold)continue;
+      hold=canPlaceSequential(tmg,selected.concat([booster]),ctx,{ignoreQuota:true,ignoreConsecutive:true});
+      if(hold)continue;
+      hold=canPlaceSequential(citrate,selected.concat([booster,tmg]),ctx,{ignoreQuota:true,ignoreConsecutive:true});
+      if(hold)continue;
+      const q={min:WEEKLY_NAD_DAYS,max:WEEKLY_NAD_DAYS,label:'NAD booster 6/week + TMG + Magnesium Citrate'};
+      addSequentialItem(selected,booster,'forward NAD rotation from frozen history',q);
+      addSequentialItem(selected,tmg,'mandatory TMG companion for NAD booster',{min:WEEKLY_NAD_DAYS,max:WEEKLY_NAD_DAYS,label:'mandatory NAD companion'});
+      addSequentialItem(selected,citrate,'mandatory Magnesium Citrate companion for NAD booster',{min:WEEKLY_NAD_DAYS,max:WEEKLY_NAD_DAYS,label:'mandatory NAD companion'});
+      return '';
+    }
+    return 'NAD bundle held by body, quota, cooldown, or companion conflict';
+  }
+  function aceSequentialHoldReason(item,selected,ctx){
+    const direct=canPlaceSequential(item,selected,ctx,{});
+    if(direct)return direct;
+    const pressure=aceSequentialQuotaPressure(item,ctx.date);
+    if(!pressure.should&&Number(item.score||0)<.78)return 'Lower forward fit than frozen-history placement pressure';
+    return 'Daily cap or stronger forward-history fit';
+  }
+  function buildSequentialSupplementModel(d,g){
+    const date=String(d?.id||activeDate||brusselsISODate()).slice(0,10);
+    const scored=(aceScoredForDate(date)||[]).slice().sort((a,b)=>b.score-a.score);
+    const scoredById=Object.fromEntries(scored.map(item=>[item.card.id,item]));
+    const selected=[];
+    const ctx={date,scoredById,historyWindow:aceHistoryWindowBefore(date,14)};
+
+    const nadHold=placeSequentialNadBundle(selected,ctx);
+    const selectedIds=()=>new Set(selected.map(x=>x.card.id));
+
+    const quotaCandidates=scored.filter(item=>!NAD_IDS.includes(item.card.id)&&!NAD_PAIR_IDS.includes(item.card.id)).map(item=>({item,pressure:aceSequentialQuotaPressure(item,date)})).filter(x=>x.pressure.should||Number(x.item.score||0)>=.78).sort((a,b)=>{
+      if(a.pressure.must!==b.pressure.must)return a.pressure.must?-1:1;
+      if(a.pressure.behind!==b.pressure.behind)return a.pressure.behind?-1:1;
+      return quotaPriority(b.item.card)-quotaPriority(a.item.card)||Number(b.item.score||0)-Number(a.item.score||0);
+    });
+    for(const entry of quotaCandidates){
+      if(selected.length>=WEEKLY_DAILY_CAP)break;
+      if(selectedIds().has(entry.item.card.id))continue;
+      const hold=canPlaceSequential(entry.item,selected,ctx,{});
+      if(!hold)addSequentialItem(selected,entry.item,entry.pressure.must?'weekly quota deadline from frozen history':entry.pressure.behind?'weekly quota pace from frozen history':'high fit within forward quota',entry.pressure.q);
+    }
+
     for(const item of scored){
-      if(selectedIds.has(item.card.id))continue;
-      const conflict=conflicts(item.card,selected);
+      if(selected.length>=WEEKLY_DAILY_CAP)break;
+      if(!REPEATABLE_SUPPORT_IDS.includes(item.card.id))continue;
+      if(selectedIds().has(item.card.id))continue;
+      if(Number(item.score||0)<.70)continue;
+      const hold=canPlaceSequential(item,selected,ctx,{});
+      if(!hold)addSequentialItem(selected,item,'repeatable support: high current fit below frozen-history quota',quotaForCard(item.card));
+    }
+
+    for(const item of scored){
+      if(selected.length>=Math.min(WEEKLY_DAILY_CAP,8))break;
+      if(selectedIds().has(item.card.id)||NAD_IDS.includes(item.card.id)||NAD_PAIR_IDS.includes(item.card.id))continue;
+      if(Number(item.score||0)<.82)continue;
+      const hold=canPlaceSequential(item,selected,ctx,{});
+      if(!hold)addSequentialItem(selected,item,'bonus high fit after forward-only quota pass',quotaForCard(item.card));
+    }
+
+    if(!selected.length){
+      const fallback=scored.find(item=>!canPlaceSequential(item,selected,ctx,{ignoreQuota:true}));
+      if(fallback)addSequentialItem(selected,fallback,'fallback: safest available current-day card',quotaForCard(fallback.card));
+    }
+
+    const finalIds=new Set(selected.map(x=>x.card.id));
+    const held=scored.filter(item=>!finalIds.has(item.card.id)).map(item=>{
       const copy=clonePlanItem(item);
-      if(conflict)copy.hold=conflict;
-      else if(item.body&&item.body.status==='LOCKED')copy.hold=item.body.note||'Body veto';
-      else if((plan.counts[item.card.id]||0)>=quotaForCard(item.card).max)copy.hold='Weekly quota already scheduled on stronger esoteric date';
-      else copy.hold='Lower esoteric fit than weekly placement';
-      held.push(copy);
+      copy.hold=aceSequentialHoldReason(item,selected,ctx);
+      return copy;
+    });
+    if(nadHold&&!selected.some(x=>NAD_IDS.includes(x.card.id))){
+      const bestNad=NAD_IDS.map(id=>scoredById[id]).filter(Boolean)[0];
+      if(bestNad){const copy=clonePlanItem(bestNad,nadHold);copy.hold=nadHold;held.unshift(copy);}
     }
-    for(const o of plan.overflow||[]){
-      if(o.iso===d.id&&!selectedIds.has(o.item.card.id))held.unshift(o.item);
-    }
-    return {selected,held,scored,weeklyPlan:plan,weeklyPolicy:SUPPLEMENT_POLICY_VERSION};
+    const counts={};
+    aceWeekDatesBefore(date).forEach(day=>historyIdsOn(day).forEach(id=>{counts[id]=(counts[id]||0)+1;}));
+    selected.forEach(item=>{counts[item.card.id]=(counts[item.card.id]||0)+1;});
+    return {selected,held,scored,weeklyPlan:null,weeklyPolicy:SUPPLEMENT_POLICY_VERSION,sequentialPlan:{date,historyWindow:ctx.historyWindow,counts,policy:SUPPLEMENT_POLICY_VERSION,planner:'forward-only-ledger-v1'}};
+  }
+
+  function buildSupplementModel(d,g){
+    return buildSequentialSupplementModel(d,g);
   }
 
   function buildFrozenSupplementModel(d,g,freeze){
     const date=String(d?.id||activeDate||brusselsISODate()).slice(0,10);
-    const frozenIds=(Array.isArray(freeze?.selected)?freeze.selected:freeze?.selectedIds||[]).filter(id=>BY_ID[id]);
+    const frozenIds=selectedIdsFromFreezeRecord(freeze);
     const scored=(aceScoredForDate(date)||[]).slice().sort((a,b)=>b.score-a.score);
     const byId=Object.fromEntries(scored.map(item=>[item.card.id,item]));
     const selected=frozenIds.map(id=>byId[id]||scoreCard(BY_ID[id],d,g));
@@ -8754,30 +8862,87 @@ details.supp-group summary::-webkit-details-marker{display:none}
     const activeCount=(model&&Array.isArray(model.selected))?model.selected.length:0;
     return panel(`<div class="focus-title">Supplements</div><div class="tiny" style="margin-top:6px;color:var(--muted)">Cards ${activeCount} · ${profileOk?'Profile loaded':'Profile fallback'}</div>`);
   }
-  function freezeSupplementCardPlan(date,model){
+  function freezeSupplementCardPlan(date,model,opts){
+    opts=opts||{};
     try{
       state.suppCardPlanHistory=state.suppCardPlanHistory||{};
       const key=String(date||activeDate||brusselsISODate()).slice(0,10);
-      const selected=(model.selected||[]).map(x=>x.card.id);
-      const selectedNames=(model.selected||[]).map(x=>x.card.name);
-      const bodyHash=aceSupplementBodyHash(key);
+      const existing=aceValidSupplementFreeze(key);
+      if(existing&&!opts.force)return existing;
+      const selected=(model.selected||[]).map(x=>x.card.id).filter(id=>BY_ID[id]);
+      if(!selected.length)return null;
+      const selectedNames=selected.map(id=>BY_ID[id].name);
+      const bodySnapshot=aceSupplementBodySnapshot(key);
+      const bodyHash=aceHashString(aceStableJson(bodySnapshot));
       const freezeKey=aceDailySupplementFreezeKey(key,bodyHash);
-      const existing=state.suppCardPlanHistory[key];
-      if(existing&&existing.reason===DAILY_SUPPLEMENT_FREEZE_REASON&&existing.freezeKey===freezeKey&&Array.isArray(existing.selected)&&existing.selected.join('|')===selected.join('|'))return existing;
-      const rec={date:key,authority:SUPPLEMENT_POLICY_VERSION,selected,selectedIds:selected.slice(),selectedNames,bodyHash,appVersion:APP_VERSION,policyVersion:SUPPLEMENT_POLICY_VERSION,stateSchemaVersion:aceSupplementStateSchemaVersion(),freezeKey,held_count:(model.held||[]).length,createdAt:new Date().toISOString(),reason:DAILY_SUPPLEMENT_FREEZE_REASON,patch:PATCH_VERSION};
+      const rec={
+        date:key,
+        authority:SUPPLEMENT_POLICY_VERSION,
+        freezeAuthority:'rolling-selector-ledger-v1',
+        ledgerVersion:'rolling-selector-ledger-v1',
+        planner:'forward-only-ledger-v1',
+        selected,
+        selectedIds:selected.slice(),
+        selectedNames,
+        bodySnapshot,
+        bodyHash,
+        appVersion:APP_VERSION,
+        policyVersion:SUPPLEMENT_POLICY_VERSION,
+        stateSchemaVersion:aceSupplementStateSchemaVersion(),
+        freezeKey,
+        held_count:(model.held||[]).length,
+        historyWindow:model?.sequentialPlan?.historyWindow||[],
+        createdAt:opts.createdAt||new Date().toISOString(),
+        reason:DAILY_SUPPLEMENT_FREEZE_REASON,
+        patch:PATCH_VERSION
+      };
       state.suppCardPlanHistory[key]=rec;
-      try{saveState();}catch(e){}
+      if(opts.save!==false)try{saveState();}catch(e){}
       return rec;
     }catch(e){return null;}
   }
+  function rollingSupplementDates(){
+    try{
+      return buildRollingDates().filter(x=>x&&x.visible!==false).slice(0,15).map(x=>String(x.iso).slice(0,10)).filter(Boolean).sort();
+    }catch(e){
+      const today=brusselsISODate();
+      return Array.from({length:15},(_,i)=>aceAddDays(today,i));
+    }
+  }
+  function ensureRollingSupplementLedger(){
+    const dates=rollingSupplementDates();
+    const created=[];
+    state.suppCardPlanHistory=state.suppCardPlanHistory||{};
+    for(const iso of dates){
+      if(aceValidSupplementFreeze(iso))continue;
+      const pkt=aceGetDayPacket(iso);
+      const model=buildSequentialSupplementModel(pkt.d,pkt.g);
+      const rec=freezeSupplementCardPlan(iso,model,{save:false});
+      if(rec)created.push(iso);
+    }
+    if(created.length)try{saveState();}catch(e){}
+    return {dates,created,total:Object.keys(state.suppCardPlanHistory||{}).length};
+  }
+  window.ensureRollingSupplementLedger=ensureRollingSupplementLedger;
+  window.aceValidSupplementFreeze=aceValidSupplementFreeze;
+  window.aceClearSupplementVolatileCaches=function(){
+    try{
+      Object.keys(ACE_DAY_PACKET_CACHE).forEach(k=>delete ACE_DAY_PACKET_CACHE[k]);
+      Object.keys(ACE_SCORE_CACHE).forEach(k=>delete ACE_SCORE_CACHE[k]);
+      Object.keys(ACE_TIMING_LAYER_CACHE).forEach(k=>delete ACE_TIMING_LAYER_CACHE[k]);
+      Object.keys(ACE_BODY_STATE_CACHE).forEach(k=>delete ACE_BODY_STATE_CACHE[k]);
+      Object.keys(WEEKLY_PLAN_CACHE).forEach(k=>delete WEEKLY_PLAN_CACHE[k]);
+    }catch(e){}
+  };
   window.aceRecalculateDailySupplementFreeze=function(date){
     try{
-      const key=String(date||activeDate||brusselsISODate()).slice(0,10);
+      const newest=rollingSupplementDates().slice(-1)[0]||brusselsISODate();
+      const key=String(date||newest).slice(0,10);
+      if(key!==newest&&!window.__ACE_ALLOW_HISTORICAL_SUPPLEMENT_RECALC__)return aceValidSupplementFreeze(key);
       if(state&&state.suppCardPlanHistory)delete state.suppCardPlanHistory[key];
-      try{saveState();}catch(e){}
       const pkt=aceGetDayPacket(key);
-      renderClubs(pkt.d,pkt.g);
-      return state?.suppCardPlanHistory?.[key]||null;
+      const model=buildSequentialSupplementModel(pkt.d,pkt.g);
+      return freezeSupplementCardPlan(key,model,{force:true});
     }catch(e){return null;}
   };
   window.aceRenderSuppAlternatives=function(details,date){
@@ -8786,7 +8951,8 @@ details.supp-group summary::-webkit-details-marker{display:none}
       const box=details.querySelector('[data-alt-list]');
       if(!box||box.dataset.rendered==='1')return;
       const pkt=aceGetDayPacket(date);
-      const model=buildSupplementModel(pkt.d,pkt.g);
+      const builder=window.aceBuildSupplementCardModel;
+      const model=typeof builder==='function'?builder(pkt.d,pkt.g):buildSequentialSupplementModel(pkt.d,pkt.g);
       box.dataset.rendered='1';
       box.innerHTML=model.held.length?model.held.map(x=>renderItem(x,pkt.d.id,false)).join(''):'<div class="tiny">No alternatives held for this date.</div>';
       try{if(typeof fwUpdateTimingBadges==='function')fwUpdateTimingBadges();}catch(e){}
@@ -8801,8 +8967,8 @@ details.supp-group summary::-webkit-details-marker{display:none}
     const root=document.getElementById('grid-clubs'); if(!root)return;
     try{if(d&&d.id===brusselsISODate())console.info('ACE Mind life domains before supplement render',d.id,topDomains(g));}catch(e){}
     const freeze=aceValidSupplementFreeze(d.id);
-    const model=freeze?buildFrozenSupplementModel(d,g,freeze):buildSupplementModel(d,g);
-    const activeFreeze=freeze||freezeSupplementCardPlan(d.id,model);
+    const model=freeze?buildFrozenSupplementModel(d,g,freeze):buildSequentialSupplementModel(d,g);
+    const activeFreeze=freeze||null;
     window.ACE_MIND_SUPPLEMENT_MODEL={date:d.id,patch:PATCH_VERSION,selected:model.selected.map(x=>x.card.id),freeze_key:activeFreeze&&activeFreeze.freezeKey||null,freeze_reason:activeFreeze&&activeFreeze.reason||null,weekly_limited_herbs:WEEKLY_LIMITED_HERBS,weekly_limited_policy:WEEKLY_LIMITED_POLICY,nad_days:WEEKLY_NAD_DAYS,daily_cap:WEEKLY_DAILY_CAP,repeatable_support_ids:REPEATABLE_SUPPORT_IDS};
     root.innerHTML=supplementSummary(d,g,model)+renderGroups(model.selected,d.id,true)+`<details class="supp-group" ontoggle="this.open&&window.aceRenderSuppAlternatives&&window.aceRenderSuppAlternatives(this,'${html(d.id)}')"><summary class="supp-head">Not today / alternatives · ${model.held.length}</summary><div data-alt-list="1"><div class="tiny" style="padding:10px 4px;color:var(--muted)">Open to render alternatives only when needed.</div></div></details>`;
     try{if(d&&d.id===brusselsISODate())console.info('ACE Mind life domains after supplement render',d.id,topDomains(g));}catch(e){}
@@ -8825,6 +8991,7 @@ details.supp-group summary::-webkit-details-marker{display:none}
     }catch(e){render();}
   };
   renderDayRail=function(){
+    try{if(typeof ensureRollingSupplementLedger==='function')ensureRollingSupplementLedger();}catch(e){console.warn('ACE supplement ledger ensure skipped',e);}
     const d=(typeof aceGetDayPacket==='function'?aceGetDayPacket(activeDate||brusselsISODate()).d:day());
     const [,mo,dy]=d.id.split('-').map(Number);
     const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -8833,38 +9000,6 @@ details.supp-group summary::-webkit-details-marker{display:none}
     const days=buildRollingDates();
     document.getElementById('dayRail').innerHTML=days.map(x=>`<button class="day-btn ${x.iso===activeDate?'active':''}" onclick="setDay('${x.iso}')" title="${x.visible?'rolling rail':'selected outside rail'}"><b>${x.wd.slice(0,3)}</b><span>${x.iso.slice(5)}</span></button>`).join('');
   };
-  if(typeof renderYearMap==='function'){
-    renderYearMap=function(){
-      const mg=document.getElementById('yearMonthGrid'), dg=document.getElementById('yearDaysGrid'), pv=document.getElementById('yearPreview');
-      if(!mg||!dg||!pv)return;
-      mg.innerHTML=FW_MONTH_LABELS.map((m,i)=>`<button class="year-month-btn ${i===fwYearMapMonth?'active':''}" onclick="fwSelectYearMonth(${i})">${m}</button>`).join('');
-      const y=Number((fwYearMapSelected||activeDate||brusselsISODate()).slice(0,4))||new Date().getFullYear(), month=fwYearMapMonth+1, first=new Date(Date.UTC(y,fwYearMapMonth,1)).getUTCDay(), total=fwDaysInMonth(y,month);
-      const weekday=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(x=>`<div class="year-weekday">${x}</div>`).join('');
-      const cells=[];
-      for(let i=0;i<first;i++)cells.push('<button class="year-day-cell blank" aria-hidden="true"></button>');
-      for(let n=1;n<=total;n++){
-        const isoDate=fwIsoFromYMD(y,month,n);
-        let cls='green', title='supplements';
-        try{
-          const obj=fwEngineDay(isoDate);
-          cls=typeof fwYearMapStatusFastV2524==='function'?fwYearMapStatusFastV2524(obj):'green';
-          title=`${isoDate} · lightweight day marker`;
-        }catch(e){cls='orange'}
-        const today=isoDate===brusselsISODate()?' today':'';
-        const selected=isoDate===fwYearMapSelected?' selected':'';
-        const eph=fwEphemerisDay(isoDate)?'<span class="year-dot cyan" title="Ephemeris loaded"></span>':'';
-        cells.push(`<button class="year-day-cell${today}${selected}" onclick="fwPreviewYearDate('${isoDate}')" title="${html(title)}"><span class="year-day-num">${n}</span><span class="year-day-marks"><span class="year-dot ${cls}"></span>${eph}</span></button>`);
-      }
-      dg.innerHTML=weekday+cells.join('');
-      const sel=fwYearMapSelected||fwIsoFromYMD(y,month,1);
-      try{
-        const pkt=aceGetDayPacket(sel), d=pkt.d, g=pkt.g, model=buildSupplementModel(d,g);
-        const topDomainText=topDomains(g).map(x=>`${label(x.key)} ${x.score.toFixed(2)} ${x.favor||''}`).join(' · ');
-        const picks=model.selected.slice(0,8).map(x=>x.card.name).join(' · ');
-        pv.innerHTML=`<div class="year-preview-title">${html(d.weekday)} · ${html(sel)} · Individual cards</div><div class="year-preview-grid"><div><b>BaZi</b><br>${html(d.bazi.hanzi+' '+d.bazi.signature)}</div><div><b>Mayan</b><br>${html('K'+d.mayan.dreamspell.kin+' Tone '+d.mayan.dreamspell.tone+' '+d.mayan.dreamspell.archetype)}</div><div><b>Numerology</b><br>${html(d.ptrm)}</div><div><b>Astrology</b><br>${html(d.astrology.focus||'')}</div><div><b>Top domains</b><br>${html(topDomainText||'none')}</div><div><b>Supplements</b><br>${html(picks||'none cleared')}</div><div><b>Source</b><br>${html(d.astrology.source||'dynamic')}</div><div><b>Policy</b><br>${html('individual-card policy v6 + weekly esoteric coverage v2')}</div></div>`;
-      }catch(e){pv.innerHTML=`<div class="year-preview-title">${html(sel)}</div><div class="small">Preview unavailable: ${html(e.message||e)}</div>`;}
-    };
-  }
   isTicked=function(date,name){try{return !!state.supp[key(String(date).slice(0,10),normSuppName(name))];}catch(e){return false;}};
   tickSupp=function(date,name){
     date=String(date||activeDate||brusselsISODate()).slice(0,10);
@@ -8913,7 +9048,8 @@ details.supp-group summary::-webkit-details-marker{display:none}
     // No save-on-view: daily supplement freezes and user actions persist through their own explicit writes.
   }catch(e){}
   window.WEEKLY_LIMITED_HERBS=WEEKLY_LIMITED_HERBS.slice();
-  window.ACE_SUPPLEMENT_POLICY_V4={patch:PATCH_VERSION,performance:'day-packet-cache+lazy-alternatives+lazy-year-map',weekly_limited_herbs:WEEKLY_LIMITED_HERBS.slice(),weekly_limited_policy:WEEKLY_LIMITED_POLICY,nad_days:WEEKLY_NAD_DAYS,daily_cap:WEEKLY_DAILY_CAP,repeatable_support_ids:REPEATABLE_SUPPORT_IDS,weekly_esoteric_quotas:WEEKLY_ESOTERIC_QUOTAS,cards:CARDS.length};
+  window.ACE_SUPPLEMENT_POLICY_V4={patch:PATCH_VERSION,performance:'day-packet-cache+lazy-alternatives+forward-ledger',weekly_limited_herbs:WEEKLY_LIMITED_HERBS.slice(),weekly_limited_policy:WEEKLY_LIMITED_POLICY,nad_days:WEEKLY_NAD_DAYS,daily_cap:WEEKLY_DAILY_CAP,repeatable_support_ids:REPEATABLE_SUPPORT_IDS,weekly_esoteric_quotas:WEEKLY_ESOTERIC_QUOTAS,cards:CARDS.length};
+  try{ensureRollingSupplementLedger();}catch(e){console.warn('ACE rolling supplement ledger init skipped',e);}
   try{if(typeof appInitialized==='undefined'||appInitialized)render();}catch(e){console.error('ACE supplement card repair render failed',e);}
   try{acePrewarmSupplementWeeks(activeDate||brusselsISODate());}catch(e){}
 })();
@@ -9166,7 +9302,7 @@ details.supp-group summary::-webkit-details-marker{display:none}
     catch(e){try{alert('Export failed: '+safeErr(e));}catch(_){}}
   };
   window.aceMindClearDerivedPlanHistory=function(){
-    try{var st=tryGet('state');if(st){st.suppCardPlanHistory={};st.auditLastDerivedClear=nowIso();if(typeof saveState==='function')saveState();if(typeof toast==='function')toast('Derived plan history cleared');} if(document.getElementById('jesterAuditModal')&&document.getElementById('jesterAuditModal').classList.contains('open'))openJesterAudit();}
+    try{var st=tryGet('state');if(st){var dates=(typeof buildRollingDates==='function'?buildRollingDates():[]).filter(function(x){return x&&x.visible!==false;}).map(function(x){return String(x.iso||'').slice(0,10);}).filter(Boolean).sort();var newest=dates[dates.length-1];if(newest&&st.suppCardPlanHistory)delete st.suppCardPlanHistory[newest];st.auditLastDerivedClear=nowIso();if(typeof ensureRollingSupplementLedger==='function')ensureRollingSupplementLedger();else if(typeof saveState==='function')saveState();if(typeof toast==='function')toast('Newest selector plan recalculated');} if(document.getElementById('jesterAuditModal')&&document.getElementById('jesterAuditModal').classList.contains('open'))openJesterAudit();}
     catch(e){try{alert('Clear failed: '+safeErr(e));}catch(_){}}
   };
 
