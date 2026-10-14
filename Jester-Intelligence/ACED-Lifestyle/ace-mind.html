@@ -8812,10 +8812,33 @@ details.supp-group summary::-webkit-details-marker{display:none}
     return buildSequentialSupplementModel(d,g);
   }
 
+  // Freeze daily resonance itself, not only the selected supplement IDs.
+  function aceEnsureSupplementScoreSnapshot(date,freeze,scored){
+    if(!freeze||!scored||!scored.length)return null;
+    if(freeze.scoreSnapshot&&typeof freeze.scoreSnapshot==='object'&&Object.keys(freeze.scoreSnapshot).length===CARDS.length)return freeze.scoreSnapshot;
+    const snapshot={};
+    for(const item of scored){
+      if(!item?.card?.id||!Number.isFinite(Number(item.score)))continue;
+      snapshot[item.card.id]={score:Number(Number(item.score).toFixed(6)),reasons:(item.reasons||[]).map(String).slice(0,20)};
+    }
+    if(!Object.keys(snapshot).length)return null;
+    freeze.scoreSnapshot=snapshot;
+    freeze.scoreSnapshotVersion='daily-resonance-v1';
+    // Upgrade older freezes without changing their already-selected daily cards.
+    if(state?.suppCardPlanHistory?.[date]===freeze){try{saveState();}catch(e){console.warn('ACE daily score persistence failed',e);}}
+    return snapshot;
+  }
   function buildFrozenSupplementModel(d,g,freeze){
     const date=String(d?.id||activeDate||brusselsISODate()).slice(0,10);
     const frozenIds=selectedIdsFromFreezeRecord(freeze);
-    const scored=(aceScoredForDate(date)||[]).slice().sort((a,b)=>b.score-a.score);
+    const current=(aceScoredForDate(date)||[]).slice();
+    const snapshot=aceEnsureSupplementScoreSnapshot(date,freeze,current);
+    const scored=current.map(item=>{
+      const saved=snapshot?.[item.card.id];
+      return saved&&Number.isFinite(Number(saved.score))
+        ?Object.assign({},item,{score:Number(saved.score),reasons:Array.isArray(saved.reasons)?saved.reasons.slice():(item.reasons||[]).slice()})
+        :item;
+    }).sort((a,b)=>b.score-a.score);
     const byId=Object.fromEntries(scored.map(item=>[item.card.id,item]));
     const selected=frozenIds.map(id=>byId[id]||scoreCard(BY_ID[id],d,g));
     const selectedIds=new Set(frozenIds);
@@ -8886,6 +8909,8 @@ details.supp-group summary::-webkit-details-marker{display:none}
         selectedNames,
         bodySnapshot,
         bodyHash,
+        scoreSnapshot:Object.fromEntries((model.scored||[]).filter(x=>x?.card?.id&&Number.isFinite(Number(x.score))).map(x=>[x.card.id,{score:Number(Number(x.score).toFixed(6)),reasons:(x.reasons||[]).map(String).slice(0,20)}])),
+        scoreSnapshotVersion:'daily-resonance-v1',
         appVersion:APP_VERSION,
         policyVersion:SUPPLEMENT_POLICY_VERSION,
         stateSchemaVersion:aceSupplementStateSchemaVersion(),
