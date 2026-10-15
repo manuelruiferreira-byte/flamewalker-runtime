@@ -392,6 +392,11 @@ body[data-ace-data-seal="fail"] .brand-card{box-shadow:0 22px 80px rgba(0,0,0,.6
 <script src="./shared/resonance/timing-v1.js?v=1.0.0"></script>
 <script src="./shared/resonance/warnings-v1.js?v=1.0.0"></script>
 <script src="./shared/resonance/presentation-v1.js?v=1.0.0"></script>
+<script src="./shared/sync/config-v1.js?v=1.0.0"></script>
+<script src="./shared/sync/core-v1.js?v=1.0.0"></script>
+<script src="./shared/sync/drive-v1.js?v=1.0.0"></script>
+<script src="./shared/sync/runtime-v1.js?v=1.0.0"></script>
+<link rel="stylesheet" href="./shared/sync/sync-v1.css?v=1.0.0">
 </head>
 <body>
 <div class="app-shell" id="appShell">
@@ -411,7 +416,7 @@ body[data-ace-data-seal="fail"] .brand-card{box-shadow:0 22px 80px rgba(0,0,0,.6
 <script id="agent-state" type="application/json">{}</script>
 <script>
 'use strict';
-const APP_VERSION='2.0.0-deterministic-oracle';
+const APP_VERSION='2.1.0-drive-sync';
 const STORAGE_KEY='ace_mind_state_v214';
 const ACE_REMOVED_GOVERNANCE_STORAGE_KEYS=[];
 const OLD_STORAGE_KEYS=['ace_mind_state_v21','ace_mind_v19_state','ace_mind_state_v20','ace_mind_v20_state'];
@@ -1509,6 +1514,7 @@ function saveState(){
   }
   updateAgentState();
   try{JesterBridge.notifyStateChanged('save');}catch(e){}
+  if(window.ACECloudSync)ACECloudSync.capture();
 }
 function day(){return fwEngineDay(activeDate||brusselsISODate())}
 function blockFor(d){return {name:'Complete canonical catalog',items:ACEReference.supplements.map(s=>[s.name,'User selection only',''])};}
@@ -6895,6 +6901,7 @@ function initApp(){
     setChamber(activeChamber,true,true);
     installBackToSpades();
     updateLens();
+    ACECloudSync.init({get:()=>state,apply:next=>{state=next;saveState();try{fwGuidanceCacheClearV2524();}catch(e){}render();}});
     document.getElementById('dayRail')?.querySelector('.day-btn.active')?.scrollIntoView({inline:'center',block:'nearest'});
   }catch(e){
     console.error('ACE Mind init failed',e);

@@ -20,13 +20,15 @@ jobs:
         with:
           node-version: '22'
       - name: Pure-engine regression and canonical snapshot
-        run: node --test tests/ace-resonance/engine.test.cjs
+        run: node --test tests/ace-resonance/engine.test.cjs tests/ace-resonance/sync.test.cjs
       - name: Install browser test tools
         run: npm install --no-save @playwright/test@1.61.1
       - name: Install independent browser engines
         run: npx playwright install --with-deps chromium firefox
       - name: Phone, tablet, desktop and reinstall regression
-        run: node tests/ace-resonance/browser.cjs
+        run: |
+          node tests/ace-resonance/browser.cjs
+          node tests/ace-resonance/sync-browser.cjs
         env:
           ACE_SCREENSHOTS: test-results/ace-resonance
       - uses: actions/upload-artifact@v4

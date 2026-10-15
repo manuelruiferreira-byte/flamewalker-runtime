@@ -1,4 +1,4 @@
-const CACHE_NAME = "flamewalker-runtime-v0-3-resonance-20261014";
+const CACHE_NAME = "flamewalker-runtime-v0-4-drive-sync-20261015";
 
 const SHELL_FILES = [
   "./",
@@ -34,6 +34,7 @@ self.addEventListener("fetch", event => {
   const isRuntimePage =
     event.request.mode === "navigate" ||
     url.pathname.includes("/shared/resonance/") ||
+    url.pathname.includes("/shared/sync/") ||
     url.pathname.endsWith("/manifest-ace-mind.webmanifest") ||
     url.pathname.endsWith(".html") ||
     url.pathname.includes("/Jester-Intelligence/ACE-Cluster-App/") ||
