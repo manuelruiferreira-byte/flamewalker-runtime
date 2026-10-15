@@ -1622,7 +1622,7 @@ function convergenceFor(d){
   else if(String(d.ptrm||'').match(/REST|STABLE|BALANCED/i))intensity='LOW/SPACED';
   const mode=d.focusHint||(/Wind|Monkey|Storm|Eagle|Warrior/i.test([dna,dream,cosmic].join(' '))?'signal':'steady');
   const focus=focusFromMode(mode,d);
-  const natalNote=d.natalTransit?.available?` Natal: ${d.natalTransit.focusLine}`:'';
+  const natalNote=' Daily domains: '+ACEResonance.scoreLifeDomains(d.id,FW_NATAL_PROFILE,ACEResonance.VERSION).rows.slice(0,3).map(r=>r.name+' '+r.score+'%').join(' · ');
   const summary=`${dna}, ${dream}, ${cosmic}. ${d.bazi?.signature||''}. ${d.astrology?.focus||''}.${natalNote}`;
   const gate=b.veto?'FAIL-CLOSED BODY VETO':(b.governor==='GREEN'?'BODY CLEAR':'BODY CONDITIONAL');
   return{body:b,num,mode,focus,summary,intensity,gate,worldMode:mode,tzolkin:{toneNumber:d.mayan?.tzolkin?.tone,signDisplay:d.mayan?.tzolkin?.sign||d.mayan?.tzolkin?.archetype}};
@@ -2009,16 +2009,10 @@ function fwReduce(n) {
   return n;
 }
 function fwPersonalNums(isoDate) {
-  const [yr, mo, dy] = isoDate.split('-').map(Number);
-  const ySum = String(yr).split('').reduce((a,c) => a + (parseInt(c)||0), 0);
-  const pYRaw = 8 + 15 + ySum;              // Aug + birth day + universal year digits
-  const pY = fwReduce(pYRaw);
-  const pMRaw = fwReduce(pY) + mo;          // master year reduced into month gate
-  const pM = fwReduce(pMRaw);
-  const pDRaw = pM + dy;                    // preserves bridges such as 32/5 and 33/6
-  const pD = fwReduce(pDRaw);
-  return { pY, pYRaw, pM, pMRaw, pD, pDRaw };
+  const n=ACEResonance.factors(isoDate,FW_NATAL_PROFILE).numerology;
+  return {pY:n.py,pYRaw:n.pyRaw,pM:n.pm,pMRaw:n.pmRaw,pD:n.pd,pDRaw:n.pdRaw};
 }
+
 function fwAddDaysISO(isoDate,delta){
   const dt=new Date(String(isoDate).slice(0,10)+'T12:00:00Z');
   dt.setUTCDate(dt.getUTCDate()+Number(delta||0));
@@ -3597,7 +3591,7 @@ function renderTemporal(d, g) {
 
   // ── Numerology + hinge card ──────────────────────────────────────────────────
   html += '<div class="card">';
-  html += '<span class="fw-to-label">Numerology \u00b7 09:00 Hinge</span>';
+  html += '<span class="fw-to-label">Optional 09:00 observation \u00b7 not a score input</span>';
   html += `<div class="fw-to-hinge-badge ${hinge.isPost ? 'fw-to-hinge-post' : 'fw-to-hinge-pre'}">${e(hinge.label)}</div>`;
   html += `<div class="fw-to-hinge-countdown"><span id="fw-hinge-countdown">${e(hinge.countdown)}</span></div>`;
   html += '<div class="fw-to-num-grid">';
@@ -6031,7 +6025,7 @@ function aceNudgePanelInnerHtml(){
   const data=aceNudgeLoad();
   const q=(data.queueDate===brusselsISODate()&&Array.isArray(data.queue))?data.queue:aceBuildNudgeQueue(false);
   const rows=q.length?q.map(n=>`<div class="nudge-item"><b>${escapeHtml(n.time)} · ${escapeHtml(n.planet_symbol)} ${escapeHtml(n.planet)} · ${escapeHtml(n.item)}</b><span>${escapeHtml(n.environment)}</span><span>${escapeHtml(n.reason_code)}</span></div>`).join(''):`<div class="nudge-empty">No highlighted supplement has a clean future planetary timing window right now. The queue will change as the day, body gate, and timing field change.</div>`;
-  return `<div class="focus-title">PWA Nudge Lab</div><div class="small" style="margin-top:5px">Free experimental notifications for highlighted items only. Privacy-safe glance text. No scoring or block logic is changed.</div>`+
+  return `<div class="focus-title">PWA Nudge Lab</div><div class="small" style="margin-top:5px">Optional reminders for manually checked items only. Reminder timing never changes resonance scores.</div>`+
     `<div class="nudge-status">${escapeHtml(aceNudgeCapLine())}${data.lastScheduleMode?`<br>Last schedule: ${escapeHtml(data.lastScheduleMode)} · ${escapeHtml(data.lastScheduledAt||'')}`:''}</div>`+
     `<div class="nudge-grid"><button class="nudge-btn gold" onclick="aceNudgeEnable()">Enable</button><button class="nudge-btn" onclick="aceNudgeBuildAction()">Build Queue</button><button class="nudge-btn" onclick="aceNudgeTestAction()">Test Now</button><button class="nudge-btn" onclick="aceNudgeScheduleAction()">Schedule</button><button class="nudge-btn warn" onclick="aceNudgeClearAction()">Clear</button><button class="nudge-btn" onclick="openModal('lensModal')">Lens</button></div>`+
     `<div class="nudge-list">${rows}</div>`+

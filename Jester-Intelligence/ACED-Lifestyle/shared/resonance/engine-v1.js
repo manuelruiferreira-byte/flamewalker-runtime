@@ -17,7 +17,7 @@ function factors(date,p){
  if(!p||p.version!=='3.4_ORACLE/1')throw Error('Canonical profile 3.4_ORACLE/1 required');
  const birthday=parseInt(p.numerology.birthday,10),attitude=parseInt(p.numerology.attitude_sun,10),birthMonth=attitude-birthday;
  if(!(birthday>=1&&birthday<=31&&birthMonth>=1&&birthMonth<=12))throw Error('Missing canonical numerology inputs');
- const pyRaw=birthMonth+birthday+String(year).split('').reduce((s,c)=>s+Number(c),0),py=reduce(pyRaw),pmRaw=py+month,pm=reduce(pmRaw),pdRaw=pm+day,pd=reduce(pdRaw);
+ const pyRaw=birthMonth+birthday+reduce(String(year).split('').reduce((s,c)=>s+Number(c),0)),py=reduce(pyRaw),pmRaw=py+month,pm=reduce(pmRaw),pdRaw=pm+day,pd=reduce(pdRaw);
  const elapsed=Math.round((ms-dateValue('2026-05-29'))/86400000),stem=mod(9+elapsed,10),branch=mod(3+elapsed,12);
  // Preserve the established app's four separate daily correlations. Modern tracks
  // are explicitly ACE correlations, not claimed interchangeable with traditional GMT.

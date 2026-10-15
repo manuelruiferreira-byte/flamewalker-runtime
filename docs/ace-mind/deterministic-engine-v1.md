@@ -30,7 +30,7 @@ For each card independently:
 
 | Layer | Weight | Mapping |
 |---|---:|---|
-| Numerology | 20 | 70% personal day, 15% natal life path, 15% expression; retain 11/22/33 when reducing; compound numbers recorded |
+| Numerology | 20 | 70% personal day, 15% natal life path, 15% expression; retain 11/22/33 when reducing; compound numbers recorded; reduce universal year first, matching the canonical annual record |
 | BaZi | 20 | 80% date stem element, 15% natal Day Master element, 5% matching polarity |
 | Mayan | 15 | 80% mean daily four-count affinity, 20% mean natal four-count affinity; seal 55%, tone 30%, color 15% |
 | Transits | 20 | Major contacts to natal planets, 5° orb; conjunction +1, sextile +0.6, square -0.7, trine +0.8, opposition -0.7; linearly declining with orb and normalized by affinity |
