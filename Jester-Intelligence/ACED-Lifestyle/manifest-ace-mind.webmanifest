@@ -2,16 +2,30 @@
   "id": "./ace-mind.html",
   "name": "ACE Mind",
   "short_name": "ACE Mind",
-  "description": "ACE Mind personal kernel for daily convergence, body gates, supplements, practices, AI handoff, and governed patches.",
-  "start_url": "./ace-mind.html?v=ace-mind-jester-audit-v2-1-20260620",
+  "description": "Deterministic daily esoteric forecasts, independent timing, user choices, notes and AI handoffs.",
+  "start_url": "./ace-mind.html?v=ace-resonance-1.0.0",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#02040a",
   "theme_color": "#02040a",
-  "categories": ["productivity", "health", "lifestyle"],
+  "categories": [
+    "productivity",
+    "health",
+    "lifestyle"
+  ],
   "icons": [
-    {"src":"./shared/assets/logos/ace-mind.png?v=ace-mind-jester-audit-v2-1-20260620","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"./shared/assets/logos/ace-mind.png?v=ace-mind-jester-audit-v2-1-20260620","sizes":"512x512","type":"image/png","purpose":"any"}
+    {
+      "src": "./shared/assets/logos/ace-mind-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./shared/assets/logos/ace-mind-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
   ]
 }

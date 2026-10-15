@@ -5,9 +5,9 @@
    canonical runtime fresh from network.
 */
 
-const ACE_MIND_SW_VERSION = "25.8.3-profile-redaction-20260705";
+const ACE_MIND_SW_VERSION = "2.0.0-resonance-20261014";
 const CACHE_PREFIX = "ace-mind-cache-";
-const ACE_MIND_BUILD = "ace-mind-jester-audit-v2-1-20260620";
+const ACE_MIND_BUILD = "ace-resonance-1.0.0";
 
 self.addEventListener("install", event => {
   self.skipWaiting();
@@ -35,6 +35,8 @@ self.addEventListener("fetch", event => {
 
   const criticalAsset =
     url.pathname.endsWith("/ace-mind.html") ||
+    url.pathname.includes("/shared/resonance/") ||
+    url.pathname.endsWith("/manifest-ace-mind.webmanifest") ||
     url.pathname.endsWith("/shared/js/flamewalker-canonical-profile-v3-3.js") ||
     url.pathname.includes("/shared/optimizer/") ||
     url.pathname.includes("/shared/data/supplements/") ||
@@ -47,7 +49,7 @@ self.addEventListener("fetch", event => {
 
 self.addEventListener("notificationclick", event => {
   event.notification.close();
-  const targetUrl = "./ace-mind.html?v=ace-mind-jester-audit-v2-1-20260620";
+  const targetUrl = "./ace-mind.html?v=ace-resonance-1.0.0";
 
   event.waitUntil(
     (async () => {
