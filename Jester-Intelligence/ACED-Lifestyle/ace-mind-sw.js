@@ -5,7 +5,7 @@
    canonical runtime fresh from network.
 */
 
-const ACE_MIND_SW_VERSION = "2.0.0-resonance-20261014";
+const ACE_MIND_SW_VERSION = "2.1.0-drive-sync-20261015";
 const CACHE_PREFIX = "ace-mind-cache-";
 const ACE_MIND_BUILD = "ace-resonance-1.0.0";
 
@@ -36,6 +36,7 @@ self.addEventListener("fetch", event => {
   const criticalAsset =
     url.pathname.endsWith("/ace-mind.html") ||
     url.pathname.includes("/shared/resonance/") ||
+    url.pathname.includes("/shared/sync/") ||
     url.pathname.endsWith("/manifest-ace-mind.webmanifest") ||
     url.pathname.endsWith("/shared/js/flamewalker-canonical-profile-v3-3.js") ||
     url.pathname.includes("/shared/optimizer/") ||
