@@ -41,8 +41,8 @@ function acknowledge(body){for(const id of [body.id,...(body.sourceIds||[])])if(
 function capture(){
  if(!adapter||applying)return;
  try{const next=C.flatten(adapter.get());const ops=C.diff(observed||{},next,records(),actor,Date.now());persist(ops);observed=next;
- if(Object.keys(ops).length){setStatus(navigator.onLine?'Pending':'Offline',token?'Changes saved locally; synchronization queued.':'Changes saved locally. Connect Google Drive to sync.');schedule();}}
- catch{setStatus('Storage error','Could not persist synchronization records. Export your device data before clearing storage.');}
+ if(Object.keys(ops).length){setStatus(navigator.onLine?'Pending':'Offline',token?'Changes saved locally; synchronization queued.':'Changes saved locally. Connect Google Drive to sync.');schedule();}return true;}
+ catch{setStatus('Storage error','Could not persist synchronization records. Export your device data before clearing storage.');return false;}
 }
 function editing(){const e=document.activeElement;return e&&(e.tagName==='TEXTAREA'||e.tagName==='INPUT'&&!['checkbox','button'].includes(e.type))&&!e.closest('#ace-drive-modal');}
 function apply(){if(editing())return;const current=adapter.get(),next=C.apply(current,records());if(C.canonical(C.flatten(current))===C.canonical(C.flatten(next))){observed=C.flatten(next);return;}applying=true;try{adapter.apply(next);observed=C.flatten(adapter.get());}finally{applying=false;}}
@@ -51,7 +51,7 @@ async function syncNow(){
  if(busy||!adapter)return;
  if(!navigator.onLine){setStatus('Offline','Changes remain on this device and will synchronize when connected.');return;}
  if(!transport||Date.now()>=expires){token='';transport=null;setStatus('Reconnect required','Google sessions expire. Select Connect Google Drive; pending changes are retained.');return;}
- capture();busy=true;setStatus('Syncing','Reading private Drive app data and saving pending changes.');
+ if(capture()===false)return;busy=true;setStatus('Syncing','Reading private Drive app data and saving pending changes.');
  try{
   const session=transport,sessionAccount=account;
   for(const file of await session.list()){
