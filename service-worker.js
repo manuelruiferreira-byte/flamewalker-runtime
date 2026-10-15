@@ -1,4 +1,4 @@
-const CACHE_NAME = "flamewalker-runtime-v0-2-forecast-refresh-20260627";
+const CACHE_NAME = "flamewalker-runtime-v0-3-resonance-20261014";
 
 const SHELL_FILES = [
   "./",
@@ -19,7 +19,7 @@ self.addEventListener("activate", event => {
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(key => key !== CACHE_NAME)
+          .filter(key => key.startsWith("flamewalker-runtime-") && key !== CACHE_NAME)
           .map(key => caches.delete(key))
       )
     )
@@ -33,6 +33,8 @@ self.addEventListener("fetch", event => {
   const url = new URL(event.request.url);
   const isRuntimePage =
     event.request.mode === "navigate" ||
+    url.pathname.includes("/shared/resonance/") ||
+    url.pathname.endsWith("/manifest-ace-mind.webmanifest") ||
     url.pathname.endsWith(".html") ||
     url.pathname.includes("/Jester-Intelligence/ACE-Cluster-App/") ||
     url.pathname.includes("/Jester-Intelligence/ACED-Lifestyle/ace-cluster.html");

@@ -6,7 +6,7 @@
 <meta content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" name="viewport"/>
 <meta content="#02040a" name="theme-color"/>
 <title>ACE Mind</title>
-<link href="./manifest.json" rel="manifest"/>
+<link href="./manifest-ace-mind.webmanifest?v=1.0.0" rel="manifest"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <style>
 
@@ -385,6 +385,13 @@ body[data-ace-data-seal="fail"] .brand-card{box-shadow:0 22px 80px rgba(0,0,0,.6
 @media(max-width:620px){.jester-audit-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 </style>
+<link rel="stylesheet" href="./shared/resonance/presentation-v1.css?v=1.0.0">
+<script src="./shared/resonance/reference-v1.js?v=1.0.0"></script>
+<script src="./shared/resonance/canonical-v1.js?v=1.0.0"></script>
+<script src="./shared/resonance/engine-v1.js?v=1.0.0"></script>
+<script src="./shared/resonance/timing-v1.js?v=1.0.0"></script>
+<script src="./shared/resonance/warnings-v1.js?v=1.0.0"></script>
+<script src="./shared/resonance/presentation-v1.js?v=1.0.0"></script>
 </head>
 <body>
 <div class="app-shell" id="appShell">
@@ -404,7 +411,7 @@ body[data-ace-data-seal="fail"] .brand-card{box-shadow:0 22px 80px rgba(0,0,0,.6
 <script id="agent-state" type="application/json">{}</script>
 <script>
 'use strict';
-const APP_VERSION='1.8.2-fixed-jester-audit-v2-1-data-seal-2026-06-20';
+const APP_VERSION='2.0.0-deterministic-oracle';
 const STORAGE_KEY='ace_mind_state_v214';
 const ACE_REMOVED_GOVERNANCE_STORAGE_KEYS=[];
 const OLD_STORAGE_KEYS=['ace_mind_state_v21','ace_mind_v19_state','ace_mind_state_v20','ace_mind_v20_state'];
@@ -419,7 +426,7 @@ const FW_CANONICAL_DATA_SEAL = Object.freeze({version:'DATA-1.1',generated:'2026
 // natal blueprint. Natal relevance modifies domain/practice emphasis only.
 // It must never break individual supplement card rules or body veto governance.
 // ═══════════════════════════════════════════════════════════════════════════
-const FW_NATAL_PROFILE = {
+const FW_NATAL_PROFILE = ACECanonical.migrate({
   profile_id:'flamewalker_measurement_record_data_1_1_redacted_0900',
   source:{provider:'Flamewalker Measurement Record DATA-1.1 + Astrodienst + Ming Li/FateMaster + Maya Wisdom',method:'Tropical Placidus primary; Whole Sign and Fagan/Bradley sidereal cross-check; Ming Li Local Solar Time; four separate Mayan counts',zodiac:'tropical_primary',confidence:'canonical_operational_09_porto_source_sealed',captured_at:'2026-06-20',seal:'DATA-1.1 / v3.3 UNIVERSAL'},
   birth:{name:'REDACTED',date:'REDACTED',time_local:'09:00',universal_time:'08:00',sidereal_time:'5:00:54',apparent_solar_time:'~07:21:03',place:'REDACTED',coordinates:'REDACTED',julian_day_TT:'REDACTED',delta_T_sec:42.9,lunar_calendar:'REDACTED',chinese_zodiac:'Rat',canonical_note:'09:00 local civil time is the sole operational foundation. All angles, house cusps and BaZi hour follow from this foundation; the old afternoon input is explicitly not used.'},
@@ -463,7 +470,7 @@ const FW_NATAL_PROFILE = {
   numerology:{life_path:"33/6",expression:"111/3",soul_urge:"48/12/3",personality:"63/9",birthday:"15/6",attitude_sun:"23/5",maturity:"9 (master-variant 36/9)",hidden_passion:"9",karmic_lessons:"7 and 8",subconscious_self:"7",balance:"20/2",period_cycles:"8; 15/6; 19/10/1",pinnacles:"14/5; 7; 12/3; 9",challenges:"2; 5; 3; 7",personal_year_2026:'24/6'},
   gematria:{pythagorean:'111/3',chaldean:'82/10/1',english_ordinal:'282/12/3',english_reverse_ordinal:'339/15/6',english_reverse_reduction:'150/6',hebrew_standard:'1034/8',hebrew_siduri:'224/8',hebrew_katan:'80/8',english_jewish:'1222/7'},
   engine_policy:{order:'daily_sky → 09:00 natal relevance filter → timing overlays → body_veto → domains/practices/supplements → individual card rules',supplement_authority:'individual cards only; no supplement block authority'}
-};
+}, FW_MEASUREMENT_RECORD);
 
 const ANCHORS = [
   {
@@ -1360,6 +1367,7 @@ const MODELS=[['Gemini','https://gemini.google.com/app','GM'],['ChatGPT','https:
 const PAYLOADS=[['state','State'],['day','Day'],['bug','Bug'],['patch','Patch'],['snapshot','Snapshot']];
 let storageStatus={mode:'unknown',lastError:null,lastSavedAt:null};
 let storageWarned=false;
+try{if(!localStorage.getItem('ace_mind_pre_resonance_v1')){const backup={};for(const k of [...OLD_STORAGE_KEYS,STORAGE_KEY]){const v=localStorage.getItem(k);if(v!==null)backup[k]=v;}if(Object.keys(backup).length)localStorage.setItem('ace_mind_pre_resonance_v1',JSON.stringify(backup));}}catch(e){console.warn('Pre-upgrade backup unavailable; export data before clearing browser storage.');}
 let state=loadState();
 let activeDate=state.activeDate || brusselsISODate();
 let activeIdx=validIndex(state.activeIdx ?? todayIndex()); // legacy migration/index only
@@ -1416,15 +1424,15 @@ function mergeState(base,incoming){
   out.bodyPlan=cleanRecord(mergedBody,1600,16);
   out.body=out.bodyPlan; // legacy alias only, bodyPlan is the authority
   out.bodyLog=typeof src.bodyLog==='object'&&src.bodyLog?{...(base?.bodyLog||{}),...src.bodyLog}:{...(base?.bodyLog||{})};
-  out.supp=cleanBoolRecord(Object.assign({},base?.supp||{},src.supp||{}),1800);
+  out.supp=Object.assign({},base?.supp||{},src.supp||{});
   out.practices=cleanBoolRecord(Object.assign({},base?.practices||{},src.practices||{}),600);
   out.suppLog=typeof src.suppLog==='object'&&src.suppLog?{...(base?.suppLog||{}),...src.suppLog}:{...(base?.suppLog||{})};
   // Block history is quarantined for migration/debug only. Live supplement authority is individual card history.
   out.legacyBlockHistory=typeof src.blockHistory==='object'&&src.blockHistory?{...(base?.legacyBlockHistory||{}),...(base?.blockHistory||{}),...src.blockHistory}:{...(base?.legacyBlockHistory||{}),...(base?.blockHistory||{})};
   out.blockHistory={};
   out.suppCardPlanHistory=typeof src.suppCardPlanHistory==='object'&&src.suppCardPlanHistory?{...(base?.suppCardPlanHistory||{}),...src.suppCardPlanHistory}:{...(base?.suppCardPlanHistory||{})};
-  out.notes=cleanRecord(Object.assign({},base?.notes||{},src.notes||{}),180,1600);
-  out.logs=cleanLogs([...(Array.isArray(base?.logs)?base.logs:[]),...(Array.isArray(src.logs)?src.logs:[])],80);
+  out.notes=Object.assign({},base?.notes||{},src.notes||{});
+  out.logs=Array.isArray(src.logs)?src.logs.slice():(base?.logs||[]).slice();
   out.patchHistory=cleanPatchHistory([...(Array.isArray(base?.patchHistory)?base.patchHistory:[]),...(Array.isArray(src.patchHistory)?src.patchHistory:[])],60);
   out.patchRollback=cleanPatchRollback(src.patchRollback||base?.patchRollback||null);
   out.patchGovernance=Object.assign({version:'v25.0',lastPreview:null,lastApplied:null,lastUndo:null},base?.patchGovernance||{},src.patchGovernance||{});
@@ -1488,9 +1496,9 @@ function saveState(){
     localStorage.setItem(STORAGE_KEY,payload);
     storageStatus={mode:'local',lastError:null,lastSavedAt:state.savedAt};
   }catch(e){
-    OLD_STORAGE_KEYS.forEach(storageRemove);
+    // Preserve prior storage on quota errors; users can export before cleanup.
     try{
-      state.logs=cleanLogs(state.logs,20);
+      // Do not prune user logs to force a save.
       payload=JSON.stringify(state);
       localStorage.setItem(STORAGE_KEY,payload);
       storageStatus={mode:'local-pruned',lastError:null,lastSavedAt:state.savedAt};
@@ -1503,7 +1511,7 @@ function saveState(){
   try{JesterBridge.notifyStateChanged('save');}catch(e){}
 }
 function day(){return fwEngineDay(activeDate||brusselsISODate())}
-function blockFor(d){return BLOCKS[String(d.block)]||BLOCKS['1']}
+function blockFor(d){return {name:'Complete canonical catalog',items:ACEReference.supplements.map(s=>[s.name,'User selection only',''])};}
 function fwFreezeBlock(date, assignment, source){
   // Supplement block locking is disabled in the canonical card-only build.
   // Older imports can still contain blockHistory, but it is quarantined and never
@@ -1851,26 +1859,14 @@ function suppClass(cbr,g,name){
   return '';
 }
 function tickSupp(date,name){
-  date=String(date||activeDate||brusselsISODate()).slice(0,10);
-  name=normSuppName(name);
-  const k=key(date,name);
-  const ticked=!state.supp[k];
-  state.supp[k]=ticked;
-  if(!state.suppLog)state.suppLog={};
-  const ed=fwEngineDay(date);
-  const bl=BLOCKS[String(ed.block)]||BLOCKS['1'];
-  const body=bodySummaryForDate(date);
-  const taken=Object.keys(state.supp).filter(x=>x.startsWith(date+'__')&&state.supp[x]).map(x=>x.slice(date.length+2));
-  const prev=state.suppLog[date]&&typeof state.suppLog[date]==='object'?state.suppLog[date]:{};
-  const events=Array.isArray(prev.events)?prev.events.slice(-80):[];
-  const event={name,ticked,at:new Date().toISOString(),block:ed.block,blockName:bl.name,bodyGovernor:body.governor,blockAssignment:ed.blockAssignment||null};
-  events.push(event);
-  state.suppLog[date]={...prev,block:ed.block,blockName:bl.name,taken,events,lastEvent:event,reason:ed.blockReason,blockAssignment:ed.blockAssignment||null,at:event.at};
-  fwFreezeBlock(date, ed.blockAssignment || {finalBlock:ed.block, reasonSummary:ed.blockReason}, 'supplement-toggle');
-  state.logs.push({type:'supplement-toggle',date,name,ticked,block:ed.block,bodyGovernor:body.governor,at:event.at});
-  saveState();
-  render();
+  ACEResonance.dateValue(date);
+  const k=key(date,name);state.supp=state.supp||{};state.supp[k]=!state.supp[k];
+  const event={name,ticked:state.supp[k],at:new Date().toISOString(),engine:ACEResonance.VERSION};
+  const prior=state.suppLog[date]||{};
+  state.suppLog[date]={...prior,events:[...(prior.events||[]),event],taken:Object.keys(state.supp).filter(k=>k.startsWith(date+'__')&&state.supp[k]).map(k=>k.slice(date.length+2))};
+  saveState();renderClubs(day(),deriveGuidanceV23(day()));
 }
+
 function isTicked(date,name){return !!state.supp[key(date,name)]}
 function tickPractice(date,name){
   if(!state.practices)state.practices={};
@@ -2028,15 +2024,8 @@ function fwAddDaysISO(isoDate,delta){
   dt.setUTCDate(dt.getUTCDate()+Number(delta||0));
   return dt.toISOString().slice(0,10);
 }
-function fwPersonalIsoForDate(isoDate){
-  const date=String(isoDate||brusselsISODate()).slice(0,10);
-  const today=brusselsISODate();
-  let usePrevious=false;
-  if(date===today){
-    try{ usePrevious=fwBrusselsTime().h<FW_PERSONAL_HINGE_HOUR; }catch(e){ usePrevious=false; }
-  }
-  return usePrevious ? fwAddDaysISO(date,-1) : date;
-}
+function fwPersonalIsoForDate(isoDate){ ACEResonance.dateValue(isoDate); return isoDate; }
+
 const FW_PD_INFO = {
   1:{kw:'Initiative',    desc:'New cycles ignite. Plant the seed.'},
   2:{kw:'Partnership',   desc:'Cooperation weaves the field.'},
@@ -2211,28 +2200,28 @@ function fwNormalizeNatalProfile(profile){
   out.angles=Object.assign({},FW_NATAL_PROFILE.angles,out.angles||{});
   out.houses=Object.assign({},FW_NATAL_PROFILE.houses,out.houses||{});
   out.engine_policy=Object.assign({},FW_NATAL_PROFILE.engine_policy,out.engine_policy||{});
-  out.measurement_record=FW_MEASUREMENT_RECORD;
+  out.measurement_record=FW_NATAL_PROFILE.measurements;
   out.extensions={
-    tropical_whole_sign:FW_MEASUREMENT_RECORD.tropical_whole_sign,
-    tropical_aspect_ledger:FW_MEASUREMENT_RECORD.tropical_aspect_ledger,
-    sidereal_fagan_bradley:FW_MEASUREMENT_RECORD.sidereal_fagan_bradley,
-    draconic:FW_MEASUREMENT_RECORD.draconic,
-    heliocentric:FW_MEASUREMENT_RECORD.heliocentric,
-    harmonics:FW_MEASUREMENT_RECORD.harmonics,
-    planetary_distances:FW_MEASUREMENT_RECORD.planetary_distances,
-    declinations:FW_MEASUREMENT_RECORD.declinations,
-    antiscia:FW_MEASUREMENT_RECORD.antiscia,
-    dignities_sect:FW_MEASUREMENT_RECORD.dignities_sect,
-    hellenistic_lots:FW_MEASUREMENT_RECORD.hellenistic_lots,
-    vertex_points:FW_MEASUREMENT_RECORD.vertex_points,
-    midpoints_ebertin:FW_MEASUREMENT_RECORD.midpoints_ebertin,
-    fixed_stars:FW_MEASUREMENT_RECORD.fixed_stars,
-    relocation:FW_MEASUREMENT_RECORD.relocation,
-    traditional_timing:FW_MEASUREMENT_RECORD.traditional_timing,
-    gematria:FW_MEASUREMENT_RECORD.gematria,
-    numerology:FW_MEASUREMENT_RECORD.numerology,
-    mayan:FW_MEASUREMENT_RECORD.mayan,
-    bazi:FW_MEASUREMENT_RECORD.bazi
+    tropical_whole_sign:FW_NATAL_PROFILE.measurements.tropical_whole_sign,
+    tropical_aspect_ledger:FW_NATAL_PROFILE.measurements.tropical_aspect_ledger,
+    sidereal_fagan_bradley:FW_NATAL_PROFILE.measurements.sidereal_fagan_bradley,
+    draconic:FW_NATAL_PROFILE.measurements.draconic,
+    heliocentric:FW_NATAL_PROFILE.measurements.heliocentric,
+    harmonics:FW_NATAL_PROFILE.measurements.harmonics,
+    planetary_distances:FW_NATAL_PROFILE.measurements.planetary_distances,
+    declinations:FW_NATAL_PROFILE.measurements.declinations,
+    antiscia:FW_NATAL_PROFILE.measurements.antiscia,
+    dignities_sect:FW_NATAL_PROFILE.measurements.dignities_sect,
+    hellenistic_lots:FW_NATAL_PROFILE.measurements.hellenistic_lots,
+    vertex_points:FW_NATAL_PROFILE.measurements.vertex_points,
+    midpoints_ebertin:FW_NATAL_PROFILE.measurements.midpoints_ebertin,
+    fixed_stars:FW_NATAL_PROFILE.measurements.fixed_stars,
+    relocation:FW_NATAL_PROFILE.measurements.relocation,
+    traditional_timing:FW_NATAL_PROFILE.measurements.traditional_timing,
+    gematria:FW_NATAL_PROFILE.measurements.gematria,
+    numerology:FW_NATAL_PROFILE.measurements.numerology,
+    mayan:FW_NATAL_PROFILE.measurements.mayan,
+    bazi:FW_NATAL_PROFILE.measurements.bazi
   };
   return out;
 }
@@ -2247,7 +2236,7 @@ const FW_CANONICAL_DOMAIN_KEYS=['body','health','money','career','love','social'
 const FW_DOMAIN_ALIAS={body:'health',health:'health',money:'money',career:'career',vocation:'career',love:'love',eros:'love',intimacy:'love',social:'social',community:'social',creative:'creative',creativity:'creative',study:'study',learning:'study',spiritual:'spiritual',spirit:'spiritual',leisure:'leisure',rest:'leisure'};
 function fwDomainKey(k){return FW_DOMAIN_ALIAS[String(k||'').toLowerCase()]||String(k||'').toLowerCase();}
 function fwAddDomainScore(map,key,val){key=fwDomainKey(key); if(!key)return; map[key]=(map[key]||0)+Number(val||0);}
-function fwRecord(){return FW_MEASUREMENT_RECORD||{};}
+function fwRecord(){return FW_NATAL_PROFILE.measurements||{};}
 function fwCanonicalClass(key){try{return fwRecord()[key]?.class||'A';}catch(e){return 'A';}}
 function fwIsoBefore(a,b){return String(a).slice(0,10)<String(b).slice(0,10);}
 function fwCanonicalLayerMapForDate(iso){
@@ -2377,7 +2366,7 @@ function fwCanonicalGovernancePanel(d,g){
   const e=typeof escapeHtml==='function'?escapeHtml:(s=>String(s??''));
   const top=(cg.top_domains||[]).map(x=>`${x.key} ${Math.round(x.score*100)/100}`).join(' · ');
   const layers=(cg.active_layers||[]).slice(0,10).map(x=>`<div class="fw-to-natal-row"><span class="fw-to-natal-planet">${e(x.label)}</span><span class="fw-to-natal-pos">${e(x.status)} · Class ${e(x.class)} · ${e(x.basis)}</span></div>`).join('');
-  return `<details class="fw-to-details-card" open><summary class="fw-to-summary">Canonical Governance · DATA-1.1</summary><div class="fw-to-details-body"><div class="warn">Source of truth: 09:00 Porto Measurement Record DATA-1.1. Active layers govern as bounded modifiers; body veto and supplement conflicts remain above symbolism.</div><div class="small" style="margin-top:8px">${e(cg.summary)} ${top?`Top: ${e(top)}.`:''}</div><div class="small" style="margin-top:6px">Transit status: ${e(cg.accuracy?.transits||'unknown')}</div><div class="fw-to-mayan-grid" style="margin-top:10px">${layers}</div></div></details>`;
+  return `<details class="fw-to-details-card" open><summary class="fw-to-summary">Canonical Governance · DATA-1.1</summary><div class="fw-to-details-body"><div class="warn">Source of truth: 09:00 Porto Measurement Record DATA-1.1. Archived source-layer inspection. Authoritative supplement and domain forecasts use the versioned resonance engine; body observations and warnings are separate.</div><div class="small" style="margin-top:8px">${e(cg.summary)} ${top?`Top: ${e(top)}.`:''}</div><div class="small" style="margin-top:6px">Transit status: ${e(cg.accuracy?.transits||'unknown')}</div><div class="fw-to-mayan-grid" style="margin-top:10px">${layers}</div></div></details>`;
 }
 
 function fwAngleDelta(a,b){const d=Math.abs((((Number(a)-Number(b))+540)%360)-180);return d;}
@@ -2602,13 +2591,9 @@ function fwApplyLoveSocialAxisCalibration(domainScores,conv,personalTransit,body
   return out;
 }
 function fwBaselineDomainScores(date){
-  const d=fwBareDayForAxis(date), conv=compileConvergence(d), body=fwGreenBodyStates();
-  let scores=scoreDomains(conv,body);
-  scores=fwApplyNatalDomainBoost(scores,d.natalTransit);
-  scores=fwApplyLoveSocialAxisCalibration(scores,conv,d.natalTransit,body,d,{skipPercentile:true,baseline:true});
-  scores=fwApplySeasonalDomainContext(scores,d,conv,body,{baseline:true});
-  return scores;
+  return aceDomainProjection(ACEResonance.scoreLifeDomains(date,FW_NATAL_PROFILE,ACEResonance.VERSION));
 }
+
 function fwAnnualDomainScan(year){
   year=String(year||'2026');
   if(FW_AXIS_CACHE.yearScan[year])return FW_AXIS_CACHE.yearScan[year];
@@ -2893,7 +2878,7 @@ function fwPtrmFull(isoDate) {
     pY:nums.pY, pYRaw:nums.pYRaw, pM:nums.pM, pMRaw:nums.pMRaw,
     ptrm:`${raw}/${pd} ${lbl[pd]||'GROUNDING'}`,
     hingeAdjusted:personalIso!==worldIso,
-    hingeRule:'Before 09:00 Brussels use the previous personal date; at or after 09:00 use the selected/current date.'
+    hingeRule:'Selected Brussels calendar date always governs; 09:00 is informational only.'
   };
 }
 
@@ -3408,7 +3393,7 @@ function fwEngineDay(isoDate) {
   const weekday = fwWeekdayName(date);
   const mayan = fwMayanDay(date);
   const bazi = fwBaziDay(date);
-  const sel = fwSelectBlockV23(date);
+  const sel = {block:null,reason:'All canonical supplements ranked independently',assignment:null,element:bazi.element};
   const astro = fwAstroPositions(date);
   const natalTransit = fwNatalTransitEngine(date);
   const num = fwPtrmFull(date);
@@ -3418,7 +3403,7 @@ function fwEngineDay(isoDate) {
     dayNum:d,
     weekday,
     shift:'free',
-    focusHint:fwFocusHint(sel.block),
+    focusHint:'One clean action',
     block:sel.block,
     blockReason:sel.reason,
     blockAssignment,
@@ -3607,7 +3592,7 @@ function renderTemporal(d, g) {
   const _sh=Math.floor(ph.setUTC||0), _sm=Math.round(((ph.setUTC||0)%1)*60);
   html += `<div class="tiny" style="margin-top:2px;color:var(--muted)">Sunrise ~${('0'+_rh).slice(-2)}:${('0'+_rm).slice(-2)} UTC · Sunset ~${('0'+_sh).slice(-2)}:${('0'+_sm).slice(-2)} UTC</div>`;
   html += '</div></div>';
-  html += '<div class="tiny fw-to-static-note" style="margin-top:6px">Live · Brussels current time · 09:00 personal hinge · Chaldean order · NOAA solar · coordinates: ' + e((state.temporalConfig?.label||'Brussels fallback')) + '</div>';
+  html += '<div class="tiny fw-to-static-note" style="margin-top:6px">Live · Brussels current time · 09:00 information only; does not govern scores · Chaldean order · NOAA solar · coordinates: ' + e((state.temporalConfig?.label||'Brussels fallback')) + '</div>';
   html += '</div>';
 
   // ── Numerology + hinge card ──────────────────────────────────────────────────
@@ -4857,52 +4842,10 @@ function selectChakra(conv) {
   return base;
 }
 
-function scoreDomains(conv, bodyStates) {
-  // ── Weekday context: life domains follow real-world rhythms ──────────────
-  // Derived from conv.iso (Brussels, warehouse schedule Mon-Fri).
-  // Career/money are near-zero on rest days; leisure/creative/spiritual rise.
-  const _iso = conv.iso || '';
-  const _dow = _iso ? new Date(_iso + 'T12:00:00Z').getUTCDay() : new Date().getDay(); // 0=Sun,6=Sat
-  const _weekend = _dow === 0 || _dow === 6;
-  const _saturday = _dow === 6;
-  // v25.2.2: Weekend multipliers were pushing Creative/Spiritual/Leisure into the 1.0
-  // ceiling almost every weekend, so one of them won "primary" by default and crowded
-  // out genuine signal (Creative was rank-0 ~172 days/yr — a false result). These are
-  // softened so they lift without saturating, and the relational lift is made honest:
-  // the warehouse week is Mon–Fri, so weekends are when Love/Social actually have room.
-  const DOW_MULT = _weekend ? {
-    money: 0.22, career: 0.12, love: 1.24, social: _saturday ? 1.32 : 1.16,
-    health: 1.05, creative: 1.18, study: 1.12, spiritual: 1.20, leisure: 1.22
-  } : { money:1, career:1, love:1, social:1, health:1, creative:1, study:1, spiritual:1, leisure:1 };
-
-  // ── Elemental deficiency-correction (light — domains are context, not physiology) ──
-  // If engaging in a domain provides elemental energy the user lacks, give a small boost.
-  // E.g. creative/career channel Fire → slight bonus when Fire-deficient.
-  const need = (typeof ACE_USER_PROFILE !== 'undefined') ? ACE_USER_PROFILE.bazi.elementNeed : {};
-  const DOMAIN_ELEMENT = {
-    money:'Earth', career:'Fire', love:'Water', social:'Fire',
-    health:'Earth', creative:'Fire', study:'Water', spiritual:'Water', leisure:'Earth'
-  };
-
-  const result = {};
-  for (const [domain, card] of Object.entries(DOMAIN_CARDS)) {
-    const { score: rawScore, trail } = scoreCard(card, conv, bodyStates);
-    // deficiency correction: does this domain's primary element fill a user need?
-    const domEl = DOMAIN_ELEMENT[domain] || 'Earth';
-    const defBonus = aceClamp((need[domEl] || 0) * 0.14, -0.08, 0.18);  // light, max ±0.18
-    let score = aceClamp(rawScore + defBonus, -1, 1);
-    // weekday multiplier (clamp so it can't produce false OPTIMALs on its own)
-    score = aceClamp(score * (DOW_MULT[domain] || 1), -1, 1);
-    const favor = score >= 0.62 ? 'FAVORED'
-                : score >= 0.38 ? 'Supported'
-                : score >= 0.18 ? 'Neutral'
-                : score >= 0.0  ? 'Low signal'
-                : 'Caution';
-    result[domain] = { score: Math.round(score * 100) / 100, favor, trail };
-  }
-  return result;
+function scoreDomains(conv) {
+  return aceDomainProjection(ACEResonance.scoreLifeDomains(conv.iso,FW_NATAL_PROFILE,ACEResonance.VERSION));
 }
-
+function aceDomainProjection(out){return Object.fromEntries(out.rows.map(r=>[r.id,{...r,score:r.score/100,favor:r.classification,trail:r.contributions.map(c=>c.explanation),why:r.contributions.map(c=>c.explanation).join('; '),action:r.classification,chromatic:{state:r.score>=80?'full_green':r.score>=65?'full_blue':'quiet',label:r.classification},engineVersion:out.engineVersion}]));}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ACE Mind v25.2.3 · Convergence Chromatic Calibration
@@ -5328,11 +5271,11 @@ function aceEngineScore(name, card, conv, bodyStates, profile, cbr){
 }
 
 // ── Score a single supplement against the day (now via the v24 engine) ────────
-function scoreSupplementForDay(name, conv, bodyStates, cbr) {
-  const card = getSuppCard(name);
-  if (!card) return { score: 0.35, rawScore: 0.35, bodyPermission: 1, status: 'ALLOWED',
-    label: 'no profile data · neutral', reasonTrail: ['no card · neutral'], trail: ['no card · neutral'] };
-  return aceEngineScore(name, card, conv, bodyStates || {}, ACE_USER_PROFILE, cbr);
+function scoreSupplementForDay(name, conv) {
+  const id=ACEReference.supplements.find(s=>s.name===name||(s.aliases||[]).includes(name))?.id;
+  const row=ACEResonance.scoreSupplements(conv.iso,FW_NATAL_PROFILE,ACEResonance.VERSION).rows.find(x=>x.id===id);
+  if(!row)return {score:0,status:'UNAVAILABLE',trail:['Canonical supplement not found']};
+  return {...row,score:row.score/100,rawScore:row.score/100,status:row.classification,trail:row.contributions.map(c=>c.explanation),reasonTrail:row.contributions.map(c=>c.explanation)};
 }
 
 // ── Status thresholds (legacy harmonic scorer — still used by practice/domain cards) ─
@@ -5768,9 +5711,7 @@ function deriveGuidanceV23(d) {
   const gov        = c.body.governor;
   const veto       = c.body.veto;
   const bodyStates = c.body.states || {};
-  const suppMode   = veto ? 'LOCKED'
-                   : (gov==='RED'||gov==='ORANGE') ? 'LOCKED'
-                   : (gov==='YELLOW'||gov==='WATCH') ? 'CONDITIONAL' : 'ALIGNED';
+  const suppMode = 'USER_SELECTION';
 
   const conv = compileConvergence(d);
   const freqResult   = selectFrequency(conv, bodyStates);
@@ -5778,26 +5719,10 @@ function deriveGuidanceV23(d) {
   const moveResult   = selectMovement(conv, bodyStates);
   const chakra       = selectChakra(conv);
 
-  const rawDomainScores = scoreDomains(conv, bodyStates);
-  const domainScores = {};
-  for (const [dom, v] of Object.entries(rawDomainScores)) {
-    const gen = genDomainGuidance(dom, conv, v.score, v.favor);
-    domainScores[dom] = { ...v, action: gen.action, why: gen.why, trap: gen.trap };
-  }
-
   const personalTransit = d.natalTransit || fwNatalTransitEngine(d.id);
-  const axisDomainScores = fwApplyLoveSocialAxisCalibration(
-    fwApplyNatalDomainBoost(domainScores, personalTransit),
-    conv,
-    personalTransit,
-    bodyStates,
-    d
-  );
   const seasonalContext = fwSeasonalContextForDate(d.id);
-  const seasonalDomainScores = fwApplySeasonalDomainContext(axisDomainScores,d,conv,bodyStates);
   const canonicalGovernance = fwCanonicalGovernanceForDay(d.id,d,conv,personalTransit,seasonalContext,bodyStates);
-  let life = fwApplyChromaticConvergence(seasonalDomainScores,d,conv,personalTransit,seasonalContext,bodyStates);
-  life = fwApplyCanonicalRecordGovernance(life,d,conv,personalTransit,seasonalContext,bodyStates,canonicalGovernance);
+  const life = aceDomainProjection(ACEResonance.scoreLifeDomains(d.id,FW_NATAL_PROFILE,ACEResonance.VERSION));
 
   const ACU = {Wood:['LV3','GB34'],Fire:['HT7','PC6'],Earth:['ST36','SP6'],Metal:['LU7','LI4'],Water:['KI1','KI3']};
   const acu = ACU[d.bazi?.element||'Earth'] || ['ST36','SP6'];
@@ -5836,7 +5761,7 @@ function deriveGuidanceV23(d) {
     canonicalGovernance,
     life,
     conv,
-    supplementAuthority:'individual-card-policy-v4 + canonical-data-1.1-bounded-modifiers'
+    supplementAuthority:ACEResonance.VERSION
   };
 }
 
@@ -5891,7 +5816,7 @@ function renderDayRail(){
 function panel(html){return `<div class="card">${html}</div>`}
 function mayanLine(d){const m=d.mayan||{};return `DNA K${m.dna?.kin||'?'} Tone ${m.dna?.tone||'?'} ${m.dna?.archetype||''}; Dreamspell K${m.dreamspell?.kin||'?'} Tone ${m.dreamspell?.tone||'?'} ${m.dreamspell?.archetype||''}; Cosmic K${m.cosmic?.kin||'?'} Tone ${m.cosmic?.tone||'?'} ${m.cosmic?.archetype||''}; Tzolkin Tone ${m.tzolkin?.tone||'?'} ${m.tzolkin?.sign||m.tzolkin?.archetype||''}.`}
 function baziLine(d){const sig=d.bazi?.signature||'';const pillar=d.bazi?.pillar||'';let tone='containment and timing';if(/Water|Rat/i.test(sig))tone='adaptive water moving through structure';if(/Fire|Horse|Snake/i.test(sig))tone='heat, visibility, and controlled output';if(/Metal|Monkey|Rooster/i.test(sig))tone='precision, sorting, and boundary craft';if(/Wood|Tiger|Rabbit/i.test(sig))tone='growth pressure and directional movement';return `${d.bazi?.hanzi||''} ${pillar} · ${sig}. Operational tone: ${tone}.`}
-function numerologyLine(d,g){return `${d.ptrm||'unlisted'} · day ${d.dayNum||'?'} · supplement block ${d.block||'?'} (${g.block?.name||'block'}). Use the number field as pacing, not prophecy.`}
+function numerologyLine(d,g){return `${d.ptrm||'unlisted'} · day ${d.dayNum||'?'} · all supplements ranked by ${ACEResonance.VERSION}.`;}
 function astrologyLine(d){const a=d.astrology||{};const planets=[a.sun&&`Sun ${a.sun}`,a.moon&&`Moon ${a.moon}`,a.mercury&&`Mercury ${a.mercury}`,a.venus&&`Venus ${a.venus}`,a.mars&&`Mars ${a.mars}`,a.jupiter&&`Jupiter ${a.jupiter}`].filter(Boolean).join(' · ');return `${a.focus||'No focus recorded.'}${planets?` ${planets}.`:''}`}
 function synthesisLine(d,g){const c=g.c;return `${c.focus}. ${c.gate||'BODY CLEAR'}. Intensity ${c.intensity}. Supplement authority ${g.suppMode||'CARD_OPTIMIZER'}. The invariant: one clean signal, body gate first, then card-level action.`}
 function convergenceHtml(d,g){return `<div class="conv-grid"><div class="conv-card"><b>Mayan</b><div>${escapeHtml(mayanLine(d))}</div></div><div class="conv-card"><b>BaZi</b><div>${escapeHtml(baziLine(d))}</div></div><div class="conv-card"><b>Numerology</b><div>${escapeHtml(numerologyLine(d,g))}</div></div><div class="conv-card"><b>Astrology</b><div>${escapeHtml(astrologyLine(d))}</div></div></div><div class="conv-synthesis">${escapeHtml(synthesisLine(d,g))}</div>`}
@@ -5907,17 +5832,14 @@ function renderSpades(d,g){
   const seasonalClean=g.seasonalContext&&g.seasonalContext.summary?`Seasonal echo: ${g.seasonalContext.summary}`:'';
   const synthesis=`${visibleFocus}. Field intensity ${c.intensity}. Read the sky as orientation: Mayan seed, BaZi weather, numerology pace, astrology nuance, then body gate.`;
   const fieldHtml=`<div class="focus-title">${escapeHtml(visibleFocus)}</div><div class="small" style="margin-top:6px">${escapeHtml(c.summary)}</div><div class="conv-grid"><div class="conv-card"><b>Mayan</b><div>${escapeHtml(mayanClean)}</div></div><div class="conv-card"><b>BaZi</b><div>${escapeHtml(baziClean)}</div></div><div class="conv-card"><b>Numerology</b><div>${escapeHtml(numerologyClean)}</div></div><div class="conv-card"><b>Astrology</b><div>${escapeHtml(astrologyClean)}</div></div></div>${natalClean?`<div class="small" style="margin-top:10px;color:var(--blue)">${escapeHtml(natalClean)}</div>`:''}${seasonalClean?`<div class="small" style="margin-top:6px;color:var(--muted)">${escapeHtml(seasonalClean)}</div>`:''}<div class="conv-synthesis">${escapeHtml(synthesis)}</div>`;
-  const bodyHtml=`<div class="focus-title">Body State</div><div class="body-grid" style="margin-top:10px">${AXES.map(a=>{const st=c.body.states[a];return `<div class="body-row"><div><div class="body-name state-${st}">${AXIS_LABEL[a]}</div><div class="body-state-letters">G · Y · O · R</div></div><div class="body-actions"><button class="${st==='green'?'active state-green':'state-green'}" onclick="setBody('${d.id}','${a}','green')" aria-label="Set ${AXIS_LABEL[a]} green">G</button><button class="${st==='yellow'?'active state-yellow':'state-yellow'}" onclick="setBody('${d.id}','${a}','yellow')" aria-label="Set ${AXIS_LABEL[a]} yellow">Y</button><button class="${st==='orange'?'active state-orange':'state-orange'}" onclick="setBody('${d.id}','${a}','orange')" aria-label="Set ${AXIS_LABEL[a]} orange">O</button><button class="${st==='red'?'active state-red':'state-red'}" onclick="setBody('${d.id}','${a}','red')" aria-label="Set ${AXIS_LABEL[a]} red">R</button></div></div>`}).join('')}</div>${fwBodyMatrixAlternativeBanner(d,g)}`;
+  const bodyHtml=`<div class="focus-title">Body State</div><div class="body-grid" style="margin-top:10px">${AXES.map(a=>{const st=c.body.states[a];return `<div class="body-row"><div><div class="body-name state-${st}">${AXIS_LABEL[a]}</div><div class="body-state-letters">G · Y · O · R</div></div><div class="body-actions"><button class="${st==='green'?'active state-green':'state-green'}" onclick="setBody('${d.id}','${a}','green')" aria-label="Set ${AXIS_LABEL[a]} green">G</button><button class="${st==='yellow'?'active state-yellow':'state-yellow'}" onclick="setBody('${d.id}','${a}','yellow')" aria-label="Set ${AXIS_LABEL[a]} yellow">Y</button><button class="${st==='orange'?'active state-orange':'state-orange'}" onclick="setBody('${d.id}','${a}','orange')" aria-label="Set ${AXIS_LABEL[a]} orange">O</button><button class="${st==='red'?'active state-red':'state-red'}" onclick="setBody('${d.id}','${a}','red')" aria-label="Set ${AXIS_LABEL[a]} red">R</button></div></div>`}).join('')}</div>`;
   document.getElementById('grid-spades').innerHTML=panel(fieldHtml)+panel(bodyHtml)+renderDayNote(d);
 }
 function renderClubs(d,g){
-  // ACE clean-ui stale-pass1: placeholder binding only.
-  // The canonical card-only supplement renderer is installed later by the supplement-card repair layer.
-  const root=document.getElementById('grid-clubs');
-  if(root&&!root.dataset.waitingForCanonicalRenderer){
-    root.dataset.waitingForCanonicalRenderer='1';
-  }
+  const root=document.getElementById('grid-clubs');if(!root)return;
+  window.ACE_MIND_SUPPLEMENT_MODEL=ACEPresentation.supplements(root,d.id,FW_NATAL_PROFILE,name=>isTicked(d.id,name),name=>tickSupp(d.id,name));
 }
+
 function renderDiamonds(d,g){
   const sc=v=>v!=null?` · ${v.toFixed(2)}`:'';
   const trailHtml=g.practTrail&&g.practTrail.length?`<div class="tiny" style="color:var(--muted);margin-top:4px">${escapeHtml(g.practTrail.join(' | '))}</div>`:'';
@@ -5937,109 +5859,9 @@ function renderDiamonds(d,g){
 function foodAlternatives(g){const gov=g.c.body.governor;const base=[`Protein + minerals + clean hydration`,`Warm simple meal with easy digestion`,`Greek-style plate: protein, olive oil, greens, rice or potatoes`,`Soup or stew when the nervous system needs grounding`];if(g.c.body.veto||gov==='RED'||gov==='ORANGE')return [`Warm simple food only`,`Soup/stew + electrolytes`,`Avoid experiments, heavy fats, alcohol, and stimulant stacking`,`Keep portions moderate and digestion easy`];if(gov==='YELLOW'||gov==='WATCH')return [`Protein + cooked vegetables`,`Rice/potato base + olive oil + salt/minerals`,`Avoid extreme spice, heavy sugar, and late caffeine`,`Hydrate before adding supplements`];return base}
 function openFoodCard(){const d=day(),g=deriveGuidanceV23(d);document.getElementById('suppTitle').textContent='Food Advice · Alternatives';document.getElementById('suppContent').innerHTML=`<div class="row-note">${escapeHtml(g.food)} · body gate ${escapeHtml(g.c.body.governor)}</div><div class="supp-modal-grid" style="margin-top:10px"><div class="supp-modal-box"><b>Best choices today</b>${listHtml(foodAlternatives(g))}</div><div class="supp-modal-box"><b>Keep away from</b>${listHtml(g.c.body.veto?['new supplement experiments','heavy detox foods','large late meals','alcohol / overstimulation']:['excess sugar','chaotic snacking','heavy late food','food that fights the current body state'])}</div><div class="supp-modal-box"><b>Simple formula</b>${listHtml(['Protein anchor','Mineral/hydration support','One digestion-friendly carb if needed','One calming element: soup, tea, or warm meal'])}</div><div class="supp-modal-box"><b>Plan B</b>${listHtml(['If tired: soup + protein','If rushed: yogurt/eggs/tuna + fruit','If social: choose the cleanest warm option','If skin/liver feels reactive: simplify'])}</div></div><div class="supp-modal-note">Food advice stays inside ACE Mind. ACE Gravitic remains for breath, movement, acupressure, chakra, and frequency routing.</div>`;openModal('suppModal')}
 function renderHearts(d,g){
-  const ORDER=['money','career','love','social','health','creative','study','spiritual','leisure'];
-  const GLYPHS={money:'◈',career:'◆',love:'♡',social:'◎',health:'⊕',creative:'✦',study:'◉',spiritual:'⟡',leisure:'◟◞'};
-  const SHORT={money:'Money',career:'Career',love:'Love',social:'Social',health:'Health',creative:'Creative',study:'Study',spiritual:'Spirit',leisure:'Rest'};
-
-  // rank by score
-  const scored = ORDER.map(k=>({k,v:g.life[k]||{score:0,action:'One clean step.'}}))
-                      .sort((a,b)=>(b.v.score||0)-(a.v.score||0));
-  const rankOf = {}; scored.forEach((x,i)=>{ rankOf[x.k]=i; });
-
-  // v25.2.2: Domain GLOW now follows an honest activation STATE, not the single-winner
-  // rank race. Love/Social read their own axis state (the multi-key relational gate),
-  // so a true open day glows green even if a productive domain edges it on raw score.
-  // The day's actual #1 still gets a distinct primary RING so "lead with this" survives.
-  // States: 'green' (open/peak), 'gold' (favored), 'silver' (inner/healing, love only),
-  // 'support', 'quiet', 'caution'.
-  function domainState(k, v){
-    if(v&&v.chromatic&&v.chromatic.state)return String(v.chromatic.state);
-    const sc=Number(v&&v.score||0);
-    const ax=v&&v.axis?String(v.axis.state||'').toLowerCase():'';
-      const blocked=aceVerdict==='BLOCK', downgraded=aceVerdict==='DOWNGRADE';
-    if(k==='love'||k==='social'){
-      if(ax==='red') return 'high_caution';
-      if(ax==='green'||ax==='gold') return blocked?'high_caution':downgraded?'full_yellow':'full_green';
-      if(ax==='amber') return 'full_yellow';
-      if(ax==='silver') return 'full_blue';
-      return sc>=0.62?'dim_green':sc>=0.45?'dim_blue':sc>=0.18?'quiet':sc<0?'dim_yellow':'quiet';
-    }
-    if(sc<0) return 'dim_yellow';
-    if(blocked) return 'high_caution';
-    if(sc>=0.90 && !downgraded) return 'gold';
-    if(sc>=0.78 && !downgraded) return 'full_green';
-    if(sc>=0.62) return 'dim_green';
-    if(sc>=0.45) return 'full_blue';
-    if(sc>=0.28) return 'dim_blue';
-    return 'quiet';
-  }
-  const STATE_STYLE={
-    gold:`background:rgba(253,230,138,.22);border:2px solid rgba(253,230,138,.94);box-shadow:0 0 24px rgba(253,230,138,.34),inset 0 0 14px rgba(253,230,138,.08)`,
-    full_green:`background:rgba(52,211,153,.20);border:2px solid #34d399;box-shadow:0 0 18px rgba(52,211,153,.32)`,
-    dim_green:`background:rgba(52,211,153,.10);border:1.5px solid rgba(52,211,153,.55);box-shadow:0 0 12px rgba(52,211,153,.14)`,
-    full_blue:`background:rgba(59,130,246,.14);border:2px solid rgba(147,197,253,.75);box-shadow:0 0 16px rgba(147,197,253,.22)`,
-    dim_blue:`background:rgba(59,130,246,.07);border:1px solid rgba(147,197,253,.38)`,
-    full_yellow:`background:rgba(250,204,21,.14);border:2px solid rgba(250,204,21,.72);box-shadow:0 0 15px rgba(250,204,21,.18)`,
-    dim_yellow:`background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.34)`,
-    high_caution:`background:rgba(239,68,68,.08);border:2px solid rgba(239,68,68,.48);box-shadow:0 0 16px rgba(239,68,68,.18)`,
-    green:`background:rgba(52,211,153,.20);border:2px solid #34d399;box-shadow:0 0 18px rgba(52,211,153,.32)`,
-    silver:`background:rgba(186,230,253,.12);border:2px solid rgba(186,230,253,.55);box-shadow:0 0 14px rgba(186,230,253,.18)`,
-    support:`background:rgba(214,168,79,.13);border:1px solid rgba(214,168,79,.42)`,
-    quiet:`background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.11)`,
-    caution:`background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.20)`
-  };
-  const STATE_COLOR={gold:'#fde68a',full_green:'#34d399',dim_green:'#86efac',full_blue:'#93c5fd',dim_blue:'#60a5fa',full_yellow:'#facc15',dim_yellow:'#fde68a',high_caution:'#fca5a5',green:'#34d399',silver:'#bae6fd',support:'#d6a84f',quiet:'#91a3b9',caution:'#fca5a5'};
-  // The primary (rank-0) gets a cyan ring overlay only when it is NOT itself green,
-  // so a green domain stays purely emerald and the ring just flags "today's lead".
-  function dotStyle(state, rank){
-    const base=STATE_STYLE[state]||STATE_STYLE.quiet;
-    if(rank===0 && !['full_green','green','gold'].includes(state)) return base+`;outline:2px solid rgba(34,211,238,.65);outline-offset:2px`;
-    return base;
-  }
-  function dotColor(state){ return STATE_COLOR[state]||STATE_COLOR.quiet; }
-
-  // build 3×3 dot grid
-  const dots = ORDER.map(k=>{
-    const v=g.life[k]||{score:0}; const sc=v.score||0; const rank=rankOf[k];
-    const state = domainState(k, v);
-    const sz = (rank<=1 || ['gold','full_green','green'].includes(state)) ? '72px' : (['dim_green','full_blue','full_yellow'].includes(state)?'66px':'60px');
-    const ds = dotStyle(state, rank);
-    const dc = dotColor(state);
-    const prominent = rank<=1 || ['gold','full_green','dim_green','full_blue','full_yellow','green'].includes(state);
-    const nameStyle = prominent
-      ? `color:${dc};font-weight:900;font-size:.66rem;letter-spacing:.05em;margin-top:4px`
-      : `color:#4a5568;font-size:.60rem;margin-top:3px`;
-    return `<div style="display:flex;flex-direction:column;align-items:center;gap:0;cursor:pointer" onclick="aceDomainTap('${k}',this)" data-domain="${k}">
-      <div style="width:${sz};height:${sz};border-radius:20px;${ds};display:grid;place-items:center;transition:all 280ms">
-        <span style="font-size:${prominent?'1.3rem':'1.05rem'};color:${dc};opacity:${sc<0.10?'.3':'1'}">${GLYPHS[k]}</span>
-      </div>
-      <div style="${nameStyle}">${SHORT[k]}</div>
-    </div>`;
-  }).join('');
-
-  // top 2 compact highlight cards
-  function hiCard(rank, colorVar, glowColor){
-    const item = scored[rank]; if(!item) return '';
-    const v = item.v; const k = item.k;
-    return `<div style="flex:1;border:1px solid ${colorVar};border-radius:18px;background:rgba(0,0,0,.22);padding:10px 11px">
-      <div style="font-size:.64rem;font-weight:900;letter-spacing:.10em;color:${colorVar};text-transform:uppercase">${rank===0?'Primary':'Secondary'} · ${SHORT[k]}</div>
-      <div style="font-size:.82rem;color:#f0ead6;margin-top:5px;line-height:1.38">${escapeHtml(v.action||'One clean step.')}</div>
-    </div>`;
-  }
-
-  const detailId = `domain-detail-${d.id}`;
-  document.getElementById('grid-hearts').innerHTML=
-    `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:4px 0 10px">${dots}</div>`+
-    `<div style="display:flex;gap:9px;margin-bottom:10px">${hiCard(0,'#34d399')}${hiCard(1,'#22d3ee')}</div>`+
-    `<div id="${detailId}" style="min-height:56px;border:1px solid rgba(214,168,79,.14);border-radius:16px;background:rgba(0,0,0,.18);padding:10px 12px;font-size:.80rem;color:#aebdd1;line-height:1.45;transition:opacity 220ms">
-      Tap any domain to see its guidance.
-    </div>`;
-
-  // attach tap handler (defined outside innerHTML scope)
-  window._aceLifeData = g.life;
-  window._aceDomainShort = SHORT;
-  window._aceDomainDetailId = detailId;
+  ACEPresentation.domains(document.getElementById('grid-hearts'),ACEResonance.scoreLifeDomains(d.id,FW_NATAL_PROFILE,ACEResonance.VERSION));
 }
+
 function aceDomainTap(k, el){
   const v = (window._aceLifeData||{})[k]||{};
   const short = (window._aceDomainShort||{})[k]||k;
@@ -6169,17 +5991,12 @@ function aceNudgeEnvironment(planet,name,profile){
   return env;
 }
 function aceNudgeEligibleItems(){
-  const d=day(); const g=deriveGuidanceV23(d);
-  const byName={}; (d.blockAssignment?.itemStatuses||[]).forEach(s=>{byName[s.name]=s});
-  const items=(g.block.items||[]).map(it=>{
-    const st=byName[it[0]]||{name:it[0],status:'ALLOWED',score:0.55,label:''};
-    return {...st,name:it[0],note:it[1],cbr:it[2]};
-  });
-  const blocked=new Set(['LOCKED','RED','MISALIGNED','ORANGE']);
-  let eligible=items.filter(x=>!blocked.has(String(x.status||'').toUpperCase())&&(String(x.status).toUpperCase()==='OPTIMAL'||Number(x.score)>=0.62));
-  if(!eligible.length)eligible=items.filter(x=>!blocked.has(String(x.status||'').toUpperCase())&&String(x.status).toUpperCase()==='ALLOWED'&&Number(x.score)>=0.55);
-  return eligible.sort((a,b)=>(Number(b.score)||0)-(Number(a.score)||0)).slice(0,ACE_NUDGE_MAX_PER_DAY).map(x=>({d,g,item:x}));
+  // Reminders refer only to explicit user selections, never an eligibility policy.
+  const d=day(),g=deriveGuidanceV23(d);
+  return ACEResonance.scoreSupplements(d.id,FW_NATAL_PROFILE,ACEResonance.VERSION).rows
+    .filter(r=>isTicked(d.id,r.name)).map(r=>({d,g,item:{...r,score:r.score/100,status:'USER_SELECTION',cbr:''}}));
 }
+
 function aceBuildNudgeQueue(save=true){
   const today=brusselsISODate();
   const candidates=aceNudgeEligibleItems();
@@ -6518,25 +6335,14 @@ function aceSanitizeDayForCardOnly(d){
   return o;
 }
 function aceCardModelCompact(d,g){
-  try{
-    const builder=window.aceBuildSupplementCardModel;
-    if(typeof builder==='function'){
-      const m=builder(d,g);
-      return {
-        authority:'weekly-esoteric-coverage-v3-canonical-data-1.1',
-        selected:(m.selected||[]).map(x=>({id:x.card.id,name:x.card.name,cbr:x.card.cbr||'',score:Number(x.score||0),status:x.status||'',reasons:(x.reasons||[]).slice(0,3)})),
-        held_count:(m.held||[]).length,
-        rules:['one NAD','max two magnesium forms with pairing rule','one mineral-biomass','one sleep aid','weekly herbs maximum 1 per rolling 7 days']
-      };
-    }
-  }catch(e){}
-  const taken=Object.keys(state.supp||{}).filter(k=>k.startsWith((d&&d.id||activeDate)+'__')&&state.supp[k]).map(k=>k.slice(String(d&&d.id||activeDate).length+2));
-  return {authority:'weekly-esoteric-coverage-v3-canonical-data-1.1',selected:[],held_count:null,taken,rules:['supplement model unavailable during early boot']};
+  const forecast=ACEResonance.scoreSupplements(d.id,FW_NATAL_PROFILE,ACEResonance.VERSION);
+  return {authority:ACEResonance.VERSION,profileVersion:FW_NATAL_PROFILE.version,rankings:forecast.rows,selected:[],held_count:0,rules:['All 42 supplements ranked; no automatic selection. User decides.'],warnings:ACEWarnings.combinations(forecast.rows)};
 }
+
 function aiSuppCompact(d,g){
   const compact=aceCardModelCompact(d,g);
   compact.taken=Object.keys(state.supp||{}).filter(k=>k.startsWith(d.id+'__')&&state.supp[k]).map(k=>k.slice(d.id.length+2));
-  compact.mode='CARD_OPTIMIZER';
+  compact.mode='USER_SELECTION';
   return compact;
 }
 
@@ -6547,7 +6353,7 @@ function aiPracticesCompact(d,g){
 function aiDayCompact(d,g){
   return {
     date:d.id,weekday:d.weekday,shift:d.shift,ptrm:d.ptrm,
-    focus:g?.c?.focus||'',gate:g?.c?.gate||'',intensity:g?.c?.intensity||'',supplement_authority:'weekly-esoteric-coverage-v3-canonical-data-1.1',supplement_mode:'CARD_OPTIMIZER',
+    focus:g?.c?.focus||'',gate:g?.c?.gate||'',intensity:g?.c?.intensity||'',supplement_authority:'ace-resonance-1.0.0',supplement_mode:'USER_SELECTION',
     mayan:{tzolkin:d.mayan?.tzolkin,dreamspell:d.mayan?.dreamspell,dna:d.mayan?.dna,cosmic:d.mayan?.cosmic},
     bazi:d.bazi,
     numerology:numerologyLine(d,g),
@@ -6664,7 +6470,7 @@ function buildBridgePayload(){
     active_day:d.id,
     generated_at:new Date().toISOString(),
     asset_paths:ASSETS,
-    day_summary:{weekday:d.weekday,dayNum:d.dayNum,ptrm:d.ptrm,shift:d.shift,focus:g.c.focus,gate:g.c.gate,intensity:g.c.intensity,supplement_mode:'CARD_OPTIMIZER',supplement_authority:'weekly-esoteric-coverage-v3-canonical-data-1.1'},
+    day_summary:{weekday:d.weekday,dayNum:d.dayNum,ptrm:d.ptrm,shift:d.shift,focus:g.c.focus,gate:g.c.gate,intensity:g.c.intensity,supplement_mode:'USER_SELECTION',supplement_authority:'ace-resonance-1.0.0'},
     convergence:{mayan:mayanLine(d),bazi:baziLine(d),numerology:numerologyLine(d,g),astrology:astrologyLine(d),natal:d.natalTransit?.focusLine||'',synthesis:synthesisLine(d,g)},
     body:g.c.body,
     supplements,
@@ -6828,8 +6634,8 @@ function updateLens(){
     data_paths:{app_config:'./shared/data/app-configs/ace-mind.config.json',libraries:'./shared/data/libraries/',profiles:'./shared/data/profiles/',ephemeris:'embedded Astrodienst Swiss Ephemeris 2026 00:00 UT; no unsealed fallback governs',natal_profile:'FW_NATAL_PROFILE / embedded Measurement Record DATA-1.1'},
     chambers:{spades:'Overview',clubs:'Supplements',diamonds:'Grounding',hearts:'Domains',jester:'AI and data',temporal:'Temporal Observatory'},
     day:aceSanitizeDayForCardOnly(d),
-    day_summary:{weekday:d.weekday,dayNum:d.dayNum,ptrm:d.ptrm,personalIso:d.personalIso,focus:g.c.focus,gate:g.c.gate,supplement_mode:'CARD_OPTIMIZER',supplement_authority:'weekly-esoteric-coverage-v3-canonical-data-1.1'},
-    supplement_authority:'weekly-esoteric-coverage-v3-canonical-data-1.1',
+    day_summary:{weekday:d.weekday,dayNum:d.dayNum,ptrm:d.ptrm,personalIso:d.personalIso,focus:g.c.focus,gate:g.c.gate,supplement_mode:'USER_SELECTION',supplement_authority:'ace-resonance-1.0.0'},
+    supplement_authority:'ace-resonance-1.0.0',
     body:g.c.body,
     supplements:aiSuppCompact(d,g),
     temporalConfig:state.temporalConfig||{},
@@ -7039,9 +6845,13 @@ function applyOp(op){
     storageStatus={mode:'cleared',lastError:null,lastSavedAt:null};
   }
 }
+function aceExportForecast(){
+ const date=day().id;
+ downloadJson({schema:'ace-forecast-1',supplements:ACEResonance.scoreSupplements(date,FW_NATAL_PROFILE,ACEResonance.VERSION),lifeDomains:ACEResonance.scoreLifeDomains(date,FW_NATAL_PROFILE,ACEResonance.VERSION)},'ace-forecast-'+date+'-'+ACEResonance.VERSION+'.json');
+}
 function exportState(){
   saveState();
-  downloadJson(state,'ace-mind-'+APP_VERSION+'-state-'+new Date().toISOString().slice(0,10)+'.json');
+  downloadJson({...state,preResonanceBackup:storageGet('ace_mind_pre_resonance_v1'),forecastEngine:ACEResonance.VERSION,canonicalProfile:FW_NATAL_PROFILE},'ace-mind-'+APP_VERSION+'-state-'+new Date().toISOString().slice(0,10)+'.json');
 }
 function downloadJson(obj,name){const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),500)}
 function importStateFile(ev){
@@ -7052,6 +6862,8 @@ function importStateFile(ev){
   r.onload=()=>{
     try{
       const data=JSON.parse(r.result);
+      if(data.preResonanceBackup&&!storageGet('ace_mind_pre_resonance_v1'))localStorage.setItem('ace_mind_pre_resonance_v1',data.preResonanceBackup);
+      if(data.temporalSync)fwSaveSync(data.temporalSync);
       state=mergeState(state,data);
       activeDate=state.activeDate||brusselsISODate();
       activeIdx=validIndex(state.activeIdx??todayIndex());
@@ -7073,8 +6885,7 @@ function initApp(){
   // Force-close handoff gate on every cold boot — never trust previous gate state.
   try{const g=document.getElementById('handoffGate');if(g)g.classList.remove('open');}catch(e){}
   JesterAI.handoffActive=false;
-  // Auto-return to today — never open on a past date
-  try{const _today=brusselsISODate();if(state.activeDate&&state.activeDate!==_today){state.activeDate=_today;}}catch(e){}
+  // Preserve the explicit selected date across refresh and application updates.
   try{
     // Restore selected date from saved state; fall back to today only if nothing saved.
     activeDate = state.activeDate || brusselsISODate();
@@ -7084,6 +6895,7 @@ function initApp(){
     state.activeChamber=activeChamber;
     requestTemporalGeolocation(false);
     render();
+    if('serviceWorker' in navigator) navigator.serviceWorker.register('./ace-mind-sw.js?v='+encodeURIComponent(APP_VERSION),{scope:'./',updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});
     initSwipe();
     renderAI();
     setChamber(activeChamber,true,true);
@@ -7472,7 +7284,7 @@ function fwBMOpenSupplementCardMatrix(name){
   }catch(e){return '';}
 }
 var __ACE_BODY_MATRIX_DERIVE__=deriveGuidanceV23;
-deriveGuidanceV23=function(d){const g=__ACE_BODY_MATRIX_DERIVE__(d);return fwBMApplySupplementMatrix(d,g);};
+// Supplement body-matrix override retired. Body observations remain in their own panel.
 try{console.info('ACE Mind body-axis score matrix + alternative support block loaded',FW_BODY_SCORE_VERSION);}catch(e){}
 
 
@@ -7480,7 +7292,7 @@ try{console.info('ACE Mind body-axis score matrix + alternative support block lo
 function aceMindApplyStableIdentity(){
   try{document.title='ACE Mind';}catch(e){}
   try{const t=document.querySelector('.title');if(t)t.textContent='ACE Mind';}catch(e){}
-  try{const m=document.querySelector('link[rel="manifest"]');if(m)m.setAttribute('href','./manifest.json');}catch(e){}
+  try{const m=document.querySelector('link[rel="manifest"]');if(m)m.setAttribute('href','./manifest-ace-mind.webmanifest?v=1.0.0');}catch(e){}
 }
 try{document.addEventListener('DOMContentLoaded',aceMindApplyStableIdentity);}catch(e){}
 try{aceMindApplyStableIdentity();}catch(e){}
@@ -7488,7 +7300,10 @@ try{
   exportState=function(){
     const copy=Object.assign({},state,{
       app:'ACE Mind',
-      internal_engine:'ACE Mind body-score matrix + alternative support block',
+      internal_engine:ACEResonance.VERSION,
+      canonicalProfile:FW_NATAL_PROFILE,
+      preResonanceBackup:storageGet('ace_mind_pre_resonance_v1'),
+      temporalSync:fwLoadSync(),
       primary_storage_key:STORAGE_KEY,
       imported_storage_keys:storageStatus&&storageStatus.migratedFrom||[]
     });
@@ -7555,7 +7370,7 @@ function aceMindStableBodyHtml(d,g){
     return `<div class="body-row"><div><div class="body-name state-${st}">${aceMindStableSafeText(AXIS_LABEL[a])}</div><div class="body-state-letters">G · Y · O · R</div></div><div class="body-actions"><button class="${st==='green'?'active state-green':'state-green'}" onclick="setBody('${date}','${a}','green')" aria-label="Set ${aceMindStableSafeText(AXIS_LABEL[a])} green">G</button><button class="${st==='yellow'?'active state-yellow':'state-yellow'}" onclick="setBody('${date}','${a}','yellow')" aria-label="Set ${aceMindStableSafeText(AXIS_LABEL[a])} yellow">Y</button><button class="${st==='orange'?'active state-orange':'state-orange'}" onclick="setBody('${date}','${a}','orange')" aria-label="Set ${aceMindStableSafeText(AXIS_LABEL[a])} orange">O</button><button class="${st==='red'?'active state-red':'state-red'}" onclick="setBody('${date}','${a}','red')" aria-label="Set ${aceMindStableSafeText(AXIS_LABEL[a])} red">R</button></div></div>`;
   }).join('');
   let alt='';
-  try{alt=typeof fwBodyMatrixAlternativeBanner==='function'?fwBodyMatrixAlternativeBanner(d,g):'';}catch(e){alt='';}
+  // Body observations do not offer automatic supplement/block replacements.
   return `<div class="focus-title">Body State</div><div class="body-grid" style="margin-top:10px">${rows}</div>${alt}`;
 }
 function aceMindStableNotesHtml(d){
@@ -7584,7 +7399,7 @@ try{
     if(rail)rail.innerHTML=days.map(x=>`<button class="day-btn ${x.iso===activeDate?'active':''}" onclick="setDay('${x.iso}')" title="${x.visible?'rolling rail':'selected outside rail'}"><b>${x.wd.slice(0,3)}</b><span>${x.iso.slice(5)}</span></button>`).join('');
   };
 }catch(e){}
-try{document.title='ACE Mind';const t=document.querySelector('.title');if(t)t.textContent='ACE Mind';const m=document.querySelector('link[rel="manifest"]');if(m)m.setAttribute('href','./manifest.json');}catch(e){}
+try{document.title='ACE Mind';const t=document.querySelector('.title');if(t)t.textContent='ACE Mind';const m=document.querySelector('link[rel="manifest"]');if(m)m.setAttribute('href','./manifest-ace-mind.webmanifest?v=1.0.0');}catch(e){}
 
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -7902,7 +7717,7 @@ try{APP_VERSION=APP_VERSION;}catch(e){}
         g.c.summary = aceCleanText(g.c.summary, '');
       }
       if(g && g.life){Object.values(g.life).forEach(function(v){if(!v||typeof v!=='object')return; ['why','action','favor','label','state'].forEach(function(k){if(v[k]!=null)v[k]=aceCleanText(v[k],'');}); if(Array.isArray(v.trail))v.trail=v.trail.map(function(x){return aceCleanText(x,'');}).filter(Boolean);});}
-      if(g){g.suppMode='CARD_OPTIMIZER';g.supplementAuthority='individual-card-policy-v4';}
+      if(g){g.suppMode='USER_SELECTION';g.supplementAuthority=ACEResonance.VERSION;}
     }catch(e){}
     return g;
   }
@@ -7932,7 +7747,7 @@ try{APP_VERSION=APP_VERSION;}catch(e){}
       exercise:{exercise_today:exerciseToday,exercise_status:status,exercise_level:hardProtect?'body-safe recovery only':training?'training / circulation':exerciseToday?'light movement / mobility':'optional',movement_recommendation:movement||'Optional gentle movement',exercise_reason:hardProtect?'Body governor requires protective routing.':exerciseToday?'ACE Mind has a movement recommendation for today.':'No movement recommendation detected.'},
       gravitic_flags:{show_exercise_card:exerciseToday,highlight_movement:exerciseToday,route_to_body_practice:true,body_safe_mode:hardProtect,movement_required:exerciseToday},
       body_governor:body.governor || null,
-      day_refs:{ptrm:d && d.ptrm, focusHint:d && d.focusHint, bazi:d && d.bazi, mayan:d && d.mayan, supplement_authority:'weekly-esoteric-coverage-v3-canonical-data-1.1'}
+      day_refs:{ptrm:d && d.ptrm, focusHint:d && d.focusHint, bazi:d && d.bazi, mayan:d && d.mayan, supplement_authority:'ace-resonance-1.0.0'}
     };
   }
 
@@ -7948,7 +7763,7 @@ try{APP_VERSION=APP_VERSION;}catch(e){}
   function aceRememberHandoff(reason){
     try{
       const date = aceSafeDate(activeDate || state.activeDate);
-      const ctx = {version:PATCH_VERSION,date,chamber:typeof activeChamber!=='undefined'?activeChamber:'spades',reason:reason||'ai-handoff',at:Date.now(),supplement_authority:'weekly-esoteric-coverage-v3-canonical-data-1.1'};
+      const ctx = {version:PATCH_VERSION,date,chamber:typeof activeChamber!=='undefined'?activeChamber:'spades',reason:reason||'ai-handoff',at:Date.now(),supplement_authority:'ace-resonance-1.0.0'};
       sessionStorage.setItem(HANDOFF_SESSION_KEY, JSON.stringify(ctx));
       state.activeDate = date; if(typeof activeDate !== 'undefined') activeDate = date;
       state.blockHistory = {};
@@ -7994,7 +7809,7 @@ try{APP_VERSION=APP_VERSION;}catch(e){}
           out.gravitic_exercise_packet=packet;
           out.gravitic_flags=Object.assign({},out.gravitic_flags||{},packet.gravitic_flags);
           out.grounding=Object.assign({},out.grounding||{},{exercise_today:packet.exercise.exercise_today,exercise_status:packet.exercise.exercise_status,exercise_level:packet.exercise.exercise_level,movement:packet.exercise.movement_recommendation});
-          out.day_summary=Object.assign({},out.day_summary||{},{exercise_today:packet.exercise.exercise_today,supplement_mode:'CARD_OPTIMIZER',supplement_authority:'weekly-esoteric-coverage-v3-canonical-data-1.1'});
+          out.day_summary=Object.assign({},out.day_summary||{},{exercise_today:packet.exercise.exercise_today,supplement_mode:'USER_SELECTION',supplement_authority:'ace-resonance-1.0.0'});
           delete out.day_summary.block; delete out.day_summary.block_frozen;
         }catch(e){}
         return out;
@@ -8013,7 +7828,7 @@ try{APP_VERSION=APP_VERSION;}catch(e){}
           state.graviticExercisePacket=packet;
           state.graviticFlags=Object.assign({},state.graviticFlags||{},packet.gravitic_flags);
           sessionStorage.setItem('ace_mind_to_gravitic_exercise',JSON.stringify(packet));
-          const fullPacket={packet_type:'ace_mind_to_gravitic',source:'ACE Mind',version:typeof APP_VERSION!=='undefined'?APP_VERSION:PATCH_VERSION,patch_version:PATCH_VERSION,created_at:new Date().toISOString(),day:d.id,focus:g.c&&g.c.focus,frequency:g.freq,breath:g.breath,movement:g.movement,exercise_today:packet.exercise.exercise_today,exercise_status:packet.exercise.exercise_status,exercise_level:packet.exercise.exercise_level,gravitic_flags:packet.gravitic_flags,exercise:packet.exercise,acupressure:g.acu,chakra:g.chakra,food:g.food,body_governor:g.c&&g.c.body&&g.c.body.governor,supplement_mode:'CARD_OPTIMIZER',supplement_authority:'weekly-esoteric-coverage-v3-canonical-data-1.1'};
+          const fullPacket={packet_type:'ace_mind_to_gravitic',source:'ACE Mind',version:typeof APP_VERSION!=='undefined'?APP_VERSION:PATCH_VERSION,patch_version:PATCH_VERSION,created_at:new Date().toISOString(),day:d.id,focus:g.c&&g.c.focus,frequency:g.freq,breath:g.breath,movement:g.movement,exercise_today:packet.exercise.exercise_today,exercise_status:packet.exercise.exercise_status,exercise_level:packet.exercise.exercise_level,gravitic_flags:packet.gravitic_flags,exercise:packet.exercise,acupressure:g.acu,chakra:g.chakra,food:g.food,body_governor:g.c&&g.c.body&&g.c.body.governor,supplement_mode:'USER_SELECTION',supplement_authority:'ace-resonance-1.0.0'};
           sessionStorage.setItem('ace_mind_to_gravitic',JSON.stringify(fullPacket));
           acePersistStateSoon();
         }catch(e){}
@@ -8063,997 +7878,7 @@ details.supp-group summary::-webkit-details-marker{display:none}
 .supp-res-gauge span{position:relative;z-index:1;font-size:.64rem;font-weight:950;color:var(--gold2);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:-.04em}
 .supp-res-label{font-size:.55rem;letter-spacing:.10em;text-transform:uppercase;color:#7f93ac;text-align:center;margin-top:-2px}
 </style>
-<script>
-(function(){
-  'use strict';
-  const PATCH_VERSION='ace-supplement-card-repair-v9-canonical-data-1-1-2026-06-20';
-  const SUPPLEMENT_POLICY_VERSION='weekly-esoteric-coverage-v3-canonical-data-1.1';
-  const DAILY_SUPPLEMENT_FREEZE_REASON='daily supplement freeze';
-  const WEEKLY_LIMITED_HERBS=['ashwagandha','reishi','gotu_kola','fadogia_agrestis','turkesterone'];
-  const WEEKLY_LIMITED_POLICY=Object.freeze({
-    maximum_uses_per_rolling_7_days:1,
-    automatic_frequency_boost:true,
-    missed_week_requires_makeup:true,
-    normal_weekly_cards:true,
-    permanent_highlight_allowed:false
-  });
 
-  const CARDS=[
-    {id:'magnesium_citrate',name:'Magnesium Citrate',num:[70,7],bazi:['己','Yin','Earth'],persist:'Endogenous magnesium pool',max:'Conditional',groups:['magnesium'],domains:['body'],axes:['gut','sleep','nervous'],windows:['Morning'],rule:'One primary magnesium form daily. Prefer for bowel support. Calculate total elemental magnesium.'},
-    {id:'magnesium_malate',name:'Magnesium Malate',num:[55,1],bazi:['丙','Yang','Fire'],persist:'Endogenous magnesium pool',max:'Conditional',groups:['magnesium'],domains:['study','body'],axes:['nervous','back'],windows:['Morning'],rule:'Daytime magnesium option. Do not automatically combine with every other magnesium form.'},
-    {id:'magnesium_bisglycinate',name:'Magnesium Bisglycinate',num:[93,3],bazi:['癸','Yin','Water'],persist:'Endogenous magnesium pool',max:'Conditional',groups:['magnesium','sleep_aid'],domains:['leisure','body'],axes:['sleep','nervous'],windows:['Night'],rule:'Evening relaxation option. May support one primary sleep intervention.'},
-    {id:'magnesium_taurate',name:'Magnesium Taurate',num:[62,8],bazi:['丁','Yin','Fire'],persist:'Magnesium pool; taurine short-lived',max:'Conditional',groups:['magnesium'],domains:['body'],axes:['heart','sleep'],windows:['Night'],rule:'Cardiovascular or evening option. Avoid clustering with reishi and L-citrulline when blood pressure is low.'},
-    {id:'nr',name:'NR',num:[14,5],bazi:['丙','Yang','Fire'],persist:'Rapid metabolism; downstream metabolites last longer',max:'One NAD precursor per selected day',groups:['nad'],domains:['career','study','body'],axes:['nervous','body'],windows:['Morning'],rule:'Never combine automatically with NMN or NMNH.'},
-    {id:'nmn',name:'NMN',num:[14,5],bazi:['丙','Yang','Fire'],persist:'Rapid conversion to NAD metabolites',max:'One NAD precursor per selected day',groups:['nad'],domains:['body','study'],axes:['body','nervous'],windows:['Morning'],rule:'Never combine automatically with NR or NMNH.'},
-    {id:'tmg',name:'TMG / Betaine',num:[13,4],bazi:['戊','Yang','Earth'],persist:'Several hours',max:'Conditional',groups:[],domains:['body'],axes:['liver'],windows:['Morning'],rule:'Optional methyl support for an NAD day. Not automatically compulsory.'},
-    {id:'creatine',name:'Creatine 5 g',num:[51,6],bazi:['戊','Yang','Earth'],persist:'Plasma hours; muscle stores much longer',max:'Up to daily',groups:['core'],domains:['body','career','study'],axes:['back','nervous'],windows:['Morning'],rule:'Core support. Caffeine is not an automatic conflict.'},
-    {id:'coq10',name:'CoQ10',num:[18,9],bazi:['丙','Yang','Fire'],persist:'About 30–35 hours',max:'Conditional',groups:[],domains:['body'],axes:['heart'],windows:['Morning'],rule:'Take with a meal containing dietary fat.'},
-    {id:'omega_3',name:'Omega-3',num:[26,8],bazi:['癸','Yin','Water'],persist:'Long lipid incorporation',max:'Conditional',groups:[],domains:['body'],axes:['heart','nervous','skin'],windows:['Morning'],rule:'Take with food. Flag high cumulative bleeding-risk combinations.'},
-    {id:'multivitamin',name:'Multivitamin',num:[55,1],bazi:['己','Yin','Earth'],persist:'Nutrient-dependent',max:'Conditional',groups:['multi_b'],domains:['body'],axes:['body'],windows:['Morning'],rule:'Do not automatically combine with B-complex. Count overlapping vitamins and minerals.'},
-    {id:'d3_k2',name:'D3 + K2',num:[11,11],bazi:['丙','Yang','Fire'],persist:'D3 weeks; MK-7 days',max:'Dose-dependent',groups:[],domains:['body'],axes:['body','heart'],windows:['Morning'],rule:'Take with food. Frequency must reflect the actual dose and vitamin D status.'},
-    {id:'nac',name:'NAC',num:[9,9],bazi:['辛','Yin','Metal'],persist:'About 5–6 hours',max:'Conditional / frequent',groups:[],domains:['body'],axes:['liver'],windows:['Afternoon'],rule:'On NAD or hormesis days, place approximately 4–6 hours after the morning selection.'},
-    {id:'milk_thistle',name:'Milk Thistle',num:[48,3],bazi:['乙','Yin','Wood'],persist:'Several hours',max:'Rotate',groups:['botanical'],domains:['body'],axes:['liver'],windows:['Night'],rule:'Use on a low-complexity herbal day.'},
-    {id:'probiotic',name:'Probiotic',num:[53,8],bazi:['己','Yin','Earth'],persist:'Strain-dependent',max:'Up to daily',groups:[],domains:['body'],axes:['gut'],windows:['Flexible'],rule:'Separate from antibiotics and concentrated antimicrobial products when practical.'},
-    {id:'zinc',name:'Zinc',num:[25,7],bazi:['庚','Yang','Metal'],persist:'Plasma hours',max:'Conditional',groups:[],domains:['body'],axes:['skin','liver'],windows:['Night'],rule:'Count zinc already present in the multivitamin. Separate large zinc and magnesium doses.'},
-    {id:'astragalus',name:'Astragalus',num:[29,11],bazi:['甲','Yang','Wood'],persist:'Uncertain',max:'Rotate',groups:['botanical'],domains:['body','spirit'],axes:['body'],windows:['Morning'],rule:'Immune-support option. Do not select automatically every day.'},
-    {id:'lions_mane',name:"Lion's Mane",num:[39,3],bazi:['乙','Yin','Wood'],persist:'Human kinetics uncertain',max:'Conditional / frequent',groups:[],domains:['study','creative'],axes:['nervous'],windows:['Morning'],rule:'Cognition and learning support. Monitor allergy or digestive response.'},
-    {id:'l_theanine',name:'L-Theanine',num:[43,7],bazi:['癸','Yin','Water'],persist:'About 1–2 hours',max:'As needed',groups:[],domains:['study','leisure'],axes:['nervous','sleep'],windows:['Flexible'],rule:'Calm-focus or sleep support. Supporting aid, not an excuse for a large sedative stack.'},
-    {id:'lutein',name:'Lutein',num:[27,9],bazi:['乙','Yin','Wood'],persist:'Days to weeks in tissues',max:'Conditional',groups:[],domains:['study','body'],axes:['eyes'],windows:['Morning'],rule:'Take with food containing some fat.'},
-    {id:'collagen',name:'Collagen',num:[33,33],bazi:['己','Yin','Earth'],persist:'Peptides and amino acids for several hours',max:'Up to daily',groups:[],domains:['body'],axes:['skin','back'],windows:['Afternoon'],rule:'Can accompany MSM, vitamin C and other protein sources.'},
-    {id:'vitamin_c',name:'Vitamin C',num:[37,1],bazi:['甲','Yang','Wood'],persist:'About 2 hours',max:'Conditional',groups:[],domains:['body'],axes:['skin','liver'],windows:['Afternoon'],rule:'Prefer later in the day on NAD, resveratrol or exercise-hormesis days.'},
-    {id:'msm',name:'MSM',num:[9,9],bazi:['庚','Yang','Metal'],persist:'Several hours',max:'Conditional / frequent',groups:[],domains:['body'],axes:['back','skin'],windows:['Afternoon'],rule:'Natural partner for collagen and structural-support days.'},
-    {id:'quercetin',name:'Quercetin',num:[49,4],bazi:['乙','Yin','Wood'],persist:'Metabolites may persist many hours',max:'Rotate',groups:['botanical'],domains:['body'],axes:['liver'],windows:['Morning'],rule:'May accompany resveratrol. Avoid combining with an unnecessarily large botanical set.'},
-    {id:'resveratrol',name:'Resveratrol',num:[54,9],bazi:['甲','Yang','Wood'],persist:'Parent short-lived; metabolites longer',max:'Rotate',groups:['hormesis'],domains:['body','spirit'],axes:['liver'],windows:['Morning'],rule:'Morning hormesis option. Place high-dose vitamin C and NAC later.'},
-    {id:'spermidine',name:'Spermidine',num:[58,4],bazi:['癸','Yin','Water'],persist:'Not firmly established',max:'Rotate',groups:['hormesis'],domains:['body'],axes:['body'],windows:['Morning'],rule:'Must not remain permanently green. Selection requires a current-day reason.'},
-    {id:'spirulina',name:'Spirulina',num:[47,11],bazi:['癸','Yin','Water'],persist:'Biomass, not conventional drug kinetics',max:'Rotate',groups:['mineral_biomass'],domains:['body'],axes:['body'],windows:['Morning'],rule:'Choose only one of spirulina, sea moss or shilajit per day.'},
-    {id:'irish_sea_moss',name:'Irish Sea Moss',num:[55,1],bazi:['癸','Yin','Water'],persist:'Iodine effects outlast plasma clearance',max:'Rotate',groups:['mineral_biomass'],domains:['body'],axes:['body'],windows:['Morning'],rule:'Choose only one mineral-biomass product daily. Require known iodine and contaminant quality.'},
-    {id:'cordyceps',name:'Cordyceps',num:[45,9],bazi:['丙','Yang','Fire'],persist:'Cordycepin short-lived; extracts vary',max:'Conditional / frequent',groups:[],domains:['body','career'],axes:['body','heart'],windows:['Morning'],rule:'Physical-energy option. Prefer morning or early afternoon.'},
-    {id:'b_complex',name:'B-Complex',num:[36,9],bazi:['丙','Yang','Fire'],persist:'Vitamin-dependent',max:'Rotate',groups:['multi_b'],domains:['body','study'],axes:['nervous'],windows:['Morning'],rule:'Prefer non-NAD days conservatively. Do not automatically combine with multivitamin.'},
-    {id:'l_citrulline',name:'L-Citrulline',num:[54,9],bazi:['丙','Yang','Fire'],persist:'About 1–2 hours',max:'Activity days',groups:[],domains:['body'],axes:['heart','back'],windows:['Morning'],rule:'Use for exertion or vascular support. No mandatory weekly endothelial rest.'},
-    {id:'nmnh',name:'NMNH',num:[22,22],bazi:['丙','Yang','Fire'],persist:'Human profile still developing',max:'One NAD precursor per selected day',groups:['nad'],domains:['body','study'],axes:['nervous','body'],windows:['Morning'],rule:'Active NAD option. Never combine automatically with NMN or NR.'},
-    {id:'shilajit',name:'Shilajit',num:[34,7],bazi:['戊','Yang','Earth'],persist:'Extract-dependent',max:'About 2× weekly',groups:['mineral_biomass'],domains:['body'],axes:['body'],windows:['Morning'],rule:'Use tested product. Do not place on the same day as sea moss or spirulina.',max7:2},
-    {id:'gotu_kola',name:'Gotu Kola',num:[30,3],bazi:['乙','Yin','Wood'],persist:'Active compounds persist for hours',max:'Normal 1× weekly',groups:['weekly_limited_herbs','botanical'],domains:['nervous','study'],axes:['nervous'],windows:['Flexible'],rule:'Normal weekly herb. Do not cluster with the other four weekly herbs. Use on a low-complexity botanical day.',max7:1},
-    {id:'chaga',name:'Chaga',num:[20,2],bazi:['辛','Yin','Metal'],persist:'Unknown',max:'Rotate',groups:['botanical'],domains:['body'],axes:['liver'],windows:['Flexible'],rule:'Avoid automatic daily use. Flag kidney, oxalate and bleeding-risk contexts.'},
-    {id:'reishi',name:'Reishi',num:[41,5],bazi:['癸','Yin','Water'],persist:'Extract-dependent',max:'Normal 1× weekly',groups:['weekly_limited_herbs','botanical'],domains:['spirit','leisure'],axes:['sleep','heart','liver'],windows:['Night'],rule:'Normal weekly herb. Do not cluster with Gotu Kola, Ashwagandha, Fadogia or Turkesterone. Monitor low-pressure symptoms.',max7:1},
-    {id:'black_maca',name:'Black Maca',num:[20,2],bazi:['戊','Yang','Earth'],persist:'Human kinetics uncertain',max:'Rotate',groups:[],domains:['body','love'],axes:['body'],windows:['Morning'],rule:'Never use on the same day as Fadogia or Turkesterone.'},
-    {id:'melatonin',name:'Melatonin',num:[40,4],bazi:['癸','Yin','Water'],persist:'About 30–60 minutes immediate release',max:'As needed',groups:['sleep_aid'],domains:['leisure','body'],axes:['sleep'],windows:['Night'],rule:'One primary sleep aid. Do not automatically combine with valerian and ashwagandha.'},
-    {id:'valerian',name:'Valerian',num:[37,1],bazi:['癸','Yin','Water'],persist:'Constituents generally short-lived',max:'As needed',groups:['sleep_aid'],domains:['leisure','body'],axes:['sleep'],windows:['Night'],rule:'Primary sleep aid when selected. Avoid alcohol and large sedative combinations.'},
-    {id:'fadogia_agrestis',name:'Fadogia Agrestis',num:[69,6],bazi:['丙','Yang','Fire'],persist:'Human kinetics unknown',max:'Normal 1× weekly',groups:['weekly_limited_herbs'],domains:['body','love'],axes:['body'],windows:['Morning'],rule:'Normal weekly herb. Do not use with maca, Turkesterone or Ashwagandha on the same day.',max7:1},
-    {id:'turkesterone',name:'Turkesterone',num:[54,9],bazi:['甲','Yang','Wood'],persist:'Human kinetics insufficiently established',max:'Normal 1× weekly',groups:['weekly_limited_herbs'],domains:['body'],axes:['body'],windows:['Morning'],rule:'Normal weekly herb. Do not combine with Fadogia or black maca. Do not permanently highlight.',max7:1},
-    {id:'ashwagandha',name:'Ashwagandha',num:[42,6],bazi:['己','Yin','Earth'],persist:'Extract-dependent',max:'Normal 1× weekly',groups:['weekly_limited_herbs','sleep_aid'],domains:['leisure','body'],axes:['sleep','liver'],windows:['Night'],rule:'Normal weekly herb with liver/body gate. Never combine with both valerian and melatonin. Do not cluster with the other weekly herbs.',max7:1}
-  ];
-  const BY_ID=Object.fromEntries(CARDS.map(c=>[c.id,c]));
-  const ALIAS=new Map();
-  function norm(value){return String(value||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');}
-  for(const card of CARDS){
-    const names=[card.id,card.name,card.name.replace(' / Betaine',''),card.name.replace(' 5 g',''),card.name.replace('Agrestis',''),card.name.replace("'",'')];
-    if(card.id==='magnesium_citrate')names.push('mag_citrate_1_2_dose','mag_citrate','magnesium_citrate_half_dose');
-    if(card.id==='lions_mane')names.push('lions_mane','lion_s_mane');
-    if(card.id==='d3_k2')names.push('d3_k2','vitamin_d3_k2');
-    if(card.id==='omega_3')names.push('omega3');
-    if(card.id==='irish_sea_moss')names.push('sea_moss');
-    if(card.id==='b_complex')names.push('b_complex','b_compex');
-    if(card.id==='l_citrulline')names.push('citrulline');
-    for(const name of names)ALIAS.set(norm(name),card.id);
-  }
-  function cardIdFromName(name){return ALIAS.get(norm(name))||norm(name);}
-  function html(value){return (typeof escapeHtml==='function'?escapeHtml(value):String(value??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])));}
-  function stateForDate(date){try{return bodySummaryForDate(date)?.states||{};}catch(e){return {};}}
-  function takenIdsOn(date){
-    const ids=[];
-    try{
-      const prefix=String(date).slice(0,10)+'__';
-      for(const key of Object.keys(state?.supp||{}))if(key.startsWith(prefix)&&state.supp[key])ids.push(cardIdFromName(key.slice(prefix.length)));
-      const rec=state?.suppLog?.[String(date).slice(0,10)];
-      for(const n of (rec?.taken||[]))ids.push(cardIdFromName(n));
-      for(const ev of (rec?.events||[]))if(ev?.ticked)ids.push(cardIdFromName(ev.name));
-    }catch(e){}
-    return [...new Set(ids)];
-  }
-  function selectedIdsFromFreezeRecord(rec){
-    const raw=Array.isArray(rec?.selected)?rec.selected:(Array.isArray(rec?.selectedIds)?rec.selectedIds:[]);
-    return [...new Set(raw.map(cardIdFromName).filter(id=>BY_ID[id]))];
-  }
-  function plannedIdsOn(date){
-    try{
-      const key=String(date).slice(0,10);
-      const rec=state?.suppCardPlanHistory?.[key];
-      if(!rec||rec.date!==key)return [];
-      return selectedIdsFromFreezeRecord(rec);
-    }catch(e){return [];}
-  }
-  function historyIdsOn(date){
-    return [...new Set([...plannedIdsOn(date),...takenIdsOn(date)])];
-  }
-  function countRolling(id,date,days=7){
-    let count=0;
-    for(let i=0;i<days;i++){
-      const d=typeof addDays==='function'?addDays(date,-i):new Date(Date.parse(date+'T12:00:00Z')-i*86400000).toISOString().slice(0,10);
-      const ids=i===0?takenIdsOn(d):historyIdsOn(d);
-      if(ids.includes(id))count++;
-    }
-    return count;
-  }
-  function topDomains(g){
-    return Object.entries(g?.life||{}).sort((a,b)=>Number(b[1]?.score||0)-Number(a[1]?.score||0)).slice(0,4).map(([k,v])=>({key:k,score:Number(v?.score||0),favor:v?.favor||''}));
-  }
-
-  function seasonalLayersForDate(iso){
-    try{
-      if(typeof fwSeasonalContextForDate==='function')return fwSeasonalContextForDate(iso).layers||[];
-    }catch(e){}
-    return [];
-  }
-  function timingOverlaySignal(card,iso){
-    const layers=aceSeasonalLayersCached(iso);
-    const text=layers.map(x=>`${x.label||''} ${x.notes||''}`).join(' ').toLowerCase();
-    let score=0; const notes=[];
-    const el=String(card.bazi?.[2]||'').toLowerCase();
-    if(/jupiter|leo|sun|visibility|voice|recognition|creative|authority/.test(text)&&['fire','wood'].includes(el)){score+=.075;notes.push('timing overlay: Leo/Jupiter visibility');}
-    if(/saturn|8th|trust|grief|debt|shared|responsibility|sober/.test(text)&&['earth','water','metal'].includes(el)){score+=.055;notes.push('timing overlay: Saturn/8th containment');}
-    if(/pluto square natal moon|moon|scorpio|root|emotional|family/.test(text)&&['water','earth'].includes(el)){score+=.045;notes.push('timing overlay: Moon/root regulation');}
-    if(/chiron trine mars|agency|embodied|body|mars/.test(text)&&['fire','earth','metal'].includes(el)){score+=.04;notes.push('timing overlay: embodied agency');}
-    if(/progressed|solar arc|saturn conjunct natal mercury|speech|thought|doctrine|learning/.test(text)&&['metal','earth','wood'].includes(el)){score+=.035;notes.push('timing overlay: thought/speech maturation');}
-    return {score:Math.min(.16,score),notes,layers:layers.map(x=>x.label).slice(0,3)};
-  }
-
-  function textOf(value){try{return JSON.stringify(value).toLowerCase();}catch(e){return String(value||'').toLowerCase();}}
-  function dayElement(d){return String(d?.bazi?.element||d?.bazi?.signature||'').toLowerCase();}
-  function mayanTone(d){return Number(d?.mayan?.dreamspell?.tone||d?.mayan?.dreamspell?.toneNum||d?.mayan?.tzolkin?.tone||0);}
-  function astrologyElement(d){
-    const t=textOf(d?.astrology||{})+' '+textOf(d?.natalTransit||{});
-    if(/leo|aries|sagittarius|sun|mars|fire/.test(t))return 'fire';
-    if(/taurus|virgo|capricorn|earth/.test(t))return 'earth';
-    if(/gemini|libra|aquarius|mercury|air|metal/.test(t))return 'metal';
-    if(/cancer|scorpio|pisces|moon|neptune|water/.test(t))return 'water';
-    return '';
-  }
-  function elementMatches(card,element){
-    const e=String(element||'').toLowerCase(), c=String(card.bazi?.[2]||'').toLowerCase();
-    if(!e||!c)return false;
-    if(e.includes(c)||c.includes(e))return true;
-    return (e==='metal'&&['metal'].includes(c))||(e==='wood'&&c==='wood')||(e==='fire'&&c==='fire')||(e==='earth'&&c==='earth')||(e==='water'&&c==='water');
-  }
-  function frequencyAllowed(card,date){
-    const used=countRolling(card.id,date,7);
-    const max7=card.max7||(/\bRotate\b/i.test(card.max)?3:null);
-    if(card.id==='shilajit')return {ok:used<2,used,max:2,label:`${used}/2 in 7d`};
-    if(WEEKLY_LIMITED_HERBS.includes(card.id))return {ok:used<1,used,max:1,label:`${used}/1 in 7d`};
-    if(max7)return {ok:used<max7,used,max:max7,label:`${used}/${max7} in 7d`};
-    return {ok:true,used,max:null,label:'ok'};
-  }
-  function bodyGate(card,states){
-    const bad=(card.axes||[]).map(a=>[a,states[a]]).filter(([,s])=>s==='red'||s==='orange');
-    if(card.id==='ashwagandha'&&states.liver&&states.liver!=='green')bad.push(['liver',states.liver]);
-    if(card.id==='reishi'&&states.heart==='red')bad.push(['heart','red']);
-    if(bad.some(([,s])=>s==='red'))return {status:'LOCKED',score:-.75,note:'Body veto: '+bad.map(x=>x.join(' ')).join(', ')};
-    if(bad.length)return {status:'WATCH',score:-.32,note:'Body caution: '+bad.map(x=>x.join(' ')).join(', ')};
-    const support=(card.axes||[]).filter(a=>states[a]==='yellow'||states[a]==='green');
-    return {status:'OK',score:support.length?.08*support.length:0,note:support.length?'Body support: '+support.join(', '):'Body neutral'};
-  }
-  function scoreCard(card,d,g){
-    const reasons=[];
-    let score=.20;
-    const root=Number(d?.personalDay||0), raw=Number(d?.personalDayRaw||0);
-    if(root&&card.num[1]===root){score+=.22;reasons.push('numerology root '+root);}
-    else if(raw&&card.num[0]===raw){score+=.16;reasons.push('numerology compound '+raw);}
-    else if(root&&Math.abs(card.num[1]-root)<=1){score+=.06;reasons.push('near numerology');}
-    if(elementMatches(card,dayElement(d))){score+=.18;reasons.push('BaZi '+card.bazi[2]);}
-    const bz=textOf(d?.bazi||{});
-    if(bz.includes(String(card.bazi[0]).toLowerCase())||bz.includes(String(card.bazi[1]).toLowerCase())){score+=.05;reasons.push('BaZi stem/polarity');}
-    if(elementMatches(card,astrologyElement(d))){score+=.10;reasons.push('astrology element');}
-    const tone=mayanTone(d);
-    if(tone&&card.num[1]&&((tone-card.num[1]+13)%13===0||tone===card.num[1])){score+=.08;reasons.push('Mayan tone resonance');}
-    const ds=textOf(d?.mayan||{});
-    if(/red|dragon|serpent|skywalker|earth/.test(ds)&&card.bazi[2]==='Fire'){score+=.04;reasons.push('Mayan fire/action');}
-    if(/blue|night|hand|monkey|eagle|storm/.test(ds)&&['Water','Wood'].includes(card.bazi[2])){score+=.04;reasons.push('Mayan restoration');}
-    if(/white|wind|worldbridger|dog|wizard|mirror/.test(ds)&&['Metal','Water'].includes(card.bazi[2])){score+=.04;reasons.push('Mayan refinement');}
-    if(/yellow|seed|star|human|warrior|sun/.test(ds)&&['Earth','Fire'].includes(card.bazi[2])){score+=.04;reasons.push('Mayan construction');}
-    for(const dom of topDomains(g))if((card.domains||[]).includes(dom.key)){score+=Math.min(.16,dom.score*.12);reasons.push('domain '+dom.key);}
-    const canonicalSignal=(typeof fwCanonicalSupplementSignal==='function')?fwCanonicalSupplementSignal(card,d,g):{score:0,reasons:[]};
-    score+=Number(canonicalSignal.score||0); reasons.push(...(canonicalSignal.reasons||[]));
-    const timing=timingOverlaySignal(card,d.id); score+=timing.score; reasons.push(...timing.notes);
-    const bg=bodyGate(card,aceStateForDateCached(d.id)); score+=bg.score; reasons.push(bg.note);
-    const freq=frequencyAllowed(card,d.id); if(!freq.ok){score-=.85;reasons.push('frequency limit '+freq.label);}
-    if(['spermidine','spirulina','shilajit','irish_sea_moss','astragalus','chaga','milk_thistle','quercetin','resveratrol'].includes(card.id))score-=.04;
-    return {card,score,reasons,freq,body:bg};
-  }
-  function magnesiumConflict(card,selected){
-    if(!card.groups?.includes('magnesium'))return '';
-    const magIds=selected.filter(x=>x.card.groups?.includes('magnesium')).map(x=>x.card.id);
-    if(!magIds.length)return '';
-    if(magIds.includes(card.id))return 'Already selected this magnesium form';
-    if(magIds.length>=2)return 'Maximum two magnesium forms daily';
-    const anchors=['magnesium_citrate','magnesium_taurate'];
-    const adjuncts=['magnesium_malate','magnesium_bisglycinate'];
-    const other=magIds[0];
-    const allowed=(anchors.includes(other)&&adjuncts.includes(card.id))||(anchors.includes(card.id)&&adjuncts.includes(other));
-    return allowed?'':'Magnesium pairing rule: citrate/taurate may pair only with malate/bisglycinate';
-  }
-  function conflicts(card,selected){
-    const ids=selected.map(x=>x.card.id), groups=selected.flatMap(x=>x.card.groups||[]);
-    if(card.groups?.includes('nad')&&groups.includes('nad'))return 'Only one NAD precursor per selected day';
-    const magHold=magnesiumConflict(card,selected); if(magHold)return magHold;
-    if(card.groups?.includes('mineral_biomass')&&groups.includes('mineral_biomass'))return 'Only one mineral-biomass product daily';
-    if(card.groups?.includes('sleep_aid')&&groups.includes('sleep_aid'))return 'Only one primary sleep aid';
-    if(card.groups?.includes('multi_b')&&groups.includes('multi_b'))return 'Do not automatically combine multivitamin and B-complex';
-    if(WEEKLY_LIMITED_HERBS.includes(card.id)&&ids.some(id=>WEEKLY_LIMITED_HERBS.includes(id)))return 'Weekly-limited herbs do not cluster';
-    if(card.id==='black_maca'&&ids.some(id=>['fadogia_agrestis','turkesterone'].includes(id)))return 'Maca cannot share day with Fadogia or Turkesterone';
-    if(['fadogia_agrestis','turkesterone'].includes(card.id)&&ids.includes('black_maca'))return 'Fadogia/Turkesterone cannot share day with maca';
-    if(card.id==='l_citrulline'&&ids.includes('reishi'))return 'Avoid Citrulline + Reishi if pressure is low';
-    if(card.id==='reishi'&&ids.includes('l_citrulline'))return 'Avoid Reishi + Citrulline if pressure is low';
-    if(card.id==='ashwagandha'&&ids.includes('valerian')&&ids.includes('melatonin'))return 'Ashwagandha cannot join both valerian and melatonin';
-    return '';
-  }
-  // v25.3.8 Weekly Esoteric Coverage Planner
-  // Doctrine: no fixed supplement weekdays. The planner scores every card across the
-  // ISO week using the day engine, then places weekly quota cards on their best
-  // esoteric/body-compatible dates while preserving conflict gates.
-  const NAD_IDS=['nr','nmn','nmnh'];
-  const NAD_PAIR_IDS=['tmg','magnesium_citrate'];
-  const WEEKLY_NAD_DAYS=6;
-  const REPEATABLE_SUPPORT_IDS=['milk_thistle','nac','collagen','vitamin_c','magnesium_taurate','magnesium_bisglycinate','creatine'];
-  const WEEKLY_ESOTERIC_QUOTAS=Object.freeze({
-    d3_k2:{min:1,max:1,label:'exactly 1/week'},
-    shilajit:{min:2,max:2,label:'exactly 2/week'},
-    astragalus:{min:3,max:3,label:'exactly 3/week'},
-    cordyceps:{min:3,max:3,label:'exactly 3/week'},
-    lions_mane:{min:3,max:3,label:'exactly 3/week'},
-    milk_thistle:{min:1,max:4,label:'at least 1/week; repeatable'},
-    nac:{min:1,max:4,label:'at least 1/week; repeatable'},
-    collagen:{min:1,max:4,label:'at least 1/week; repeatable'},
-    vitamin_c:{min:1,max:4,label:'at least 1/week; repeatable'},
-    magnesium_taurate:{min:1,max:4,label:'at least 1/week; repeatable'},
-    magnesium_bisglycinate:{min:1,max:4,label:'at least 1/week; repeatable'},
-    creatine:{min:1,max:4,label:'at least 1/week; repeatable'}
-  });
-  const WEEKLY_DEFAULT_QUOTA=Object.freeze({min:1,max:1,label:'at least 1/week'});
-  const WEEKLY_DAILY_CAP=12;
-  const WEEKLY_PLAN_CACHE={};
-  const ACE_DAY_PACKET_CACHE={};
-  const ACE_SCORE_CACHE={};
-  const ACE_TIMING_LAYER_CACHE={};
-  const ACE_BODY_STATE_CACHE={};
-  const ACE_CACHE_LIMIT=96;
-
-  function aceTrimCache(obj,limit){
-    try{
-      const keys=Object.keys(obj||{});
-      if(keys.length<=limit)return;
-      keys.slice(0,keys.length-limit).forEach(k=>delete obj[k]);
-    }catch(e){}
-  }
-  function aceBodyHash(){
-    try{return JSON.stringify(state&&state.body?state.body:{});}catch(e){return 'body';}
-  }
-  function aceCacheKey(iso){return String(iso||brusselsISODate()).slice(0,10)+'__'+aceBodyHash();}
-  function aceStableJson(value){
-    if(Array.isArray(value))return '['+value.map(aceStableJson).join(',')+']';
-    if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+aceStableJson(value[k])).join(',')+'}';
-    return JSON.stringify(value);
-  }
-  function aceHashString(value){
-    const s=String(value||'');
-    let h=2166136261;
-    for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}
-    return (h>>>0).toString(36);
-  }
-  function aceSupplementBodySnapshot(iso){
-    const date=String(iso||activeDate||brusselsISODate()).slice(0,10);
-    const states={};
-    AXES.forEach(axis=>{states[axis]=validBodyState(bodyStatus(date,axis));});
-    return {date,states};
-  }
-  function aceSupplementBodyHash(iso){
-    return aceHashString(aceStableJson(aceSupplementBodySnapshot(iso)));
-  }
-  function aceSupplementStateSchemaVersion(){
-    return String(typeof STORAGE_KEY!=='undefined'?STORAGE_KEY:'ace_mind_state_unknown');
-  }
-  function aceDailySupplementFreezeKey(iso,bodyHash){
-    const date=String(iso||activeDate||brusselsISODate()).slice(0,10);
-    return [date,DAILY_SUPPLEMENT_FREEZE_REASON,bodyHash||aceSupplementBodyHash(date)].join('__');
-  }
-  function aceFreezeAuthorityDecodes(rec){
-    if(!rec||typeof rec!=='object')return false;
-    if(rec.reason===DAILY_SUPPLEMENT_FREEZE_REASON)return true;
-    const authority=[rec.freezeAuthority,rec.ledgerVersion,rec.authority,rec.policyVersion,rec.freezeKey].filter(Boolean).join(' ');
-    return /supplement|freeze|rolling-selector-ledger|weekly-esoteric|canonical-data/i.test(authority);
-  }
-  function aceValidSupplementFreeze(date){
-    try{
-      const key=String(date||activeDate||brusselsISODate()).slice(0,10);
-      const rec=state?.suppCardPlanHistory?.[key];
-      if(!rec||rec.date!==key)return null;
-      if(!aceFreezeAuthorityDecodes(rec))return null;
-      const selected=selectedIdsFromFreezeRecord(rec);
-      if(!selected.length||selected.some(id=>!BY_ID[id]))return null;
-      return rec;
-    }catch(e){return null;}
-  }
-  function aceGetDayPacket(iso){
-    const key=aceCacheKey(iso);
-    if(ACE_DAY_PACKET_CACHE[key])return ACE_DAY_PACKET_CACHE[key];
-    const d=fwEngineDay(String(iso||brusselsISODate()).slice(0,10));
-    const g=deriveGuidanceV23(d);
-    const pkt={d,g,at:Date.now()};
-    ACE_DAY_PACKET_CACHE[key]=pkt;
-    aceTrimCache(ACE_DAY_PACKET_CACHE,ACE_CACHE_LIMIT);
-    return pkt;
-  }
-  function aceSeasonalLayersCached(iso){
-    const key=String(iso||brusselsISODate()).slice(0,10);
-    if(ACE_TIMING_LAYER_CACHE[key])return ACE_TIMING_LAYER_CACHE[key];
-    const layers=seasonalLayersForDate(key);
-    ACE_TIMING_LAYER_CACHE[key]=layers;
-    aceTrimCache(ACE_TIMING_LAYER_CACHE,ACE_CACHE_LIMIT);
-    return layers;
-  }
-  function aceStateForDateCached(iso){
-    const key=aceCacheKey(iso);
-    if(ACE_BODY_STATE_CACHE[key])return ACE_BODY_STATE_CACHE[key];
-    const out=stateForDate(String(iso||brusselsISODate()).slice(0,10));
-    ACE_BODY_STATE_CACHE[key]=out;
-    aceTrimCache(ACE_BODY_STATE_CACHE,ACE_CACHE_LIMIT);
-    return out;
-  }
-  function aceScoredForDate(iso){
-    const key=aceCacheKey(iso);
-    if(ACE_SCORE_CACHE[key])return ACE_SCORE_CACHE[key];
-    const pkt=aceGetDayPacket(iso);
-    const scored=CARDS.map(card=>scoreCard(card,pkt.d,pkt.g)).sort((a,b)=>b.score-a.score);
-    ACE_SCORE_CACHE[key]=scored;
-    aceTrimCache(ACE_SCORE_CACHE,ACE_CACHE_LIMIT);
-    return scored;
-  }
-  function aceIdle(fn,delay){
-    try{
-      if('requestIdleCallback' in window)return requestIdleCallback(fn,{timeout:delay||1200});
-    }catch(e){}
-    return setTimeout(fn,delay||160);
-  }
-  function acePrewarmSupplementWeeks(seedIso){
-    const seed=String(seedIso||activeDate||brusselsISODate()).slice(0,10);
-    const days=(typeof buildRollingDates==='function'?buildRollingDates():[{iso:seed}]).filter(x=>x&&x.visible!==false).slice(0,15).map(x=>x.iso||seed);
-    days.forEach((iso,i)=>aceIdle(()=>{try{aceGetDayPacket(iso);}catch(e){console.warn('ACE supplement day prewarm skipped',iso,e);}},120+i*40));
-  }
-
-  function isoWeekStart(iso){
-    const d=new Date(String(iso||brusselsISODate()).slice(0,10)+'T12:00:00Z');
-    const day=d.getUTCDay()||7;
-    d.setUTCDate(d.getUTCDate()-day+1);
-    return d.toISOString().slice(0,10);
-  }
-  function isoWeekDates(iso){
-    const start=isoWeekStart(iso);
-    return Array.from({length:7},(_,i)=>typeof addDays==='function'?addDays(start,i):new Date(Date.parse(start+'T12:00:00Z')+i*86400000).toISOString().slice(0,10));
-  }
-  function quotaForCard(card){
-    if(NAD_IDS.includes(card.id))return {min:0,max:4,label:'NAD booster pool 6/week'};
-    if(NAD_PAIR_IDS.includes(card.id))return {min:0,max:6,label:'paired with NAD booster'};
-    if(WEEKLY_ESOTERIC_QUOTAS[card.id])return WEEKLY_ESOTERIC_QUOTAS[card.id];
-    if(WEEKLY_LIMITED_HERBS.includes(card.id))return {min:1,max:1,label:'normal herb 1/week'};
-    if(card.max7&&card.max7<1)return {min:0,max:0,label:'not scheduled'};
-    return WEEKLY_DEFAULT_QUOTA;
-  }
-  function quotaPriority(card){
-    let p=0;
-    if(NAD_IDS.includes(card.id))p+=98;
-    if(NAD_PAIR_IDS.includes(card.id))p+=90;
-    if(WEEKLY_LIMITED_HERBS.includes(card.id))p+=80;
-    if((card.groups||[]).includes('mineral_biomass'))p+=70;
-    if((card.groups||[]).includes('magnesium'))p+=62;
-    if((card.groups||[]).includes('nad'))p+=60;
-    if((card.groups||[]).includes('sleep_aid'))p+=58;
-    if((card.groups||[]).includes('multi_b'))p+=52;
-    const q=quotaForCard(card); p+=Number(q.min||0)*8;
-    return p;
-  }
-  function clonePlanItem(item,extraReason){
-    const copy=Object.assign({},item,{reasons:(item.reasons||[]).slice(),freq:Object.assign({},item.freq||{}),body:Object.assign({},item.body||{})});
-    if(extraReason)copy.reasons.push(extraReason);
-    return copy;
-  }
-  function isPlaceableWeekly(item,selected,counts){
-    const q=quotaForCard(item.card);
-    if((counts[item.card.id]||0)>=q.max)return 'weekly quota already filled';
-    if(item.body&&item.body.status==='LOCKED')return item.body.note||'body veto';
-    if(selected.length>=WEEKLY_DAILY_CAP)return 'daily card cap reached';
-    if(selected.some(x=>x.card.id===item.card.id))return 'already placed on this date';
-    return conflicts(item.card,selected)||'';
-  }
-  function addWeeklyPlanItem(byDate,counts,iso,item,reason,quota){
-    if(!item||!item.card)return null;
-    if((byDate[iso]||[]).some(x=>x.card.id===item.card.id))return null;
-    if((byDate[iso]||[]).length>=WEEKLY_DAILY_CAP)return null;
-    const qi=clonePlanItem(item,reason);
-    qi.weeklyQuota=quota||quotaForCard(item.card);
-    qi.weeklyPlanned=true;
-    byDate[iso]=byDate[iso]||[];
-    byDate[iso].push(qi);
-    counts[item.card.id]=(counts[item.card.id]||0)+1;
-    byDate[iso].sort((a,b)=>slotRank(a.card)-slotRank(b.card)||b.score-a.score);
-    return qi;
-  }
-  function scoredItem(scoredByDate,iso,id){return (scoredByDate[iso]||[]).find(x=>x.card.id===id)||null;}
-  function canPlaceBundleItem(item,selected,counts,ignoreQuota){
-    if(!item)return 'missing card score';
-    const q=quotaForCard(item.card);
-    if(!ignoreQuota&&(counts[item.card.id]||0)>=q.max)return 'weekly quota already filled';
-    if(item.body&&item.body.status==='LOCKED')return item.body.note||'body veto';
-    if(selected.length>=WEEKLY_DAILY_CAP)return 'daily card cap reached';
-    if(selected.some(x=>x.card.id===item.card.id))return 'already placed on this date';
-    return conflicts(item.card,selected)||'';
-  }
-  function placeNadBundle(byDate,counts,scoredByDate,iso,boosterItem,reason){
-    const selected=(byDate[iso]||[]).slice();
-    const tmg=scoredItem(scoredByDate,iso,'tmg');
-    const citrate=scoredItem(scoredByDate,iso,'magnesium_citrate');
-    let hold=canPlaceBundleItem(boosterItem,selected,counts,false); if(hold)return hold;
-    const withBooster=selected.concat([boosterItem]);
-    hold=canPlaceBundleItem(tmg,withBooster,counts,true); if(hold)return 'TMG pair: '+hold;
-    hold=canPlaceBundleItem(citrate,withBooster.concat([tmg]),counts,true); if(hold)return 'Magnesium Citrate pair: '+hold;
-    const q={min:WEEKLY_NAD_DAYS,max:WEEKLY_NAD_DAYS,label:'NAD booster 6/week + TMG + Magnesium Citrate'};
-    addWeeklyPlanItem(byDate,counts,iso,boosterItem,reason,q);
-    addWeeklyPlanItem(byDate,counts,iso,tmg,'mandatory TMG companion for NAD booster', {min:WEEKLY_NAD_DAYS,max:WEEKLY_NAD_DAYS,label:'mandatory NAD companion'});
-    addWeeklyPlanItem(byDate,counts,iso,citrate,'mandatory Magnesium Citrate companion for NAD booster', {min:WEEKLY_NAD_DAYS,max:WEEKLY_NAD_DAYS,label:'mandatory NAD companion'});
-    return '';
-  }
-  function nadBundleCandidates(dates,scoredByDate,byDate,counts,forcedId){
-    const out=[];
-    for(const iso of dates){
-      if((byDate[iso]||[]).some(x=>NAD_IDS.includes(x.card.id)))continue;
-      for(const id of NAD_IDS){
-        if(forcedId&&id!==forcedId)continue;
-        const item=scoredItem(scoredByDate,iso,id); if(!item)continue;
-        const boosterCount=counts[id]||0;
-        if(boosterCount>=quotaForCard(item.card).max)continue;
-        const tmg=scoredItem(scoredByDate,iso,'tmg'), citrate=scoredItem(scoredByDate,iso,'magnesium_citrate');
-        const selected=(byDate[iso]||[]).slice();
-        const h1=canPlaceBundleItem(item,selected,counts,false);
-        const h2=h1?'':canPlaceBundleItem(tmg,selected.concat([item]),counts,true);
-        const h3=(h1||h2)?'':canPlaceBundleItem(citrate,selected.concat([item,tmg]),counts,true);
-        const hold=h1||h2||h3||'';
-        const balance=(3-boosterCount)*.018;
-        const rank=Number(item.score||0)+Number(tmg?.score||0)*.08+Number(citrate?.score||0)*.08+balance;
-        out.push({iso,id,item,hold,rank});
-      }
-    }
-    return out.sort((a,b)=>b.rank-a.rank);
-  }
-  function buildWeeklyEsotericPlan(targetIso){
-    const weekStart=isoWeekStart(targetIso);
-    const cacheKey=weekStart+'__'+JSON.stringify(state?.body||{});
-    if(WEEKLY_PLAN_CACHE[cacheKey])return WEEKLY_PLAN_CACHE[cacheKey];
-    const dates=isoWeekDates(targetIso);
-    const byDate={};
-    const scoredByDate={};
-    const savedSupp=state.supp, savedSuppLog=state.suppLog;
-    try{
-      // Weekly appearances are a planned esoteric rota, not a moving reward/punishment
-      // after ticking a checkbox. Tick history marks completion but must not move the week.
-      state.supp={}; state.suppLog={};
-      for(const iso of dates){
-        try{
-          aceGetDayPacket(iso);
-          scoredByDate[iso]=aceScoredForDate(iso);
-          byDate[iso]=[];
-        }catch(e){scoredByDate[iso]=[];byDate[iso]=[];}
-      }
-    }finally{state.supp=savedSupp||{}; state.suppLog=savedSuppLog||{};}
-    const counts={};
-    const overflow=[];
-
-    // NAD doctrine: six esoterically selected days per week. Each NAD day receives
-    // exactly one booster, plus mandatory TMG and Magnesium Citrate companions.
-    for(const forcedId of NAD_IDS){
-      const chosen=nadBundleCandidates(dates,scoredByDate,byDate,counts,forcedId).find(x=>!x.hold);
-      if(chosen){
-        const hold=placeNadBundle(byDate,counts,scoredByDate,chosen.iso,chosen.item,`NAD 6/week reserve · ${BY_ID[forcedId].name}`);
-        if(hold)overflow.push({iso:chosen.iso,item:clonePlanItem(chosen.item,hold)});
-      }else{
-        const best=nadBundleCandidates(dates,scoredByDate,byDate,counts,forcedId)[0];
-        if(best)overflow.push({iso:best.iso,item:clonePlanItem(best.item,best.hold||'NAD reserve could not be placed')});
-      }
-    }
-    while((NAD_IDS.reduce((s,id)=>s+(counts[id]||0),0))<WEEKLY_NAD_DAYS){
-      const chosen=nadBundleCandidates(dates,scoredByDate,byDate,counts,'').find(x=>!x.hold);
-      if(!chosen)break;
-      const hold=placeNadBundle(byDate,counts,scoredByDate,chosen.iso,chosen.item,'NAD 6/week esoteric bundle');
-      if(hold){overflow.push({iso:chosen.iso,item:clonePlanItem(chosen.item,hold)});break;}
-    }
-
-    const cardOrder=CARDS.slice().filter(card=>!NAD_IDS.includes(card.id)&&!NAD_PAIR_IDS.includes(card.id)).sort((a,b)=>quotaPriority(b)-quotaPriority(a)||a.name.localeCompare(b.name));
-    for(const card of cardOrder){
-      const q=quotaForCard(card);
-      while((counts[card.id]||0)<q.min){
-        const candidates=dates.map(iso=>{
-          const base=(scoredByDate[iso]||[]).find(x=>x.card.id===card.id);
-          if(!base)return null;
-          const daySelected=byDate[iso]||[];
-          const hold=isPlaceableWeekly(base,daySelected,counts);
-          const dayIndex=dates.indexOf(iso);
-          const pressure=((counts[card.id]||0)+1)*.01 + dayIndex*.001;
-          return {iso,item:base,hold,rank:Number(base.score||0)+pressure};
-        }).filter(Boolean).sort((a,b)=>b.rank-a.rank);
-        const chosen=candidates.find(x=>!x.hold);
-        if(chosen){
-          const qi=addWeeklyPlanItem(byDate,counts,chosen.iso,chosen.item,`weekly esoteric quota ${counts[card.id]||0}/${q.min} · ${q.label}`,q);
-          if(!qi)overflow.push({iso:chosen.iso,item:clonePlanItem(chosen.item,'weekly quota could not be placed safely')});
-        }else{
-          const best=candidates[0];
-          if(best){
-            const oi=clonePlanItem(best.item,'weekly quota could not be placed safely');
-            oi.hold=best.hold||'not placeable';
-            oi.weeklyQuota=q;
-            overflow.push({iso:best.iso,item:oi});
-          }
-          break;
-        }
-      }
-    }
-
-    // Repeatable support pass: after mandatory coverage, allow extra high-fit support
-    // cards only when esoterically strong, conflict-safe, and below the 12-card cap.
-    for(const iso of dates){
-      let guard=0;
-      while((byDate[iso]||[]).length<WEEKLY_DAILY_CAP && guard++<20){
-        const selected=byDate[iso]||[];
-        const candidates=(scoredByDate[iso]||[]).filter(item=>{
-          const id=item.card.id;
-          if(!REPEATABLE_SUPPORT_IDS.includes(id))return false;
-          if(selected.some(x=>x.card.id===id))return false;
-          const q=quotaForCard(item.card);
-          if((counts[id]||0)>=q.max)return false;
-          if(Number(item.score||0)<.70)return false;
-          return !isPlaceableWeekly(item,selected,counts);
-        }).sort((a,b)=>b.score-a.score);
-        const chosen=candidates[0];
-        if(!chosen)break;
-        addWeeklyPlanItem(byDate,counts,iso,chosen,'bonus repeat: high esoteric fit and conflict-safe',quotaForCard(chosen.card));
-      }
-    }
-
-    const result={weekStart,dates,byDate,scoredByDate,counts,overflow,policy:SUPPLEMENT_POLICY_VERSION,nad_days:NAD_IDS.reduce((s,id)=>s+(counts[id]||0),0),daily_cap:WEEKLY_DAILY_CAP};
-    WEEKLY_PLAN_CACHE[cacheKey]=result;
-    return result;
-  }
-
-  function aceIsoDow(iso){
-    const d=new Date(String(iso).slice(0,10)+'T12:00:00Z');
-    return d.getUTCDay()||7;
-  }
-  function aceAddDays(iso,n){
-    try{
-      if(typeof fwAddDaysISO==='function')return fwAddDaysISO(iso,n);
-    }catch(e){}
-    const d=new Date(String(iso).slice(0,10)+'T12:00:00Z');
-    d.setUTCDate(d.getUTCDate()+Number(n||0));
-    return d.toISOString().slice(0,10);
-  }
-  function aceHistoryWindowBefore(iso,days=14){
-    const out=[];
-    for(let i=days;i>=1;i--)out.push(aceAddDays(iso,-i));
-    return out;
-  }
-  function aceWeekDatesBefore(iso){
-    const start=isoWeekStart(iso), out=[];
-    for(let d=start;d<iso;d=aceAddDays(d,1))out.push(d);
-    return out;
-  }
-  function aceCountOnDates(id,dates){
-    return (dates||[]).reduce((sum,date)=>sum+(historyIdsOn(date).includes(id)?1:0),0);
-  }
-  function aceCountWeekBefore(id,iso){return aceCountOnDates(id,aceWeekDatesBefore(iso));}
-  function aceCountRollingBefore(id,iso,days=7){
-    let count=0;
-    for(let i=1;i<=days;i++)if(historyIdsOn(aceAddDays(iso,-i)).includes(id))count++;
-    return count;
-  }
-  function aceWeekRemainingIncluding(iso){return Math.max(1,8-aceIsoDow(iso));}
-  function aceWeekQuotaState(card,iso){
-    const q=quotaForCard(card);
-    const weekBefore=aceCountWeekBefore(card.id,iso);
-    const rollingBefore=aceCountRollingBefore(card.id,iso,7);
-    const remaining=aceWeekRemainingIncluding(iso);
-    const dow=aceIsoDow(iso);
-    const target=dow===7?Number(q.min||0):Math.floor((dow*Number(q.min||0))/7);
-    return {q,weekBefore,rollingBefore,remaining,target,need:Math.max(0,Number(q.min||0)-weekBefore)};
-  }
-  function aceIsExplicitQuotaCard(card){
-    return !!WEEKLY_ESOTERIC_QUOTAS[card.id]||WEEKLY_LIMITED_HERBS.includes(card.id)||card.id==='shilajit'||Number(card.max7||0)>0;
-  }
-  function aceSequentialQuotaPressure(item,iso){
-    const card=item.card, qState=aceWeekQuotaState(card,iso), q=qState.q;
-    const must=qState.need>0&&qState.need>=qState.remaining;
-    const behind=qState.weekBefore<qState.target;
-    const explicit=aceIsExplicitQuotaCard(card);
-    const strongFit=Number(item.score||0)>=.74;
-    const should=qState.need>0&&(must||behind||(explicit&&strongFit));
-    return {must,behind,explicit,strongFit,should,qState,q};
-  }
-  function aceConsecutiveHold(card,iso){
-    const id=card.id;
-    const yesterday=historyIdsOn(aceAddDays(iso,-1)).includes(id);
-    if(!yesterday)return '';
-    const repeatOk=REPEATABLE_SUPPORT_IDS.includes(id)||NAD_PAIR_IDS.includes(id)||(card.groups||[]).includes('magnesium')||['omega_3','coq10','creatine','collagen','vitamin_c'].includes(id);
-    return repeatOk?'':'Consecutive-day cooldown from frozen history';
-  }
-  function canPlaceSequential(item,selected,ctx,opts){
-    opts=opts||{};
-    if(!item||!item.card)return 'missing card score';
-    const card=item.card, qState=aceWeekQuotaState(card,ctx.date), q=qState.q;
-    if(!opts.ignoreQuota){
-      if(qState.weekBefore>=q.max)return 'weekly quota already filled by frozen history';
-      if(qState.rollingBefore>=q.max&&q.max<=3)return 'rolling 7-day quota already filled by frozen history';
-    }
-    if(item.body&&item.body.status==='LOCKED')return item.body.note||'body veto';
-    if(selected.length>=WEEKLY_DAILY_CAP)return 'daily card cap reached';
-    if(selected.some(x=>x.card.id===card.id))return 'already placed on this date';
-    const conflict=conflicts(card,selected); if(conflict)return conflict;
-    if(!opts.ignoreConsecutive){
-      const consecutive=aceConsecutiveHold(card,ctx.date); if(consecutive)return consecutive;
-    }
-    return '';
-  }
-  function addSequentialItem(selected,item,reason,quota){
-    const copy=clonePlanItem(item,reason);
-    copy.weeklyQuota=quota||quotaForCard(item.card);
-    copy.forwardPlanned=true;
-    selected.push(copy);
-    selected.sort((a,b)=>slotRank(a.card)-slotRank(b.card)||b.score-a.score);
-    return copy;
-  }
-  function aceShouldPlaceNad(iso){
-    const weekBefore=NAD_IDS.reduce((sum,id)=>sum+aceCountWeekBefore(id,iso),0);
-    if(weekBefore>=WEEKLY_NAD_DAYS)return false;
-    const remaining=aceWeekRemainingIncluding(iso);
-    const need=WEEKLY_NAD_DAYS-weekBefore;
-    if(need>=remaining)return true;
-    const dow=aceIsoDow(iso);
-    const pace=dow===7?WEEKLY_NAD_DAYS:Math.floor((dow*WEEKLY_NAD_DAYS)/7);
-    const rollingBefore=NAD_IDS.reduce((sum,id)=>sum+aceCountRollingBefore(id,iso,6),0);
-    return weekBefore<pace||rollingBefore<5;
-  }
-  function placeSequentialNadBundle(selected,ctx){
-    if(!aceShouldPlaceNad(ctx.date))return '';
-    const scoredById=ctx.scoredById;
-    const candidates=NAD_IDS.map(id=>scoredById[id]).filter(Boolean).sort((a,b)=>{
-      const ac=aceCountRollingBefore(a.card.id,ctx.date,14), bc=aceCountRollingBefore(b.card.id,ctx.date,14);
-      if(ac!==bc)return ac-bc;
-      const aw=aceCountWeekBefore(a.card.id,ctx.date), bw=aceCountWeekBefore(b.card.id,ctx.date);
-      if(aw!==bw)return aw-bw;
-      return Number(b.score||0)-Number(a.score||0);
-    });
-    for(const booster of candidates){
-      const tmg=scoredById.tmg, citrate=scoredById.magnesium_citrate;
-      let hold=canPlaceSequential(booster,selected,ctx,{});
-      if(hold)continue;
-      hold=canPlaceSequential(tmg,selected.concat([booster]),ctx,{ignoreQuota:true,ignoreConsecutive:true});
-      if(hold)continue;
-      hold=canPlaceSequential(citrate,selected.concat([booster,tmg]),ctx,{ignoreQuota:true,ignoreConsecutive:true});
-      if(hold)continue;
-      const q={min:WEEKLY_NAD_DAYS,max:WEEKLY_NAD_DAYS,label:'NAD booster 6/week + TMG + Magnesium Citrate'};
-      addSequentialItem(selected,booster,'forward NAD rotation from frozen history',q);
-      addSequentialItem(selected,tmg,'mandatory TMG companion for NAD booster',{min:WEEKLY_NAD_DAYS,max:WEEKLY_NAD_DAYS,label:'mandatory NAD companion'});
-      addSequentialItem(selected,citrate,'mandatory Magnesium Citrate companion for NAD booster',{min:WEEKLY_NAD_DAYS,max:WEEKLY_NAD_DAYS,label:'mandatory NAD companion'});
-      return '';
-    }
-    return 'NAD bundle held by body, quota, cooldown, or companion conflict';
-  }
-  function aceSequentialHoldReason(item,selected,ctx){
-    const direct=canPlaceSequential(item,selected,ctx,{});
-    if(direct)return direct;
-    const pressure=aceSequentialQuotaPressure(item,ctx.date);
-    if(!pressure.should&&Number(item.score||0)<.78)return 'Lower forward fit than frozen-history placement pressure';
-    return 'Daily cap or stronger forward-history fit';
-  }
-  function buildSequentialSupplementModel(d,g){
-    const date=String(d?.id||activeDate||brusselsISODate()).slice(0,10);
-    const scored=(aceScoredForDate(date)||[]).slice().sort((a,b)=>b.score-a.score);
-    const scoredById=Object.fromEntries(scored.map(item=>[item.card.id,item]));
-    const selected=[];
-    const ctx={date,scoredById,historyWindow:aceHistoryWindowBefore(date,14)};
-
-    const nadHold=placeSequentialNadBundle(selected,ctx);
-    const selectedIds=()=>new Set(selected.map(x=>x.card.id));
-
-    const quotaCandidates=scored.filter(item=>!NAD_IDS.includes(item.card.id)&&!NAD_PAIR_IDS.includes(item.card.id)).map(item=>({item,pressure:aceSequentialQuotaPressure(item,date)})).filter(x=>x.pressure.should||Number(x.item.score||0)>=.78).sort((a,b)=>{
-      if(a.pressure.must!==b.pressure.must)return a.pressure.must?-1:1;
-      if(a.pressure.behind!==b.pressure.behind)return a.pressure.behind?-1:1;
-      return quotaPriority(b.item.card)-quotaPriority(a.item.card)||Number(b.item.score||0)-Number(a.item.score||0);
-    });
-    for(const entry of quotaCandidates){
-      if(selected.length>=WEEKLY_DAILY_CAP)break;
-      if(selectedIds().has(entry.item.card.id))continue;
-      const hold=canPlaceSequential(entry.item,selected,ctx,{});
-      if(!hold)addSequentialItem(selected,entry.item,entry.pressure.must?'weekly quota deadline from frozen history':entry.pressure.behind?'weekly quota pace from frozen history':'high fit within forward quota',entry.pressure.q);
-    }
-
-    for(const item of scored){
-      if(selected.length>=WEEKLY_DAILY_CAP)break;
-      if(!REPEATABLE_SUPPORT_IDS.includes(item.card.id))continue;
-      if(selectedIds().has(item.card.id))continue;
-      if(Number(item.score||0)<.70)continue;
-      const hold=canPlaceSequential(item,selected,ctx,{});
-      if(!hold)addSequentialItem(selected,item,'repeatable support: high current fit below frozen-history quota',quotaForCard(item.card));
-    }
-
-    for(const item of scored){
-      if(selected.length>=Math.min(WEEKLY_DAILY_CAP,8))break;
-      if(selectedIds().has(item.card.id)||NAD_IDS.includes(item.card.id)||NAD_PAIR_IDS.includes(item.card.id))continue;
-      if(Number(item.score||0)<.82)continue;
-      const hold=canPlaceSequential(item,selected,ctx,{});
-      if(!hold)addSequentialItem(selected,item,'bonus high fit after forward-only quota pass',quotaForCard(item.card));
-    }
-
-    if(!selected.length){
-      const fallback=scored.find(item=>!canPlaceSequential(item,selected,ctx,{ignoreQuota:true}));
-      if(fallback)addSequentialItem(selected,fallback,'fallback: safest available current-day card',quotaForCard(fallback.card));
-    }
-
-    const finalIds=new Set(selected.map(x=>x.card.id));
-    const held=scored.filter(item=>!finalIds.has(item.card.id)).map(item=>{
-      const copy=clonePlanItem(item);
-      copy.hold=aceSequentialHoldReason(item,selected,ctx);
-      return copy;
-    });
-    if(nadHold&&!selected.some(x=>NAD_IDS.includes(x.card.id))){
-      const bestNad=NAD_IDS.map(id=>scoredById[id]).filter(Boolean)[0];
-      if(bestNad){const copy=clonePlanItem(bestNad,nadHold);copy.hold=nadHold;held.unshift(copy);}
-    }
-    const counts={};
-    aceWeekDatesBefore(date).forEach(day=>historyIdsOn(day).forEach(id=>{counts[id]=(counts[id]||0)+1;}));
-    selected.forEach(item=>{counts[item.card.id]=(counts[item.card.id]||0)+1;});
-    return {selected,held,scored,weeklyPlan:null,weeklyPolicy:SUPPLEMENT_POLICY_VERSION,sequentialPlan:{date,historyWindow:ctx.historyWindow,counts,policy:SUPPLEMENT_POLICY_VERSION,planner:'forward-only-ledger-v1'}};
-  }
-
-  function buildSupplementModel(d,g){
-    return buildSequentialSupplementModel(d,g);
-  }
-
-  function buildFrozenSupplementModel(d,g,freeze){
-    const date=String(d?.id||activeDate||brusselsISODate()).slice(0,10);
-    const frozenIds=selectedIdsFromFreezeRecord(freeze);
-    const scored=(aceScoredForDate(date)||[]).slice().sort((a,b)=>b.score-a.score);
-    const byId=Object.fromEntries(scored.map(item=>[item.card.id,item]));
-    const selected=frozenIds.map(id=>byId[id]||scoreCard(BY_ID[id],d,g));
-    const selectedIds=new Set(frozenIds);
-    const held=[];
-    for(const item of scored){
-      if(selectedIds.has(item.card.id))continue;
-      const copy=clonePlanItem(item);
-      const conflict=conflicts(item.card,selected);
-      if(conflict)copy.hold=conflict;
-      else if(item.body&&item.body.status==='LOCKED')copy.hold=item.body.note||'Body veto';
-      else copy.hold='Daily freeze preserved today\'s selected card order';
-      held.push(copy);
-    }
-    return {selected,held,scored,weeklyPlan:null,weeklyPolicy:SUPPLEMENT_POLICY_VERSION,freeze,freezeAuthority:DAILY_SUPPLEMENT_FREEZE_REASON};
-  }
-
-  function slotRank(card){const w=(card.windows||['Flexible'])[0];return w==='Morning'?1:w==='Afternoon'?2:w==='Night'?3:4;}
-  function cbr(item){if(item.body.status==='LOCKED')return 'H';if(item.score>=.74)return 'L';if(item.score>=.52)return 'M';return 'H';}
-  function statusText(item,selected){
-    if(item.body.status==='LOCKED')return 'LOCKED';
-    if(item.hold)return 'HOLD';
-    if(selected)return item.score>=.74?'TAKE TODAY':'SUPPORT';
-    return item.score>=.52?'ELIGIBLE':'NOT TODAY';
-  }
-  /* ACE clean-ui stale-pass1: removed dead signalChips(item) helper.
-   Supplement cards now render compact status chips directly in renderItem(). */
-  function resonancePct(item){return Math.max(0,Math.min(100,Math.round(Number(item.score||0)*100)));}
-  function resonanceColor(item){return item.body&&item.body.status==='LOCKED'?'var(--red)':Number(item.score||0)>=.74?'var(--emerald)':Number(item.score||0)>=.52?'var(--gold2)':'var(--muted)';}
-  function renderItem(item,date,selected){
-    const card=item.card, tag=cbr(item), ticked=typeof isTicked==='function'&&isTicked(date,card.name);
-    const status=statusText(item,selected);
-    const statusClass=status.includes('LOCK')?'locked':status.includes('HOLD')||status.includes('MANUAL')?'watch':selected?'support':'dim';
-    const pct=resonancePct(item), color=resonanceColor(item);
-    const shortStatus=status.includes('LOCK')?'LOCKED':status.includes('HOLD')?'HOLD':selected?'TAKE':'WAIT';
-    return `<div class="supp-item ${statusClass}" data-date="${html(date)}" data-supp="${html(card.name)}" data-note="${html(card.rule||'')}" data-cbr="${tag}" onclick="openSupplementCard(this.dataset.supp,this.dataset.note,this.dataset.cbr)"><div class="check ${ticked?'checked':''}" onclick="event.stopPropagation();tickSupp(this.closest('.supp-item').dataset.date,this.closest('.supp-item').dataset.supp)"></div><div style="flex:1"><div class="supp-name">${html(card.name)}</div><div class="supp-signal-line"><span class="supp-policy-chip">${html(shortStatus)}</span></div></div><div class="supp-side"><div class="supp-res-gauge" style="--res-p:${pct};--res-color:${color}" title="Resonance ${pct}%"><span>${pct}</span></div><div class="supp-res-label">res</div><span class="tag ${tag}">${tag}</span><span class="fw-timing-badge ${selected?'now':'hold'}" data-timing-name="${html(card.name)}" data-timing-status="${html(item.body&&item.body.status==='LOCKED'?'LOCKED':(item.hold?'ORANGE':'ALLOWED'))}" data-timing-cbr="${tag}" title="Planetary timing gate">TIME</span></div></div>`;
-  }
-  function groupBySlot(items){const out={Morning:[],Afternoon:[],Night:[],Flexible:[],Manual:[]};for(const it of items){const w=(it.card.windows||['Flexible'])[0];(out[out[w]?w:'Flexible']).push(it);}return out;}
-  function renderGroups(items,date,selected){
-    const groups=groupBySlot(items);
-    return Object.entries(groups).filter(([,arr])=>arr.length).map(([slot,arr])=>`<div class="supp-group"><div class="supp-head">${html(slot)}</div>${arr.map(x=>renderItem(x,date,selected)).join('')}</div>`).join('');
-  }
-  function supplementSummary(d,g,model){
-    const profileOk=!!(window.ACE_MIND_CANONICAL_HANDOFF_V1?.ok||window.ACE_MIND_CANONICAL_PROFILE_APPLIED?.ok||state?.canonicalProfile?.version);
-    const activeCount=(model&&Array.isArray(model.selected))?model.selected.length:0;
-    return panel(`<div class="focus-title">Supplements</div><div class="tiny" style="margin-top:6px;color:var(--muted)">Cards ${activeCount} · ${profileOk?'Profile loaded':'Profile fallback'}</div>`);
-  }
-  function freezeSupplementCardPlan(date,model,opts){
-    opts=opts||{};
-    try{
-      state.suppCardPlanHistory=state.suppCardPlanHistory||{};
-      const key=String(date||activeDate||brusselsISODate()).slice(0,10);
-      const existing=aceValidSupplementFreeze(key);
-      if(existing&&!opts.force)return existing;
-      const selected=(model.selected||[]).map(x=>x.card.id).filter(id=>BY_ID[id]);
-      if(!selected.length)return null;
-      const selectedNames=selected.map(id=>BY_ID[id].name);
-      const bodySnapshot=aceSupplementBodySnapshot(key);
-      const bodyHash=aceHashString(aceStableJson(bodySnapshot));
-      const freezeKey=aceDailySupplementFreezeKey(key,bodyHash);
-      const rec={
-        date:key,
-        authority:SUPPLEMENT_POLICY_VERSION,
-        freezeAuthority:'rolling-selector-ledger-v1',
-        ledgerVersion:'rolling-selector-ledger-v1',
-        planner:'forward-only-ledger-v1',
-        selected,
-        selectedIds:selected.slice(),
-        selectedNames,
-        bodySnapshot,
-        bodyHash,
-        appVersion:APP_VERSION,
-        policyVersion:SUPPLEMENT_POLICY_VERSION,
-        stateSchemaVersion:aceSupplementStateSchemaVersion(),
-        freezeKey,
-        held_count:(model.held||[]).length,
-        historyWindow:model?.sequentialPlan?.historyWindow||[],
-        createdAt:opts.createdAt||new Date().toISOString(),
-        reason:DAILY_SUPPLEMENT_FREEZE_REASON,
-        patch:PATCH_VERSION
-      };
-      state.suppCardPlanHistory[key]=rec;
-      if(opts.save!==false)try{saveState();}catch(e){}
-      return rec;
-    }catch(e){return null;}
-  }
-  function rollingSupplementDates(){
-    try{
-      return buildRollingDates().filter(x=>x&&x.visible!==false).slice(0,15).map(x=>String(x.iso).slice(0,10)).filter(Boolean).sort();
-    }catch(e){
-      const today=brusselsISODate();
-      return Array.from({length:15},(_,i)=>aceAddDays(today,i));
-    }
-  }
-  function ensureRollingSupplementLedger(){
-    const dates=rollingSupplementDates();
-    const created=[];
-    state.suppCardPlanHistory=state.suppCardPlanHistory||{};
-    for(const iso of dates){
-      if(aceValidSupplementFreeze(iso))continue;
-      const pkt=aceGetDayPacket(iso);
-      const model=buildSequentialSupplementModel(pkt.d,pkt.g);
-      const rec=freezeSupplementCardPlan(iso,model,{save:false});
-      if(rec)created.push(iso);
-    }
-    if(created.length)try{saveState();}catch(e){}
-    return {dates,created,total:Object.keys(state.suppCardPlanHistory||{}).length};
-  }
-  window.ensureRollingSupplementLedger=ensureRollingSupplementLedger;
-  window.aceValidSupplementFreeze=aceValidSupplementFreeze;
-  window.aceClearSupplementVolatileCaches=function(){
-    try{
-      Object.keys(ACE_DAY_PACKET_CACHE).forEach(k=>delete ACE_DAY_PACKET_CACHE[k]);
-      Object.keys(ACE_SCORE_CACHE).forEach(k=>delete ACE_SCORE_CACHE[k]);
-      Object.keys(ACE_TIMING_LAYER_CACHE).forEach(k=>delete ACE_TIMING_LAYER_CACHE[k]);
-      Object.keys(ACE_BODY_STATE_CACHE).forEach(k=>delete ACE_BODY_STATE_CACHE[k]);
-      Object.keys(WEEKLY_PLAN_CACHE).forEach(k=>delete WEEKLY_PLAN_CACHE[k]);
-    }catch(e){}
-  };
-  window.aceRecalculateDailySupplementFreeze=function(date){
-    try{
-      const newest=rollingSupplementDates().slice(-1)[0]||brusselsISODate();
-      const key=String(date||newest).slice(0,10);
-      if(key!==newest&&!window.__ACE_ALLOW_HISTORICAL_SUPPLEMENT_RECALC__)return aceValidSupplementFreeze(key);
-      if(state&&state.suppCardPlanHistory)delete state.suppCardPlanHistory[key];
-      const pkt=aceGetDayPacket(key);
-      const model=buildSequentialSupplementModel(pkt.d,pkt.g);
-      return freezeSupplementCardPlan(key,model,{force:true});
-    }catch(e){return null;}
-  };
-  window.aceRenderSuppAlternatives=function(details,date){
-    try{
-      if(!details||!details.open)return;
-      const box=details.querySelector('[data-alt-list]');
-      if(!box||box.dataset.rendered==='1')return;
-      const pkt=aceGetDayPacket(date);
-      const builder=window.aceBuildSupplementCardModel;
-      const model=typeof builder==='function'?builder(pkt.d,pkt.g):buildSequentialSupplementModel(pkt.d,pkt.g);
-      box.dataset.rendered='1';
-      box.innerHTML=model.held.length?model.held.map(x=>renderItem(x,pkt.d.id,false)).join(''):'<div class="tiny">No alternatives held for this date.</div>';
-      try{if(typeof fwUpdateTimingBadges==='function')fwUpdateTimingBadges();}catch(e){}
-    }catch(e){try{details.querySelector('[data-alt-list]').innerHTML='<div class="tiny">Alternatives unavailable: '+html(e.message||e)+'</div>';}catch(_){} }
-  };
-  window.aceBuildSupplementCardModel=function(d,g){
-    const date=String(d?.id||activeDate||brusselsISODate()).slice(0,10);
-    const freeze=aceValidSupplementFreeze(date);
-    return freeze?buildFrozenSupplementModel(d,g,freeze):buildSupplementModel(d,g);
-  };
-  renderClubs=function(d,g){
-    const root=document.getElementById('grid-clubs'); if(!root)return;
-    try{if(d&&d.id===brusselsISODate())console.info('ACE Mind life domains before supplement render',d.id,topDomains(g));}catch(e){}
-    const freeze=aceValidSupplementFreeze(d.id);
-    const model=freeze?buildFrozenSupplementModel(d,g,freeze):buildSequentialSupplementModel(d,g);
-    const activeFreeze=freeze||null;
-    window.ACE_MIND_SUPPLEMENT_MODEL={date:d.id,patch:PATCH_VERSION,selected:model.selected.map(x=>x.card.id),freeze_key:activeFreeze&&activeFreeze.freezeKey||null,freeze_reason:activeFreeze&&activeFreeze.reason||null,weekly_limited_herbs:WEEKLY_LIMITED_HERBS,weekly_limited_policy:WEEKLY_LIMITED_POLICY,nad_days:WEEKLY_NAD_DAYS,daily_cap:WEEKLY_DAILY_CAP,repeatable_support_ids:REPEATABLE_SUPPORT_IDS};
-    root.innerHTML=supplementSummary(d,g,model)+renderGroups(model.selected,d.id,true)+`<details class="supp-group" ontoggle="this.open&&window.aceRenderSuppAlternatives&&window.aceRenderSuppAlternatives(this,'${html(d.id)}')"><summary class="supp-head">Not today / alternatives · ${model.held.length}</summary><div data-alt-list="1"><div class="tiny" style="padding:10px 4px;color:var(--muted)">Open to render alternatives only when needed.</div></div></details>`;
-    try{if(d&&d.id===brusselsISODate())console.info('ACE Mind life domains after supplement render',d.id,topDomains(g));}catch(e){}
-    try{if(typeof fwUpdateTimingBadges==='function')fwUpdateTimingBadges();}catch(e){}
-  };
-  window.aceRenderActiveDateFast=function(){
-    try{
-      const grid=document.getElementById('grid-'+activeChamber);
-      if(!grid){render();return;}
-      const pkt=aceGetDayPacket(activeDate||brusselsISODate());
-      renderDayRail();
-      if(activeChamber==='spades')renderSpades(pkt.d,pkt.g);
-      else if(activeChamber==='clubs')renderClubs(pkt.d,pkt.g);
-      else if(activeChamber==='diamonds')renderDiamonds(pkt.d,pkt.g);
-      else if(activeChamber==='hearts')renderHearts(pkt.d,pkt.g);
-      else if(activeChamber==='jester')renderJester(pkt.d,pkt.g);
-      else if(activeChamber==='temporal')renderTemporal(pkt.d,pkt.g);
-      setChamber(activeChamber,false,true);
-      safeHeaderLogo();
-    }catch(e){render();}
-  };
-  renderDayRail=function(){
-    try{if(typeof ensureRollingSupplementLedger==='function')ensureRollingSupplementLedger();}catch(e){console.warn('ACE supplement ledger ensure skipped',e);}
-    const d=(typeof aceGetDayPacket==='function'?aceGetDayPacket(activeDate||brusselsISODate()).d:day());
-    const [,mo,dy]=d.id.split('-').map(Number);
-    const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    document.getElementById('dayName').textContent=`${d.weekday} · ${dy} ${MON[mo-1]}`;
-    document.getElementById('dayMeta').textContent=`${d.id} · ${d.personalDayRaw||''}/${d.personalDay||''} · ${d.bazi?.hanzi||''}`;
-    const days=buildRollingDates();
-    document.getElementById('dayRail').innerHTML=days.map(x=>`<button class="day-btn ${x.iso===activeDate?'active':''}" onclick="setDay('${x.iso}')" title="${x.visible?'rolling rail':'selected outside rail'}"><b>${x.wd.slice(0,3)}</b><span>${x.iso.slice(5)}</span></button>`).join('');
-  };
-  isTicked=function(date,name){try{return !!state.supp[key(String(date).slice(0,10),normSuppName(name))];}catch(e){return false;}};
-  tickSupp=function(date,name){
-    date=String(date||activeDate||brusselsISODate()).slice(0,10);
-    name=normSuppName(name);
-    const k=key(date,name);
-    state.supp=state.supp||{};
-    const ticked=!state.supp[k];
-    state.supp[k]=ticked;
-    state.suppLog=state.suppLog||{};
-    const prev=state.suppLog[date]&&typeof state.suppLog[date]==='object'?state.suppLog[date]:{};
-    const events=Array.isArray(prev.events)?prev.events.slice(-80).map(e=>{const c=Object.assign({},e);delete c.block;delete c.blockName;delete c.blockAssignment;return c;}):[];
-    const event={name,ticked,at:new Date().toISOString(),policy:SUPPLEMENT_POLICY_VERSION};
-    events.push(event);
-    const taken=Object.keys(state.supp).filter(x=>x.startsWith(date+'__')&&state.supp[x]).map(x=>x.slice(date.length+2));
-    state.suppLog[date]={taken,events,lastEvent:event,policy:SUPPLEMENT_POLICY_VERSION,at:event.at};
-    saveState();
-    try{
-      const pkt=aceGetDayPacket(date);
-      renderClubs(pkt.d,pkt.g);
-    }catch(e){try{render();}catch(_){} }
-  };
-  try{
-    if(typeof setChamber==='function'&&!window.__ACE_FAST_CHAMBER_RENDER_V8__){
-      window.__ACE_FAST_CHAMBER_RENDER_V8__=true;
-      const baseSetChamberV8=setChamber;
-      setChamber=function(id,save,fromHistory){
-        const out=baseSetChamberV8.apply(this,arguments);
-        try{
-          if(typeof aceRenderActiveDateFast==='function'&&!fromHistory){
-            const pkt=aceGetDayPacket(activeDate||brusselsISODate());
-            if(activeChamber==='spades')renderSpades(pkt.d,pkt.g);
-            else if(activeChamber==='clubs')renderClubs(pkt.d,pkt.g);
-            else if(activeChamber==='diamonds')renderDiamonds(pkt.d,pkt.g);
-            else if(activeChamber==='hearts')renderHearts(pkt.d,pkt.g);
-            else if(activeChamber==='jester')renderJester(pkt.d,pkt.g);
-            else if(activeChamber==='temporal')renderTemporal(pkt.d,pkt.g);
-          }
-        }catch(e){}
-        return out;
-      };
-    }
-  }catch(e){}
-  try{
-    state.blockHistory={};
-    if(state.suppLog)for(const rec of Object.values(state.suppLog)){if(rec&&typeof rec==='object'){delete rec.block;delete rec.blockName;delete rec.blockAssignment;delete rec.reason;(rec.events||[]).forEach(e=>{delete e.block;delete e.blockName;delete e.blockAssignment;});}}
-    // No save-on-view: daily supplement freezes and user actions persist through their own explicit writes.
-  }catch(e){}
-  window.WEEKLY_LIMITED_HERBS=WEEKLY_LIMITED_HERBS.slice();
-  window.ACE_SUPPLEMENT_POLICY_V4={patch:PATCH_VERSION,performance:'day-packet-cache+lazy-alternatives+forward-ledger',weekly_limited_herbs:WEEKLY_LIMITED_HERBS.slice(),weekly_limited_policy:WEEKLY_LIMITED_POLICY,nad_days:WEEKLY_NAD_DAYS,daily_cap:WEEKLY_DAILY_CAP,repeatable_support_ids:REPEATABLE_SUPPORT_IDS,weekly_esoteric_quotas:WEEKLY_ESOTERIC_QUOTAS,cards:CARDS.length};
-  try{ensureRollingSupplementLedger();}catch(e){console.warn('ACE rolling supplement ledger init skipped',e);}
-  try{if(typeof appInitialized==='undefined'||appInitialized)render();}catch(e){console.error('ACE supplement card repair render failed',e);}
-  try{acePrewarmSupplementWeeks(activeDate||brusselsISODate());}catch(e){}
-})();
-</script>
 
 <script id="ace-mind-jester-audit-v2-1-hardened">
 (function aceMindJesterAuditV21Hardened(){
@@ -9302,8 +8127,8 @@ details.supp-group summary::-webkit-details-marker{display:none}
     catch(e){try{alert('Export failed: '+safeErr(e));}catch(_){}}
   };
   window.aceMindClearDerivedPlanHistory=function(){
-    try{var st=tryGet('state');if(st){var dates=(typeof buildRollingDates==='function'?buildRollingDates():[]).filter(function(x){return x&&x.visible!==false;}).map(function(x){return String(x.iso||'').slice(0,10);}).filter(Boolean).sort();var newest=dates[dates.length-1];if(newest&&st.suppCardPlanHistory)delete st.suppCardPlanHistory[newest];st.auditLastDerivedClear=nowIso();if(typeof ensureRollingSupplementLedger==='function')ensureRollingSupplementLedger();else if(typeof saveState==='function')saveState();if(typeof toast==='function')toast('Newest selector plan recalculated');} if(document.getElementById('jesterAuditModal')&&document.getElementById('jesterAuditModal').classList.contains('open'))openJesterAudit();}
-    catch(e){try{alert('Clear failed: '+safeErr(e));}catch(_){}}
+    if(typeof fwGuidanceCacheClearV2524==='function')fwGuidanceCacheClearV2524();
+    render();toast('Derived display refreshed. Archived forecasts preserved.');
   };
 
   function installTriggers(){
