@@ -384,6 +384,11 @@ details[open].fw-to-details-card .fw-to-summary::before{content:'-'}
 body[data-ace-data-seal="fail"] .brand-card{box-shadow:0 22px 80px rgba(0,0,0,.62),0 0 0 1px rgba(239,68,68,.35),0 0 28px rgba(239,68,68,.12)!important}
 @media(max-width:620px){.jester-audit-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+/* Desktop-accessible navigation, including narrow HOLTRON workspaces. */
+.chamber-nav{display:flex;align-items:center;gap:10px;margin:0 0 9px;padding:7px 9px;border:1px solid var(--line);border-radius:18px;background:rgba(2,7,18,.84)}
+.chamber-nav-btn{flex:0 0 46px;min-width:44px;min-height:44px;border:1px solid rgba(217,166,74,.45);border-radius:13px;background:rgba(5,17,35,.95);color:var(--gold2);font-size:1.7rem;line-height:1;cursor:pointer;display:grid;place-items:center}
+.chamber-nav-btn:hover,.chamber-nav-btn:focus-visible{background:rgba(217,166,74,.18);outline:2px solid var(--cyan);outline-offset:2px}
+.chamber-nav-label{flex:1;min-width:0;text-align:center;color:var(--gold2);font-size:.93rem;font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 </style>
 <link rel="stylesheet" href="./shared/resonance/presentation-v1.css?v=1.0.0">
 <script src="./shared/resonance/reference-v1.js?v=1.0.0"></script>
@@ -401,7 +406,7 @@ body[data-ace-data-seal="fail"] .brand-card{box-shadow:0 22px 80px rgba(0,0,0,.6
 <body>
 <div class="app-shell" id="appShell">
 <header class="topbar"><div class="brand-card"><div class="brand-mark"><img alt="" id="brandLogo"/></div><div class="brand-copy"><div class="title">ACE Mind</div></div><div class="top-actions"><button class="small-btn" onclick="openModal('lensModal')" type="button">Lens</button><button aria-label="AI" class="icon-btn" onclick="openModal('aiModal')" type="button">AI</button></div></div></header>
-<main class="main"><section class="day-panel"><div class="day-current"><div><div class="day-name" id="dayName"></div><div class="day-meta" id="dayMeta"></div></div><div class="day-actions"><button class="secondary" onclick="fwSetToday()">Today</button></div></div><div class="day-rail" id="dayRail"></div></section><section class="carousel-wrap" id="carouselWrap"><button class="car-arrow left" onclick="moveChamber(-1)">‹</button><div class="carousel-track" id="carouselTrack"></div><button class="car-arrow right" onclick="moveChamber(1)">›</button><div class="dots" id="dots"></div></section></main>
+<main class="main"><section class="day-panel"><div class="day-current"><div><div class="day-name" id="dayName"></div><div class="day-meta" id="dayMeta"></div></div><div class="day-actions"><button class="secondary" onclick="fwSetToday()">Today</button></div></div><div class="day-rail" id="dayRail"></div></section><nav aria-label="ACE Mind menu navigation" class="chamber-nav"><button type="button" class="chamber-nav-btn" aria-label="Previous menu" title="Previous menu" onclick="moveChamber(-1)">‹</button><span id="chamberNavLabel" class="chamber-nav-label" aria-live="polite">Overview</span><button type="button" class="chamber-nav-btn" aria-label="Next menu" title="Next menu" onclick="moveChamber(1)">›</button></nav><section class="carousel-wrap" id="carouselWrap"><div class="carousel-track" id="carouselTrack"></div><div class="dots" id="dots"></div></section></main>
 <nav aria-label="Utilities" class="utility-dock"><button class="dock-btn" onclick="openModal('aiModal')">AI</button><button class="dock-btn" onclick="openModal('lensModal')">Lens</button><button class="dock-btn" onclick="openModal('patchModal')">Patch</button><button class="dock-btn" onclick="exportState()">Export</button><button class="dock-btn" onclick="document.getElementById('importFile').click()">Import</button><input accept="application/json,.json" id="importFile" onchange="importStateFile(event)" type="file"/></nav>
 </div>
 <div class="modal" id="aiModal"><div class="modal-panel"><div class="modal-head"><div class="modal-title">AI</div><button class="x" onclick="closeModal('aiModal')">×</button></div><div class="ai-section-label">What to send</div><div class="payload-grid" id="payloadGrid"></div><div class="ai-section-label">Where to send it</div><div class="model-grid" id="modelGrid"></div><div class="action-row"><button class="secondary" onclick="openJesterBridge()">Bridge</button><button class="secondary" onclick="copyCurrentPayload()">Copy</button></div><div class="copy-status" id="copyStatus"></div><textarea id="handoffBox" spellcheck="false"></textarea></div></div>
@@ -6149,6 +6154,8 @@ function setCarouselTransform(viewIndex,animate=true){
 }
 function updateDots(){
   document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',CHAMBERS[i]===activeChamber));
+  const navLabel=document.getElementById('chamberNavLabel');
+  if(navLabel)navLabel.textContent=CHAMBER_LABEL[activeChamber]||'ACE Mind';
 }
 function applyChamberAtmosphere(dir=0){
   // v21.21: keep the chamber marker for future lightweight theming,
